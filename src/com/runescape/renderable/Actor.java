@@ -3,7 +3,7 @@ package com.runescape.renderable;
 import com.runescape.anim.AnimationSequence;
 
 public class Actor extends Renderable {
-	
+
 	public int[] pathX = new int[10];
 	public int[] pathY = new int[10];
 	public int anInt1522 = -1;

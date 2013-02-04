@@ -284,7 +284,6 @@ public class Client extends GameStub {
 	private int anInt1065;
 	private int anInt1066;
 	private int anInt1067 = -1;
-	private boolean aBoolean1068 = false;
 	private int[] anIntArray1069 = new int[SkillConstants.SKILL_COUNT];
 	private int[] anIntArray1070 = new int[2000];
 	private int anInt1071;
@@ -298,7 +297,6 @@ public class Client extends GameStub {
 	private int anInt1080;
 	private LinkedList aLinkedList1081 = new LinkedList();
 	private int[] anIntArray1082 = new int[33];
-	private int anInt1083 = 24869;
 	private Widget aWidget1084 = new Widget();
 	private IndexedImage[] anIndexedImageArray1085 = new IndexedImage[100];
 	static int anInt1086;
@@ -799,19 +797,19 @@ public class Client extends GameStub {
 	public final void init() {
 		Client.nodeId = Integer.parseInt(getParameter("nodeid"));
 		Client.portOffset = Integer.parseInt(getParameter("portoff"));
-		String string = getParameter("lowmem");
-		if (string != null && string.equals("1")) {
+		String memoryType = getParameter("lowmem");
+		if (memoryType != null && memoryType.equals("1")) {
 			Client.setLowMemory((byte) 77);
 		} else {
 			Client.setHighMemory();
 		}
-		String string_18_ = getParameter("free");
-		if (string_18_ != null && string_18_.equals("1")) {
+		String worldType = getParameter("free");
+		if (worldType != null && worldType.equals("1")) {
 			Client.membersWorld = false;
 		} else {
 			Client.membersWorld = true;
 		}
-		this.method2(503, false, 765);
+		this.initializeApplet(765, 503);
 	}
 
 	@Override
@@ -840,14 +838,14 @@ public class Client extends GameStub {
 					opcode = inBuffer.getUnsignedByte();
 				}
 				if (anInt1111 == 0) {
-					int i_19_ = anInt26;
-					if (anInt1161 == 1 && anInt27 >= 516 && anInt28 >= 160 && anInt27 <= 765 && anInt28 <= 205) {
+					int i_19_ = clickType;
+					if (anInt1161 == 1 && clickX >= 516 && clickY >= 160 && clickX <= 765 && clickY <= 205) {
 						i_19_ = 0;
 					}
 					if (aBoolean910) {
 						if (i_19_ != 1) {
-							int i_20_ = anInt20;
-							int i_21_ = anInt21;
+							int i_20_ = mouseEventX;
+							int i_21_ = mouseEventY;
 							if (anInt973 == 0) {
 								i_20_ -= 4;
 								i_21_ -= 4;
@@ -875,8 +873,8 @@ public class Client extends GameStub {
 							int i_22_ = anInt974;
 							int i_23_ = anInt975;
 							int i_24_ = anInt976;
-							int i_25_ = anInt27;
-							int i_26_ = anInt28;
+							int i_25_ = clickX;
+							int i_26_ = clickY;
 							if (anInt973 == 0) {
 								i_25_ -= 4;
 								i_26_ -= 4;
@@ -922,8 +920,8 @@ public class Client extends GameStub {
 									anInt1109 = i_32_;
 									anInt1110 = i_31_;
 									anInt1111 = 2;
-									anInt1112 = anInt27;
-									anInt1113 = anInt28;
+									anInt1112 = clickX;
+									anInt1113 = clickY;
 									if (Widget.interfaces[i_32_].interfaceParentId == anInt882) {
 										anInt1111 = 1;
 									}
@@ -1658,10 +1656,10 @@ public class Client extends GameStub {
 		do {
 			try {
 				loggedIn &= bool;
-				if (anInt26 != 1) {
+				if (clickType != 1) {
 					break;
 				}
-				if (anInt27 >= 6 && anInt27 <= 106 && anInt28 >= 467 && anInt28 <= 499) {
+				if (clickX >= 6 && clickX <= 106 && clickY >= 467 && clickY <= 499) {
 					publicChatSetting = (publicChatSetting + 1) % 4;
 					aBoolean1258 = true;
 					aBoolean1248 = true;
@@ -1670,7 +1668,7 @@ public class Client extends GameStub {
 					outBuffer.put(privateChatSetting);
 					outBuffer.put(tradeSetting);
 				}
-				if (anInt27 >= 135 && anInt27 <= 235 && anInt28 >= 467 && anInt28 <= 499) {
+				if (clickX >= 135 && clickX <= 235 && clickY >= 467 && clickY <= 499) {
 					privateChatSetting = (privateChatSetting + 1) % 3;
 					aBoolean1258 = true;
 					aBoolean1248 = true;
@@ -1679,7 +1677,7 @@ public class Client extends GameStub {
 					outBuffer.put(privateChatSetting);
 					outBuffer.put(tradeSetting);
 				}
-				if (anInt27 >= 273 && anInt27 <= 373 && anInt28 >= 467 && anInt28 <= 499) {
+				if (clickX >= 273 && clickX <= 373 && clickY >= 467 && clickY <= 499) {
 					tradeSetting = (tradeSetting + 1) % 3;
 					aBoolean1258 = true;
 					aBoolean1248 = true;
@@ -1688,7 +1686,7 @@ public class Client extends GameStub {
 					outBuffer.put(privateChatSetting);
 					outBuffer.put(tradeSetting);
 				}
-				if (anInt27 >= 412 && anInt27 <= 512 && anInt28 >= 467 && anInt28 <= 499) {
+				if (clickX >= 412 && clickX <= 512 && clickY >= 467 && clickY <= 499) {
 					if (anInt882 == -1) {
 						method147(537);
 						aString906 = "";
@@ -1951,7 +1949,7 @@ public class Client extends GameStub {
 				}
 			}
 			if (i != 0) {
-				method6();
+				startup();
 			}
 			for (int i_148_ = 0; i_148_ < anInt999; i_148_++) {
 				int i_149_ = anIntArray1001[i_148_];
@@ -2358,8 +2356,8 @@ public class Client extends GameStub {
 			Rasterizer.drawFilledRectangle(i + 1, i_189_ + 1, i_190_ - 2, 16, 0);
 			Rasterizer.drawUnfilledRectangle(i + 1, i_189_ + 18, i_190_ - 2, i_191_ - 19, 0);
 			aTypeFace1297.drawRegularString("Choose Option", i + 3, i_189_ + 14, i_192_);
-			int i_193_ = anInt20;
-			int i_194_ = anInt21;
+			int i_193_ = mouseEventX;
+			int i_194_ = mouseEventY;
 			if (anInt973 == 0) {
 				i_193_ -= 4;
 				i_194_ -= 4;
@@ -2576,28 +2574,17 @@ public class Client extends GameStub {
 	}
 
 	@Override
-	public final void method7(int i) {
-		do {
-			try {
-				if (!aBoolean1277 && !aBoolean951 && !aBoolean1201) {
-					Client.currentCycle++;
-					if (!loggedIn) {
-						method140(true);
-					} else {
-						method62(anInt1243);
-					}
-					method57(false);
-					if (i == anInt1083) {
-						break;
-					}
-					Client.aBoolean944 = !Client.aBoolean944;
-				}
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("20652, " + i + ", " + runtimeexception.toString());
-				throw new RuntimeException();
+	public final void doLogic() {
+		if (!aBoolean1277 && !aBoolean951 && !aBoolean1201) {
+			Client.currentCycle++;
+			if (!loggedIn) {
+				method140(true);
+			} else {
+				method62(anInt1243);
 			}
-			break;
-		} while (false);
+			method57(false);
+			Client.aBoolean944 = !Client.aBoolean944;
+		}
 	}
 
 	public final void method47(int i, boolean bool) {
@@ -3058,7 +3045,7 @@ public class Client extends GameStub {
 			SignLink.storeId = 32;
 			SignLink.method547(InetAddress.getLocalHost());
 			Client client = new Client();
-			client.method1(503, 765);
+			client.initializeApplication(765, 503);
 		} catch (Exception exception) {
 			/* empty */
 		}
@@ -3146,7 +3133,7 @@ public class Client extends GameStub {
 	public final void method55(int i) {
 		try {
 			while (i >= 0) {
-				method6();
+				startup();
 			}
 			for (Projectile projectile = (Projectile) projectileList.getBack(); projectile != null; projectile = (Projectile) projectileList
 					.getPrevious()) {
@@ -3321,7 +3308,7 @@ public class Client extends GameStub {
 					}
 				}
 				if (i != 25106) {
-					method6();
+					startup();
 				}
 				for (int i_288_ = 0; i_288_ < 100; i_288_++) {
 					int i_289_ = (int) (Math.random() * 124.0) + 2;
@@ -3461,7 +3448,7 @@ public class Client extends GameStub {
 				if (loggedIn) {
 					synchronized (mouseCapturer.objectLock) {
 						if (Client.flagged) {
-							if (anInt26 != 0 || mouseCapturer.coord >= 40) {
+							if (clickType != 0 || mouseCapturer.coord >= 40) {
 								outBuffer.putOpcode(45);
 								outBuffer.put(0);
 								int i_305_ = outBuffer.offset;
@@ -3528,19 +3515,19 @@ public class Client extends GameStub {
 							mouseCapturer.coord = 0;
 						}
 					}
-					if (anInt26 != 0) {
-						long l = (aLong29 - aLong1245) / 50L;
+					if (clickType != 0) {
+						long l = (clickTime - aLong1245) / 50L;
 						if (l > 4095L) {
 							l = 4095L;
 						}
-						aLong1245 = aLong29;
-						int i_314_ = anInt28;
+						aLong1245 = clickTime;
+						int i_314_ = clickY;
 						if (i_314_ < 0) {
 							i_314_ = 0;
 						} else if (i_314_ > 502) {
 							i_314_ = 502;
 						}
-						int i_315_ = anInt27;
+						int i_315_ = clickX;
 						if (i_315_ < 0) {
 							i_315_ = 0;
 						} else if (i_315_ > 764) {
@@ -3548,7 +3535,7 @@ public class Client extends GameStub {
 						}
 						int i_316_ = i_314_ * 765 + i_315_;
 						int i_317_ = 0;
-						if (anInt26 == 2) {
+						if (clickType == 2) {
 							i_317_ = 1;
 						}
 						int i_318_ = (int) l;
@@ -3558,7 +3545,7 @@ public class Client extends GameStub {
 					if (anInt1041 > 0) {
 						anInt1041--;
 					}
-					if (keyArray[1] == 1 || keyArray[2] == 1 || keyArray[3] == 1 || keyArray[4] == 1) {
+					if (keyStatus[1] == 1 || keyStatus[2] == 1 || keyStatus[3] == 1 || keyStatus[4] == 1) {
 						aBoolean1042 = true;
 					}
 					if (aBoolean1042 && anInt1041 <= 0) {
@@ -3568,12 +3555,12 @@ public class Client extends GameStub {
 						outBuffer.putShort(anInt1209);
 						outBuffer.putShortA(anInt1210);
 					}
-					if (aBoolean17 == true && aBoolean979 == false) {
+					if (awtFocus == true && aBoolean979 == false) {
 						aBoolean979 = true;
 						outBuffer.putOpcode(3);
 						outBuffer.put(1);
 					}
-					if (aBoolean17 == false && aBoolean979 == true) {
+					if (awtFocus == false && aBoolean979 == true) {
 						aBoolean979 = false;
 						outBuffer.putOpcode(3);
 						outBuffer.put(0);
@@ -3609,11 +3596,11 @@ public class Client extends GameStub {
 					}
 					if (anInt1111 != 0) {
 						anInt1014++;
-						if (anInt20 > anInt1112 + 5 || anInt20 < anInt1112 - 5 || anInt21 > anInt1113 + 5
-								|| anInt21 < anInt1113 - 5) {
+						if (mouseEventX > anInt1112 + 5 || mouseEventX < anInt1112 - 5 || mouseEventY > anInt1113 + 5
+								|| mouseEventY < anInt1113 - 5) {
 							aBoolean1267 = true;
 						}
-						if (anInt19 == 0) {
+						if (mouseButtonPressed == 0) {
 							if (anInt1111 == 2) {
 								aBoolean1178 = true;
 							}
@@ -3667,7 +3654,7 @@ public class Client extends GameStub {
 								method69(menuActionRow - 1, false);
 							}
 							anInt1268 = 10;
-							anInt26 = 0;
+							clickType = 0;
 						}
 					}
 					if (Scene.anInt550 != -1) {
@@ -3677,22 +3664,22 @@ public class Client extends GameStub {
 								Client.clientsPlayer.pathX[0], true, i_324_);
 						Scene.anInt550 = -1;
 						if (bool) {
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 1;
 							anInt941 = 0;
 						}
 					}
-					if (anInt26 == 1 && aString869 != null) {
+					if (clickType == 1 && aString869 != null) {
 						aString869 = null;
 						aBoolean1248 = true;
-						anInt26 = 0;
+						clickType = 0;
 					}
 					method20(4);
 					method92(true);
 					method78(19);
 					method32(true);
-					if (anInt19 == 1 || anInt26 == 1) {
+					if (mouseButtonPressed == 1 || clickType == 1) {
 						anInt1238++;
 					}
 					if (anInt1048 == 2) {
@@ -3705,10 +3692,10 @@ public class Client extends GameStub {
 						anIntArray1055[i_326_]++;
 					}
 					method73(732);
-					anInt18++;
-					if (anInt18 > 4500) {
+					idleTime++;
+					if (idleTime > 4500) {
 						anInt1036 = 250;
-						anInt18 -= 500;
+						idleTime -= 500;
 						outBuffer.putOpcode(202);
 					}
 					anInt1013++;
@@ -3828,26 +3815,26 @@ public class Client extends GameStub {
 				aProducingGraphicsBuffer1148 = null;
 				aProducingGraphicsBuffer1149 = null;
 				aProducingGraphicsBuffer1150 = null;
-				aProducingGraphicsBuffer1135 = new ProducingGraphicsBuffer(128, 265, method11(0));
+				aProducingGraphicsBuffer1135 = new ProducingGraphicsBuffer(128, 265, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1136 = new ProducingGraphicsBuffer(128, 265, method11(0));
+				aProducingGraphicsBuffer1136 = new ProducingGraphicsBuffer(128, 265, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1132 = new ProducingGraphicsBuffer(509, 171, method11(0));
+				aProducingGraphicsBuffer1132 = new ProducingGraphicsBuffer(509, 171, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1133 = new ProducingGraphicsBuffer(360, 132, method11(0));
+				aProducingGraphicsBuffer1133 = new ProducingGraphicsBuffer(360, 132, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1134 = new ProducingGraphicsBuffer(360, 200, method11(0));
+				aProducingGraphicsBuffer1134 = new ProducingGraphicsBuffer(360, 200, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1137 = new ProducingGraphicsBuffer(202, 238, method11(0));
+				aProducingGraphicsBuffer1137 = new ProducingGraphicsBuffer(202, 238, getComponent());
 				if (i < 0 || i > 0) {
 					aLinkedListArrayArrayArray852 = null;
 				}
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1138 = new ProducingGraphicsBuffer(203, 238, method11(0));
+				aProducingGraphicsBuffer1138 = new ProducingGraphicsBuffer(203, 238, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1139 = new ProducingGraphicsBuffer(74, 94, method11(0));
+				aProducingGraphicsBuffer1139 = new ProducingGraphicsBuffer(74, 94, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1140 = new ProducingGraphicsBuffer(75, 94, method11(0));
+				aProducingGraphicsBuffer1140 = new ProducingGraphicsBuffer(75, 94, getComponent());
 				Rasterizer.resetPixels();
 				if (anArchive1078 != null) {
 					method56(0);
@@ -3983,8 +3970,8 @@ public class Client extends GameStub {
 				calculatePath(2, i_350_, 0, i_349_ + 1, Client.clientsPlayer.pathY[0], 0, 0, i_344_,
 						Client.clientsPlayer.pathX[0], false, i_345_);
 			}
-			anInt939 = anInt27;
-			anInt940 = anInt28;
+			anInt939 = clickX;
+			anInt940 = clickY;
 			anInt942 = 2;
 			anInt941 = 0;
 			return true;
@@ -4181,8 +4168,8 @@ public class Client extends GameStub {
 					if (npc != null) {
 						calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 								Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(57);
@@ -4199,8 +4186,8 @@ public class Client extends GameStub {
 						bool_375_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 								Client.clientsPlayer.pathX[0], false, itemSlot);
 					}
-					anInt939 = anInt27;
-					anInt940 = anInt28;
+					anInt939 = clickX;
+					anInt940 = clickY;
 					anInt942 = 2;
 					anInt941 = 0;
 					outBuffer.putOpcode(236);
@@ -4224,8 +4211,8 @@ public class Client extends GameStub {
 						bool_376_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 								Client.clientsPlayer.pathX[0], false, itemSlot);
 					}
-					anInt939 = anInt27;
-					anInt940 = anInt28;
+					anInt939 = clickX;
+					anInt940 = clickY;
 					anInt942 = 2;
 					anInt941 = 0;
 					outBuffer.putOpcode(25);
@@ -4268,8 +4255,8 @@ public class Client extends GameStub {
 					if (player != null) {
 						calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 								Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						Client.anInt1213 += itemId;
@@ -4286,8 +4273,8 @@ public class Client extends GameStub {
 					if (npc != null) {
 						calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 								Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(155);
@@ -4299,8 +4286,8 @@ public class Client extends GameStub {
 					if (player != null) {
 						calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 								Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(153);
@@ -4309,7 +4296,7 @@ public class Client extends GameStub {
 				}
 				if (menuActionId == 516) {
 					if (!aBoolean910) {
-						currentScene.method534(false, anInt28 - 4, anInt27 - 4);
+						currentScene.method534(false, clickY - 4, clickX - 4);
 					} else {
 						currentScene.method534(false, interfaceid - 4, itemSlot - 4);
 					}
@@ -4512,8 +4499,8 @@ public class Client extends GameStub {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							Client.anInt1011 += itemId;
@@ -4533,8 +4520,8 @@ public class Client extends GameStub {
 							bool_384_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 									Client.clientsPlayer.pathX[0], false, itemSlot);
 						}
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(79);
@@ -4581,8 +4568,8 @@ public class Client extends GameStub {
 							bool_385_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 									Client.clientsPlayer.pathX[0], false, itemSlot);
 						}
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(156);
@@ -4597,8 +4584,8 @@ public class Client extends GameStub {
 							bool_386_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 									Client.clientsPlayer.pathX[0], false, itemSlot);
 						}
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(181);
@@ -4625,8 +4612,8 @@ public class Client extends GameStub {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							Client.anInt1251 += itemId;
@@ -4644,8 +4631,8 @@ public class Client extends GameStub {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							Client.anInt1159++;
@@ -4663,8 +4650,8 @@ public class Client extends GameStub {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(131);
@@ -4705,8 +4692,8 @@ public class Client extends GameStub {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(72);
@@ -4718,8 +4705,8 @@ public class Client extends GameStub {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(249);
@@ -4732,8 +4719,8 @@ public class Client extends GameStub {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(39);
@@ -4745,8 +4732,8 @@ public class Client extends GameStub {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(139);
@@ -4767,8 +4754,8 @@ public class Client extends GameStub {
 							bool_388_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 									Client.clientsPlayer.pathX[0], false, itemSlot);
 						}
-						anInt939 = anInt27;
-						anInt940 = anInt28;
+						anInt939 = clickX;
+						anInt940 = clickY;
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(23);
@@ -4843,8 +4830,8 @@ public class Client extends GameStub {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.clientsPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(14);
@@ -4898,8 +4885,8 @@ public class Client extends GameStub {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.clientsPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							if ((itemId & 0x3) == 0) {
@@ -4986,8 +4973,8 @@ public class Client extends GameStub {
 								bool_396_ = calculatePath(2, 0, 1, 0, Client.clientsPlayer.pathY[0], 1, 0, interfaceid,
 										Client.clientsPlayer.pathX[0], false, itemSlot);
 							}
-							anInt939 = anInt27;
-							anInt940 = anInt28;
+							anInt939 = clickX;
+							anInt940 = clickY;
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(253);
@@ -5059,8 +5046,8 @@ public class Client extends GameStub {
 				if (anInt1307 == 0 && anInt1161 == 0) {
 					menuActionNames[menuActionRow] = "Walk here";
 					menuActionIds[menuActionRow] = 516;
-					anIntArray1116[menuActionRow] = anInt20;
-					anIntArray1117[menuActionRow] = anInt21;
+					anIntArray1116[menuActionRow] = mouseEventX;
+					anIntArray1117[menuActionRow] = mouseEventY;
 					menuActionRow++;
 				}
 				int i_399_ = -1;
@@ -5260,143 +5247,137 @@ public class Client extends GameStub {
 	}
 
 	@Override
-	public final void method8(int i) {
+	public final void shutdown() {
+		SignLink.aBoolean639 = false;
 		try {
-			SignLink.aBoolean639 = false;
-			try {
-				if (bufferedConnection != null) {
-					bufferedConnection.close();
-				}
-			} catch (Exception exception) {
-				/* empty */
+			if (bufferedConnection != null) {
+				bufferedConnection.close();
 			}
-			bufferedConnection = null;
-			method15(860);
-			if (mouseCapturer != null) {
-				mouseCapturer.capturing = false;
-			}
-			mouseCapturer = null;
-			onDemandRequester.stop();
-			onDemandRequester = null;
-			aBuffer859 = null;
-			outBuffer = null;
-			aBuffer872 = null;
-			inBuffer = null;
-			anIntArray1259 = null;
-			aByteArrayArray1208 = null;
-			aByteArrayArray1272 = null;
-			anIntArray1260 = null;
-			anIntArray1261 = null;
-			anIntArrayArrayArray1239 = null;
-			currentSceneTileFlags = null;
-			currentScene = null;
-			currentCollisionMap = null;
-			wayPoints = null;
-			distanceValues = null;
-			walkingQueueX = null;
-			walkingQueueY = null;
-			aByteArray937 = null;
-			aProducingGraphicsBuffer1188 = null;
-			aProducingGraphicsBuffer1189 = null;
-			currentSceneBuffer = null;
-			aProducingGraphicsBuffer1191 = null;
-			aProducingGraphicsBuffer1148 = null;
-			aProducingGraphicsBuffer1149 = null;
-			aProducingGraphicsBuffer1150 = null;
-			aProducingGraphicsBuffer928 = null;
-			aProducingGraphicsBuffer929 = null;
-			aProducingGraphicsBuffer930 = null;
-			aProducingGraphicsBuffer931 = null;
-			aProducingGraphicsBuffer932 = null;
-			aProducingGraphicsBuffer933 = null;
-			aProducingGraphicsBuffer934 = null;
-			aProducingGraphicsBuffer935 = null;
-			aProducingGraphicsBuffer936 = null;
-			anIndexedImage1221 = null;
-			anIndexedImage1222 = null;
-			anIndexedImage1223 = null;
-			anIndexedImage1052 = null;
-			anIndexedImage1053 = null;
-			anIndexedImage1054 = null;
-			anIndexedImageArray972 = null;
-			anIndexedImage1168 = null;
-			anIndexedImage1169 = null;
-			anIndexedImage1170 = null;
-			anIndexedImage1171 = null;
-			anIndexedImage1172 = null;
-			anIndexedImage890 = null;
-			anIndexedImage891 = null;
-			anIndexedImage892 = null;
-			anIndexedImage893 = null;
-			anIndexedImage894 = null;
-			anImageRGB1147 = null;
-			anImageRGBArray1012 = null;
-			anImageRGBArray1120 = null;
-			anImageRGBArray1175 = null;
-			anImageRGB1099 = null;
-			anImageRGB1100 = null;
-			anImageRGB1101 = null;
-			anImageRGB1102 = null;
-			anImageRGB1103 = null;
-			anIndexedImageArray1085 = null;
-			worldMapHintIcons = null;
-			anIntArrayArray954 = null;
-			localPlayers = null;
-			anIntArray917 = null;
-			anIntArray919 = null;
-			aBufferArray920 = null;
-			anIntArray865 = null;
-			localNpcs = null;
-			anIntArray862 = null;
-			aLinkedListArrayArrayArray852 = null;
-			aLinkedList1204 = null;
-			i = 55 / i;
-			projectileList = null;
-			aLinkedList1081 = null;
-			anIntArray1116 = null;
-			anIntArray1117 = null;
-			menuActionIds = null;
-			anIntArray1119 = null;
-			menuActionNames = null;
-			anIntArray996 = null;
-			iconDrawPointsX = null;
-			iconDrawPointsY = null;
-			minimapHintIcons = null;
-			minimap = null;
-			aStringArray1107 = null;
-			aLongArray980 = null;
-			anIntArray851 = null;
-			aProducingGraphicsBuffer1135 = null;
-			aProducingGraphicsBuffer1136 = null;
-			aProducingGraphicsBuffer1132 = null;
-			aProducingGraphicsBuffer1133 = null;
-			aProducingGraphicsBuffer1134 = null;
-			aProducingGraphicsBuffer1137 = null;
-			aProducingGraphicsBuffer1138 = null;
-			aProducingGraphicsBuffer1139 = null;
-			aProducingGraphicsBuffer1140 = null;
-			method118(3);
-			GameObjectDefinition.method235(-501);
-			NpcDefinition.method441(-501);
-			ItemDefinition.reset();
-			FloorDefinition.cache = null;
-			IdentityKit.identityKitCache = null;
-			Widget.interfaces = null;
-			AnimationSequence.animationSequences = null;
-			SpotAnimation.cache = null;
-			SpotAnimation.modelCache = null;
-			Varp.aVarpArray746 = null;
-			producingGraphicsBuffer = null;
-			Player.aCache1724 = null;
-			Rasterizer3D.reset();
-			Scene.method495(-501);
-			Model.reset();
-			Animation.reset();
-			System.gc();
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("35760, " + i + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+		} catch (Exception exception) {
+			/* empty */
 		}
+		bufferedConnection = null;
+		method15(860);
+		if (mouseCapturer != null) {
+			mouseCapturer.capturing = false;
+		}
+		mouseCapturer = null;
+		onDemandRequester.stop();
+		onDemandRequester = null;
+		aBuffer859 = null;
+		outBuffer = null;
+		aBuffer872 = null;
+		inBuffer = null;
+		anIntArray1259 = null;
+		aByteArrayArray1208 = null;
+		aByteArrayArray1272 = null;
+		anIntArray1260 = null;
+		anIntArray1261 = null;
+		anIntArrayArrayArray1239 = null;
+		currentSceneTileFlags = null;
+		currentScene = null;
+		currentCollisionMap = null;
+		wayPoints = null;
+		distanceValues = null;
+		walkingQueueX = null;
+		walkingQueueY = null;
+		aByteArray937 = null;
+		aProducingGraphicsBuffer1188 = null;
+		aProducingGraphicsBuffer1189 = null;
+		currentSceneBuffer = null;
+		aProducingGraphicsBuffer1191 = null;
+		aProducingGraphicsBuffer1148 = null;
+		aProducingGraphicsBuffer1149 = null;
+		aProducingGraphicsBuffer1150 = null;
+		aProducingGraphicsBuffer928 = null;
+		aProducingGraphicsBuffer929 = null;
+		aProducingGraphicsBuffer930 = null;
+		aProducingGraphicsBuffer931 = null;
+		aProducingGraphicsBuffer932 = null;
+		aProducingGraphicsBuffer933 = null;
+		aProducingGraphicsBuffer934 = null;
+		aProducingGraphicsBuffer935 = null;
+		aProducingGraphicsBuffer936 = null;
+		anIndexedImage1221 = null;
+		anIndexedImage1222 = null;
+		anIndexedImage1223 = null;
+		anIndexedImage1052 = null;
+		anIndexedImage1053 = null;
+		anIndexedImage1054 = null;
+		anIndexedImageArray972 = null;
+		anIndexedImage1168 = null;
+		anIndexedImage1169 = null;
+		anIndexedImage1170 = null;
+		anIndexedImage1171 = null;
+		anIndexedImage1172 = null;
+		anIndexedImage890 = null;
+		anIndexedImage891 = null;
+		anIndexedImage892 = null;
+		anIndexedImage893 = null;
+		anIndexedImage894 = null;
+		anImageRGB1147 = null;
+		anImageRGBArray1012 = null;
+		anImageRGBArray1120 = null;
+		anImageRGBArray1175 = null;
+		anImageRGB1099 = null;
+		anImageRGB1100 = null;
+		anImageRGB1101 = null;
+		anImageRGB1102 = null;
+		anImageRGB1103 = null;
+		anIndexedImageArray1085 = null;
+		worldMapHintIcons = null;
+		anIntArrayArray954 = null;
+		localPlayers = null;
+		anIntArray917 = null;
+		anIntArray919 = null;
+		aBufferArray920 = null;
+		anIntArray865 = null;
+		localNpcs = null;
+		anIntArray862 = null;
+		aLinkedListArrayArrayArray852 = null;
+		aLinkedList1204 = null;
+		projectileList = null;
+		aLinkedList1081 = null;
+		anIntArray1116 = null;
+		anIntArray1117 = null;
+		menuActionIds = null;
+		anIntArray1119 = null;
+		menuActionNames = null;
+		anIntArray996 = null;
+		iconDrawPointsX = null;
+		iconDrawPointsY = null;
+		minimapHintIcons = null;
+		minimap = null;
+		aStringArray1107 = null;
+		aLongArray980 = null;
+		anIntArray851 = null;
+		aProducingGraphicsBuffer1135 = null;
+		aProducingGraphicsBuffer1136 = null;
+		aProducingGraphicsBuffer1132 = null;
+		aProducingGraphicsBuffer1133 = null;
+		aProducingGraphicsBuffer1134 = null;
+		aProducingGraphicsBuffer1137 = null;
+		aProducingGraphicsBuffer1138 = null;
+		aProducingGraphicsBuffer1139 = null;
+		aProducingGraphicsBuffer1140 = null;
+		method118(3);
+		GameObjectDefinition.method235(-501);
+		NpcDefinition.method441(-501);
+		ItemDefinition.reset();
+		FloorDefinition.cache = null;
+		IdentityKit.identityKitCache = null;
+		Widget.interfaces = null;
+		AnimationSequence.animationSequences = null;
+		SpotAnimation.cache = null;
+		SpotAnimation.modelCache = null;
+		Varp.aVarpArray746 = null;
+		producingGraphicsBuffer = null;
+		Player.aCache1724 = null;
+		Rasterizer3D.reset();
+		Scene.method495(-501);
+		Model.reset();
+		Animation.reset();
+		System.gc();
 	}
 
 	public void method72() {
@@ -5412,31 +5393,25 @@ public class Client extends GameStub {
 		if (bufferedConnection != null) {
 			bufferedConnection.printDebug();
 		}
-		aBoolean9 = true;
+		dumpRequested = true;
 	}
 
 	@Override
-	public final Component method11(int i) {
-		try {
-			anInt1032 += i;
-			if (SignLink.applet != null) {
-				return SignLink.applet;
-			}
-			if (gameFrame != null) {
-				return gameFrame;
-			}
-			return this;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("60139, " + i + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+	public final Component getComponent() {
+		if (SignLink.applet != null) {
+			return SignLink.applet;
 		}
+		if (gameFrame != null) {
+			return gameFrame;
+		}
+		return this;
 	}
 
 	public final void method73(int i) {
 		try {
 			i = 55 / i;
 			for (;;) {
-				int i_414_ = this.method5(-796);
+				int i_414_ = this.readCharacter();
 				if (i_414_ == -1) {
 					break;
 				}
@@ -6105,7 +6080,7 @@ public class Client extends GameStub {
 			if (!bool) {
 				if (i == 0 && anInt1067 != -1) {
 					aString869 = string;
-					anInt26 = 0;
+					clickType = 0;
 				}
 				if (anInt1301 == -1) {
 					aBoolean1248 = true;
@@ -6130,75 +6105,75 @@ public class Client extends GameStub {
 		do {
 			try {
 				i = 72 / i;
-				if (anInt26 != 1) {
+				if (clickType != 1) {
 					break;
 				}
-				if (anInt27 >= 539 && anInt27 <= 573 && anInt28 >= 169 && anInt28 < 205 && anIntArray1155[0] != -1) {
+				if (clickX >= 539 && clickX <= 573 && clickY >= 169 && clickY < 205 && anIntArray1155[0] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 0;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 569 && anInt27 <= 599 && anInt28 >= 168 && anInt28 < 205 && anIntArray1155[1] != -1) {
+				if (clickX >= 569 && clickX <= 599 && clickY >= 168 && clickY < 205 && anIntArray1155[1] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 1;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 597 && anInt27 <= 627 && anInt28 >= 168 && anInt28 < 205 && anIntArray1155[2] != -1) {
+				if (clickX >= 597 && clickX <= 627 && clickY >= 168 && clickY < 205 && anIntArray1155[2] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 2;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 625 && anInt27 <= 669 && anInt28 >= 168 && anInt28 < 203 && anIntArray1155[3] != -1) {
+				if (clickX >= 625 && clickX <= 669 && clickY >= 168 && clickY < 203 && anIntArray1155[3] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 3;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 666 && anInt27 <= 696 && anInt28 >= 168 && anInt28 < 205 && anIntArray1155[4] != -1) {
+				if (clickX >= 666 && clickX <= 696 && clickY >= 168 && clickY < 205 && anIntArray1155[4] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 4;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 694 && anInt27 <= 724 && anInt28 >= 168 && anInt28 < 205 && anIntArray1155[5] != -1) {
+				if (clickX >= 694 && clickX <= 724 && clickY >= 168 && clickY < 205 && anIntArray1155[5] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 5;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 722 && anInt27 <= 756 && anInt28 >= 169 && anInt28 < 205 && anIntArray1155[6] != -1) {
+				if (clickX >= 722 && clickX <= 756 && clickY >= 169 && clickY < 205 && anIntArray1155[6] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 6;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 540 && anInt27 <= 574 && anInt28 >= 466 && anInt28 < 502 && anIntArray1155[7] != -1) {
+				if (clickX >= 540 && clickX <= 574 && clickY >= 466 && clickY < 502 && anIntArray1155[7] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 7;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 572 && anInt27 <= 602 && anInt28 >= 466 && anInt28 < 503 && anIntArray1155[8] != -1) {
+				if (clickX >= 572 && clickX <= 602 && clickY >= 466 && clickY < 503 && anIntArray1155[8] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 8;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 599 && anInt27 <= 629 && anInt28 >= 466 && anInt28 < 503 && anIntArray1155[9] != -1) {
+				if (clickX >= 599 && clickX <= 629 && clickY >= 466 && clickY < 503 && anIntArray1155[9] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 9;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 627 && anInt27 <= 671 && anInt28 >= 467 && anInt28 < 502 && anIntArray1155[10] != -1) {
+				if (clickX >= 627 && clickX <= 671 && clickY >= 467 && clickY < 502 && anIntArray1155[10] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 10;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 669 && anInt27 <= 699 && anInt28 >= 466 && anInt28 < 503 && anIntArray1155[11] != -1) {
+				if (clickX >= 669 && clickX <= 699 && clickY >= 466 && clickY < 503 && anIntArray1155[11] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 11;
 					aBoolean1128 = true;
 				}
-				if (anInt27 >= 696 && anInt27 <= 726 && anInt28 >= 466 && anInt28 < 503 && anIntArray1155[12] != -1) {
+				if (clickX >= 696 && clickX <= 726 && clickY >= 466 && clickY < 503 && anIntArray1155[12] != -1) {
 					aBoolean1178 = true;
 					anInt1246 = 12;
 					aBoolean1128 = true;
 				}
-				if (anInt27 < 724 || anInt27 > 758 || anInt28 < 466 || anInt28 >= 502 || anIntArray1155[13] == -1) {
+				if (clickX < 724 || clickX > 758 || clickY < 466 || clickY >= 502 || anIntArray1155[13] == -1) {
 					break;
 				}
 				aBoolean1178 = true;
@@ -6226,19 +6201,19 @@ public class Client extends GameStub {
 				aProducingGraphicsBuffer1138 = null;
 				aProducingGraphicsBuffer1139 = null;
 				aProducingGraphicsBuffer1140 = null;
-				aProducingGraphicsBuffer1191 = new ProducingGraphicsBuffer(479, 96, method11(0));
-				aProducingGraphicsBuffer1189 = new ProducingGraphicsBuffer(172, 156, method11(0));
+				aProducingGraphicsBuffer1191 = new ProducingGraphicsBuffer(479, 96, getComponent());
+				aProducingGraphicsBuffer1189 = new ProducingGraphicsBuffer(172, 156, getComponent());
 				Rasterizer.resetPixels();
 				anIndexedImage1222.drawImage(0, 0);
-				aProducingGraphicsBuffer1188 = new ProducingGraphicsBuffer(190, 261, method11(0));
-				currentSceneBuffer = new ProducingGraphicsBuffer(512, 334, method11(0));
+				aProducingGraphicsBuffer1188 = new ProducingGraphicsBuffer(190, 261, getComponent());
+				currentSceneBuffer = new ProducingGraphicsBuffer(512, 334, getComponent());
 				Rasterizer.resetPixels();
-				aProducingGraphicsBuffer1148 = new ProducingGraphicsBuffer(496, 50, method11(0));
+				aProducingGraphicsBuffer1148 = new ProducingGraphicsBuffer(496, 50, getComponent());
 				if (i != 1) {
-					method6();
+					startup();
 				}
-				aProducingGraphicsBuffer1149 = new ProducingGraphicsBuffer(269, 37, method11(0));
-				aProducingGraphicsBuffer1150 = new ProducingGraphicsBuffer(249, 45, method11(0));
+				aProducingGraphicsBuffer1149 = new ProducingGraphicsBuffer(269, 37, getComponent());
+				aProducingGraphicsBuffer1150 = new ProducingGraphicsBuffer(249, 45, getComponent());
 				aBoolean1280 = true;
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -6267,7 +6242,7 @@ public class Client extends GameStub {
 		try {
 			int i_453_ = i_452_ * i_452_ + i_451_ * i_451_;
 			if (i >= 0) {
-				method6();
+				startup();
 			}
 			if (i_453_ > 4225 && i_453_ < 90000) {
 				int i_454_ = anInt1210 + anInt1234 & 0x7ff;
@@ -6299,9 +6274,9 @@ public class Client extends GameStub {
 				menuActionRow = 1;
 				method129(false);
 				anInt911 = 0;
-				if (anInt20 > 4 && anInt21 > 4 && anInt20 < 516 && anInt21 < 338) {
+				if (mouseEventX > 4 && mouseEventY > 4 && mouseEventX < 516 && mouseEventY < 338) {
 					if (anInt882 != -1) {
-						method29(4, 13037, Widget.interfaces[anInt882], anInt20, 4, anInt21, 0);
+						method29(4, 13037, Widget.interfaces[anInt882], mouseEventX, 4, mouseEventY, 0);
 					} else {
 						method71(33660);
 					}
@@ -6310,11 +6285,12 @@ public class Client extends GameStub {
 					anInt1051 = anInt911;
 				}
 				anInt911 = 0;
-				if (anInt20 > 553 && anInt21 > 205 && anInt20 < 743 && anInt21 < 466) {
+				if (mouseEventX > 553 && mouseEventY > 205 && mouseEventX < 743 && mouseEventY < 466) {
 					if (anInt1214 != -1) {
-						method29(553, 13037, Widget.interfaces[anInt1214], anInt20, 205, anInt21, 0);
+						method29(553, 13037, Widget.interfaces[anInt1214], mouseEventX, 205, mouseEventY, 0);
 					} else if (anIntArray1155[anInt1246] != -1) {
-						method29(553, 13037, Widget.interfaces[anIntArray1155[anInt1246]], anInt20, 205, anInt21, 0);
+						method29(553, 13037, Widget.interfaces[anIntArray1155[anInt1246]], mouseEventX, 205,
+								mouseEventY, 0);
 					}
 				}
 				if (anInt911 != anInt1073) {
@@ -6322,11 +6298,11 @@ public class Client extends GameStub {
 					anInt1073 = anInt911;
 				}
 				anInt911 = 0;
-				if (anInt20 > 17 && anInt21 > 357 && anInt20 < 496 && anInt21 < 453) {
+				if (mouseEventX > 17 && mouseEventY > 357 && mouseEventX < 496 && mouseEventY < 453) {
 					if (anInt1301 != -1) {
-						method29(17, 13037, Widget.interfaces[anInt1301], anInt20, 357, anInt21, 0);
-					} else if (anInt21 < 434 && anInt20 < 426) {
-						method74(anInt20 - 17, anInt21 - 357, 9);
+						method29(17, 13037, Widget.interfaces[anInt1301], mouseEventX, 357, mouseEventY, 0);
+					} else if (mouseEventY < 434 && mouseEventX < 426) {
+						method74(mouseEventX - 17, mouseEventY - 357, 9);
 					}
 				}
 				if (anInt1301 != -1 && anInt911 != anInt1064) {
@@ -6454,7 +6430,7 @@ public class Client extends GameStub {
 				aLong1245 = 0L;
 				anInt1047 = 0;
 				mouseCapturer.coord = 0;
-				aBoolean17 = true;
+				awtFocus = true;
 				aBoolean979 = true;
 				loggedIn = true;
 				outBuffer.offset = 0;
@@ -6470,7 +6446,7 @@ public class Client extends GameStub {
 				hintIconType = 0;
 				menuActionRow = 0;
 				aBoolean910 = false;
-				anInt18 = 0;
+				idleTime = 0;
 				for (int i_472_ = 0; i_472_ < 100; i_472_++) {
 					aStringArray969[i_472_] = null;
 				}
@@ -6850,7 +6826,7 @@ public class Client extends GameStub {
 				outBuffer.put(walkingQueueY[currentIndex] - localY);
 			}
 			outBuffer.putLEShort(localY + regionAbsoluteBaseY);
-			outBuffer.putByteC(keyArray[5] == 1 ? 1 : 0);
+			outBuffer.putByteC(keyStatus[5] == 1 ? 1 : 0);
 			return true;
 		}
 		if (clickType == 1) {
@@ -7240,10 +7216,10 @@ public class Client extends GameStub {
 	}
 
 	@Override
-	public final void method6() {
+	public final void startup() {
 		drawLoadingText(20, "Starting up");
 		if (SignLink.aBoolean615) {
-			anInt6 = 5;
+			mindel = 5;
 		}
 		if (Client.aBoolean1018) {
 			aBoolean1277 = true;
@@ -7516,39 +7492,39 @@ public class Client extends GameStub {
 					}
 					ImageRGB imagergb = new ImageRGB(archive_541_, "backleft1", 0);
 					aProducingGraphicsBuffer928 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backleft2", 0);
 					aProducingGraphicsBuffer929 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backright1", 0);
 					aProducingGraphicsBuffer930 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backright2", 0);
 					aProducingGraphicsBuffer931 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backtop1", 0);
 					aProducingGraphicsBuffer932 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backvmid1", 0);
 					aProducingGraphicsBuffer933 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backvmid2", 0);
 					aProducingGraphicsBuffer934 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backvmid3", 0);
 					aProducingGraphicsBuffer935 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					imagergb = new ImageRGB(archive_541_, "backhmid2", 0);
 					aProducingGraphicsBuffer936 = new ProducingGraphicsBuffer(imagergb.width, imagergb.height,
-							method11(0));
+							getComponent());
 					imagergb.drawInverse(0, 0);
 					int i_562_ = (int) (Math.random() * 21.0) - 10;
 					int i_563_ = (int) (Math.random() * 21.0) - 10;
@@ -7697,11 +7673,11 @@ public class Client extends GameStub {
 			try {
 				loggedIn &= bool;
 				if (anInt1046 == 0) {
-					if (anInt26 != 1) {
+					if (clickType != 1) {
 						break;
 					}
-					int i = anInt27 - 25 - 550;
-					int i_584_ = anInt28 - 5 - 4;
+					int i = clickX - 25 - 550;
+					int i_584_ = clickY - 5 - 4;
 					if (i >= 0 && i_584_ >= 0 && i < 146 && i_584_ < 151) {
 						i -= 73;
 						i_584_ -= 75;
@@ -7787,10 +7763,10 @@ public class Client extends GameStub {
 						/* empty */
 					}
 				}
-				Graphics graphics = method11(0).getGraphics();
+				Graphics graphics = getComponent().getGraphics();
 				graphics.setColor(Color.black);
 				graphics.fillRect(0, 0, 765, 503);
-				this.method4(false, 1);
+				this.method4(1);
 				if (aBoolean951) {
 					aBoolean856 = false;
 					graphics.setFont(new Font("Helvetica", 1, 16));
@@ -8308,8 +8284,8 @@ public class Client extends GameStub {
 		}
 		if (anInt1301 == -1) {
 			aWidget1084.interfaceScrollPosition = anInt1236 - anInt1114 - 77;
-			if (anInt20 > 448 && anInt20 < 560 && anInt21 > 332) {
-				method65(463, 77, anInt20 - 17, anInt21 - 357, aWidget1084, 0, false, anInt1236, 0);
+			if (mouseEventX > 448 && mouseEventX < 560 && mouseEventY > 332) {
+				method65(463, 77, mouseEventX - 17, mouseEventY - 357, aWidget1084, 0, false, anInt1236, 0);
 			}
 			int i = anInt1236 - 77 - aWidget1084.interfaceScrollPosition;
 			if (i < 0) {
@@ -8504,7 +8480,7 @@ public class Client extends GameStub {
 		try {
 			int i = widget.interfaceContentType;
 			if (bool) {
-				method6();
+				startup();
 			}
 			if (i >= 1 && i <= 200 || i >= 701 && i <= 900) {
 				if (i >= 801) {
@@ -8627,8 +8603,8 @@ public class Client extends GameStub {
 											if (imagergb != null) {
 												if (anInt1111 != 0 && anInt1110 == i_636_
 														&& anInt1109 == widget_635_.interfaceId) {
-													i_641_ = anInt20 - anInt1112;
-													i_642_ = anInt21 - anInt1113;
+													i_641_ = mouseEventX - anInt1112;
+													i_642_ = mouseEventY - anInt1113;
 													if (i_641_ < 5 && i_641_ > -5) {
 														i_641_ = 0;
 													}
@@ -8676,8 +8652,7 @@ public class Client extends GameStub {
 												} else {
 													imagergb.method345(i_639_, 16083, i_640_);
 												}
-												if (imagergb.maxWidth == 33
-														|| widget_635_.itemAmounts[i_636_] != 1) {
+												if (imagergb.maxWidth == 33 || widget_635_.itemAmounts[i_636_] != 1) {
 													int i_647_ = widget_635_.itemAmounts[i_636_];
 													aTypeFace1295.drawRegularString(Client.method43(-33245, i_647_),
 															i_639_ + 1 + i_641_, i_640_ + 10 + i_642_, 0);
@@ -9130,16 +9105,16 @@ public class Client extends GameStub {
 					if (anInt1040 != i_699_) {
 						anInt1040 += (i_699_ - anInt1040) / 16;
 					}
-					if (keyArray[1] == 1) {
+					if (keyStatus[1] == 1) {
 						anInt1211 += (-24 - anInt1211) / 2;
-					} else if (keyArray[2] == 1) {
+					} else if (keyStatus[2] == 1) {
 						anInt1211 += (24 - anInt1211) / 2;
 					} else {
 						anInt1211 /= 2;
 					}
-					if (keyArray[3] == 1) {
+					if (keyStatus[3] == 1) {
 						anInt1212 += (12 - anInt1212) / 2;
-					} else if (keyArray[4] == 1) {
+					} else if (keyStatus[4] == 1) {
 						anInt1212 += (-12 - anInt1212) / 2;
 					} else {
 						anInt1212 /= 2;
@@ -9220,25 +9195,17 @@ public class Client extends GameStub {
 	}
 
 	@Override
-	public final void method9(int i) {
-		try {
-			if (aBoolean1277 || aBoolean951 || aBoolean1201) {
-				method94(-13873);
+	public final void repaintGame() {
+		if (aBoolean1277 || aBoolean951 || aBoolean1201) {
+			method94(-13873);
+		} else {
+			Client.anInt1086++;
+			if (!loggedIn) {
+				method135(false, false);
 			} else {
-				Client.anInt1086++;
-				if (i != 0) {
-					opcode = -1;
-				}
-				if (!loggedIn) {
-					method135(false, false);
-				} else {
-					method102();
-				}
-				anInt1238 = 0;
+				method102();
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("24097, " + i + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+			anInt1238 = 0;
 		}
 	}
 
@@ -9307,7 +9274,7 @@ public class Client extends GameStub {
 			if (b == 2) {
 				b = (byte) 0;
 			} else {
-				method6();
+				startup();
 			}
 			SignLink.anInt638 = i;
 		} catch (RuntimeException runtimeexception) {
@@ -9352,10 +9319,10 @@ public class Client extends GameStub {
 				int i_712_ = 507;
 				int i_713_ = 20;
 				int i_714_ = 16776960;
-				if (anInt8 < 15) {
+				if (fps < 15) {
 					i_714_ = 16711680;
 				}
-				aTypeFace1296.drawStringRA("Fps:" + anInt8, i_712_, i_713_, i_714_);
+				aTypeFace1296.drawStringRA("Fps:" + fps, i_712_, i_713_, i_714_);
 				i_713_ += 15;
 				Runtime runtime = Runtime.getRuntime();
 				int i_715_ = (int) ((runtime.totalMemory() - runtime.freeMemory()) / 1024L);
@@ -9513,15 +9480,15 @@ public class Client extends GameStub {
 				}
 				i += 8;
 				int i_723_ = 15 * menuActionRow + 21;
-				if (anInt27 > 4 && anInt28 > 4 && anInt27 < 516 && anInt28 < 338) {
-					int i_724_ = anInt27 - 4 - i / 2;
+				if (clickX > 4 && clickY > 4 && clickX < 516 && clickY < 338) {
+					int i_724_ = clickX - 4 - i / 2;
 					if (i_724_ + i > 512) {
 						i_724_ = 512 - i;
 					}
 					if (i_724_ < 0) {
 						i_724_ = 0;
 					}
-					int i_725_ = anInt28 - 4;
+					int i_725_ = clickY - 4;
 					if (i_725_ + i_723_ > 334) {
 						i_725_ = 334 - i_723_;
 					}
@@ -9535,14 +9502,14 @@ public class Client extends GameStub {
 					anInt976 = i;
 					anInt977 = 15 * menuActionRow + 22;
 				}
-				if (anInt27 > 553 && anInt28 > 205 && anInt27 < 743 && anInt28 < 466) {
-					int i_726_ = anInt27 - 553 - i / 2;
+				if (clickX > 553 && clickY > 205 && clickX < 743 && clickY < 466) {
+					int i_726_ = clickX - 553 - i / 2;
 					if (i_726_ < 0) {
 						i_726_ = 0;
 					} else if (i_726_ + i > 190) {
 						i_726_ = 190 - i;
 					}
-					int i_727_ = anInt28 - 205;
+					int i_727_ = clickY - 205;
 					if (i_727_ < 0) {
 						i_727_ = 0;
 					} else if (i_727_ + i_723_ > 261) {
@@ -9555,16 +9522,16 @@ public class Client extends GameStub {
 					anInt976 = i;
 					anInt977 = 15 * menuActionRow + 22;
 				}
-				if (anInt27 <= 17 || anInt28 <= 357 || anInt27 >= 496 || anInt28 >= 453) {
+				if (clickX <= 17 || clickY <= 357 || clickX >= 496 || clickY >= 453) {
 					break;
 				}
-				int i_728_ = anInt27 - 17 - i / 2;
+				int i_728_ = clickX - 17 - i / 2;
 				if (i_728_ < 0) {
 					i_728_ = 0;
 				} else if (i_728_ + i > 479) {
 					i_728_ = 479 - i;
 				}
-				int i_729_ = anInt28 - 357;
+				int i_729_ = clickY - 357;
 				if (i_729_ < 0) {
 					i_729_ = 0;
 				} else if (i_729_ + i_723_ > 96) {
@@ -9823,7 +9790,7 @@ public class Client extends GameStub {
 	public final void method122(int i, long l) {
 		try {
 			if (i != 3) {
-				method6();
+				startup();
 			}
 			if (l != 0L) {
 				for (int i_759_ = 0; i_759_ < anInt847; i_759_++) {
@@ -10232,13 +10199,13 @@ public class Client extends GameStub {
 								&& (i_804_ == 7 || privateChatSetting == 0 || privateChatSetting == 1
 										&& method109(false, string))) {
 							int i_807_ = 329 - i * 13;
-							if (anInt20 > 4 && anInt21 - 4 > i_807_ - 10 && anInt21 - 4 <= i_807_ + 3) {
+							if (mouseEventX > 4 && mouseEventY - 4 > i_807_ - 10 && mouseEventY - 4 <= i_807_ + 3) {
 								int i_808_ = aTypeFace1296.getStringEffectWidth("From:  " + string
 										+ aStringArray969[i_803_]) + 25;
 								if (i_808_ > 450) {
 									i_808_ = 450;
 								}
-								if (anInt20 < 4 + i_808_) {
+								if (mouseEventX < 4 + i_808_) {
 									if (playerRights >= 1) {
 										menuActionNames[menuActionRow] = "Report abuse @whi@" + string;
 										menuActionIds[menuActionRow] = 2606;
@@ -10617,7 +10584,6 @@ public class Client extends GameStub {
 		try {
 			aBoolean987 = true;
 			if (b != 59) {
-				anInt1083 = -186;
 			}
 			try {
 				long l = System.currentTimeMillis();
@@ -10650,21 +10616,6 @@ public class Client extends GameStub {
 			aBoolean987 = false;
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("48378, " + b + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
-	}
-
-	@Override
-	public final void method10(byte b) {
-		try {
-			aBoolean1280 = true;
-			if (b == 1) {
-				b = (byte) 0;
-			} else {
-				anInt1243 = isaacCipher.nextInt();
-			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("97636, " + b + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -11052,14 +11003,14 @@ public class Client extends GameStub {
 					int i = width / 2 - 80;
 					int i_980_ = height / 2 + 20;
 					i_980_ += 20;
-					if (anInt26 == 1 && anInt27 >= i - 75 && anInt27 <= i + 75 && anInt28 >= i_980_ - 20
-							&& anInt28 <= i_980_ + 20) {
+					if (clickType == 1 && clickX >= i - 75 && clickX <= i + 75 && clickY >= i_980_ - 20
+							&& clickY <= i_980_ + 20) {
 						anInt858 = 3;
 						anInt1241 = 0;
 					}
 					i = width / 2 + 80;
-					if (anInt26 == 1 && anInt27 >= i - 75 && anInt27 <= i + 75 && anInt28 >= i_980_ - 20
-							&& anInt28 <= i_980_ + 20) {
+					if (clickType == 1 && clickX >= i - 75 && clickX <= i + 75 && clickY >= i_980_ - 20
+							&& clickY <= i_980_ + 20) {
 						aString1291 = "";
 						aString1292 = "Enter your username & password.";
 						anInt858 = 2;
@@ -11069,19 +11020,19 @@ public class Client extends GameStub {
 					int i = height / 2 - 40;
 					i += 30;
 					i += 25;
-					if (anInt26 == 1 && anInt28 >= i - 15 && anInt28 < i) {
+					if (clickType == 1 && clickY >= i - 15 && clickY < i) {
 						anInt1241 = 0;
 					}
 					i += 15;
-					if (anInt26 == 1 && anInt28 >= i - 15 && anInt28 < i) {
+					if (clickType == 1 && clickY >= i - 15 && clickY < i) {
 						anInt1241 = 1;
 					}
 					i += 15;
 					int i_981_ = width / 2 - 80;
 					int i_982_ = height / 2 + 50;
 					i_982_ += 20;
-					if (anInt26 == 1 && anInt27 >= i_981_ - 75 && anInt27 <= i_981_ + 75 && anInt28 >= i_982_ - 20
-							&& anInt28 <= i_982_ + 20) {
+					if (clickType == 1 && clickX >= i_981_ - 75 && clickX <= i_981_ + 75 && clickY >= i_982_ - 20
+							&& clickY <= i_982_ + 20) {
 						anInt1063 = 0;
 						method84(aString1198, aString1199, false);
 						if (loggedIn) {
@@ -11089,14 +11040,14 @@ public class Client extends GameStub {
 						}
 					}
 					i_981_ = width / 2 + 80;
-					if (anInt26 == 1 && anInt27 >= i_981_ - 75 && anInt27 <= i_981_ + 75 && anInt28 >= i_982_ - 20
-							&& anInt28 <= i_982_ + 20) {
+					if (clickType == 1 && clickX >= i_981_ - 75 && clickX <= i_981_ + 75 && clickY >= i_982_ - 20
+							&& clickY <= i_982_ + 20) {
 						anInt858 = 0;
 						aString1198 = "";
 						aString1199 = "";
 					}
 					for (;;) {
-						int i_983_ = this.method5(-796);
+						int i_983_ = this.readCharacter();
 						if (i_983_ == -1) {
 							break;
 						}
@@ -11142,8 +11093,8 @@ public class Client extends GameStub {
 					int i = width / 2;
 					int i_986_ = height / 2 + 50;
 					i_986_ += 20;
-					if (anInt26 != 1 || anInt27 < i - 75 || anInt27 > i + 75 || anInt28 < i_986_ - 20
-							|| anInt28 > i_986_ + 20) {
+					if (clickType != 1 || clickX < i - 75 || clickX > i + 75 || clickY < i_986_ - 20
+							|| clickY > i_986_ + 20) {
 						break;
 					}
 					anInt858 = 0;
@@ -11171,8 +11122,8 @@ public class Client extends GameStub {
 					imagergb.method351(anIndexedImage1222, false, 83 - i_993_ - imagergb.maxHeight / 2 - 4, 94 + i_992_
 							- imagergb.maxWidth / 2 + 4);
 				} else {
-					imagergb.method345(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_
-							- imagergb.maxHeight / 2 - 4);
+					imagergb.method345(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_ - imagergb.maxHeight
+							/ 2 - 4);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -11304,7 +11255,7 @@ public class Client extends GameStub {
 			int i_1021_ = 0;
 			int i_1022_ = i_1012_;
 			if (i != 0) {
-				method6();
+				startup();
 			}
 			if (i_1018_ != 0) {
 				int i_1023_ = Model.anIntArray1682[i_1018_];
@@ -12522,8 +12473,8 @@ public class Client extends GameStub {
 			Model.aBoolean1677 = true;
 			if (b == 1) {
 				Model.anInt1680 = 0;
-				Model.anInt1678 = anInt20 - 4;
-				Model.anInt1679 = anInt21 - 4;
+				Model.anInt1678 = mouseEventX - 4;
+				Model.anInt1679 = mouseEventY - 4;
 				Rasterizer.resetPixels();
 				currentScene.method535(anInt883, anInt885, anInt887, anInt884, i, anInt886, false);
 				currentScene.method510((byte) 104);

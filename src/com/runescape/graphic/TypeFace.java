@@ -6,7 +6,7 @@ import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 
 public class TypeFace extends Rasterizer {
-	
+
 	protected byte[][] characterPixels = new byte[256][];
 	protected int[] characterWidths = new int[256];
 	protected int[] characterHeights = new int[256];
@@ -406,19 +406,22 @@ public class TypeFace extends Rasterizer {
 			rasterizerPixelOffset += widthoffset;
 		}
 		if (width > 0 && height > 0) {
-			drawCharacterPixelsAlpha(characterPixels, Rasterizer.pixels, characterPixel, rasterizerPixel, characterPixelOffset, rasterizerPixelOffset, width, height, color, alpha);
+			drawCharacterPixelsAlpha(characterPixels, Rasterizer.pixels, characterPixel, rasterizerPixel,
+					characterPixelOffset, rasterizerPixelOffset, width, height, color, alpha);
 		}
 	}
 
-	private void drawCharacterPixelsAlpha(byte[] characterPixels, int[] rasterizerPixels, int characterPixel, int rasterizerPixel, int characterPixelOffset, int rasterizerPixelOffset, int width, int height,
-			int color, int alpha) {
+	private void drawCharacterPixelsAlpha(byte[] characterPixels, int[] rasterizerPixels, int characterPixel,
+			int rasterizerPixel, int characterPixelOffset, int rasterizerPixelOffset, int width, int height, int color,
+			int alpha) {
 		color = ((color & 0xff00ff) * alpha & ~0xff00ff) + ((color & 0xff00) * alpha & 0xff0000) >> 8;
 		alpha = 256 - alpha;
 		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
 			for (int widthCounter = -width; widthCounter < 0; widthCounter++) {
 				if (characterPixels[characterPixel++] != 0) {
 					int rasterizerPixelColor = rasterizerPixels[rasterizerPixel];
-					rasterizerPixels[rasterizerPixel++] = (((rasterizerPixelColor & 0xff00ff) * alpha & ~0xff00ff) + ((rasterizerPixelColor & 0xff00) * alpha & 0xff0000) >> 8)
+					rasterizerPixels[rasterizerPixel++] = (((rasterizerPixelColor & 0xff00ff) * alpha & ~0xff00ff)
+							+ ((rasterizerPixelColor & 0xff00) * alpha & 0xff0000) >> 8)
 							+ color;
 				} else {
 					rasterizerPixel++;

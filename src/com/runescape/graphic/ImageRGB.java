@@ -11,7 +11,7 @@ import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
 public class ImageRGB extends Rasterizer {
-	
+
 	public int[] pixels;
 	public int width;
 	public int height;
@@ -91,104 +91,106 @@ public class ImageRGB extends Rasterizer {
 	}
 
 	public void adjustRGB(int redOffset, int greenOffset, int blueOffset) {
-			for (int pixel = 0; pixel < pixels.length; pixel++) {
-				int originalColor = pixels[pixel];
-				if (originalColor != 0) {
-					int red = originalColor >> 16 & 0xff;
-					red += redOffset;
-					if (red < 1) {
-						red = 1;
-					} else if (red > 255) {
-						red = 255;
-					}
-					int green = originalColor >> 8 & 0xff;
-					green += greenOffset;
-					if (green < 1) {
-						green = 1;
-					} else if (green > 255) {
-						green = 255;
-					}
-					int blue = originalColor & 0xff;
-					blue += blueOffset;
-					if (blue < 1) {
-						blue = 1;
-					} else if (blue > 255) {
-						blue = 255;
-					}
-					pixels[pixel] = (red << 16) + (green << 8) + blue;
+		for (int pixel = 0; pixel < pixels.length; pixel++) {
+			int originalColor = pixels[pixel];
+			if (originalColor != 0) {
+				int red = originalColor >> 16 & 0xff;
+				red += redOffset;
+				if (red < 1) {
+					red = 1;
+				} else if (red > 255) {
+					red = 255;
 				}
+				int green = originalColor >> 8 & 0xff;
+				green += greenOffset;
+				if (green < 1) {
+					green = 1;
+				} else if (green > 255) {
+					green = 255;
+				}
+				int blue = originalColor & 0xff;
+				blue += blueOffset;
+				if (blue < 1) {
+					blue = 1;
+				} else if (blue > 255) {
+					blue = 255;
+				}
+				pixels[pixel] = (red << 16) + (green << 8) + blue;
 			}
+		}
 	}
 
 	public void trim() {
-			int[] newPixels = new int[maxWidth * maxHeight];
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
-					newPixels[(y + offsetY) * maxWidth + (x + offsetX)] = pixels[y * width + x];
-				}
+		int[] newPixels = new int[maxWidth * maxHeight];
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				newPixels[(y + offsetY) * maxWidth + (x + offsetX)] = pixels[y * width + x];
 			}
-			pixels = newPixels;
-			width = maxWidth;
-			height = maxHeight;
-			offsetX = 0;
-			offsetY = 0;
+		}
+		pixels = newPixels;
+		width = maxWidth;
+		height = maxHeight;
+		offsetX = 0;
+		offsetY = 0;
 	}
 
 	public void drawInverse(int x, int y) {
-			x += offsetX;
-			y += offsetY;
-			int rasterizerPixel = x + y * Rasterizer.width;
-			int pixel = 0;
-			int newHeight = height;
-			int newWidth = width;
-			int rasterizerPixelOffset = Rasterizer.width - newWidth;
-			int pixelOffset = 0;
-			if (y < Rasterizer.topY) {
-				int yOffset = Rasterizer.topY - y;
-				newHeight -= yOffset;
-				y = Rasterizer.topY;
-				pixel += yOffset * newWidth;
-				rasterizerPixel += yOffset * Rasterizer.width;
-			}
-			if (y + newHeight > Rasterizer.bottomY) {
-				newHeight -= y + newHeight - Rasterizer.bottomY;
-			}
-			if (x < Rasterizer.topX) {
-				int xOffset = Rasterizer.topX - x;
-				newWidth -= xOffset;
-				x = Rasterizer.topX;
-				pixel += xOffset;
-				rasterizerPixel += xOffset;
-				pixelOffset += xOffset;
-				rasterizerPixelOffset += xOffset;
-			}
-			if (x + newWidth > Rasterizer.bottomX) {
-				int widthOffset = x + newWidth - Rasterizer.bottomX;
-				newWidth -= widthOffset;
-				pixelOffset += widthOffset;
-				rasterizerPixelOffset += widthOffset;
-			}
-			if (newWidth > 0 && newHeight > 0) {
-				copyPixels(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth, newHeight);
-			}
+		x += offsetX;
+		y += offsetY;
+		int rasterizerPixel = x + y * Rasterizer.width;
+		int pixel = 0;
+		int newHeight = height;
+		int newWidth = width;
+		int rasterizerPixelOffset = Rasterizer.width - newWidth;
+		int pixelOffset = 0;
+		if (y < Rasterizer.topY) {
+			int yOffset = Rasterizer.topY - y;
+			newHeight -= yOffset;
+			y = Rasterizer.topY;
+			pixel += yOffset * newWidth;
+			rasterizerPixel += yOffset * Rasterizer.width;
+		}
+		if (y + newHeight > Rasterizer.bottomY) {
+			newHeight -= y + newHeight - Rasterizer.bottomY;
+		}
+		if (x < Rasterizer.topX) {
+			int xOffset = Rasterizer.topX - x;
+			newWidth -= xOffset;
+			x = Rasterizer.topX;
+			pixel += xOffset;
+			rasterizerPixel += xOffset;
+			pixelOffset += xOffset;
+			rasterizerPixelOffset += xOffset;
+		}
+		if (x + newWidth > Rasterizer.bottomX) {
+			int widthOffset = x + newWidth - Rasterizer.bottomX;
+			newWidth -= widthOffset;
+			pixelOffset += widthOffset;
+			rasterizerPixelOffset += widthOffset;
+		}
+		if (newWidth > 0 && newHeight > 0) {
+			copyPixels(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth,
+					newHeight);
+		}
 	}
 
-	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset, int rasterizerPixelOffset, int width, int height) {
-				int shiftedWidth = -(width >> 2);
-				width = -(width & 0x3);
-				for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
-					for (int widthCounter = shiftedWidth; widthCounter < 0; widthCounter++) {
-						rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
-						rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
-						rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
-						rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
-					}
-					for (int widthCounter = width; widthCounter < 0; widthCounter++) {
-						rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
-					}
-					rasterizerPixel += rasterizerPixelOffset;
-					pixel += pixelOffset;
-				}
+	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset,
+			int rasterizerPixelOffset, int width, int height) {
+		int shiftedWidth = -(width >> 2);
+		width = -(width & 0x3);
+		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
+			for (int widthCounter = shiftedWidth; widthCounter < 0; widthCounter++) {
+				rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
+				rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
+				rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
+				rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
+			}
+			for (int widthCounter = width; widthCounter < 0; widthCounter++) {
+				rasterizerPixels[rasterizerPixel++] = pixels[pixel++];
+			}
+			rasterizerPixel += rasterizerPixelOffset;
+			pixel += pixelOffset;
+		}
 	}
 
 	public void method345(int x, int i_42_, int y) {
@@ -282,61 +284,63 @@ public class ImageRGB extends Rasterizer {
 	}
 
 	public void drawImageAlpha(int x, int y, int alpha) {
-			x += offsetX;
-			y += offsetY;
-			int rasterizerPixel = x + y * Rasterizer.width;
-			int pixel = 0;
-			int newHeight = height;
-			int newWidth = width;
-			int rasterizerPixelOffset = Rasterizer.width - newWidth;
-			int pixelOffset = 0;
-			if (y < Rasterizer.topY) {
-				int yOffset = Rasterizer.topY - y;
-				newHeight -= yOffset;
-				y = Rasterizer.topY;
-				pixel += yOffset * newWidth;
-				rasterizerPixel += yOffset * Rasterizer.width;
-			}
-			if (y + newHeight > Rasterizer.bottomY) {
-				newHeight -= y + newHeight - Rasterizer.bottomY;
-			}
-			if (x < Rasterizer.topX) {
-				int xOffset = Rasterizer.topX - x;
-				newWidth -= xOffset;
-				x = Rasterizer.topX;
-				pixel += xOffset;
-				rasterizerPixel += xOffset;
-				pixelOffset += xOffset;
-				rasterizerPixelOffset += xOffset;
-			}
-			if (x + newWidth > Rasterizer.bottomX) {
-				int xOffset = x + newWidth - Rasterizer.bottomX;
-				newWidth -= xOffset;
-				pixelOffset += xOffset;
-				rasterizerPixelOffset += xOffset;
-			}
-			if (newWidth > 0 && newHeight > 0) {
-				copyPixelsAlpha(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth, newHeight, 0, alpha);
-			}
+		x += offsetX;
+		y += offsetY;
+		int rasterizerPixel = x + y * Rasterizer.width;
+		int pixel = 0;
+		int newHeight = height;
+		int newWidth = width;
+		int rasterizerPixelOffset = Rasterizer.width - newWidth;
+		int pixelOffset = 0;
+		if (y < Rasterizer.topY) {
+			int yOffset = Rasterizer.topY - y;
+			newHeight -= yOffset;
+			y = Rasterizer.topY;
+			pixel += yOffset * newWidth;
+			rasterizerPixel += yOffset * Rasterizer.width;
+		}
+		if (y + newHeight > Rasterizer.bottomY) {
+			newHeight -= y + newHeight - Rasterizer.bottomY;
+		}
+		if (x < Rasterizer.topX) {
+			int xOffset = Rasterizer.topX - x;
+			newWidth -= xOffset;
+			x = Rasterizer.topX;
+			pixel += xOffset;
+			rasterizerPixel += xOffset;
+			pixelOffset += xOffset;
+			rasterizerPixelOffset += xOffset;
+		}
+		if (x + newWidth > Rasterizer.bottomX) {
+			int xOffset = x + newWidth - Rasterizer.bottomX;
+			newWidth -= xOffset;
+			pixelOffset += xOffset;
+			rasterizerPixelOffset += xOffset;
+		}
+		if (newWidth > 0 && newHeight > 0) {
+			copyPixelsAlpha(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset,
+					newWidth, newHeight, 0, alpha);
+		}
 	}
 
-	private void copyPixelsAlpha(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset, int rasterizerPixelOffset, int width, int height,
-			int color, int alpha) {
-			int alphaValue = 256 - alpha;
-			for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
-				for (int widthCounter = -width; widthCounter < 0; widthCounter++) {
-					color = pixels[pixel++];
-					if (color != 0) {
-						int rasterizerPixelColor = rasterizerPixels[rasterizerPixel];
-						rasterizerPixels[rasterizerPixel++] = ((color & 0xff00ff) * alpha + (rasterizerPixelColor & 0xff00ff) * alphaValue & ~0xff00ff)
-								+ ((color & 0xff00) * alpha + (rasterizerPixelColor & 0xff00) * alphaValue & 0xff0000) >> 8;
-					} else {
-						rasterizerPixel++;
-					}
+	private void copyPixelsAlpha(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset,
+			int rasterizerPixelOffset, int width, int height, int color, int alpha) {
+		int alphaValue = 256 - alpha;
+		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
+			for (int widthCounter = -width; widthCounter < 0; widthCounter++) {
+				color = pixels[pixel++];
+				if (color != 0) {
+					int rasterizerPixelColor = rasterizerPixels[rasterizerPixel];
+					rasterizerPixels[rasterizerPixel++] = ((color & 0xff00ff) * alpha
+							+ (rasterizerPixelColor & 0xff00ff) * alphaValue & ~0xff00ff)
+							+ ((color & 0xff00) * alpha + (rasterizerPixelColor & 0xff00) * alphaValue & 0xff0000) >> 8;
+				} else {
+					rasterizerPixel++;
 				}
-				rasterizerPixel += rasterizerPixelOffset;
-				pixel += pixelOffset;
 			}
+			rasterizerPixel += rasterizerPixelOffset;
+			pixel += pixelOffset;
+		}
 	}
 
 	public void method349(int i, int i_89_, int[] is, int i_90_, int[] is_91_, int i_92_, int i_93_, int i_94_,
@@ -460,8 +464,8 @@ public class ImageRGB extends Rasterizer {
 				i_132_ += i_136_;
 			}
 			if (i_131_ > 0 && i_130_ > 0) {
-				method352(pixels, i_131_, indexedimage.pixels, i_130_, Rasterizer.pixels, 0, i_132_, i_128_,
-						i_133_, i_129_);
+				method352(pixels, i_131_, indexedimage.pixels, i_130_, Rasterizer.pixels, 0, i_132_, i_128_, i_133_,
+						i_129_);
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("70668, " + indexedimage + ", " + bool + ", " + i + ", " + i_127_ + ", "
@@ -472,45 +476,45 @@ public class ImageRGB extends Rasterizer {
 
 	private void method352(int[] is, int i, byte[] bs, int i_137_, int[] is_138_, int i_139_, int i_140_, int i_141_,
 			int i_142_, int i_143_) {
-			int i_144_ = -(i >> 2);
-			i = -(i & 0x3);
-			for (int i_146_ = -i_137_; i_146_ < 0; i_146_++) {
-				for (int i_147_ = i_144_; i_147_ < 0; i_147_++) {
-					i_139_ = is[i_143_++];
-					if (i_139_ != 0 && bs[i_141_] == 0) {
-						is_138_[i_141_++] = i_139_;
-					} else {
-						i_141_++;
-					}
-					i_139_ = is[i_143_++];
-					if (i_139_ != 0 && bs[i_141_] == 0) {
-						is_138_[i_141_++] = i_139_;
-					} else {
-						i_141_++;
-					}
-					i_139_ = is[i_143_++];
-					if (i_139_ != 0 && bs[i_141_] == 0) {
-						is_138_[i_141_++] = i_139_;
-					} else {
-						i_141_++;
-					}
-					i_139_ = is[i_143_++];
-					if (i_139_ != 0 && bs[i_141_] == 0) {
-						is_138_[i_141_++] = i_139_;
-					} else {
-						i_141_++;
-					}
+		int i_144_ = -(i >> 2);
+		i = -(i & 0x3);
+		for (int i_146_ = -i_137_; i_146_ < 0; i_146_++) {
+			for (int i_147_ = i_144_; i_147_ < 0; i_147_++) {
+				i_139_ = is[i_143_++];
+				if (i_139_ != 0 && bs[i_141_] == 0) {
+					is_138_[i_141_++] = i_139_;
+				} else {
+					i_141_++;
 				}
-				for (int i_148_ = i; i_148_ < 0; i_148_++) {
-					i_139_ = is[i_143_++];
-					if (i_139_ != 0 && bs[i_141_] == 0) {
-						is_138_[i_141_++] = i_139_;
-					} else {
-						i_141_++;
-					}
+				i_139_ = is[i_143_++];
+				if (i_139_ != 0 && bs[i_141_] == 0) {
+					is_138_[i_141_++] = i_139_;
+				} else {
+					i_141_++;
 				}
-				i_141_ += i_140_;
-				i_143_ += i_142_;
+				i_139_ = is[i_143_++];
+				if (i_139_ != 0 && bs[i_141_] == 0) {
+					is_138_[i_141_++] = i_139_;
+				} else {
+					i_141_++;
+				}
+				i_139_ = is[i_143_++];
+				if (i_139_ != 0 && bs[i_141_] == 0) {
+					is_138_[i_141_++] = i_139_;
+				} else {
+					i_141_++;
+				}
 			}
+			for (int i_148_ = i; i_148_ < 0; i_148_++) {
+				i_139_ = is[i_143_++];
+				if (i_139_ != 0 && bs[i_141_] == 0) {
+					is_138_[i_141_++] = i_139_;
+				} else {
+					i_141_++;
+				}
+			}
+			i_141_ += i_140_;
+			i_143_ += i_142_;
+		}
 	}
 }

@@ -16,8 +16,8 @@ public class MouseCapturer implements Runnable {
 		while (capturing) {
 			synchronized (objectLock) {
 				if (coord < 500) {
-					coordsX[coord] = client.anInt20;
-					coordsY[coord] = client.anInt21;
+					coordsX[coord] = client.mouseEventX;
+					coordsY[coord] = client.mouseEventY;
 					coord++;
 				}
 			}
