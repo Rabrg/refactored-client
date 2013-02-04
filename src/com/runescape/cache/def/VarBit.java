@@ -10,7 +10,7 @@ import com.runescape.util.SignLink;
 
 public class VarBit {
 	public static int anInt734;
-	public static VarBit[] aVarBitArray735;
+	public static VarBit[] cache;
 	public String aString736;
 	public int anInt737;
 	public int anInt738;
@@ -19,41 +19,31 @@ public class VarBit {
 	public int anInt741 = -1;
 	public int anInt742;
 
-	public static void method590(int i, Archive archive) {
-		do {
-			try {
-				if (i != 0) {
-				}
+	public static void load(int i, Archive archive) {
 				Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
 				VarBit.anInt734 = buffer.getUnsignedLEShort();
-				if (VarBit.aVarBitArray735 == null) {
-					VarBit.aVarBitArray735 = new VarBit[VarBit.anInt734];
+				if (VarBit.cache == null) {
+					VarBit.cache = new VarBit[VarBit.anInt734];
 				}
-				for (int i_0_ = 0; i_0_ < VarBit.anInt734; i_0_++) {
-					if (VarBit.aVarBitArray735[i_0_] == null) {
-						VarBit.aVarBitArray735[i_0_] = new VarBit();
+				for (int index = 0; index < VarBit.anInt734; index++) {
+					if (VarBit.cache[index] == null) {
+						VarBit.cache[index] = new VarBit();
 					}
-					VarBit.aVarBitArray735[i_0_].method591(buffer, false, i_0_);
-					if (VarBit.aVarBitArray735[i_0_].aBoolean740) {
-						Varp.aVarpArray746[VarBit.aVarBitArray735[i_0_].anInt737].aBoolean758 = true;
+					VarBit.cache[index].method591(buffer, false, index);
+					if (VarBit.cache[index].aBoolean740) {
+						Varp.aVarpArray746[VarBit.cache[index].anInt737].aBoolean758 = true;
 					}
 				}
 				if (buffer.offset == buffer.payload.length) {
-					break;
+					return;
 				}
 				System.out.println("varbit load mismatch");
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("95423, " + i + ", " + archive + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
 	}
 
 	public void method591(Buffer buffer, boolean bool, int i) {
 		try {
 			if (!bool) {
-				for (;;) {
+				while (true) {
 					int i_1_ = buffer.getUnsignedByte();
 					if (i_1_ == 0) {
 						break;

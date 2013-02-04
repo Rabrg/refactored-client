@@ -10,7 +10,7 @@ public class Npc extends Actor {
 	public NpcDefinition npcDefinition;
 
 	private final Model method400() {
-		if (animation >= 0 && anInt1549 == 0) {
+		if (animation >= 0 && aniomationDelay == 0) {
 			int frameId = AnimationSequence.animationSequences[animation].animationForFrame[anInt1547];
 			int frameId2 = -1;
 			if (anInt1537 >= 0 && anInt1537 != anInt1531) {
@@ -42,7 +42,7 @@ public class Npc extends Actor {
 			if (model_4_ != null) {
 				int animationId = spotanimation.animationSequences.animationForFrame[currentAnimationFrame];
 				Model animationModel = new Model(true, Animation.exists(animationId), false, model_4_);
-				animationModel.translate(0, -anInt1544, 0);
+				animationModel.translate(0, -spotAnimationDelay, 0);
 				animationModel.createBones();
 				animationModel.applyTransform(animationId);
 				animationModel.triangleSkin = null;

@@ -342,8 +342,8 @@ public class ItemDefinition {
 		if (i_25_ > 0) {
 			i_39_ *= 1.04;
 		}
-		int i_40_ = Rasterizer3D.anIntArray1490[itemDefinition.modelRotation1] * i_39_ >> 16;
-		int i_41_ = Rasterizer3D.anIntArray1491[itemDefinition.modelRotation1] * i_39_ >> 16;
+		int i_40_ = Rasterizer3D.SINE[itemDefinition.modelRotation1] * i_39_ >> 16;
+		int i_41_ = Rasterizer3D.COSINE[itemDefinition.modelRotation1] * i_39_ >> 16;
 		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation,
 				itemDefinition.modelRotation1, itemDefinition.modelOffset1, i_40_ + model.modelHeight / 2
 						+ itemDefinition.modelOffset2, i_41_ + itemDefinition.modelOffset2);

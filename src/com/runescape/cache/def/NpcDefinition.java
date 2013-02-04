@@ -120,14 +120,14 @@ public class NpcDefinition {
 				aBoolean437 = !aBoolean437;
 			}
 			if (anInt413 != -1) {
-				VarBit varbit = VarBit.aVarBitArray735[anInt413];
+				VarBit varbit = VarBit.cache[anInt413];
 				int i_4_ = varbit.anInt737;
 				int i_5_ = varbit.anInt738;
 				int i_6_ = varbit.anInt739;
 				int i_7_ = Client.anIntArray1257[i_6_ - i_5_];
-				i_3_ = NpcDefinition.aClient438.anIntArray996[i_4_] >> i_5_ & i_7_;
+				i_3_ = NpcDefinition.aClient438.settings[i_4_] >> i_5_ & i_7_;
 			} else if (anInt415 != -1) {
-				i_3_ = NpcDefinition.aClient438.anIntArray996[anInt415];
+				i_3_ = NpcDefinition.aClient438.settings[anInt415];
 			}
 			if (i_3_ < 0 || i_3_ >= anIntArray444.length || anIntArray444[i_3_] == -1) {
 				return null;

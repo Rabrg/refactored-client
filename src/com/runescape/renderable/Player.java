@@ -63,7 +63,7 @@ public class Player extends Actor {
 			Model model_0_ = spotanimation.getModel();
 			if (model_0_ != null) {
 				Model model_1_ = new Model(true, Animation.exists(currentAnimationFrame), false, model_0_);
-				model_1_.translate(0, -anInt1544, 0);
+				model_1_.translate(0, -spotAnimationDelay, 0);
 				model_1_.createBones();
 				model_1_.applyTransform(spotanimation.animationSequences.animationForFrame[currentAnimationFrame]);
 				model_1_.triangleSkin = null;
@@ -209,7 +209,7 @@ public class Player extends Actor {
 		try {
 			if (npcDefinition != null) {
 				int i_11_ = -1;
-				if (animation >= 0 && anInt1549 == 0) {
+				if (animation >= 0 && aniomationDelay == 0) {
 					i_11_ = AnimationSequence.animationSequences[animation].animationForFrame[anInt1547];
 				} else if (anInt1537 >= 0) {
 					i_11_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
@@ -222,7 +222,7 @@ public class Player extends Actor {
 			int i_13_ = -1;
 			int i_14_ = -1;
 			int i_15_ = -1;
-			if (animation >= 0 && anInt1549 == 0) {
+			if (animation >= 0 && aniomationDelay == 0) {
 				AnimationSequence animationsequence = AnimationSequence.animationSequences[animation];
 				i_12_ = animationsequence.animationForFrame[anInt1547];
 				if (anInt1537 >= 0 && anInt1537 != anInt1531) {

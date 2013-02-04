@@ -76,14 +76,14 @@ public class GameObject extends Renderable {
 				}
 			}
 			if (anInt1592 != -1) {
-				VarBit varbit = VarBit.aVarBitArray735[anInt1592];
+				VarBit varbit = VarBit.cache[anInt1592];
 				int i_3_ = varbit.anInt737;
 				int i_4_ = varbit.anInt738;
 				int i_5_ = varbit.anInt739;
 				int i_6_ = Client.anIntArray1257[i_5_ - i_4_];
-				i = GameObject.aClient1600.anIntArray996[i_3_] >> i_4_ & i_6_;
+				i = GameObject.aClient1600.settings[i_3_] >> i_4_ & i_6_;
 			} else if (anInt1593 != -1) {
-				i = GameObject.aClient1600.anIntArray996[anInt1593];
+				i = GameObject.aClient1600.settings[anInt1593];
 			}
 			if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
 				return null;

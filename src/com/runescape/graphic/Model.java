@@ -78,8 +78,8 @@ public class Model extends Renderable {
 	public static int anInt1679;
 	public static int anInt1680;
 	public static int[] anIntArray1681 = new int[1000];
-	public static int[] anIntArray1682 = Rasterizer3D.anIntArray1490;
-	public static int[] anIntArray1683 = Rasterizer3D.anIntArray1491;
+	public static int[] anIntArray1682 = Rasterizer3D.SINE;
+	public static int[] anIntArray1683 = Rasterizer3D.COSINE;
 	static int[] anIntArray1684 = Rasterizer3D.getRgbLookupTableId;
 	static int[] anIntArray1685 = Rasterizer3D.anIntArray1489;
 

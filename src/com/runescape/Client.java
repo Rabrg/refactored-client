@@ -210,7 +210,7 @@ public class Client extends GameStub {
 	private int[] anIntArray993 = new int[33];
 	private int[] anIntArray994 = new int[256];
 	public Index[] stores = new Index[5];
-	public int[] anIntArray996 = new int[2000];
+	public int[] settings = new int[2000];
 	private boolean aBoolean997 = false;
 	private byte aByte998 = -74;
 	private int anInt999;
@@ -261,7 +261,7 @@ public class Client extends GameStub {
 	private int anInt1041;
 	private boolean aBoolean1042 = false;
 	private int anInt1043 = -1;
-	private static int[] anIntArray1044 = new int[99];
+	private static int[] xpForSkillLevel = new int[99];
 	private int anInt1046;
 	protected int anInt1047;
 	private int anInt1048;
@@ -275,7 +275,7 @@ public class Client extends GameStub {
 	private boolean aBoolean1056 = false;
 	private static BigInteger RSA_EXPONENT;
 	private ImageRGB[] worldMapHintIcons = new ImageRGB[100];
-	private int anInt1059;
+	private int regionAbsoluteBaseX;
 	private int regionAbsoluteBaseY;
 	private int anInt1061;
 	private int anInt1062;
@@ -284,7 +284,7 @@ public class Client extends GameStub {
 	private int anInt1065;
 	private int anInt1066;
 	private int anInt1067 = -1;
-	private int[] anIntArray1069 = new int[SkillConstants.SKILL_COUNT];
+	private int[] maxSkillLevels = new int[SkillConstants.SKILL_COUNT];
 	private int[] anIntArray1070 = new int[2000];
 	private int anInt1071;
 	private boolean aBoolean1072 = true;
@@ -380,7 +380,7 @@ public class Client extends GameStub {
 	private IndexedImage anIndexedImage1170;
 	private IndexedImage anIndexedImage1171;
 	private IndexedImage anIndexedImage1172;
-	private int anInt1173;
+	private int playerEnergy;
 	private boolean aBoolean1174 = false;
 	private ImageRGB[] anImageRGBArray1175 = new ImageRGB[8];
 	private boolean aBoolean1176 = true;
@@ -666,9 +666,9 @@ public class Client extends GameStub {
 				aTypeFace1297.drawString(aString869, 239, 40, 0);
 				aTypeFace1297.drawString("Click to continue", 239, 60, 128);
 			} else if (anInt1301 != -1) {
-				method105(8, 0, 0, Widget.interfaces[anInt1301], 0);
+				method105(8, 0, 0, Widget.widgets[anInt1301], 0);
 			} else if (anInt1067 != -1) {
-				method105(8, 0, 0, Widget.interfaces[anInt1067], 0);
+				method105(8, 0, 0, Widget.widgets[anInt1067], 0);
 			} else {
 				TypeFace typeface = aTypeFace1296;
 				int i_11_ = 0;
@@ -913,7 +913,7 @@ public class Client extends GameStub {
 									|| i_30_ == 447 || i_30_ == 1125) {
 								int i_31_ = anIntArray1116[menuActionRow - 1];
 								int i_32_ = anIntArray1117[menuActionRow - 1];
-								Widget widget = Widget.interfaces[i_32_];
+								Widget widget = Widget.widgets[i_32_];
 								if (widget.itemSwapable || widget.itemDeletesDraged) {
 									aBoolean1267 = false;
 									anInt1014 = 0;
@@ -922,10 +922,10 @@ public class Client extends GameStub {
 									anInt1111 = 2;
 									anInt1112 = clickX;
 									anInt1113 = clickY;
-									if (Widget.interfaces[i_32_].interfaceParentId == anInt882) {
+									if (Widget.widgets[i_32_].interfaceParentId == anInt882) {
 										anInt1111 = 1;
 									}
-									if (Widget.interfaces[i_32_].interfaceParentId == anInt1301) {
+									if (Widget.widgets[i_32_].interfaceParentId == anInt1301) {
 										anInt1111 = 3;
 									}
 									break;
@@ -994,7 +994,7 @@ public class Client extends GameStub {
 				outBuffer.putOpcode(0);
 				if (!aBoolean1184) {
 					for (int i_35_ = 0; i_35_ < i; i_35_++) {
-						int i_36_ = (anIntArray1259[i_35_] >> 8) * 64 - anInt1059;
+						int i_36_ = (anIntArray1259[i_35_] >> 8) * 64 - regionAbsoluteBaseX;
 						int i_37_ = (anIntArray1259[i_35_] & 0xff) * 64 - regionAbsoluteBaseY;
 						byte[] bs = aByteArrayArray1208[i_35_];
 						if (bs != null) {
@@ -1003,7 +1003,7 @@ public class Client extends GameStub {
 						}
 					}
 					for (int i_38_ = 0; i_38_ < i; i_38_++) {
-						int i_39_ = (anIntArray1259[i_38_] >> 8) * 64 - anInt1059;
+						int i_39_ = (anIntArray1259[i_38_] >> 8) * 64 - regionAbsoluteBaseX;
 						int i_40_ = (anIntArray1259[i_38_] & 0xff) * 64 - regionAbsoluteBaseY;
 						byte[] bs = aByteArrayArray1208[i_38_];
 						if (bs == null && anInt1095 < 800) {
@@ -1020,7 +1020,7 @@ public class Client extends GameStub {
 					for (int i_41_ = 0; i_41_ < i; i_41_++) {
 						byte[] bs = aByteArrayArray1272[i_41_];
 						if (bs != null) {
-							int i_42_ = (anIntArray1259[i_41_] >> 8) * 64 - anInt1059;
+							int i_42_ = (anIntArray1259[i_41_] >> 8) * 64 - regionAbsoluteBaseX;
 							int i_43_ = (anIntArray1259[i_41_] & 0xff) * 64 - regionAbsoluteBaseY;
 							region.method472(i_42_, currentCollisionMap, i_43_, 7, currentScene, bs);
 						}
@@ -1376,7 +1376,7 @@ public class Client extends GameStub {
 				for (int i_117_ = 0; i_117_ < i_116_; i_117_++) {
 					int i_118_ = widget.interfaceChildrenX[i_117_] + i;
 					int i_119_ = widget.interfaceChildrenY[i_117_] + i_113_ - i_115_;
-					Widget widget_120_ = Widget.interfaces[widget.interfaceChildren[i_117_]];
+					Widget widget_120_ = Widget.widgets[widget.interfaceChildren[i_117_]];
 					i_118_ += widget_120_.interfacePositionX;
 					i_119_ += widget_120_.interfacePositionY;
 					if ((widget_120_.interfaceHoveredPopup >= 0 || widget_120_.disabledHoveredColor != 0)
@@ -1691,9 +1691,9 @@ public class Client extends GameStub {
 						method147(537);
 						aString906 = "";
 						aBoolean1183 = false;
-						for (int i = 0; i < Widget.interfaces.length; i++) {
-							if (Widget.interfaces[i] != null && Widget.interfaces[i].interfaceContentType == 600) {
-								anInt1203 = anInt882 = Widget.interfaces[i].interfaceParentId;
+						for (int i = 0; i < Widget.widgets.length; i++) {
+							if (Widget.widgets[i] != null && Widget.widgets[i].interfaceContentType == 600) {
+								anInt1203 = anInt882 = Widget.widgets[i].interfaceParentId;
 								break;
 							}
 						}
@@ -1737,7 +1737,7 @@ public class Client extends GameStub {
 		do {
 			int i_140_ = Varp.aVarpArray746[i].anInt754;
 			if (i_140_ != 0) {
-				int i_141_ = anIntArray996[i];
+				int i_141_ = settings[i];
 				if (i_140_ == 1) {
 					if (i_141_ == 1) {
 						Rasterizer3D.method369(0.9, Client.aByte1225);
@@ -1885,27 +1885,27 @@ public class Client extends GameStub {
 							}
 						}
 					}
-					if (actor.aString1526 != null
+					if (actor.forcedChat != null
 							&& (i_143_ >= anInt916 || publicChatSetting == 0 || publicChatSetting == 3 || publicChatSetting == 1
 									&& method109(false, ((Player) actor).aString1723))) {
 						method127(true, actor, actor.anInt1527);
 						if (anInt988 > -1 && anInt999 < anInt1000) {
-							anIntArray1004[anInt999] = aTypeFace1297.getStringWidth(actor.aString1526) / 2;
+							anIntArray1004[anInt999] = aTypeFace1297.getStringWidth(actor.forcedChat) / 2;
 							anIntArray1003[anInt999] = aTypeFace1297.characterDefaultHeight;
 							anIntArray1001[anInt999] = anInt988;
 							anIntArray1002[anInt999] = anInt989;
-							anIntArray1005[anInt999] = actor.anInt1533;
-							anIntArray1006[anInt999] = actor.anInt1551;
+							anIntArray1005[anInt999] = actor.chatColor;
+							anIntArray1006[anInt999] = actor.chatEffect;
 							anIntArray1007[anInt999] = actor.anInt1555;
-							aStringArray1008[anInt999++] = actor.aString1526;
-							if (anInt1274 == 0 && actor.anInt1551 >= 1 && actor.anInt1551 <= 3) {
+							aStringArray1008[anInt999++] = actor.forcedChat;
+							if (anInt1274 == 0 && actor.chatEffect >= 1 && actor.chatEffect <= 3) {
 								anIntArray1003[anInt999] += 10;
 								anIntArray1002[anInt999] += 5;
 							}
-							if (anInt1274 == 0 && actor.anInt1551 == 4) {
+							if (anInt1274 == 0 && actor.chatEffect == 4) {
 								anIntArray1004[anInt999] = 60;
 							}
-							if (anInt1274 == 0 && actor.anInt1551 == 5) {
+							if (anInt1274 == 0 && actor.chatEffect == 5) {
 								anIntArray1003[anInt999] += 5;
 							}
 						}
@@ -1913,7 +1913,7 @@ public class Client extends GameStub {
 					if (actor.anInt1552 > Client.currentCycle) {
 						method127(true, actor, actor.anInt1527 + 15);
 						if (anInt988 > -1) {
-							int i_146_ = actor.anInt1553 * 30 / actor.anInt1554;
+							int i_146_ = actor.maxHealth * 30 / actor.currentHealth;
 							if (i_146_ > 30) {
 								i_146_ = 30;
 							}
@@ -2102,9 +2102,9 @@ public class Client extends GameStub {
 			if (b == -81) {
 				anIndexedImage1221.drawImage(0, 0);
 				if (anInt1214 != -1) {
-					method105(8, 0, 0, Widget.interfaces[anInt1214], 0);
+					method105(8, 0, 0, Widget.widgets[anInt1214], 0);
 				} else if (anIntArray1155[anInt1246] != -1) {
-					method105(8, 0, 0, Widget.interfaces[anIntArray1155[anInt1246]], 0);
+					method105(8, 0, 0, Widget.widgets[anIntArray1155[anInt1246]], 0);
 				}
 				if (aBoolean910 && anInt973 == 1) {
 					method40((byte) 9);
@@ -2212,7 +2212,7 @@ public class Client extends GameStub {
 				if (player != null && player.anInt1555 > 0) {
 					player.anInt1555--;
 					if (player.anInt1555 == 0) {
-						player.aString1526 = null;
+						player.forcedChat = null;
 					}
 				}
 			}
@@ -2222,7 +2222,7 @@ public class Client extends GameStub {
 				if (npc != null && npc.anInt1555 > 0) {
 					npc.anInt1555--;
 					if (npc.anInt1555 == 0) {
-						npc.aString1526 = null;
+						npc.forcedChat = null;
 					}
 				}
 			}
@@ -3104,7 +3104,7 @@ public class Client extends GameStub {
 			for (int i = 0; i < aByteArrayArray1208.length; i++) {
 				byte[] bs = aByteArrayArray1272[i];
 				if (bs != null) {
-					int i_277_ = (anIntArray1259[i] >> 8) * 64 - anInt1059;
+					int i_277_ = (anIntArray1259[i] >> 8) * 64 - regionAbsoluteBaseX;
 					int i_278_ = (anIntArray1259[i] & 0xff) * 64 - regionAbsoluteBaseY;
 					if (aBoolean1184) {
 						i_277_ = 10;
@@ -3387,12 +3387,12 @@ public class Client extends GameStub {
 
 	public final void method60(int i, byte b) {
 		try {
-			Widget widget = Widget.interfaces[i];
+			Widget widget = Widget.widgets[i];
 			for (int i_302_ = 0; i_302_ < widget.interfaceChildren.length; i_302_++) {
 				if (widget.interfaceChildren[i_302_] == -1) {
 					break;
 				}
-				Widget widget_303_ = Widget.interfaces[widget.interfaceChildren[i_302_]];
+				Widget widget_303_ = Widget.widgets[widget.interfaceChildren[i_302_]];
 				if (widget_303_.interfaceType == 1) {
 					method60(widget_303_.interfaceId, (byte) 6);
 				}
@@ -3412,7 +3412,7 @@ public class Client extends GameStub {
 		do {
 			try {
 				if (hintIconType == 2) {
-					method128((hintIconX - anInt1059 << 7) + anInt962, hintIconOffset * 2, anInt900, (hintIconY
+					method128((hintIconX - regionAbsoluteBaseX << 7) + anInt962, hintIconOffset * 2, anInt900, (hintIconY
 							- regionAbsoluteBaseY << 7)
 							+ anInt963);
 					if (i >= 0) {
@@ -3612,7 +3612,7 @@ public class Client extends GameStub {
 								anInt1092 = -1;
 								method82(0);
 								if (anInt1092 == anInt1109 && anInt1091 != anInt1110) {
-									Widget widget = Widget.interfaces[anInt1109];
+									Widget widget = Widget.widgets[anInt1109];
 									int i_319_ = 0;
 									if (anInt938 == 1 && widget.interfaceContentType == 206) {
 										i_319_ = 1;
@@ -4193,7 +4193,7 @@ public class Client extends GameStub {
 					outBuffer.putOpcode(236);
 					outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
 					outBuffer.putShort(itemId);
-					outBuffer.putLEShort(itemSlot + anInt1059);
+					outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 				}
 				if (menuActionId == 62 && method66(itemId, interfaceid, itemSlot, -770)) {
 					outBuffer.putOpcode(192);
@@ -4201,7 +4201,7 @@ public class Client extends GameStub {
 					outBuffer.putLEShort(itemId >> 14 & 0x7fff);
 					outBuffer.putLEShortA(interfaceid + regionAbsoluteBaseY);
 					outBuffer.putLEShort(anInt1308);
-					outBuffer.putLEShortA(itemSlot + anInt1059);
+					outBuffer.putLEShortA(itemSlot + regionAbsoluteBaseX);
 					outBuffer.putShort(anInt1310);
 				}
 				if (menuActionId == 511) {
@@ -4221,7 +4221,7 @@ public class Client extends GameStub {
 					outBuffer.putShort(itemId);
 					outBuffer.putShortA(interfaceid + regionAbsoluteBaseY);
 					outBuffer.putLEShortA(anInt1308);
-					outBuffer.putShort(itemSlot + anInt1059);
+					outBuffer.putShort(itemSlot + regionAbsoluteBaseX);
 				}
 				if (menuActionId == 74) {
 					outBuffer.putOpcode(122);
@@ -4232,15 +4232,15 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
 				if (menuActionId == 315) {
-					Widget widget = Widget.interfaces[interfaceid];
+					Widget widget = Widget.widgets[interfaceid];
 					boolean bool_377_ = true;
 					if (widget.interfaceContentType > 0) {
 						bool_377_ = method48(505, widget);
@@ -4302,7 +4302,7 @@ public class Client extends GameStub {
 					}
 				}
 				if (menuActionId == 1062) {
-					Client.anInt949 += anInt1059;
+					Client.anInt949 += regionAbsoluteBaseX;
 					if (Client.anInt949 >= 113) {
 						outBuffer.putOpcode(183);
 						outBuffer.put24BitInt(15086193);
@@ -4312,7 +4312,7 @@ public class Client extends GameStub {
 					outBuffer.putOpcode(228);
 					outBuffer.putShortA(itemId >> 14 & 0x7fff);
 					outBuffer.putShortA(interfaceid + regionAbsoluteBaseY);
-					outBuffer.putShort(itemSlot + anInt1059);
+					outBuffer.putShort(itemSlot + regionAbsoluteBaseX);
 				}
 				if (menuActionId == 679 && !aBoolean1174) {
 					outBuffer.putOpcode(40);
@@ -4328,10 +4328,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4363,10 +4363,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4379,10 +4379,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4433,10 +4433,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4449,15 +4449,15 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
 				if (menuActionId == 626) {
-					Widget widget = Widget.interfaces[interfaceid];
+					Widget widget = Widget.widgets[interfaceid];
 					anInt1161 = 1;
 					spellId = interfaceid;
 					anInt1163 = widget.spellUsableOn;
@@ -4487,10 +4487,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4527,7 +4527,7 @@ public class Client extends GameStub {
 						outBuffer.putOpcode(79);
 						outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putShort(itemId);
-						outBuffer.putShortA(itemSlot + anInt1059);
+						outBuffer.putShortA(itemSlot + regionAbsoluteBaseX);
 					}
 					if (menuActionId == 632) {
 						outBuffer.putOpcode(145);
@@ -4538,10 +4538,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4554,10 +4554,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4573,7 +4573,7 @@ public class Client extends GameStub {
 						anInt942 = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(156);
-						outBuffer.putShortA(itemSlot + anInt1059);
+						outBuffer.putShortA(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putLEShortA(itemId);
 					}
@@ -4591,17 +4591,17 @@ public class Client extends GameStub {
 						outBuffer.putOpcode(181);
 						outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putShort(itemId);
-						outBuffer.putLEShort(itemSlot + anInt1059);
+						outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putShortA(spellId);
 					}
 					if (menuActionId == 646) {
 						outBuffer.putOpcode(185);
 						outBuffer.putShort(interfaceid);
-						Widget widget = Widget.interfaces[interfaceid];
-						if (widget.interfaceFormulaes != null && widget.interfaceFormulaes[0][0] == 5) {
-							int i_387_ = widget.interfaceFormulaes[0][1];
-							if (anIntArray996[i_387_] != widget.interfaceConditionValues[0]) {
-								anIntArray996[i_387_] = widget.interfaceConditionValues[0];
+						Widget widget = Widget.widgets[interfaceid];
+						if (widget.widgetOpcodes != null && widget.widgetOpcodes[0][0] == 5) {
+							int i_387_ = widget.widgetOpcodes[0][1];
+							if (settings[i_387_] != widget.interfaceConditionValues[0]) {
+								settings[i_387_] = widget.interfaceConditionValues[0];
 								method33(i_387_);
 								aBoolean1178 = true;
 							}
@@ -4685,7 +4685,7 @@ public class Client extends GameStub {
 						outBuffer.putOpcode(252);
 						outBuffer.putLEShortA(itemId >> 14 & 0x7fff);
 						outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
-						outBuffer.putShortA(itemSlot + anInt1059);
+						outBuffer.putShortA(itemSlot + regionAbsoluteBaseX);
 					}
 					if (menuActionId == 412) {
 						Npc npc = localNpcs[itemId];
@@ -4742,7 +4742,7 @@ public class Client extends GameStub {
 					}
 					if (menuActionId == 956 && method66(itemId, interfaceid, itemSlot, -770)) {
 						outBuffer.putOpcode(35);
-						outBuffer.putLEShort(itemSlot + anInt1059);
+						outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putShortA(spellId);
 						outBuffer.putShortA(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putLEShort(itemId >> 14 & 0x7fff);
@@ -4761,7 +4761,7 @@ public class Client extends GameStub {
 						outBuffer.putOpcode(23);
 						outBuffer.putLEShort(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putLEShort(itemId);
-						outBuffer.putLEShort(itemSlot + anInt1059);
+						outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 					}
 					if (menuActionId == 867) {
 						if ((itemId & 0x3) == 0) {
@@ -4780,10 +4780,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4797,10 +4797,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4812,10 +4812,10 @@ public class Client extends GameStub {
 								method147(537);
 								aString906 = string.substring(i_389_ + 5).trim();
 								aBoolean1183 = false;
-								for (int i_390_ = 0; i_390_ < Widget.interfaces.length; i_390_++) {
-									if (Widget.interfaces[i_390_] != null
-											&& Widget.interfaces[i_390_].interfaceContentType == 600) {
-										anInt1203 = anInt882 = Widget.interfaces[i_390_].interfaceParentId;
+								for (int i_390_ = 0; i_390_ < Widget.widgets.length; i_390_++) {
+									if (Widget.widgets[i_390_] != null
+											&& Widget.widgets[i_390_].interfaceContentType == 600) {
+										anInt1203 = anInt882 = Widget.widgets[i_390_].interfaceParentId;
 										break;
 									}
 								}
@@ -4873,10 +4873,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.interfaces[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4904,27 +4904,27 @@ public class Client extends GameStub {
 					if (menuActionId == 113) {
 						method66(itemId, interfaceid, itemSlot, -770);
 						outBuffer.putOpcode(70);
-						outBuffer.putLEShort(itemSlot + anInt1059);
+						outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putShort(interfaceid + regionAbsoluteBaseY);
 						outBuffer.putLEShortA(itemId >> 14 & 0x7fff);
 					}
 					if (menuActionId == 872) {
 						method66(itemId, interfaceid, itemSlot, -770);
 						outBuffer.putOpcode(234);
-						outBuffer.putLEShortA(itemSlot + anInt1059);
+						outBuffer.putLEShortA(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putShortA(itemId >> 14 & 0x7fff);
 						outBuffer.putLEShortA(interfaceid + regionAbsoluteBaseY);
 					}
 					if (menuActionId == 502) {
 						method66(itemId, interfaceid, itemSlot, -770);
 						outBuffer.putOpcode(132);
-						outBuffer.putLEShortA(itemSlot + anInt1059);
+						outBuffer.putLEShortA(itemSlot + regionAbsoluteBaseX);
 						outBuffer.putShort(itemId >> 14 & 0x7fff);
 						outBuffer.putShortA(interfaceid + regionAbsoluteBaseY);
 					}
 					if (menuActionId == 1125) {
 						ItemDefinition itemdefinition = ItemDefinition.getDefinition(itemId);
-						Widget widget = Widget.interfaces[interfaceid];
+						Widget widget = Widget.widgets[interfaceid];
 						String string;
 						if (widget != null && widget.itemAmounts[itemSlot] >= 100000) {
 							string = String.valueOf(widget.itemAmounts[itemSlot]) + " x " + itemdefinition.name;
@@ -4938,10 +4938,10 @@ public class Client extends GameStub {
 					if (menuActionId == 169) {
 						outBuffer.putOpcode(185);
 						outBuffer.putShort(interfaceid);
-						Widget widget = Widget.interfaces[interfaceid];
-						if (widget.interfaceFormulaes != null && widget.interfaceFormulaes[0][0] == 5) {
-							int i_394_ = widget.interfaceFormulaes[0][1];
-							anIntArray996[i_394_] = 1 - anIntArray996[i_394_];
+						Widget widget = Widget.widgets[interfaceid];
+						if (widget.widgetOpcodes != null && widget.widgetOpcodes[0][0] == 5) {
+							int i_394_ = widget.widgetOpcodes[0][1];
+							settings[i_394_] = 1 - settings[i_394_];
 							method33(i_394_);
 							aBoolean1178 = true;
 						}
@@ -4978,7 +4978,7 @@ public class Client extends GameStub {
 							anInt942 = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(253);
-							outBuffer.putLEShort(itemSlot + anInt1059);
+							outBuffer.putLEShort(itemSlot + regionAbsoluteBaseX);
 							outBuffer.putLEShortA(interfaceid + regionAbsoluteBaseY);
 							outBuffer.putShortA(itemId);
 						}
@@ -5010,7 +5010,7 @@ public class Client extends GameStub {
 		do {
 			try {
 				anInt1276 = 0;
-				int i_397_ = (Client.clientsPlayer.xWithBoundary >> 7) + anInt1059;
+				int i_397_ = (Client.clientsPlayer.xWithBoundary >> 7) + regionAbsoluteBaseX;
 				int i_398_ = (Client.clientsPlayer.yWithBoundary >> 7) + regionAbsoluteBaseY;
 				i = 58 / i;
 				if (i_397_ >= 3053 && i_397_ <= 3156 && i_398_ >= 3056 && i_398_ <= 3136) {
@@ -5343,7 +5343,7 @@ public class Client extends GameStub {
 		menuActionIds = null;
 		anIntArray1119 = null;
 		menuActionNames = null;
-		anIntArray996 = null;
+		settings = null;
 		iconDrawPointsX = null;
 		iconDrawPointsY = null;
 		minimapHintIcons = null;
@@ -5366,7 +5366,7 @@ public class Client extends GameStub {
 		ItemDefinition.reset();
 		FloorDefinition.cache = null;
 		IdentityKit.identityKitCache = null;
-		Widget.interfaces = null;
+		Widget.widgets = null;
 		AnimationSequence.animationSequences = null;
 		SpotAnimation.cache = null;
 		SpotAnimation.modelCache = null;
@@ -5623,18 +5623,18 @@ public class Client extends GameStub {
 							outBuffer.putSizeByte(outBuffer.offset - i_423_);
 							aString912 = ChatEncoder.formatChatMessage(aString912);
 							aString912 = ChatCensor.censorString(aString912);
-							Client.clientsPlayer.aString1526 = aString912;
-							Client.clientsPlayer.anInt1533 = i_421_;
-							Client.clientsPlayer.anInt1551 = i_422_;
+							Client.clientsPlayer.forcedChat = aString912;
+							Client.clientsPlayer.chatColor = i_421_;
+							Client.clientsPlayer.chatEffect = i_422_;
 							Client.clientsPlayer.anInt1555 = 150;
 							if (playerRights == 2) {
-								sendMessage(Client.clientsPlayer.aString1526, 2, "@cr2@"
+								sendMessage(Client.clientsPlayer.forcedChat, 2, "@cr2@"
 										+ Client.clientsPlayer.aString1723, aBoolean1016);
 							} else if (playerRights == 1) {
-								sendMessage(Client.clientsPlayer.aString1526, 2, "@cr1@"
+								sendMessage(Client.clientsPlayer.forcedChat, 2, "@cr1@"
 										+ Client.clientsPlayer.aString1723, aBoolean1016);
 							} else {
-								sendMessage(Client.clientsPlayer.aString1526, 2, Client.clientsPlayer.aString1723,
+								sendMessage(Client.clientsPlayer.forcedChat, 2, Client.clientsPlayer.aString1723,
 										aBoolean1016);
 							}
 							if (publicChatSetting == 2) {
@@ -6276,7 +6276,7 @@ public class Client extends GameStub {
 				anInt911 = 0;
 				if (mouseEventX > 4 && mouseEventY > 4 && mouseEventX < 516 && mouseEventY < 338) {
 					if (anInt882 != -1) {
-						method29(4, 13037, Widget.interfaces[anInt882], mouseEventX, 4, mouseEventY, 0);
+						method29(4, 13037, Widget.widgets[anInt882], mouseEventX, 4, mouseEventY, 0);
 					} else {
 						method71(33660);
 					}
@@ -6287,9 +6287,9 @@ public class Client extends GameStub {
 				anInt911 = 0;
 				if (mouseEventX > 553 && mouseEventY > 205 && mouseEventX < 743 && mouseEventY < 466) {
 					if (anInt1214 != -1) {
-						method29(553, 13037, Widget.interfaces[anInt1214], mouseEventX, 205, mouseEventY, 0);
+						method29(553, 13037, Widget.widgets[anInt1214], mouseEventX, 205, mouseEventY, 0);
 					} else if (anIntArray1155[anInt1246] != -1) {
-						method29(553, 13037, Widget.interfaces[anIntArray1155[anInt1246]], mouseEventX, 205,
+						method29(553, 13037, Widget.widgets[anIntArray1155[anInt1246]], mouseEventX, 205,
 								mouseEventY, 0);
 					}
 				}
@@ -6300,7 +6300,7 @@ public class Client extends GameStub {
 				anInt911 = 0;
 				if (mouseEventX > 17 && mouseEventY > 357 && mouseEventX < 496 && mouseEventY < 453) {
 					if (anInt1301 != -1) {
-						method29(17, 13037, Widget.interfaces[anInt1301], mouseEventX, 357, mouseEventY, 0);
+						method29(17, 13037, Widget.widgets[anInt1301], mouseEventX, 357, mouseEventY, 0);
 					} else if (mouseEventY < 434 && mouseEventX < 426) {
 						method74(mouseEventX - 17, mouseEventY - 357, 9);
 					}
@@ -6817,7 +6817,7 @@ public class Client extends GameStub {
 				outBuffer.putOpcode(98);
 				outBuffer.put(maxPathSize + maxPathSize + 3);
 			}
-			outBuffer.putLEShortA(localX + anInt1059);
+			outBuffer.putLEShortA(localX + regionAbsoluteBaseX);
 			destinationX = walkingQueueX[0];
 			destinationY = walkingQueueY[0];
 			for (int maxPathSizeCounter = 1; maxPathSizeCounter < maxPathSize; maxPathSizeCounter++) {
@@ -6852,7 +6852,7 @@ public class Client extends GameStub {
 						if (i_517_ == 1) {
 							npc.anInt1547 = 0;
 							npc.anInt1548 = 0;
-							npc.anInt1549 = i_516_;
+							npc.aniomationDelay = i_516_;
 							npc.anInt1550 = 0;
 						}
 						if (i_517_ == 2) {
@@ -6864,7 +6864,7 @@ public class Client extends GameStub {
 						npc.animation = i_515_;
 						npc.anInt1547 = 0;
 						npc.anInt1548 = 0;
-						npc.anInt1549 = i_516_;
+						npc.aniomationDelay = i_516_;
 						npc.anInt1550 = 0;
 						npc.anInt1562 = npc.pathLength;
 					}
@@ -6874,17 +6874,17 @@ public class Client extends GameStub {
 					int i_519_ = buffer.getUnsignedByteC();
 					npc.updateHits(i_519_, i_518_, Client.currentCycle);
 					npc.anInt1552 = Client.currentCycle + 300;
-					npc.anInt1553 = buffer.getUnsignedByteA();
-					npc.anInt1554 = buffer.getUnsignedByte();
+					npc.maxHealth = buffer.getUnsignedByteA();
+					npc.currentHealth = buffer.getUnsignedByte();
 				}
 				if ((i_514_ & 0x80) != 0) {
 					npc.spotAnimationId = buffer.getUnsignedLEShort();
 					int i_520_ = buffer.getInt();
-					npc.anInt1544 = i_520_ >> 16;
-					npc.anInt1543 = Client.currentCycle + (i_520_ & 0xffff);
+					npc.spotAnimationDelay = i_520_ >> 16;
+					npc.spotAnimationEndCycle = Client.currentCycle + (i_520_ & 0xffff);
 					npc.currentAnimationFrame = 0;
 					npc.anInt1542 = 0;
-					if (npc.anInt1543 > Client.currentCycle) {
+					if (npc.spotAnimationEndCycle > Client.currentCycle) {
 						npc.currentAnimationFrame = -1;
 					}
 					if (npc.spotAnimationId == 65535) {
@@ -6892,13 +6892,13 @@ public class Client extends GameStub {
 					}
 				}
 				if ((i_514_ & 0x20) != 0) {
-					npc.anInt1522 = buffer.getUnsignedLEShort();
-					if (npc.anInt1522 == 65535) {
-						npc.anInt1522 = -1;
+					npc.interactingEntity = buffer.getUnsignedLEShort();
+					if (npc.interactingEntity == 65535) {
+						npc.interactingEntity = -1;
 					}
 				}
 				if ((i_514_ & 0x1) != 0) {
-					npc.aString1526 = buffer.getString();
+					npc.forcedChat = buffer.getString();
 					npc.anInt1555 = 100;
 				}
 				if ((i_514_ & 0x40) != 0) {
@@ -6906,8 +6906,8 @@ public class Client extends GameStub {
 					int i_522_ = buffer.getUnsignedByteS();
 					npc.updateHits(i_522_, i_521_, Client.currentCycle);
 					npc.anInt1552 = Client.currentCycle + 300;
-					npc.anInt1553 = buffer.getUnsignedByteS();
-					npc.anInt1554 = buffer.getUnsignedByteC();
+					npc.maxHealth = buffer.getUnsignedByteS();
+					npc.currentHealth = buffer.getUnsignedByteC();
 				}
 				if ((i_514_ & 0x2) != 0) {
 					npc.npcDefinition = NpcDefinition.getDefinition(buffer.getUnsignedShortA());
@@ -6920,8 +6920,8 @@ public class Client extends GameStub {
 					npc.anInt1531 = npc.npcDefinition.anInt433;
 				}
 				if ((i_514_ & 0x4) != 0) {
-					npc.anInt1558 = buffer.getUnsignedShort();
-					npc.anInt1559 = buffer.getUnsignedShort();
+					npc.faceTowardX = buffer.getUnsignedShort();
+					npc.faceTowardY = buffer.getUnsignedShort();
 				}
 			}
 			loggedIn &= bool;
@@ -7552,7 +7552,7 @@ public class Client extends GameStub {
 					IdentityKit.load(archive);
 					SpotAnimation.load(archive);
 					Varp.method592(0, archive);
-					VarBit.method590(0, archive);
+					VarBit.load(0, archive);
 					ItemDefinition.playerIsMember = Client.membersWorld;
 					if (!Client.lowMemory) {
 						drawLoadingText(90, "Unpacking sounds");
@@ -7607,7 +7607,7 @@ public class Client extends GameStub {
 					for (int i_575_ = 0; i_575_ < 9; i_575_++) {
 						int i_576_ = 128 + i_575_ * 32 + 15;
 						int i_577_ = 600 + i_576_ * 3;
-						int i_578_ = Rasterizer3D.anIntArray1490[i_576_];
+						int i_578_ = Rasterizer3D.SINE[i_576_];
 						is[i_575_] = i_577_ * i_578_ >> 16;
 					}
 					Scene.method532(500, 800, 512, 334, is, Client.aBoolean1256);
@@ -7682,8 +7682,8 @@ public class Client extends GameStub {
 						i -= 73;
 						i_584_ -= 75;
 						int i_585_ = anInt1210 + anInt1234 & 0x7ff;
-						int i_586_ = Rasterizer3D.anIntArray1490[i_585_];
-						int i_587_ = Rasterizer3D.anIntArray1491[i_585_];
+						int i_586_ = Rasterizer3D.SINE[i_585_];
+						int i_587_ = Rasterizer3D.COSINE[i_585_];
 						i_586_ = i_586_ * (anInt1195 + 256) >> 8;
 						i_587_ = i_587_ * (anInt1195 + 256) >> 8;
 						int i_588_ = i_584_ * i_586_ + i * i_587_ >> 11;
@@ -7938,7 +7938,7 @@ public class Client extends GameStub {
 			try {
 				if (actor.anInt1568 == Client.currentCycle
 						|| actor.animation == -1
-						|| actor.anInt1549 != 0
+						|| actor.aniomationDelay != 0
 						|| actor.anInt1548 + 1 > AnimationSequence.animationSequences[actor.animation].getFrameLength(
 								actor.anInt1547, (byte) -39)) {
 					int i = actor.anInt1568 - actor.anInt1567;
@@ -7982,7 +7982,7 @@ public class Client extends GameStub {
 				if (actor.pathLength == 0) {
 					actor.anInt1523 = 0;
 				} else {
-					if (actor.animation != -1 && actor.anInt1549 == 0) {
+					if (actor.animation != -1 && actor.aniomationDelay == 0) {
 						AnimationSequence animationsequence = AnimationSequence.animationSequences[actor.animation];
 						if (actor.anInt1562 > 0 && animationsequence.anInt61 == 0) {
 							actor.anInt1523++;
@@ -8039,7 +8039,7 @@ public class Client extends GameStub {
 						}
 						actor.anInt1537 = i_612_;
 						int i_613_ = 4;
-						if (actor.anInt1572 != actor.anInt1530 && actor.anInt1522 == -1 && actor.anInt1524 != 0) {
+						if (actor.anInt1572 != actor.anInt1530 && actor.interactingEntity == -1 && actor.anInt1524 != 0) {
 							i_613_ = 2;
 						}
 						if (actor.pathLength > 2) {
@@ -8102,8 +8102,8 @@ public class Client extends GameStub {
 		do {
 			try {
 				if (i < 0 && actor.anInt1524 != 0) {
-					if (actor.anInt1522 != -1 && actor.anInt1522 < 32768) {
-						Npc npc = localNpcs[actor.anInt1522];
+					if (actor.interactingEntity != -1 && actor.interactingEntity < 32768) {
+						Npc npc = localNpcs[actor.interactingEntity];
 						if (npc != null) {
 							int i_614_ = actor.xWithBoundary - npc.xWithBoundary;
 							int i_615_ = actor.yWithBoundary - npc.yWithBoundary;
@@ -8112,8 +8112,8 @@ public class Client extends GameStub {
 							}
 						}
 					}
-					if (actor.anInt1522 >= 32768) {
-						int i_616_ = actor.anInt1522 - 32768;
+					if (actor.interactingEntity >= 32768) {
+						int i_616_ = actor.interactingEntity - 32768;
 						if (i_616_ == anInt909) {
 							i_616_ = playerId;
 						}
@@ -8126,16 +8126,16 @@ public class Client extends GameStub {
 							}
 						}
 					}
-					if ((actor.anInt1558 != 0 || actor.anInt1559 != 0)
+					if ((actor.faceTowardX != 0 || actor.faceTowardY != 0)
 							&& (actor.pathLength == 0 || actor.anInt1523 > 0)) {
-						int i_619_ = actor.xWithBoundary - (actor.anInt1558 - anInt1059 - anInt1059) * 64;
+						int i_619_ = actor.xWithBoundary - (actor.faceTowardX - regionAbsoluteBaseX - regionAbsoluteBaseX) * 64;
 						int i_620_ = actor.yWithBoundary
-								- (actor.anInt1559 - regionAbsoluteBaseY - regionAbsoluteBaseY) * 64;
+								- (actor.faceTowardY - regionAbsoluteBaseY - regionAbsoluteBaseY) * 64;
 						if (i_619_ != 0 || i_620_ != 0) {
 							actor.anInt1530 = (int) (Math.atan2(i_619_, i_620_) * 325.949) & 0x7ff;
 						}
-						actor.anInt1558 = 0;
-						actor.anInt1559 = 0;
+						actor.faceTowardX = 0;
+						actor.faceTowardY = 0;
 					}
 					int i_621_ = actor.anInt1530 - actor.anInt1572 & 0x7ff;
 					if (i_621_ == 0) {
@@ -8186,7 +8186,7 @@ public class Client extends GameStub {
 						actor.anInt1538 = 0;
 					}
 				}
-				if (actor.spotAnimationId != -1 && Client.currentCycle >= actor.anInt1543) {
+				if (actor.spotAnimationId != -1 && Client.currentCycle >= actor.spotAnimationEndCycle) {
 					if (actor.currentAnimationFrame < 0) {
 						actor.currentAnimationFrame = 0;
 					}
@@ -8201,15 +8201,15 @@ public class Client extends GameStub {
 						actor.spotAnimationId = -1;
 					}
 				}
-				if (actor.animation != -1 && actor.anInt1549 <= 1) {
+				if (actor.animation != -1 && actor.aniomationDelay <= 1) {
 					AnimationSequence animationsequence = AnimationSequence.animationSequences[actor.animation];
 					if (animationsequence.anInt61 == 1 && actor.anInt1562 > 0 && actor.anInt1567 <= Client.currentCycle
 							&& actor.anInt1568 < Client.currentCycle) {
-						actor.anInt1549 = 1;
+						actor.aniomationDelay = 1;
 						break;
 					}
 				}
-				if (actor.animation != -1 && actor.anInt1549 == 0) {
+				if (actor.animation != -1 && actor.aniomationDelay == 0) {
 					AnimationSequence animationsequence = AnimationSequence.animationSequences[actor.animation];
 					for (actor.anInt1548++; actor.anInt1547 < animationsequence.anInt50
 							&& actor.anInt1548 > animationsequence.getFrameLength(actor.anInt1547, (byte) -39); actor.anInt1547++) {
@@ -8227,10 +8227,10 @@ public class Client extends GameStub {
 					}
 					actor.aBoolean1561 = animationsequence.aBoolean56;
 				}
-				if (actor.anInt1549 <= 0) {
+				if (actor.aniomationDelay <= 0) {
 					break;
 				}
-				actor.anInt1549--;
+				actor.aniomationDelay--;
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("56331, " + actor + ", " + i + ", " + runtimeexception.toString());
 				throw new RuntimeException();
@@ -8555,7 +8555,7 @@ public class Client extends GameStub {
 				for (int i_632_ = 0; i_632_ < i_631_; i_632_++) {
 					int i_633_ = widget.interfaceChildrenX[i_632_] + i_625_;
 					int i_634_ = widget.interfaceChildrenY[i_632_] + i_626_ - i_624_;
-					Widget widget_635_ = Widget.interfaces[widget.interfaceChildren[i_632_]];
+					Widget widget_635_ = Widget.widgets[widget.interfaceChildren[i_632_]];
 					i_633_ += widget_635_.interfacePositionX;
 					i_634_ += widget_635_.interfacePositionY;
 					if (widget_635_.interfaceContentType > 0) {
@@ -8747,7 +8747,7 @@ public class Client extends GameStub {
 											break;
 										}
 										string = string.substring(0, i_651_)
-												+ method93(369, method124(341, widget_635_, 0))
+												+ method93(369, parseWidgetOpcode(widget_635_, 0))
 												+ string.substring(i_651_ + 2);
 									}
 									for (;;) {
@@ -8756,7 +8756,7 @@ public class Client extends GameStub {
 											break;
 										}
 										string = string.substring(0, i_652_)
-												+ method93(369, method124(341, widget_635_, 1))
+												+ method93(369, parseWidgetOpcode(widget_635_, 1))
 												+ string.substring(i_652_ + 2);
 									}
 									for (;;) {
@@ -8765,7 +8765,7 @@ public class Client extends GameStub {
 											break;
 										}
 										string = string.substring(0, i_653_)
-												+ method93(369, method124(341, widget_635_, 2))
+												+ method93(369, parseWidgetOpcode(widget_635_, 2))
 												+ string.substring(i_653_ + 2);
 									}
 									for (;;) {
@@ -8774,7 +8774,7 @@ public class Client extends GameStub {
 											break;
 										}
 										string = string.substring(0, i_654_)
-												+ method93(369, method124(341, widget_635_, 3))
+												+ method93(369, parseWidgetOpcode(widget_635_, 3))
 												+ string.substring(i_654_ + 2);
 									}
 									for (;;) {
@@ -8783,7 +8783,7 @@ public class Client extends GameStub {
 											break;
 										}
 										string = string.substring(0, i_655_)
-												+ method93(369, method124(341, widget_635_, 4))
+												+ method93(369, parseWidgetOpcode(widget_635_, 4))
 												+ string.substring(i_655_ + 2);
 									}
 								}
@@ -8821,8 +8821,8 @@ public class Client extends GameStub {
 							int i_659_ = Rasterizer3D.centerHeight;
 							Rasterizer3D.centerWidth = i_633_ + widget_635_.interfaceWidth / 2;
 							Rasterizer3D.centerHeight = i_634_ + widget_635_.interfaceHeight / 2;
-							int i_660_ = Rasterizer3D.anIntArray1490[widget_635_.rotationX] * widget_635_.zoom >> 16;
-							int i_661_ = Rasterizer3D.anIntArray1491[widget_635_.rotationX] * widget_635_.zoom >> 16;
+							int i_660_ = Rasterizer3D.SINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
+							int i_661_ = Rasterizer3D.COSINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							boolean bool = method131(widget_635_, false);
 							int i_662_;
 							if (bool) {
@@ -8948,12 +8948,12 @@ public class Client extends GameStub {
 				}
 				if ((i & 0x100) != 0) {
 					player.spotAnimationId = buffer.getUnsignedShort();
-					int i_683_ = buffer.getInt();
-					player.anInt1544 = i_683_ >> 16;
-					player.anInt1543 = Client.currentCycle + (i_683_ & 0xffff);
+					int spotAnimationDelay = buffer.getInt();
+					player.spotAnimationDelay = spotAnimationDelay >> 16;
+					player.spotAnimationEndCycle = Client.currentCycle + (spotAnimationDelay & 0xffff);
 					player.currentAnimationFrame = 0;
 					player.anInt1542 = 0;
-					if (player.anInt1543 > Client.currentCycle) {
+					if (player.spotAnimationEndCycle > Client.currentCycle) {
 						player.currentAnimationFrame = -1;
 					}
 					if (player.spotAnimationId == 65535) {
@@ -8961,54 +8961,54 @@ public class Client extends GameStub {
 					}
 				}
 				if ((i & 0x8) != 0) {
-					int i_684_ = buffer.getUnsignedShort();
-					if (i_684_ == 65535) {
-						i_684_ = -1;
+					int animationId = buffer.getUnsignedShort();
+					if (animationId == 65535) {
+						animationId = -1;
 					}
-					int i_685_ = buffer.getUnsignedByteC();
-					if (i_684_ == player.animation && i_684_ != -1) {
-						int i_686_ = AnimationSequence.animationSequences[i_684_].anInt63;
+					int animationDelay = buffer.getUnsignedByteC();
+					if (animationId == player.animation && animationId != -1) {
+						int i_686_ = AnimationSequence.animationSequences[animationId].anInt63;
 						if (i_686_ == 1) {
 							player.anInt1547 = 0;
 							player.anInt1548 = 0;
-							player.anInt1549 = i_685_;
+							player.aniomationDelay = animationDelay;
 							player.anInt1550 = 0;
 						}
 						if (i_686_ == 2) {
 							player.anInt1550 = 0;
 						}
-					} else if (i_684_ == -1
+					} else if (animationId == -1
 							|| player.animation == -1
-							|| AnimationSequence.animationSequences[i_684_].anInt57 >= AnimationSequence.animationSequences[player.animation].anInt57) {
-						player.animation = i_684_;
+							|| AnimationSequence.animationSequences[animationId].anInt57 >= AnimationSequence.animationSequences[player.animation].anInt57) {
+						player.animation = animationId;
 						player.anInt1547 = 0;
 						player.anInt1548 = 0;
-						player.anInt1549 = i_685_;
+						player.aniomationDelay = animationDelay;
 						player.anInt1550 = 0;
 						player.anInt1562 = player.pathLength;
 					}
 				}
 				if ((i & 0x4) != 0) {
-					player.aString1526 = buffer.getString();
-					if (player.aString1526.charAt(0) == '~') {
-						player.aString1526 = player.aString1526.substring(1);
-						sendMessage(player.aString1526, 2, player.aString1723, aBoolean1016);
+					player.forcedChat = buffer.getString();
+					if (player.forcedChat.charAt(0) == '~') {
+						player.forcedChat = player.forcedChat.substring(1);
+						sendMessage(player.forcedChat, 2, player.aString1723, aBoolean1016);
 					} else if (player == Client.clientsPlayer) {
-						sendMessage(player.aString1526, 2, player.aString1723, aBoolean1016);
+						sendMessage(player.forcedChat, 2, player.aString1723, aBoolean1016);
 					}
-					player.anInt1533 = 0;
-					player.anInt1551 = 0;
+					player.chatColor = 0;
+					player.chatEffect = 0;
 					player.anInt1555 = 150;
 				}
 				if ((i & 0x80) != 0) {
-					int i_687_ = buffer.getUnsignedShort();
-					int i_688_ = buffer.getUnsignedByte();
-					int i_689_ = buffer.getUnsignedByteC();
-					int i_690_ = buffer.offset;
+					int chatEffects = buffer.getUnsignedShort();
+					int playerRights = buffer.getUnsignedByte();
+					int chatTextLength = buffer.getUnsignedByteC();
+					int originalOffset = buffer.offset;
 					if (player.aString1723 != null && player.visibile) {
 						long l = TextUtils.nameToLong(player.aString1723);
 						boolean bool = false;
-						if (i_688_ <= 1) {
+						if (playerRights <= 1) {
 							for (int i_691_ = 0; i_691_ < anInt847; i_691_++) {
 								if (aLongArray950[i_691_] == l) {
 									bool = true;
@@ -9019,53 +9019,53 @@ public class Client extends GameStub {
 						if (!bool && anInt1276 == 0) {
 							try {
 								aBuffer859.offset = 0;
-								buffer.getBytes(i_689_, 0, aBuffer859.payload);
+								buffer.getBytes(chatTextLength, 0, aBuffer859.payload);
 								aBuffer859.offset = 0;
-								String string = ChatEncoder.get(i_689_, aBuffer859);
-								string = ChatCensor.censorString(string);
-								player.aString1526 = string;
-								player.anInt1533 = i_687_ >> 8;
-								player.anInt1551 = i_687_ & 0xff;
+								String forcedChat = ChatEncoder.get(chatTextLength, aBuffer859);
+								forcedChat = ChatCensor.censorString(forcedChat);
+								player.forcedChat = forcedChat;
+								player.chatColor = chatEffects >> 8;
+								player.chatEffect = chatEffects & 0xff;
 								player.anInt1555 = 150;
-								if (i_688_ == 2 || i_688_ == 3) {
-									sendMessage(string, 1, "@cr2@" + player.aString1723, aBoolean1016);
-								} else if (i_688_ == 1) {
-									sendMessage(string, 1, "@cr1@" + player.aString1723, aBoolean1016);
+								if (playerRights == 2 || playerRights == 3) {
+									sendMessage(forcedChat, 1, "@cr2@" + player.aString1723, aBoolean1016);
+								} else if (playerRights == 1) {
+									sendMessage(forcedChat, 1, "@cr1@" + player.aString1723, aBoolean1016);
 								} else {
-									sendMessage(string, 2, player.aString1723, aBoolean1016);
+									sendMessage(forcedChat, 2, player.aString1723, aBoolean1016);
 								}
 							} catch (Exception exception) {
 								SignLink.reportError("cde2");
 							}
 						}
 					}
-					buffer.offset = i_690_ + i_689_;
+					buffer.offset = originalOffset + chatTextLength;
 				}
 				if ((i & 0x1) != 0) {
-					player.anInt1522 = buffer.getUnsignedShort();
-					if (player.anInt1522 == 65535) {
-						player.anInt1522 = -1;
+					player.interactingEntity = buffer.getUnsignedShort();
+					if (player.interactingEntity == 65535) {
+						player.interactingEntity = -1;
 					}
 				}
 				if ((i & 0x10) != 0) {
-					int i_692_ = buffer.getUnsignedByteC();
-					byte[] bs = new byte[i_692_];
-					Buffer buffer_693_ = new Buffer(bs);
-					buffer.getBytes(bs, 0, i_692_);
-					aBufferArray920[i_682_] = buffer_693_;
-					player.method401(0, buffer_693_);
+					int appearanceBufferSize = buffer.getUnsignedByteC();
+					byte[] _appearanceBuffer = new byte[appearanceBufferSize];
+					Buffer appearanceBuffer = new Buffer(_appearanceBuffer);
+					buffer.getBytes(_appearanceBuffer, 0, appearanceBufferSize);
+					aBufferArray920[i_682_] = appearanceBuffer;
+					player.method401(0, appearanceBuffer);
 				}
 				if ((i & 0x2) != 0) {
-					player.anInt1558 = buffer.getUnsignedShortA();
-					player.anInt1559 = buffer.getUnsignedShort();
+					player.faceTowardX = buffer.getUnsignedShortA();
+					player.faceTowardY = buffer.getUnsignedShort();
 				}
 				if ((i & 0x20) != 0) {
-					int i_694_ = buffer.getUnsignedByte();
-					int i_695_ = buffer.getUnsignedByteA();
-					player.updateHits(i_695_, i_694_, Client.currentCycle);
+					int hitDamage = buffer.getUnsignedByte();
+					int hitType = buffer.getUnsignedByteA();
+					player.updateHits(hitType, hitDamage, Client.currentCycle);
 					player.anInt1552 = Client.currentCycle + 300;
-					player.anInt1553 = buffer.getUnsignedByteC();
-					player.anInt1554 = buffer.getUnsignedByte();
+					player.maxHealth = buffer.getUnsignedByteC();
+					player.currentHealth = buffer.getUnsignedByte();
 				}
 				if ((i & 0x200) == 0) {
 					break;
@@ -9074,8 +9074,8 @@ public class Client extends GameStub {
 				int i_697_ = buffer.getUnsignedByteS();
 				player.updateHits(i_697_, i_696_, Client.currentCycle);
 				player.anInt1552 = Client.currentCycle + 300;
-				player.anInt1553 = buffer.getUnsignedByte();
-				player.anInt1554 = buffer.getUnsignedByteC();
+				player.maxHealth = buffer.getUnsignedByte();
+				player.currentHealth = buffer.getUnsignedByteC();
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("50326, " + i + ", " + i_682_ + ", " + buffer + ", " + b + ", " + player + ", "
 						+ runtimeexception.toString());
@@ -9183,7 +9183,7 @@ public class Client extends GameStub {
 				} catch (Exception exception) {
 					SignLink.reportError("glfc_ex " + Client.clientsPlayer.xWithBoundary + ","
 							+ Client.clientsPlayer.yWithBoundary + "," + anInt1039 + "," + anInt1040 + "," + anInt1094
-							+ "," + anInt1095 + "," + anInt1059 + "," + regionAbsoluteBaseY);
+							+ "," + anInt1095 + "," + regionAbsoluteBaseX + "," + regionAbsoluteBaseY);
 					throw new RuntimeException("eek");
 				}
 				break;
@@ -9299,11 +9299,11 @@ public class Client extends GameStub {
 			}
 			if (anInt1043 != -1) {
 				method119(anInt970, false, anInt1043);
-				method105(8, 0, 0, Widget.interfaces[anInt1043], 0);
+				method105(8, 0, 0, Widget.widgets[anInt1043], 0);
 			}
 			if (anInt882 != -1) {
 				method119(anInt970, false, anInt882);
-				method105(8, 0, 0, Widget.interfaces[anInt882], 0);
+				method105(8, 0, 0, Widget.widgets[anInt882], 0);
 			}
 			method70(184);
 			if (!aBoolean910) {
@@ -9637,12 +9637,12 @@ public class Client extends GameStub {
 			if (bool) {
 				throw new NullPointerException();
 			}
-			Widget widget = Widget.interfaces[i_741_];
+			Widget widget = Widget.widgets[i_741_];
 			for (int i_743_ = 0; i_743_ < widget.interfaceChildren.length; i_743_++) {
 				if (widget.interfaceChildren[i_743_] == -1) {
 					break;
 				}
-				Widget widget_744_ = Widget.interfaces[widget.interfaceChildren[i_743_]];
+				Widget widget_744_ = Widget.widgets[widget.interfaceChildren[i_743_]];
 				if (widget_744_.interfaceType == 1) {
 					bool_742_ |= method119(i, false, widget_744_.interfaceId);
 				}
@@ -9841,140 +9841,134 @@ public class Client extends GameStub {
 		} while (false);
 	}
 
-	public final int method124(int i, Widget widget, int i_761_) {
-		try {
-			i = 91 / i;
-			if (widget.interfaceFormulaes == null || i_761_ >= widget.interfaceFormulaes.length) {
+	public final int parseWidgetOpcode(Widget widget, int widgetId) {
+			if (widget.widgetOpcodes == null || widgetId >= widget.widgetOpcodes.length) {
 				return -2;
 			}
 			try {
-				int[] is = widget.interfaceFormulaes[i_761_];
-				int i_762_ = 0;
-				int i_763_ = 0;
-				int i_764_ = 0;
-				for (;;) {
-					int i_765_ = is[i_763_++];
-					int i_766_ = 0;
-					int i_767_ = 0;
-					if (i_765_ == 0) {
-						return i_762_;
+				int[] opcodes = widget.widgetOpcodes[widgetId];
+				int result = 0;
+				int counter = 0;
+				int type = 0;
+				while (true) {
+					int opcode = opcodes[counter++];
+					int value = 0;
+					int tempType = 0;
+					if (opcode == 0) {
+						return result;
 					}
-					if (i_765_ == 1) {
-						i_766_ = skillLevels[is[i_763_++]];
+					if (opcode == 1) {
+						value = skillLevels[opcodes[counter++]];
 					}
-					if (i_765_ == 2) {
-						i_766_ = anIntArray1069[is[i_763_++]];
+					if (opcode == 2) {
+						value = maxSkillLevels[opcodes[counter++]];
 					}
-					if (i_765_ == 3) {
-						i_766_ = skillExps[is[i_763_++]];
+					if (opcode == 3) {
+						value = skillExps[opcodes[counter++]];
 					}
-					if (i_765_ == 4) {
-						Widget widget_768_ = Widget.interfaces[is[i_763_++]];
-						int i_769_ = is[i_763_++];
-						if (i_769_ >= 0 && i_769_ < ItemDefinition.itemCount
-								&& (!ItemDefinition.getDefinition(i_769_).membersOnly || Client.membersWorld)) {
-							for (int i_770_ = 0; i_770_ < widget_768_.items.length; i_770_++) {
-								if (widget_768_.items[i_770_] == i_769_ + 1) {
-									i_766_ += widget_768_.itemAmounts[i_770_];
+					if (opcode == 4) {
+						Widget itemWidget = Widget.widgets[opcodes[counter++]];
+						int itemId = opcodes[counter++];
+						if (itemId >= 0 && itemId < ItemDefinition.itemCount
+								&& (!ItemDefinition.getDefinition(itemId).membersOnly || Client.membersWorld)) {
+							for (int item = 0; item < itemWidget.items.length; item++) {
+								if (itemWidget.items[item] == itemId + 1) {
+									value += itemWidget.itemAmounts[item];
 								}
 							}
 						}
 					}
-					if (i_765_ == 5) {
-						i_766_ = anIntArray996[is[i_763_++]];
+					if (opcode == 5) {
+						value = settings[opcodes[counter++]];
 					}
-					if (i_765_ == 6) {
-						i_766_ = Client.anIntArray1044[anIntArray1069[is[i_763_++]] - 1];
+					if (opcode == 6) {
+						value = Client.xpForSkillLevel[maxSkillLevels[opcodes[counter++]] - 1];
 					}
-					if (i_765_ == 7) {
-						i_766_ = anIntArray996[is[i_763_++]] * 100 / 46875;
+					if (opcode == 7) {
+						value = settings[opcodes[counter++]] * 100 / 46875;
 					}
-					if (i_765_ == 8) {
-						i_766_ = Client.clientsPlayer.combatLevel;
+					if (opcode == 8) {
+						value = Client.clientsPlayer.combatLevel;
 					}
-					if (i_765_ == 9) {
-						for (int i_771_ = 0; i_771_ < SkillConstants.SKILL_COUNT; i_771_++) {
-							if (SkillConstants.SKILL_TOGGLES[i_771_]) {
-								i_766_ += anIntArray1069[i_771_];
+					if (opcode == 9) {
+						for (int skilll = 0; skilll < SkillConstants.SKILL_COUNT; skilll++) {
+							if (SkillConstants.SKILL_TOGGLES[skilll]) {
+								value += maxSkillLevels[skilll];
 							}
 						}
 					}
-					if (i_765_ == 10) {
-						Widget widget_772_ = Widget.interfaces[is[i_763_++]];
-						int i_773_ = is[i_763_++] + 1;
-						if (i_773_ >= 0 && i_773_ < ItemDefinition.itemCount
-								&& (!ItemDefinition.getDefinition(i_773_).membersOnly || Client.membersWorld)) {
-							for (int i_774_ = 0; i_774_ < widget_772_.items.length; i_774_++) {
-								if (widget_772_.items[i_774_] == i_773_) {
-									i_766_ = 999999999;
+					if (opcode == 10) {
+						Widget itemWidget = Widget.widgets[opcodes[counter++]];
+						int itemId = opcodes[counter++] + 1;
+						if (itemId >= 0 && itemId < ItemDefinition.itemCount
+								&& (!ItemDefinition.getDefinition(itemId).membersOnly || Client.membersWorld)) {
+							for (int item = 0; item < itemWidget.items.length; item++) {
+								if (itemWidget.items[item] == itemId) {
+									value = 999999999;
 									break;
 								}
 							}
 						}
 					}
-					if (i_765_ == 11) {
-						i_766_ = anInt1173;
+					if (opcode == 11) {
+						value = playerEnergy;
 					}
-					if (i_765_ == 12) {
-						i_766_ = playerWeight;
+					if (opcode == 12) {
+						value = playerWeight;
 					}
-					if (i_765_ == 13) {
-						int i_775_ = anIntArray996[is[i_763_++]];
-						int i_776_ = is[i_763_++];
-						i_766_ = (i_775_ & 1 << i_776_) != 0 ? 1 : 0;
+					if (opcode == 13) {
+						int setting = settings[opcodes[counter++]];
+						int info = opcodes[counter++];
+						value = (setting & 1 << info) != 0 ? 1 : 0;
 					}
-					if (i_765_ == 14) {
-						int i_777_ = is[i_763_++];
-						VarBit varbit = VarBit.aVarBitArray735[i_777_];
+					if (opcode == 14) {
+						int i_777_ = opcodes[counter++];
+						VarBit varbit = VarBit.cache[i_777_];
 						int i_778_ = varbit.anInt737;
 						int i_779_ = varbit.anInt738;
 						int i_780_ = varbit.anInt739;
 						int i_781_ = Client.anIntArray1257[i_780_ - i_779_];
-						i_766_ = anIntArray996[i_778_] >> i_779_ & i_781_;
+						value = settings[i_778_] >> i_779_ & i_781_;
 					}
-					if (i_765_ == 15) {
-						i_767_ = 1;
+					if (opcode == 15) {
+						tempType = 1;
 					}
-					if (i_765_ == 16) {
-						i_767_ = 2;
+					if (opcode == 16) {
+						tempType = 2;
 					}
-					if (i_765_ == 17) {
-						i_767_ = 3;
+					if (opcode == 17) {
+						tempType = 3;
 					}
-					if (i_765_ == 18) {
-						i_766_ = (Client.clientsPlayer.xWithBoundary >> 7) + anInt1059;
+					if (opcode == 18) {
+						value = (Client.clientsPlayer.xWithBoundary >> 7) + regionAbsoluteBaseX;
 					}
-					if (i_765_ == 19) {
-						i_766_ = (Client.clientsPlayer.yWithBoundary >> 7) + regionAbsoluteBaseY;
+					if (opcode == 19) {
+						value = (Client.clientsPlayer.yWithBoundary >> 7) + regionAbsoluteBaseY;
 					}
-					if (i_765_ == 20) {
-						i_766_ = is[i_763_++];
+					if (opcode == 20) {
+						value = opcodes[counter++];
 					}
-					if (i_767_ == 0) {
-						if (i_764_ == 0) {
-							i_762_ += i_766_;
+					if (tempType == 0) {
+						if (type == 0) {
+							result += value;
 						}
-						if (i_764_ == 1) {
-							i_762_ -= i_766_;
+						if (type == 1) {
+							result -= value;
 						}
-						if (i_764_ == 2 && i_766_ != 0) {
-							i_762_ /= i_766_;
+						if (type == 2 && value != 0) {
+							result /= value;
 						}
-						if (i_764_ == 3) {
-							i_762_ *= i_766_;
+						if (type == 3) {
+							result *= value;
 						}
-						i_764_ = 0;
+						type = 0;
 					} else {
-						i_764_ = i_767_;
+						type = tempType;
 					}
 				}
 			} catch (Exception exception) {
 				return -1;
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("72370, " + i + ", " + widget + ", " + i_761_ + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final void method125(int i) {
@@ -10096,7 +10090,7 @@ public class Client extends GameStub {
 							}
 						}
 						if (hintIconType == 2) {
-							i_784_ = (hintIconX - anInt1059) * 4 + 2 - Client.clientsPlayer.xWithBoundary / 32;
+							i_784_ = (hintIconX - regionAbsoluteBaseX) * 4 + 2 - Client.clientsPlayer.xWithBoundary / 32;
 							i_785_ = (hintIconY - regionAbsoluteBaseY) * 4 + 2 - Client.clientsPlayer.yWithBoundary
 									/ 32;
 							method81(anImageRGB896, -760, i_785_, i_784_);
@@ -10280,7 +10274,7 @@ public class Client extends GameStub {
 				return false;
 			}
 			for (int i = 0; i < widget.interfaceConditionTypes.length; i++) {
-				int i_819_ = method124(341, widget, i);
+				int i_819_ = parseWidgetOpcode(widget, i);
 				int i_820_ = widget.interfaceConditionValues[i];
 				if (widget.interfaceConditionTypes[i] == 2) {
 					if (i_819_ >= i_820_) {
@@ -11354,10 +11348,10 @@ public class Client extends GameStub {
 						}
 						aString906 = "";
 						aBoolean1183 = false;
-						for (int i_1030_ = 0; i_1030_ < Widget.interfaces.length; i_1030_++) {
-							if (Widget.interfaces[i_1030_] != null
-									&& Widget.interfaces[i_1030_].interfaceContentType == i_1029_) {
-								anInt882 = Widget.interfaces[i_1030_].interfaceParentId;
+						for (int i_1030_ = 0; i_1030_ < Widget.widgets.length; i_1030_++) {
+							if (Widget.widgets[i_1030_] != null
+									&& Widget.widgets[i_1030_].interfaceContentType == i_1029_) {
+								anInt882 = Widget.widgets[i_1030_].interfaceParentId;
 								break;
 							}
 						}
@@ -11389,16 +11383,16 @@ public class Client extends GameStub {
 				}
 				if (opcode == 185) {
 					int i_1033_ = inBuffer.getUnsignedShortA();
-					Widget.interfaces[i_1033_].modelType = 3;
+					Widget.widgets[i_1033_].modelType = 3;
 					if (Client.clientsPlayer.npcDefinition == null) {
-						Widget.interfaces[i_1033_].modelId = (Client.clientsPlayer.anIntArray1720[0] << 25)
+						Widget.widgets[i_1033_].modelId = (Client.clientsPlayer.anIntArray1720[0] << 25)
 								+ (Client.clientsPlayer.anIntArray1720[4] << 20)
 								+ (Client.clientsPlayer.appearanceModels[0] << 15)
 								+ (Client.clientsPlayer.appearanceModels[8] << 10)
 								+ (Client.clientsPlayer.appearanceModels[11] << 5)
 								+ Client.clientsPlayer.appearanceModels[1];
 					} else {
-						Widget.interfaces[i_1033_].modelId = (int) (305419896L + Client.clientsPlayer.npcDefinition.aLong434);
+						Widget.widgets[i_1033_].modelId = (int) (305419896L + Client.clientsPlayer.npcDefinition.aLong434);
 					}
 					opcode = -1;
 					return true;
@@ -11413,7 +11407,7 @@ public class Client extends GameStub {
 				}
 				if (opcode == 72) {
 					int i_1035_ = inBuffer.getUnsignedShort();
-					Widget widget = Widget.interfaces[i_1035_];
+					Widget widget = Widget.widgets[i_1035_];
 					for (int i_1036_ = 0; i_1036_ < widget.items.length; i_1036_++) {
 						widget.items[i_1036_] = -1;
 						widget.items[i_1036_] = 0;
@@ -11451,10 +11445,10 @@ public class Client extends GameStub {
 					int skillLevel = inBuffer.getUnsignedByte();
 					skillExps[skillId] = skillExp;
 					skillLevels[skillId] = skillLevel;
-					anIntArray1069[skillId] = 1;
+					maxSkillLevels[skillId] = 1;
 					for (int i_1041_ = 0; i_1041_ < 98; i_1041_++) {
-						if (skillExp >= Client.anIntArray1044[i_1041_]) {
-							anIntArray1069[skillId] = i_1041_ + 2;
+						if (skillExp >= Client.xpForSkillLevel[i_1041_]) {
+							maxSkillLevels[skillId] = i_1041_ + 2;
 						}
 					}
 					opcode = -1;
@@ -11507,7 +11501,7 @@ public class Client extends GameStub {
 					int interfacePositionX = inBuffer.getShort();
 					int interfacePositionY = inBuffer.getForceLEShort();
 					int interfaceId = inBuffer.getUnsignedShort();
-					Widget widget = Widget.interfaces[interfaceId];
+					Widget widget = Widget.widgets[interfaceId];
 					widget.interfacePositionX = interfacePositionX;
 					widget.interfacePositionY = interfacePositionY;
 					opcode = -1;
@@ -11546,7 +11540,7 @@ public class Client extends GameStub {
 					}
 					anInt1094 = playerRegionX;
 					anInt1095 = playerRegionY;
-					anInt1059 = (anInt1094 - 6) * 8;
+					regionAbsoluteBaseX = (anInt1094 - 6) * 8;
 					regionAbsoluteBaseY = (anInt1095 - 6) * 8;
 					aBoolean1166 = false;
 					if ((anInt1094 / 8 == 48 || anInt1094 / 8 == 49) && anInt1095 / 8 == 48) {
@@ -11642,9 +11636,9 @@ public class Client extends GameStub {
 							}
 						}
 					}
-					int i_1078_ = anInt1059 - anInt1061;
+					int i_1078_ = regionAbsoluteBaseX - anInt1061;
 					int i_1079_ = regionAbsoluteBaseY - anInt1062;
-					anInt1061 = anInt1059;
+					anInt1061 = regionAbsoluteBaseX;
 					anInt1062 = regionAbsoluteBaseY;
 					for (int i_1080_ = 0; i_1080_ < 16384; i_1080_++) {
 						Npc npc = localNpcs[i_1080_];
@@ -11732,8 +11726,8 @@ public class Client extends GameStub {
 				if (opcode == 75) {
 					int i_1096_ = inBuffer.getUnsignedShortA();
 					int i_1097_ = inBuffer.getUnsignedShortA();
-					Widget.interfaces[i_1097_].modelType = 2;
-					Widget.interfaces[i_1097_].modelId = i_1096_;
+					Widget.widgets[i_1097_].modelType = 2;
+					Widget.widgets[i_1097_].modelId = i_1096_;
 					opcode = -1;
 					return true;
 				}
@@ -11913,7 +11907,7 @@ public class Client extends GameStub {
 					if (anInt1246 == 12) {
 						aBoolean1178 = true;
 					}
-					anInt1173 = inBuffer.getUnsignedByte();
+					playerEnergy = inBuffer.getUnsignedByte();
 					opcode = -1;
 					return true;
 				}
@@ -11976,7 +11970,7 @@ public class Client extends GameStub {
 				if (opcode == 79) {
 					int interfaceId = inBuffer.getUnsignedShort();
 					int interfaceScrollPosition = inBuffer.getUnsignedLEShortA();
-					Widget widget = Widget.interfaces[interfaceId];
+					Widget widget = Widget.widgets[interfaceId];
 					if (widget != null && widget.interfaceType == 0) {
 						if (interfaceScrollPosition < 0) {
 							interfaceScrollPosition = 0;
@@ -11990,9 +11984,9 @@ public class Client extends GameStub {
 					return true;
 				}
 				if (opcode == 68) {
-					for (int i_1131_ = 0; i_1131_ < anIntArray996.length; i_1131_++) {
-						if (anIntArray996[i_1131_] != anIntArray1070[i_1131_]) {
-							anIntArray996[i_1131_] = anIntArray1070[i_1131_];
+					for (int i_1131_ = 0; i_1131_ < settings.length; i_1131_++) {
+						if (settings[i_1131_] != anIntArray1070[i_1131_]) {
+							settings[i_1131_] = anIntArray1070[i_1131_];
 							method33(i_1131_);
 							aBoolean1178 = true;
 						}
@@ -12068,23 +12062,23 @@ public class Client extends GameStub {
 					int interfaceModelZoom = inBuffer.getUnsignedLEShort();
 					int interfaceModelId = inBuffer.getUnsignedLEShort();
 					if (interfaceModelId == 65535) {
-						Widget.interfaces[interfaceId].modelType = 0;
+						Widget.widgets[interfaceId].modelType = 0;
 						opcode = -1;
 						return true;
 					}
 					ItemDefinition itemdefinition = ItemDefinition.getDefinition(interfaceModelId);
-					Widget.interfaces[interfaceId].modelType = 4;
-					Widget.interfaces[interfaceId].modelId = interfaceModelId;
-					Widget.interfaces[interfaceId].rotationX = itemdefinition.modelRotation1;
-					Widget.interfaces[interfaceId].rotationY = itemdefinition.modelRotation2;
-					Widget.interfaces[interfaceId].zoom = itemdefinition.modelZoom * 100 / interfaceModelZoom;
+					Widget.widgets[interfaceId].modelType = 4;
+					Widget.widgets[interfaceId].modelId = interfaceModelId;
+					Widget.widgets[interfaceId].rotationX = itemdefinition.modelRotation1;
+					Widget.widgets[interfaceId].rotationY = itemdefinition.modelRotation2;
+					Widget.widgets[interfaceId].zoom = itemdefinition.modelZoom * 100 / interfaceModelZoom;
 					opcode = -1;
 					return true;
 				}
 				if (opcode == 171) {
 					boolean bool_1140_ = inBuffer.getUnsignedByte() == 1;
 					int interfaceId = inBuffer.getUnsignedLEShort();
-					Widget.interfaces[interfaceId].hiddenUntilHovered = bool_1140_;
+					Widget.widgets[interfaceId].hiddenUntilHovered = bool_1140_;
 					opcode = -1;
 					return true;
 				}
@@ -12110,8 +12104,8 @@ public class Client extends GameStub {
 				if (opcode == 126) {
 					String interfaceText = inBuffer.getString();
 					int interfaceid = inBuffer.getUnsignedLEShortA();
-					Widget.interfaces[interfaceid].disabledText = interfaceText;
-					if (Widget.interfaces[interfaceid].interfaceParentId == anIntArray1155[anInt1246]) {
+					Widget.widgets[interfaceid].disabledText = interfaceText;
+					if (Widget.widgets[interfaceid].interfaceParentId == anIntArray1155[anInt1246]) {
 						aBoolean1178 = true;
 					}
 					opcode = -1;
@@ -12137,8 +12131,8 @@ public class Client extends GameStub {
 				if (opcode == 8) {
 					int interfaceId = inBuffer.getUnsignedShortA();
 					int interfaceModelId = inBuffer.getUnsignedLEShort();
-					Widget.interfaces[interfaceId].modelType = 1;
-					Widget.interfaces[interfaceId].modelId = interfaceModelId;
+					Widget.widgets[interfaceId].modelType = 1;
+					Widget.widgets[interfaceId].modelId = interfaceModelId;
 					opcode = -1;
 					return true;
 				}
@@ -12148,14 +12142,14 @@ public class Client extends GameStub {
 					int i_1148_ = interfaceColor >> 10 & 0x1f;
 					int i_1149_ = interfaceColor >> 5 & 0x1f;
 					int i_1150_ = interfaceColor & 0x1f;
-					Widget.interfaces[interfaceId].disabledColor = (i_1148_ << 19) + (i_1149_ << 11) + (i_1150_ << 3);
+					Widget.widgets[interfaceId].disabledColor = (i_1148_ << 19) + (i_1149_ << 11) + (i_1150_ << 3);
 					opcode = -1;
 					return true;
 				}
 				if (opcode == 53) {
 					aBoolean1178 = true;
 					int i_1151_ = inBuffer.getUnsignedLEShort();
-					Widget widget = Widget.interfaces[i_1151_];
+					Widget widget = Widget.widgets[i_1151_];
 					int i_1152_ = inBuffer.getUnsignedLEShort();
 					for (int i_1153_ = 0; i_1153_ < i_1152_; i_1153_++) {
 						int i_1154_ = inBuffer.getUnsignedByte();
@@ -12177,9 +12171,9 @@ public class Client extends GameStub {
 					int interfaceId = inBuffer.getUnsignedLEShort();
 					int modelRotationX = inBuffer.getUnsignedLEShort();
 					int modelRotationY = inBuffer.getUnsignedShortA();
-					Widget.interfaces[interfaceId].rotationX = modelRotationX;
-					Widget.interfaces[interfaceId].rotationY = modelRotationY;
-					Widget.interfaces[interfaceId].zoom = modelZoom;
+					Widget.widgets[interfaceId].rotationX = modelRotationX;
+					Widget.widgets[interfaceId].rotationY = modelRotationY;
+					Widget.widgets[interfaceId].zoom = modelZoom;
 					opcode = -1;
 					return true;
 				}
@@ -12275,8 +12269,8 @@ public class Client extends GameStub {
 					int i_1169_ = inBuffer.getUnsignedShort();
 					int i_1170_ = inBuffer.getInt2();
 					anIntArray1070[i_1169_] = i_1170_;
-					if (anIntArray996[i_1169_] != i_1170_) {
-						anIntArray996[i_1169_] = i_1170_;
+					if (settings[i_1169_] != i_1170_) {
+						settings[i_1169_] = i_1170_;
 						method33(i_1169_);
 						aBoolean1178 = true;
 						if (anInt1067 != -1) {
@@ -12290,8 +12284,8 @@ public class Client extends GameStub {
 					int i_1171_ = inBuffer.getUnsignedShort();
 					int i_1172_ = inBuffer.get();
 					anIntArray1070[i_1171_] = i_1172_;
-					if (anIntArray996[i_1171_] != i_1172_) {
-						anIntArray996[i_1171_] = i_1172_;
+					if (settings[i_1171_] != i_1172_) {
+						settings[i_1171_] = i_1172_;
 						method33(i_1171_);
 						aBoolean1178 = true;
 						if (anInt1067 != -1) {
@@ -12309,7 +12303,7 @@ public class Client extends GameStub {
 				if (opcode == 200) {
 					int interfaceId = inBuffer.getUnsignedLEShort();
 					int animationId = inBuffer.getShort();
-					Widget widget = Widget.interfaces[interfaceId];
+					Widget widget = Widget.widgets[interfaceId];
 					widget.disabledAnimation = animationId;
 					if (animationId == -1) {
 						widget.animationFrame = 0;
@@ -12340,7 +12334,7 @@ public class Client extends GameStub {
 				if (opcode == 34) {
 					aBoolean1178 = true;
 					int i_1175_ = inBuffer.getUnsignedLEShort();
-					Widget widget = Widget.interfaces[i_1175_];
+					Widget widget = Widget.widgets[i_1175_];
 					while (inBuffer.offset < anInt1032) {
 						int i_1176_ = inBuffer.getSmartB();
 						int i_1177_ = inBuffer.getUnsignedLEShort();
@@ -12390,7 +12384,7 @@ public class Client extends GameStub {
 				method68(-670);
 			} catch (Exception exception) {
 				String string = "T2 - " + opcode + "," + anInt867 + "," + anInt868 + " - " + anInt1032 + ","
-						+ (anInt1059 + Client.clientsPlayer.pathX[0]) + ","
+						+ (regionAbsoluteBaseX + Client.clientsPlayer.pathX[0]) + ","
 						+ (regionAbsoluteBaseY + Client.clientsPlayer.pathY[0]) + " - ";
 				for (int i = 0; i < anInt1032 && i < 50; i++) {
 					string += inBuffer.payload[i] + ",";
@@ -12529,7 +12523,7 @@ public class Client extends GameStub {
 			int i_1190_ = i_1189_ + 1;
 			int i_1191_ = (int) (i_1190_ + 300.0 * Math.pow(2.0, i_1190_ / 7.0));
 			i += i_1191_;
-			Client.anIntArray1044[i_1189_] = i / 4;
+			Client.xpForSkillLevel[i_1189_] = i / 4;
 		}
 		Client.RSA_EXPONENT = new BigInteger(
 				"58778699976184461502525193738213253649000149147835990136706041084440742975821");

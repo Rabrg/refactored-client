@@ -484,13 +484,8 @@ public class GameStub extends Applet implements Runnable, MouseListener, MouseMo
 			gameGraphics = getComponent().getGraphics();
 			try {
 				getComponent().repaint();
-			} catch (Exception exception) {
-				/* empty */
-			}
-			try {
 				Thread.sleep(1000L);
 			} catch (Exception exception) {
-				/* empty */
 			}
 		}
 		Font helveticaBold = new Font("Helvetica", 1, 13);

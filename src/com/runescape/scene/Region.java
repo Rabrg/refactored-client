@@ -1133,7 +1133,7 @@ public class Region {
 	}
 
 	private static final int method466(int i, int i_211_, int i_212_, int i_213_) {
-		int i_214_ = 65536 - Rasterizer3D.anIntArray1491[i_212_ * 1024 / i_213_] >> 1;
+		int i_214_ = 65536 - Rasterizer3D.COSINE[i_212_ * 1024 / i_213_] >> 1;
 		return (i * (65536 - i_214_) >> 16) + (i_211_ * i_214_ >> 16);
 	}
 

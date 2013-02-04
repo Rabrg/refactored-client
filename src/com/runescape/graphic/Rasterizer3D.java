@@ -14,10 +14,10 @@ public class Rasterizer3D extends Rasterizer {
 	public static int anInt1485;
 	public static int centerWidth;
 	public static int centerHeight;
-	public static int[] anIntArray1488 = new int[512];
+	public static int[] shadowDecay = new int[512];
 	public static int[] anIntArray1489 = new int[2048];
-	public static int[] anIntArray1490 = new int[2048];
-	public static int[] anIntArray1491 = new int[2048];
+	public static int[] SINE = new int[2048];
+	public static int[] COSINE = new int[2048];
 	public static int[] lineOffsets;
 	static int anInt1493;
 	public static IndexedImage[] indexedImages;
@@ -32,10 +32,10 @@ public class Rasterizer3D extends Rasterizer {
 	static int[][] anIntArrayArray1503;
 
 	public static final void reset() {
-		Rasterizer3D.anIntArray1488 = null;
-		Rasterizer3D.anIntArray1488 = null;
-		Rasterizer3D.anIntArray1490 = null;
-		Rasterizer3D.anIntArray1491 = null;
+		Rasterizer3D.shadowDecay = null;
+		Rasterizer3D.shadowDecay = null;
+		Rasterizer3D.SINE = null;
+		Rasterizer3D.COSINE = null;
 		Rasterizer3D.lineOffsets = null;
 		Rasterizer3D.indexedImages = null;
 		Rasterizer3D.aBooleanArray1495 = null;
@@ -793,7 +793,7 @@ public class Rasterizer3D extends Rasterizer {
 				i += i_69_;
 				i_68_ = i_70_ - i_69_ >> 2;
 				if (i_68_ > 0) {
-					i_73_ = (i_72_ - i_71_) * Rasterizer3D.anIntArray1488[i_68_] >> 15;
+					i_73_ = (i_72_ - i_71_) * Rasterizer3D.shadowDecay[i_68_] >> 15;
 				} else {
 					i_73_ = 0;
 				}
@@ -1795,7 +1795,7 @@ public class Rasterizer3D extends Rasterizer {
 			} else {
 				if (i_137_ - i_136_ > 7) {
 					i_146_ = i_137_ - i_136_ >> 3;
-					i_147_ = (i_139_ - i_138_) * Rasterizer3D.anIntArray1488[i_146_] >> 6;
+					i_147_ = (i_139_ - i_138_) * Rasterizer3D.shadowDecay[i_146_] >> 6;
 				} else {
 					i_146_ = 0;
 					i_147_ = 0;
@@ -2140,15 +2140,15 @@ public class Rasterizer3D extends Rasterizer {
 	}
 
 	static {
-		for (int i = 1; i < 512; i++) {
-			Rasterizer3D.anIntArray1488[i] = 32768 / i;
+		for (int shadow = 1; shadow < 512; shadow++) {
+			Rasterizer3D.shadowDecay[shadow] = 32768 / shadow;
 		}
 		for (int i = 1; i < 2048; i++) {
 			Rasterizer3D.anIntArray1489[i] = 65536 / i;
 		}
 		for (int i = 0; i < 2048; i++) {
-			Rasterizer3D.anIntArray1490[i] = (int) (65536.0 * Math.sin(i * 0.0030679615));
-			Rasterizer3D.anIntArray1491[i] = (int) (65536.0 * Math.cos(i * 0.0030679615));
+			Rasterizer3D.SINE[i] = (int) (65536.0 * Math.sin(i * 0.0030679615));
+			Rasterizer3D.COSINE[i] = (int) (65536.0 * Math.cos(i * 0.0030679615));
 		}
 		Rasterizer3D.indexedImages = new IndexedImage[50];
 		Rasterizer3D.aBooleanArray1495 = new boolean[50];

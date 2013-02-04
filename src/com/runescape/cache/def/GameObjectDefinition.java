@@ -244,14 +244,14 @@ public class GameObjectDefinition {
 			}
 			int i = -1;
 			if (anInt279 != -1) {
-				VarBit varbit = VarBit.aVarBitArray735[anInt279];
+				VarBit varbit = VarBit.cache[anInt279];
 				int i_21_ = varbit.anInt737;
 				int i_22_ = varbit.anInt738;
 				int i_23_ = varbit.anInt739;
 				int i_24_ = Client.anIntArray1257[i_23_ - i_22_];
-				i = GameObjectDefinition.client.anIntArray996[i_21_] >> i_22_ & i_24_;
+				i = GameObjectDefinition.client.settings[i_21_] >> i_22_ & i_24_;
 			} else if (anInt254 != -1) {
-				i = GameObjectDefinition.client.anIntArray996[anInt254];
+				i = GameObjectDefinition.client.settings[anInt254];
 			}
 			if (i < 0 || i >= anIntArray264.length || anIntArray264[i] == -1) {
 				return null;

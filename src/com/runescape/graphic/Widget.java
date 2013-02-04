@@ -14,7 +14,7 @@ public class Widget {
 	public ImageRGB disabledSprite;
 	public int animationDuration;
 	public ImageRGB[] sprites;
-	public static Widget[] interfaces;
+	public static Widget[] widgets;
 	public int interfaceUnusedOne;
 	public int[] interfaceConditionValues;
 	public int interfaceContentType;
@@ -29,7 +29,7 @@ public class Widget {
 	public boolean typeFaceCentered;
 	public int interfaceScrollPosition;
 	public String[] actions;
-	public int[][] interfaceFormulaes;
+	public int[][] widgetOpcodes;
 	public boolean filled;
 	public String enabledText;
 	public int interfaceHoveredPopup;
@@ -90,14 +90,14 @@ public class Widget {
 		Buffer buffer = new Buffer(interfaceArchive.getFile("data"));
 		int parentId = -1;
 		int interfaceCount = buffer.getUnsignedLEShort();
-		Widget.interfaces = new Widget[interfaceCount];
+		Widget.widgets = new Widget[interfaceCount];
 		while (buffer.offset < buffer.payload.length) {
 			int interfaceId = buffer.getUnsignedLEShort();
 			if (interfaceId == 65535) {
 				parentId = buffer.getUnsignedLEShort();
 				interfaceId = buffer.getUnsignedLEShort();
 			}
-			Widget widget = Widget.interfaces[interfaceId] = new Widget();
+			Widget widget = Widget.widgets[interfaceId] = new Widget();
 			widget.interfaceId = interfaceId;
 			widget.interfaceParentId = parentId;
 			widget.interfaceType = buffer.getUnsignedByte();
@@ -123,12 +123,12 @@ public class Widget {
 			}
 			int formulaCount = buffer.getUnsignedByte();
 			if (formulaCount > 0) {
-				widget.interfaceFormulaes = new int[formulaCount][];
+				widget.widgetOpcodes = new int[formulaCount][];
 				for (int interfaceFormula = 0; interfaceFormula < formulaCount; interfaceFormula++) {
 					int interfaceSubFormulaCount = buffer.getUnsignedLEShort();
-					widget.interfaceFormulaes[interfaceFormula] = new int[interfaceSubFormulaCount];
+					widget.widgetOpcodes[interfaceFormula] = new int[interfaceSubFormulaCount];
 					for (int interfaceSubFormula = 0; interfaceSubFormula < interfaceSubFormulaCount; interfaceSubFormula++) {
-						widget.interfaceFormulaes[interfaceFormula][interfaceSubFormula] = buffer.getUnsignedLEShort();
+						widget.widgetOpcodes[interfaceFormula][interfaceSubFormula] = buffer.getUnsignedLEShort();
 					}
 				}
 			}
