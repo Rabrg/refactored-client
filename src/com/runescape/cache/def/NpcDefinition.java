@@ -27,7 +27,7 @@ public class NpcDefinition {
 	public int headIcon = -1;
 	private int[] modifiedModelColors;
 	public int standAnimationId = -1;
-	public long id = -1L;
+	public long id = -1;
 	public int degreesToTurn = 32;
 	private static NpcDefinition[] cache;
 	public static Client client;
