@@ -3,11 +3,11 @@ package com.runescape.renderable;
 import com.runescape.anim.Animation;
 import com.runescape.anim.AnimationSequence;
 import com.runescape.anim.SpotAnimation;
-import com.runescape.cache.def.NpcDefinition;
+import com.runescape.cache.def.ActorDefinition;
 import com.runescape.graphic.Model;
 
 public class Npc extends Actor {
-	public NpcDefinition npcDefinition;
+	public ActorDefinition npcDefinition;
 
 	private final Model method400() {
 		if (animation >= 0 && aniomationDelay == 0) {

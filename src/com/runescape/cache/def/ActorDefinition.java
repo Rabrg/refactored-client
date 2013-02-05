@@ -7,7 +7,7 @@ import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 
-public class NpcDefinition {
+public class ActorDefinition {
 
 	public int turnLeftAnimationId = -1;
 	private static int bufferIndex;
@@ -29,7 +29,7 @@ public class NpcDefinition {
 	public int standAnimationId = -1;
 	public long id = -1;
 	public int degreesToTurn = 32;
-	private static NpcDefinition[] cache;
+	private static ActorDefinition[] cache;
 	public static Client client;
 	public int turnRightAnimationId = -1;
 	public boolean clickable = true;
@@ -44,23 +44,23 @@ public class NpcDefinition {
 	private int[] modelIds;
 	public static Cache modelCache = new Cache(30);
 
-	public static final NpcDefinition getDefinition(int id) {
+	public static final ActorDefinition getDefinition(int id) {
 		for (int cacheIndex = 0; cacheIndex < 20; cacheIndex++) {
-			if (NpcDefinition.cache[cacheIndex].id == id) {
-				return NpcDefinition.cache[cacheIndex];
+			if (ActorDefinition.cache[cacheIndex].id == id) {
+				return ActorDefinition.cache[cacheIndex];
 			}
 		}
-		NpcDefinition.bufferIndex = (NpcDefinition.bufferIndex + 1) % 20;
-		NpcDefinition definition = NpcDefinition.cache[NpcDefinition.bufferIndex] = new NpcDefinition();
-		NpcDefinition.buffer.offset = NpcDefinition.bufferOffsets[id];
+		ActorDefinition.bufferIndex = (ActorDefinition.bufferIndex + 1) % 20;
+		ActorDefinition definition = ActorDefinition.cache[ActorDefinition.bufferIndex] = new ActorDefinition();
+		ActorDefinition.buffer.offset = ActorDefinition.bufferOffsets[id];
 		definition.id = id;
-		definition.loadDefinition(true, NpcDefinition.buffer);
+		definition.loadDefinition(true, ActorDefinition.buffer);
 		return definition;
 	}
 
 	public final Model getHeadModel() {
 		if (childrenIds != null) {
-			NpcDefinition definition = getChildDefinition();
+			ActorDefinition definition = getChildDefinition();
 			if (definition == null) {
 				return null;
 			}
@@ -96,7 +96,7 @@ public class NpcDefinition {
 		return headModel;
 	}
 
-	public final NpcDefinition getChildDefinition() {
+	public final ActorDefinition getChildDefinition() {
 		int childId = -1;
 		if (varBitId != -1) {
 			VarBit varbit = VarBit.cache[varBitId];
@@ -104,48 +104,48 @@ public class NpcDefinition {
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
 			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-			childId = NpcDefinition.client.settings[configId] >> leastSignificantBit & bit;
+			childId = ActorDefinition.client.settings[configId] >> leastSignificantBit & bit;
 		} else if (settingId != -1) {
-			childId = NpcDefinition.client.settings[settingId];
+			childId = ActorDefinition.client.settings[settingId];
 		}
 		if (childId < 0 || childId >= childrenIds.length || childrenIds[childId] == -1) {
 			return null;
 		}
-		return NpcDefinition.getDefinition(childrenIds[childId]);
+		return ActorDefinition.getDefinition(childrenIds[childId]);
 	}
 
 	public static final void load(Archive archive) {
-		NpcDefinition.buffer = new Buffer(archive.getFile("npc.dat"));
+		ActorDefinition.buffer = new Buffer(archive.getFile("npc.dat"));
 		Buffer buffer = new Buffer(archive.getFile("npc.idx"));
-		NpcDefinition.size = buffer.getUnsignedLEShort();
-		NpcDefinition.bufferOffsets = new int[NpcDefinition.size];
+		ActorDefinition.size = buffer.getUnsignedLEShort();
+		ActorDefinition.bufferOffsets = new int[ActorDefinition.size];
 		int offset = 2;
-		for (int bufferIndex = 0; bufferIndex < NpcDefinition.size; bufferIndex++) {
-			NpcDefinition.bufferOffsets[bufferIndex] = offset;
+		for (int bufferIndex = 0; bufferIndex < ActorDefinition.size; bufferIndex++) {
+			ActorDefinition.bufferOffsets[bufferIndex] = offset;
 			offset += buffer.getUnsignedLEShort();
 		}
-		NpcDefinition.cache = new NpcDefinition[20];
+		ActorDefinition.cache = new ActorDefinition[20];
 		for (int cacheIndex = 0; cacheIndex < 20; cacheIndex++) {
-			NpcDefinition.cache[cacheIndex] = new NpcDefinition();
+			ActorDefinition.cache[cacheIndex] = new ActorDefinition();
 		}
 	}
 
 	public static final void reset() {
-		NpcDefinition.modelCache = null;
-		NpcDefinition.bufferOffsets = null;
-		NpcDefinition.cache = null;
-		NpcDefinition.buffer = null;
+		ActorDefinition.modelCache = null;
+		ActorDefinition.bufferOffsets = null;
+		ActorDefinition.cache = null;
+		ActorDefinition.buffer = null;
 	}
 
 	public final Model getChildModel(int frameId2, int frameId, int[] framesFrom2) {
 		if (childrenIds != null) {
-			NpcDefinition childDefinition = getChildDefinition();
+			ActorDefinition childDefinition = getChildDefinition();
 			if (childDefinition == null) {
 				return null;
 			}
 			return childDefinition.getChildModel(frameId2, frameId, framesFrom2);
 		}
-		Model childIdModel = (Model) NpcDefinition.modelCache.get(id);
+		Model childIdModel = (Model) ActorDefinition.modelCache.get(id);
 		if (childIdModel == null) {
 			boolean cached = false;
 			for (int model = 0; model < modelIds.length; model++) {
@@ -172,7 +172,7 @@ public class NpcDefinition {
 			}
 			childIdModel.createBones();
 			childIdModel.applyLighting(64 + brightness, 850 + contrast, -30, -50, -30, true);
-			NpcDefinition.modelCache.put(childIdModel, id);
+			ActorDefinition.modelCache.put(childIdModel, id);
 		}
 		Model childModel = Model.aModel1614;
 		childModel.method412(7, childIdModel, Animation.exists(frameId) & Animation.exists(frameId2));

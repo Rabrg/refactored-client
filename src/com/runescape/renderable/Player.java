@@ -6,7 +6,7 @@ import com.runescape.anim.AnimationSequence;
 import com.runescape.anim.SpotAnimation;
 import com.runescape.cache.def.IdentityKit;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.def.NpcDefinition;
+import com.runescape.cache.def.ActorDefinition;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
@@ -15,7 +15,7 @@ import com.runescape.util.TextUtils;
 public class Player extends Actor {
 
 	public long aLong1717 = -1L;
-	public NpcDefinition npcDefinition;
+	public ActorDefinition npcDefinition;
 	public boolean aBoolean1719 = false;
 	public int[] appearanceColors = new int[5];
 	public int teamId;
@@ -125,7 +125,7 @@ public class Player extends Actor {
 				int i_5_ = buffer.getUnsignedByte();
 				appearance[index] = (i_4_ << 8) + i_5_;
 				if (index == 0 && appearance[0] == 65535) {
-					npcDefinition = NpcDefinition.getDefinition(buffer.getUnsignedLEShort());
+					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedLEShort());
 					break;
 				}
 				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {

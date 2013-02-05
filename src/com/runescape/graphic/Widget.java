@@ -4,7 +4,7 @@ import com.runescape.Client;
 import com.runescape.anim.Animation;
 import com.runescape.cache.Archive;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.def.NpcDefinition;
+import com.runescape.cache.def.ActorDefinition;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 import com.runescape.util.TextUtils;
@@ -306,7 +306,7 @@ public class Widget {
 			model = Model.getModel(modelId);
 		}
 		if (modelType == 2) {
-			model = NpcDefinition.getDefinition(modelId).getHeadModel();
+			model = ActorDefinition.getDefinition(modelId).getHeadModel();
 		}
 		if (modelType == 3) {
 			model = Client.clientsPlayer.getHeadModel();
