@@ -20,24 +20,24 @@ public class VarBit {
 	public int anInt742;
 
 	public static void load(int i, Archive archive) {
-				Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
-				VarBit.anInt734 = buffer.getUnsignedLEShort();
-				if (VarBit.cache == null) {
-					VarBit.cache = new VarBit[VarBit.anInt734];
-				}
-				for (int index = 0; index < VarBit.anInt734; index++) {
-					if (VarBit.cache[index] == null) {
-						VarBit.cache[index] = new VarBit();
-					}
-					VarBit.cache[index].method591(buffer, false, index);
-					if (VarBit.cache[index].aBoolean740) {
-						Varp.aVarpArray746[VarBit.cache[index].anInt737].aBoolean758 = true;
-					}
-				}
-				if (buffer.offset == buffer.payload.length) {
-					return;
-				}
-				System.out.println("varbit load mismatch");
+		Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
+		VarBit.anInt734 = buffer.getUnsignedLEShort();
+		if (VarBit.cache == null) {
+			VarBit.cache = new VarBit[VarBit.anInt734];
+		}
+		for (int index = 0; index < VarBit.anInt734; index++) {
+			if (VarBit.cache[index] == null) {
+				VarBit.cache[index] = new VarBit();
+			}
+			VarBit.cache[index].method591(buffer, false, index);
+			if (VarBit.cache[index].aBoolean740) {
+				Varp.aVarpArray746[VarBit.cache[index].anInt737].aBoolean758 = true;
+			}
+		}
+		if (buffer.offset == buffer.payload.length) {
+			return;
+		}
+		System.out.println("varbit load mismatch");
 	}
 
 	public void method591(Buffer buffer, boolean bool, int i) {

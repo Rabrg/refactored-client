@@ -310,7 +310,7 @@ public class Widget {
 			model = NpcDefinition.getDefinition(modelId).getModel(true);
 		}
 		if (modelType == 3) {
-			model = Client.clientsPlayer.getModel();
+			model = Client.clientsPlayer.getHeadModel();
 		}
 		if (modelType == 4) {
 			model = ItemDefinition.getDefinition(modelId).getModel(50, true);

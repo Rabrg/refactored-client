@@ -13,7 +13,7 @@ public class Npc extends Actor {
 		if (animation >= 0 && aniomationDelay == 0) {
 			int frameId = AnimationSequence.animationSequences[animation].animationForFrame[anInt1547];
 			int frameId2 = -1;
-			if (anInt1537 >= 0 && anInt1537 != anInt1531) {
+			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {
 				frameId2 = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
 			}
 			return npcDefinition.method442(0, frameId2, frameId,
@@ -35,7 +35,7 @@ public class Npc extends Actor {
 		if (model == null) {
 			return null;
 		}
-		anInt1527 = model.modelHeight;
+		modelHeight = model.modelHeight;
 		if (spotAnimationId != -1 && currentAnimationFrame != -1) {
 			SpotAnimation spotanimation = SpotAnimation.cache[spotAnimationId];
 			Model model_4_ = spotanimation.getModel();

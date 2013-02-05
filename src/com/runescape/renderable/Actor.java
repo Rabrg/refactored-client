@@ -9,12 +9,12 @@ public class Actor extends Renderable {
 	public int interactingEntity = -1;
 	public int anInt1523;
 	public int anInt1524 = 32;
-	public int anInt1525 = -1;
+	public int runAnimationId = -1;
 	public String forcedChat;
-	public int anInt1527 = 200;
+	public int modelHeight = 200;
 	public int anInt1530;
-	public int anInt1531 = -1;
-	public int anInt1532 = -1;
+	public int standAnimationId = -1;
+	public int standTurnAnimationId = -1;
 	public int chatColor;
 	public int[] hitDamages = new int[4];
 	public int[] hitTypes = new int[4];
@@ -55,10 +55,10 @@ public class Actor extends Renderable {
 	public int yWithBoundary;
 	public int anInt1572;
 	public boolean[] pathRun = new boolean[10];
-	public int anInt1574 = -1;
-	public int anInt1575 = -1;
-	public int anInt1576 = -1;
-	public int anInt1577 = -1;
+	public int walkAnimationId = -1;
+	public int turnAroundAnimationId = -1;
+	public int turnRightAnimationId = -1;
+	public int turnLeftAnimationId = -1;
 
 	public final void setPosition(int x, int y) {
 		if (animation != -1 && AnimationSequence.animationSequences[animation].priority == 1) {
