@@ -57,12 +57,12 @@ public class GameObject extends Renderable {
 		if (anIntArray1591 != null) {
 			gameobjectdefinition = method405(true);
 		} else {
-			gameobjectdefinition = GameObjectDefinition.getObjectByHash(anInt1601);
+			gameobjectdefinition = GameObjectDefinition.getDefinition(anInt1601);
 		}
 		if (gameobjectdefinition == null) {
 			return null;
 		}
-		Model model = gameobjectdefinition.method238(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596, anInt1597,
+		Model model = gameobjectdefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596, anInt1597,
 				i_0_);
 		return model;
 	}
@@ -88,7 +88,7 @@ public class GameObject extends Renderable {
 			if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
 				return null;
 			}
-			return GameObjectDefinition.getObjectByHash(anIntArray1591[i]);
+			return GameObjectDefinition.getDefinition(anIntArray1591[i]);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("17301, " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -119,7 +119,7 @@ public class GameObject extends Renderable {
 					anInt1599 -= (int) (Math.random() * anAnimationSequence1598.getFrameLength(anInt1590, (byte) -39));
 				}
 			}
-			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(anInt1601);
+			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(anInt1601);
 			anInt1592 = gameobjectdefinition.anInt279;
 			anInt1593 = gameobjectdefinition.anInt254;
 			anIntArray1591 = gameobjectdefinition.anIntArray264;

@@ -27,7 +27,7 @@ public class ItemDefinition {
 	public String[] groundActions;
 	private int modelOffset1;
 	public String name;
-	private static ItemDefinition[] itemDefinitions;
+	private static ItemDefinition[] cache;
 	public int femaleDialogueHat;
 	private int inventoryModelId;
 	private int maleDialogue;
@@ -47,7 +47,7 @@ public class ItemDefinition {
 	private int modelSizeY;
 	public int[] stackableIds;
 	private int sine;
-	private static int[] streamIndices;
+	private static int[] dataOffsets;
 	private int lightModifier;
 	public int femaleDialogue;
 	public int modelRotation2;
@@ -61,8 +61,8 @@ public class ItemDefinition {
 	public static final void reset() {
 		ItemDefinition.modelCache = null;
 		ItemDefinition.rgbImageCache = null;
-		ItemDefinition.streamIndices = null;
-		ItemDefinition.itemDefinitions = null;
+		ItemDefinition.dataOffsets = null;
+		ItemDefinition.cache = null;
 		ItemDefinition.dataBuffer = null;
 	}
 
@@ -90,15 +90,15 @@ public class ItemDefinition {
 		ItemDefinition.dataBuffer = new Buffer(archive.getFile("obj.dat"));
 		Buffer buffer = new Buffer(archive.getFile("obj.idx"));
 		ItemDefinition.itemCount = buffer.getUnsignedLEShort();
-		ItemDefinition.streamIndices = new int[ItemDefinition.itemCount];
+		ItemDefinition.dataOffsets = new int[ItemDefinition.itemCount];
 		int offset = 2;
 		for (int item = 0; item < ItemDefinition.itemCount; item++) {
-			ItemDefinition.streamIndices[item] = offset;
+			ItemDefinition.dataOffsets[item] = offset;
 			offset += buffer.getUnsignedLEShort();
 		}
-		ItemDefinition.itemDefinitions = new ItemDefinition[10];
+		ItemDefinition.cache = new ItemDefinition[10];
 		for (int itemDefinition = 0; itemDefinition < 10; itemDefinition++) {
-			ItemDefinition.itemDefinitions[itemDefinition] = new ItemDefinition();
+			ItemDefinition.cache[itemDefinition] = new ItemDefinition();
 		}
 	}
 
@@ -233,13 +233,13 @@ public class ItemDefinition {
 
 	public static final ItemDefinition getDefinition(int itemId) {
 		for (int i = 0; i < 10; i++) {
-			if (ItemDefinition.itemDefinitions[i].itemId == itemId) {
-				return ItemDefinition.itemDefinitions[i];
+			if (ItemDefinition.cache[i].itemId == itemId) {
+				return ItemDefinition.cache[i];
 			}
 		}
 		ItemDefinition.cacheIndex = (ItemDefinition.cacheIndex + 1) % 10;
-		ItemDefinition itemDefinition = ItemDefinition.itemDefinitions[ItemDefinition.cacheIndex];
-		ItemDefinition.dataBuffer.offset = ItemDefinition.streamIndices[itemId];
+		ItemDefinition itemDefinition = ItemDefinition.cache[ItemDefinition.cacheIndex];
+		ItemDefinition.dataBuffer.offset = ItemDefinition.dataOffsets[itemId];
 		itemDefinition.itemId = itemId;
 		itemDefinition.setDefaultValues();
 		itemDefinition.loadDefinition(ItemDefinition.dataBuffer);

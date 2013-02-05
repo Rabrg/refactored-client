@@ -1162,7 +1162,7 @@ public class Client extends GameStub {
 	public final void method23(boolean bool) {
 		try {
 			GameObjectDefinition.modelCache.removeAll();
-			GameObjectDefinition.aCache285.removeAll();
+			GameObjectDefinition.modelCache2.removeAll();
 			NpcDefinition.aCache451.removeAll();
 			ItemDefinition.modelCache.removeAll();
 			ItemDefinition.rgbImageCache.removeAll();
@@ -1218,7 +1218,7 @@ public class Client extends GameStub {
 					int floorHash = currentScene.getFloorHash(currentSceneId, viewportX, viewportY);
 					if (floorHash != 0) {
 						floorHash = floorHash >> 14 & 0x7fff;
-						int icon = GameObjectDefinition.getObjectByHash(floorHash).icon;
+						int icon = GameObjectDefinition.getDefinition(floorHash).icon;
 						if (icon >= 0) {
 							int drawPointX = viewportX;
 							int drawPointY = viewportY;
@@ -2803,7 +2803,7 @@ public class Client extends GameStub {
 						int[] is = minimap.pixels;
 						int i_244_ = 24624 + i_236_ * 4 + (103 - i) * 512 * 4;
 						int i_245_ = i_239_ >> 14 & 0x7fff;
-						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_245_);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_245_);
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
@@ -2878,7 +2878,7 @@ public class Client extends GameStub {
 						int i_249_ = i_248_ >> 6 & 0x3;
 						int i_250_ = i_248_ & 0x1f;
 						int i_251_ = i_239_ >> 14 & 0x7fff;
-						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_251_);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_251_);
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
@@ -2912,7 +2912,7 @@ public class Client extends GameStub {
 						break;
 					}
 					int i_256_ = i_239_ >> 14 & 0x7fff;
-					GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_256_);
+					GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_256_);
 					if (gameobjectdefinition.anInt263 == -1) {
 						break;
 					}
@@ -3949,7 +3949,7 @@ public class Client extends GameStub {
 			int i_349_ = i_348_ & 0x1f;
 			int i_350_ = i_348_ >> 6 & 0x3;
 			if (i_349_ == 10 || i_349_ == 11 || i_349_ == 22) {
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_347_);
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_347_);
 				int i_351_;
 				int i_352_;
 				if (i_350_ == 0 || i_350_ == 2) {
@@ -4956,7 +4956,7 @@ public class Client extends GameStub {
 					} else {
 						if (menuActionId == 1226) {
 							int hash = itemId >> 14 & 0x7fff;
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(hash);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(hash);
 							String description;
 							if (gameobjectdefinition.description != null) {
 								description = new String(gameobjectdefinition.description);
@@ -5059,9 +5059,9 @@ public class Client extends GameStub {
 					if (i_401_ != i_399_) {
 						i_399_ = i_401_;
 						if (i_404_ == 2 && currentScene.method526(currentSceneId, i_402_, i_403_, i_401_) >= 0) {
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_405_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_405_);
 							if (gameobjectdefinition.anIntArray264 != null) {
-								gameobjectdefinition = gameobjectdefinition.method240(true);
+								gameobjectdefinition = gameobjectdefinition.unknown2();
 							}
 							if (gameobjectdefinition == null) {
 								continue;
@@ -5113,7 +5113,7 @@ public class Client extends GameStub {
 								}
 								menuActionNames[menuActionRow] = "Examine @cya@" + gameobjectdefinition.name;
 								menuActionIds[menuActionRow] = 1226;
-								anIntArray1119[menuActionRow] = gameobjectdefinition.anInt259 << 14;
+								anIntArray1119[menuActionRow] = gameobjectdefinition.id << 14;
 								anIntArray1116[menuActionRow] = i_402_;
 								anIntArray1117[menuActionRow] = i_403_;
 								menuActionRow++;
@@ -5360,7 +5360,7 @@ public class Client extends GameStub {
 		aProducingGraphicsBuffer1139 = null;
 		aProducingGraphicsBuffer1140 = null;
 		method118(3);
-		GameObjectDefinition.method235(-501);
+		GameObjectDefinition.reset();
 		NpcDefinition.method441(-501);
 		ItemDefinition.reset();
 		FloorDefinition.cache = null;
@@ -7543,7 +7543,7 @@ public class Client extends GameStub {
 					Rasterizer3D.method364(20, true);
 					drawLoadingText(86, "Unpacking config");
 					AnimationSequence.method153(0, archive);
-					GameObjectDefinition.method236(archive);
+					GameObjectDefinition.load(archive);
 					FloorDefinition.load(archive);
 					ItemDefinition.load(archive);
 					NpcDefinition.method440(archive);
@@ -10777,12 +10777,12 @@ public class Client extends GameStub {
 							player = localPlayers[i_909_];
 						}
 						if (player != null) {
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_919_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_919_);
 							int i_921_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_];
 							int i_922_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_];
 							int i_923_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_ + 1];
 							int i_924_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_ + 1];
-							Model model = gameobjectdefinition.method238(i_915_, i_916_, i_921_, i_922_, i_923_,
+							Model model = gameobjectdefinition.getGameObjectModel(i_915_, i_916_, i_921_, i_922_, i_923_,
 									i_924_, -1);
 							if (model != null) {
 								method130(404, i_913_ + 1, -1, 0, i_917_, i_908_, 0, currentSceneId, i_907_, i_911_ + 1);
@@ -11159,10 +11159,10 @@ public class Client extends GameStub {
 						int i_1006_ = i_1004_ >> 6;
 						if (i_998_ == 0) {
 							currentScene.method513(i_997_, i_994_, i, (byte) -119);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_1002_);
-							if (gameobjectdefinition.isSolid) {
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+							if (gameobjectdefinition.solid) {
 								currentCollisionMap[i_994_].method221(i_1006_, i_1005_,
-										gameobjectdefinition.isWalkable, true, i_997_, i);
+										gameobjectdefinition.walkable, true, i_997_, i);
 							}
 						}
 						if (i_998_ == 1) {
@@ -11170,21 +11170,21 @@ public class Client extends GameStub {
 						}
 						if (i_998_ == 2) {
 							currentScene.method515(i_994_, -978, i_997_, i);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_1002_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 							if (i_997_ + gameobjectdefinition.sizeX > 103 || i + gameobjectdefinition.sizeX > 103
 									|| i_997_ + gameobjectdefinition.sizeY > 103
 									|| i + gameobjectdefinition.sizeY > 103) {
 								break;
 							}
-							if (gameobjectdefinition.isSolid) {
+							if (gameobjectdefinition.solid) {
 								currentCollisionMap[i_994_].method222(i_1006_, gameobjectdefinition.sizeX, i_997_, i,
-										(byte) 6, gameobjectdefinition.sizeY, gameobjectdefinition.isWalkable);
+										(byte) 6, gameobjectdefinition.sizeY, gameobjectdefinition.walkable);
 							}
 						}
 						if (i_998_ == 3) {
 							currentScene.method516((byte) 9, i_994_, i, i_997_);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getObjectByHash(i_1002_);
-							if (gameobjectdefinition.isSolid && gameobjectdefinition.hasActions) {
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
 								currentCollisionMap[i_994_].method224(360, i, i_997_);
 							}
 						}

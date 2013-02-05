@@ -868,7 +868,7 @@ public class Model extends Renderable {
 		}
 	}
 
-	public void method415(boolean bool) {
+	public void normalise(boolean bool) {
 		try {
 			modelHeight = 0;
 			anInt1644 = 0;
@@ -1230,7 +1230,7 @@ public class Model extends Renderable {
 		}
 	}
 
-	public void method425(int i) {
+	public void mirror(int i) {
 		do {
 			try {
 				for (int i_178_ = 0; i_178_ < vertexCount; i_178_++) {
