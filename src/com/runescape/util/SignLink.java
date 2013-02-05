@@ -22,7 +22,7 @@ public class SignLink implements Runnable {
 	public static RandomAccessFile[] aRandomAccessFileArray614 = new RandomAccessFile[5];
 	public static boolean aBoolean615;
 	public static Applet applet = null;
-	private static boolean aBoolean617;
+	private static boolean running;
 	private static int anInt618;
 	private static InetAddress anInetAddress619;
 	private static int anInt620;
@@ -34,7 +34,7 @@ public class SignLink implements Runnable {
 	private static String aString625 = null;
 	private static DataInputStream aDataInputStream626 = null;
 	private static int anInt627;
-	private static String aString628 = null;
+	private static String soundFileName = null;
 	private static byte[] aByteArray629 = null;
 	private static boolean aBoolean630;
 	private static int anInt631;
@@ -50,24 +50,24 @@ public class SignLink implements Runnable {
 
 	public static final void method547(InetAddress inetaddress) {
 		SignLink.anInt618 = (int) (Math.random() * 9.9999999E7);
-		if (SignLink.aBoolean617) {
+		if (SignLink.running) {
 			try {
 				Thread.sleep(500L);
 			} catch (Exception exception) {
 				/* empty */
 			}
-			SignLink.aBoolean617 = false;
+			SignLink.running = false;
 		}
 		SignLink.anInt620 = 0;
 		SignLink.aRunnable622 = null;
 		SignLink.aString623 = null;
-		SignLink.aString628 = null;
+		SignLink.soundFileName = null;
 		SignLink.aString625 = null;
 		SignLink.anInetAddress619 = inetaddress;
 		Thread thread = new Thread(new SignLink());
 		thread.setDaemon(true);
 		thread.start();
-		while (!SignLink.aBoolean617) {
+		while (!SignLink.running) {
 			try {
 				Thread.sleep(50L);
 			} catch (Exception exception) {
@@ -78,17 +78,17 @@ public class SignLink implements Runnable {
 
 	@Override
 	public final void run() {
-		SignLink.aBoolean617 = true;
-		String string = SignLink.method548();
-		SignLink.uid = SignLink.method549(string);
+		SignLink.running = true;
+		String cacheDirectory = SignLink.getCacheDirectory();
+		SignLink.uid = SignLink.method549(cacheDirectory);
 		try {
-			File file = new File(string + "main_file_cache.dat");
+			File file = new File(cacheDirectory + "main_file_cache.dat");
 			if (file.exists() && file.length() > 52428800L) {
 				file.delete();
 			}
-			SignLink.aRandomAccessFile613 = new RandomAccessFile(string + "main_file_cache.dat", "rw");
+			SignLink.aRandomAccessFile613 = new RandomAccessFile(cacheDirectory + "main_file_cache.dat", "rw");
 			for (int i = 0; i < 5; i++) {
-				SignLink.aRandomAccessFileArray614[i] = new RandomAccessFile(string + "main_file_cache.idx" + i, "rw");
+				SignLink.aRandomAccessFileArray614[i] = new RandomAccessFile(cacheDirectory + "main_file_cache.idx" + i, "rw");
 			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
@@ -115,10 +115,10 @@ public class SignLink implements Runnable {
 					SignLink.aString624 = "unknown";
 				}
 				SignLink.aString623 = null;
-			} else if (SignLink.aString628 != null) {
+			} else if (SignLink.soundFileName != null) {
 				if (SignLink.aByteArray629 != null) {
 					try {
-						FileOutputStream fileoutputstream = new FileOutputStream(string + SignLink.aString628);
+						FileOutputStream fileoutputstream = new FileOutputStream(cacheDirectory + SignLink.soundFileName);
 						fileoutputstream.write(SignLink.aByteArray629, 0, SignLink.anInt627);
 						fileoutputstream.close();
 					} catch (Exception exception) {
@@ -126,14 +126,14 @@ public class SignLink implements Runnable {
 					}
 				}
 				if (SignLink.aBoolean635) {
-					SignLink.aString637 = string + SignLink.aString628;
+					SignLink.aString637 = cacheDirectory + SignLink.soundFileName;
 					SignLink.aBoolean635 = false;
 				}
 				if (SignLink.aBoolean630) {
-					SignLink.aString632 = string + SignLink.aString628;
+					SignLink.aString632 = cacheDirectory + SignLink.soundFileName;
 					SignLink.aBoolean630 = false;
 				}
-				SignLink.aString628 = null;
+				SignLink.soundFileName = null;
 			} else if (SignLink.aString625 != null) {
 				try {
 					SignLink.aDataInputStream626 = new DataInputStream(new URL(SignLink.applet.getCodeBase(),
@@ -151,7 +151,7 @@ public class SignLink implements Runnable {
 		}
 	}
 
-	public static final String method548() {
+	public static final String getCacheDirectory() {
 		return "./cache/";
 	}
 
@@ -220,39 +220,39 @@ public class SignLink implements Runnable {
 		if (i > 2000000) {
 			return false;
 		}
-		if (SignLink.aString628 != null) {
+		if (SignLink.soundFileName != null) {
 			return false;
 		}
 		SignLink.anInt636 = (SignLink.anInt636 + 1) % 5;
 		SignLink.anInt627 = i;
 		SignLink.aByteArray629 = bs;
 		SignLink.aBoolean635 = true;
-		SignLink.aString628 = "sound" + SignLink.anInt636 + ".wav";
+		SignLink.soundFileName = "sound" + SignLink.anInt636 + ".wav";
 		return true;
 	}
 
 	public static final synchronized boolean method555() {
-		if (SignLink.aString628 != null) {
+		if (SignLink.soundFileName != null) {
 			return false;
 		}
 		SignLink.aByteArray629 = null;
 		SignLink.aBoolean635 = true;
-		SignLink.aString628 = "sound" + SignLink.anInt636 + ".wav";
+		SignLink.soundFileName = "sound" + SignLink.anInt636 + ".wav";
 		return true;
 	}
 
 	public static final synchronized void method556(byte[] bs, int i) {
-		if (i <= 2000000 && SignLink.aString628 == null) {
+		if (i <= 2000000 && SignLink.soundFileName == null) {
 			SignLink.anInt631 = (SignLink.anInt631 + 1) % 5;
 			SignLink.anInt627 = i;
 			SignLink.aByteArray629 = bs;
 			SignLink.aBoolean630 = true;
-			SignLink.aString628 = "jingle" + SignLink.anInt631 + ".mid";
+			SignLink.soundFileName = "jingle" + SignLink.anInt631 + ".mid";
 		}
 	}
 
 	public static final void reportError(String string) {
-		if (SignLink.aBoolean639 && SignLink.aBoolean617) {
+		if (SignLink.aBoolean639 && SignLink.running) {
 			System.out.println("Error: " + string);
 			try {
 				string = string.replace(':', '_');

@@ -922,10 +922,10 @@ public class Client extends GameStub {
 									anInt1111 = 2;
 									anInt1112 = clickX;
 									anInt1113 = clickY;
-									if (Widget.widgets[i_32_].interfaceParentId == anInt882) {
+									if (Widget.widgets[i_32_].widgetParentId == anInt882) {
 										anInt1111 = 1;
 									}
-									if (Widget.widgets[i_32_].interfaceParentId == anInt1301) {
+									if (Widget.widgets[i_32_].widgetParentId == anInt1301) {
 										anInt1111 = 3;
 									}
 									break;
@@ -1364,100 +1364,100 @@ public class Client extends GameStub {
 
 	public final void method29(int i, int i_111_, Widget widget, int i_112_, int i_113_, int i_114_, int i_115_) {
 		try {
-			if (widget.interfaceType == 0
-					&& widget.interfaceChildren != null
+			if (widget.widgetType == 0
+					&& widget.children != null
 					&& !widget.hiddenUntilHovered
-					&& (i_112_ >= i && i_114_ >= i_113_ && i_112_ <= i + widget.interfaceWidth && i_114_ <= i_113_
-							+ widget.interfaceHeight)) {
-				int i_116_ = widget.interfaceChildren.length;
+					&& (i_112_ >= i && i_114_ >= i_113_ && i_112_ <= i + widget.widgetWidth && i_114_ <= i_113_
+							+ widget.widgetHeight)) {
+				int i_116_ = widget.children.length;
 				if (i_111_ != 13037) {
 					aLinkedListArrayArrayArray852 = null;
 				}
 				for (int i_117_ = 0; i_117_ < i_116_; i_117_++) {
-					int i_118_ = widget.interfaceChildrenX[i_117_] + i;
-					int i_119_ = widget.interfaceChildrenY[i_117_] + i_113_ - i_115_;
-					Widget widget_120_ = Widget.widgets[widget.interfaceChildren[i_117_]];
-					i_118_ += widget_120_.interfacePositionX;
-					i_119_ += widget_120_.interfacePositionY;
-					if ((widget_120_.interfaceHoveredPopup >= 0 || widget_120_.disabledHoveredColor != 0)
-							&& i_112_ >= i_118_ && i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.interfaceWidth
-							&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
-						if (widget_120_.interfaceHoveredPopup >= 0) {
-							anInt911 = widget_120_.interfaceHoveredPopup;
+					int i_118_ = widget.childrenX[i_117_] + i;
+					int i_119_ = widget.childrenY[i_117_] + i_113_ - i_115_;
+					Widget widget_120_ = Widget.widgets[widget.children[i_117_]];
+					i_118_ += widget_120_.widgetPositionX;
+					i_119_ += widget_120_.widgetPositionY;
+					if ((widget_120_.hoveredPopup >= 0 || widget_120_.disabledHoveredColor != 0)
+							&& i_112_ >= i_118_ && i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
+							&& i_114_ < i_119_ + widget_120_.widgetHeight) {
+						if (widget_120_.hoveredPopup >= 0) {
+							anInt911 = widget_120_.hoveredPopup;
 						} else {
-							anInt911 = widget_120_.interfaceId;
+							anInt911 = widget_120_.widgetId;
 						}
 					}
-					if (widget_120_.interfaceType == 0) {
+					if (widget_120_.widgetType == 0) {
 						method29(i_118_, 13037, widget_120_, i_112_, i_119_, i_114_,
-								widget_120_.interfaceScrollPosition);
-						if (widget_120_.interfaceScrollLimit > widget_120_.interfaceHeight) {
-							method65(i_118_ + widget_120_.interfaceWidth, widget_120_.interfaceHeight, i_112_, i_114_,
-									widget_120_, i_119_, true, widget_120_.interfaceScrollLimit, 0);
+								widget_120_.scrollPosition);
+						if (widget_120_.scrollLimit > widget_120_.widgetHeight) {
+							method65(i_118_ + widget_120_.widgetWidth, widget_120_.widgetHeight, i_112_, i_114_,
+									widget_120_, i_119_, true, widget_120_.scrollLimit, 0);
 						}
 					} else {
-						if (widget_120_.interfaceActionType == 1 && i_112_ >= i_118_ && i_114_ >= i_119_
-								&& i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 1 && i_112_ >= i_118_ && i_114_ >= i_119_
+								&& i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							boolean bool = false;
-							if (widget_120_.interfaceContentType != 0) {
+							if (widget_120_.contentType != 0) {
 								bool = method103(widget_120_, false);
 							}
 							if (!bool) {
 								menuActionNames[menuActionRow] = widget_120_.tooltip;
 								menuActionIds[menuActionRow] = 315;
-								anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+								anIntArray1117[menuActionRow] = widget_120_.widgetId;
 								menuActionRow++;
 							}
 						}
-						if (widget_120_.interfaceActionType == 2 && anInt1161 == 0 && i_112_ >= i_118_
-								&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 2 && anInt1161 == 0 && i_112_ >= i_118_
+								&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							String string = widget_120_.selectedActionName;
 							if (string.indexOf(" ") != -1) {
 								string = string.substring(0, string.indexOf(" "));
 							}
 							menuActionNames[menuActionRow] = string + " @gre@" + widget_120_.spellName;
 							menuActionIds[menuActionRow] = 626;
-							anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+							anIntArray1117[menuActionRow] = widget_120_.widgetId;
 							menuActionRow++;
 						}
-						if (widget_120_.interfaceActionType == 3 && i_112_ >= i_118_ && i_114_ >= i_119_
-								&& i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 3 && i_112_ >= i_118_ && i_114_ >= i_119_
+								&& i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							menuActionNames[menuActionRow] = "Close";
 							menuActionIds[menuActionRow] = 200;
-							anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+							anIntArray1117[menuActionRow] = widget_120_.widgetId;
 							menuActionRow++;
 						}
-						if (widget_120_.interfaceActionType == 4 && i_112_ >= i_118_ && i_114_ >= i_119_
-								&& i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 4 && i_112_ >= i_118_ && i_114_ >= i_119_
+								&& i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							menuActionNames[menuActionRow] = widget_120_.tooltip;
 							menuActionIds[menuActionRow] = 169;
-							anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+							anIntArray1117[menuActionRow] = widget_120_.widgetId;
 							menuActionRow++;
 						}
-						if (widget_120_.interfaceActionType == 5 && i_112_ >= i_118_ && i_114_ >= i_119_
-								&& i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 5 && i_112_ >= i_118_ && i_114_ >= i_119_
+								&& i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							menuActionNames[menuActionRow] = widget_120_.tooltip;
 							menuActionIds[menuActionRow] = 646;
-							anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+							anIntArray1117[menuActionRow] = widget_120_.widgetId;
 							menuActionRow++;
 						}
-						if (widget_120_.interfaceActionType == 6 && aBoolean1174 == false && i_112_ >= i_118_
-								&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.interfaceWidth
-								&& i_114_ < i_119_ + widget_120_.interfaceHeight) {
+						if (widget_120_.actionType == 6 && aBoolean1174 == false && i_112_ >= i_118_
+								&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
+								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							menuActionNames[menuActionRow] = widget_120_.tooltip;
 							menuActionIds[menuActionRow] = 679;
-							anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+							anIntArray1117[menuActionRow] = widget_120_.widgetId;
 							menuActionRow++;
 						}
-						if (widget_120_.interfaceType == 2) {
+						if (widget_120_.widgetType == 2) {
 							int i_121_ = 0;
-							for (int i_122_ = 0; i_122_ < widget_120_.interfaceHeight; i_122_++) {
-								for (int i_123_ = 0; i_123_ < widget_120_.interfaceWidth; i_123_++) {
+							for (int i_122_ = 0; i_122_ < widget_120_.widgetHeight; i_122_++) {
+								for (int i_123_ = 0; i_123_ < widget_120_.widgetWidth; i_123_++) {
 									int i_124_ = i_118_ + i_123_ * (32 + widget_120_.itemSpritePadsX);
 									int i_125_ = i_119_ + i_122_ * (32 + widget_120_.itemSpritePadsY);
 									if (i_121_ < 20) {
@@ -1467,32 +1467,32 @@ public class Client extends GameStub {
 									if (i_112_ >= i_124_ && i_114_ >= i_125_ && i_112_ < i_124_ + 32
 											&& i_114_ < i_125_ + 32) {
 										anInt1091 = i_121_;
-										anInt1092 = widget_120_.interfaceId;
+										anInt1092 = widget_120_.widgetId;
 										if (widget_120_.items[i_121_] > 0) {
 											ItemDefinition itemdefinition = ItemDefinition
 													.getDefinition(widget_120_.items[i_121_] - 1);
-											if (anInt1307 == 1 && widget_120_.itemInterface) {
-												if (widget_120_.interfaceId != anInt1309 || i_121_ != anInt1308) {
+											if (anInt1307 == 1 && widget_120_.itemWidget) {
+												if (widget_120_.widgetId != anInt1309 || i_121_ != anInt1308) {
 													menuActionNames[menuActionRow] = "Use " + aString1311
 															+ " with @lre@" + itemdefinition.name;
 													menuActionIds[menuActionRow] = 870;
 													anIntArray1119[menuActionRow] = itemdefinition.itemId;
 													anIntArray1116[menuActionRow] = i_121_;
-													anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
 												}
-											} else if (anInt1161 == 1 && widget_120_.itemInterface) {
+											} else if (anInt1161 == 1 && widget_120_.itemWidget) {
 												if ((anInt1163 & 0x10) == 16) {
 													menuActionNames[menuActionRow] = aString1164 + " @lre@"
 															+ itemdefinition.name;
 													menuActionIds[menuActionRow] = 543;
 													anIntArray1119[menuActionRow] = itemdefinition.itemId;
 													anIntArray1116[menuActionRow] = i_121_;
-													anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
 												}
 											} else {
-												if (widget_120_.itemInterface) {
+												if (widget_120_.itemWidget) {
 													for (int i_126_ = 4; i_126_ >= 3; i_126_--) {
 														if (itemdefinition.inventoryActions != null
 																&& itemdefinition.inventoryActions[i_126_] != null) {
@@ -1506,7 +1506,7 @@ public class Client extends GameStub {
 															}
 															anIntArray1119[menuActionRow] = itemdefinition.itemId;
 															anIntArray1116[menuActionRow] = i_121_;
-															anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
 														} else if (i_126_ == 4) {
 															menuActionNames[menuActionRow] = "Drop @lre@"
@@ -1514,7 +1514,7 @@ public class Client extends GameStub {
 															menuActionIds[menuActionRow] = 847;
 															anIntArray1119[menuActionRow] = itemdefinition.itemId;
 															anIntArray1116[menuActionRow] = i_121_;
-															anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
 														}
 													}
@@ -1524,10 +1524,10 @@ public class Client extends GameStub {
 													menuActionIds[menuActionRow] = 447;
 													anIntArray1119[menuActionRow] = itemdefinition.itemId;
 													anIntArray1116[menuActionRow] = i_121_;
-													anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
 												}
-												if (widget_120_.itemInterface
+												if (widget_120_.itemWidget
 														&& itemdefinition.inventoryActions != null) {
 													for (int i_127_ = 2; i_127_ >= 0; i_127_--) {
 														if (itemdefinition.inventoryActions[i_127_] != null) {
@@ -1544,7 +1544,7 @@ public class Client extends GameStub {
 															}
 															anIntArray1119[menuActionRow] = itemdefinition.itemId;
 															anIntArray1116[menuActionRow] = i_121_;
-															anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
 														}
 													}
@@ -1571,7 +1571,7 @@ public class Client extends GameStub {
 															}
 															anIntArray1119[menuActionRow] = itemdefinition.itemId;
 															anIntArray1116[menuActionRow] = i_121_;
-															anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
 														}
 													}
@@ -1580,7 +1580,7 @@ public class Client extends GameStub {
 												menuActionIds[menuActionRow] = 1125;
 												anIntArray1119[menuActionRow] = itemdefinition.itemId;
 												anIntArray1116[menuActionRow] = i_121_;
-												anIntArray1117[menuActionRow] = widget_120_.interfaceId;
+												anIntArray1117[menuActionRow] = widget_120_.widgetId;
 												menuActionRow++;
 											}
 										}
@@ -1692,8 +1692,8 @@ public class Client extends GameStub {
 						aString906 = "";
 						aBoolean1183 = false;
 						for (int i = 0; i < Widget.widgets.length; i++) {
-							if (Widget.widgets[i] != null && Widget.widgets[i].interfaceContentType == 600) {
-								anInt1203 = anInt882 = Widget.widgets[i].interfaceParentId;
+							if (Widget.widgets[i] != null && Widget.widgets[i].contentType == 600) {
+								anInt1203 = anInt882 = Widget.widgets[i].widgetParentId;
 								break;
 							}
 						}
@@ -2657,7 +2657,7 @@ public class Client extends GameStub {
 			if (i <= 0) {
 				opcode = -1;
 			}
-			int i_222_ = widget.interfaceContentType;
+			int i_222_ = widget.contentType;
 			if (friendListStatus == 2) {
 				if (i_222_ == 201) {
 					aBoolean1248 = true;
@@ -3388,13 +3388,13 @@ public class Client extends GameStub {
 	public final void method60(int i, byte b) {
 		try {
 			Widget widget = Widget.widgets[i];
-			for (int i_302_ = 0; i_302_ < widget.interfaceChildren.length; i_302_++) {
-				if (widget.interfaceChildren[i_302_] == -1) {
+			for (int i_302_ = 0; i_302_ < widget.children.length; i_302_++) {
+				if (widget.children[i_302_] == -1) {
 					break;
 				}
-				Widget widget_303_ = Widget.widgets[widget.interfaceChildren[i_302_]];
-				if (widget_303_.interfaceType == 1) {
-					method60(widget_303_.interfaceId, (byte) 6);
+				Widget widget_303_ = Widget.widgets[widget.children[i_302_]];
+				if (widget_303_.widgetType == 1) {
+					method60(widget_303_.widgetId, (byte) 6);
 				}
 				widget_303_.animationFrame = 0;
 				widget_303_.animationDuration = 0;
@@ -3613,7 +3613,7 @@ public class Client extends GameStub {
 								if (anInt1092 == anInt1109 && anInt1091 != anInt1110) {
 									Widget widget = Widget.widgets[anInt1109];
 									int i_319_ = 0;
-									if (anInt938 == 1 && widget.interfaceContentType == 206) {
+									if (anInt938 == 1 && widget.contentType == 206) {
 										i_319_ = 1;
 									}
 									if (widget.items[anInt1091] <= 0) {
@@ -3900,12 +3900,12 @@ public class Client extends GameStub {
 				aBoolean997 = false;
 				anInt1032 += i_340_;
 				if (i_336_ >= i && i_336_ < i + 16 && i_337_ >= i_338_ && i_337_ < i_338_ + 16) {
-					widget.interfaceScrollPosition -= anInt1238 * 4;
+					widget.scrollPosition -= anInt1238 * 4;
 					if (bool) {
 						aBoolean1178 = true;
 					}
 				} else if (i_336_ >= i && i_336_ < i + 16 && i_337_ >= i_338_ + i_335_ - 16 && i_337_ < i_338_ + i_335_) {
-					widget.interfaceScrollPosition += anInt1238 * 4;
+					widget.scrollPosition += anInt1238 * 4;
 					if (bool) {
 						aBoolean1178 = true;
 					}
@@ -3920,7 +3920,7 @@ public class Client extends GameStub {
 					}
 					int i_342_ = i_337_ - i_338_ - 16 - i_341_ / 2;
 					int i_343_ = i_335_ - 32 - i_341_;
-					widget.interfaceScrollPosition = (i_339_ - i_335_) * i_342_ / i_343_;
+					widget.scrollPosition = (i_339_ - i_335_) * i_342_ / i_343_;
 					if (bool) {
 						aBoolean1178 = true;
 					}
@@ -4231,17 +4231,17 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
 				if (menuActionId == 315) {
 					Widget widget = Widget.widgets[interfaceid];
 					boolean bool_377_ = true;
-					if (widget.interfaceContentType > 0) {
+					if (widget.contentType > 0) {
 						bool_377_ = method48(505, widget);
 					}
 					if (bool_377_) {
@@ -4327,10 +4327,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4362,10 +4362,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4378,10 +4378,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4432,10 +4432,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4448,10 +4448,10 @@ public class Client extends GameStub {
 					anInt1269 = interfaceid;
 					anInt1270 = itemSlot;
 					anInt1271 = 2;
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 						anInt1271 = 1;
 					}
-					if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+					if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 						anInt1271 = 3;
 					}
 				}
@@ -4486,10 +4486,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4537,10 +4537,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4553,10 +4553,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4599,8 +4599,8 @@ public class Client extends GameStub {
 						Widget widget = Widget.widgets[interfaceid];
 						if (widget.widgetOpcodes != null && widget.widgetOpcodes[0][0] == 5) {
 							int i_387_ = widget.widgetOpcodes[0][1];
-							if (settings[i_387_] != widget.interfaceConditionValues[0]) {
-								settings[i_387_] = widget.interfaceConditionValues[0];
+							if (settings[i_387_] != widget.conditionValues[0]) {
+								settings[i_387_] = widget.conditionValues[0];
 								method33(i_387_);
 								aBoolean1178 = true;
 							}
@@ -4779,10 +4779,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4796,10 +4796,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -4813,8 +4813,8 @@ public class Client extends GameStub {
 								aBoolean1183 = false;
 								for (int i_390_ = 0; i_390_ < Widget.widgets.length; i_390_++) {
 									if (Widget.widgets[i_390_] != null
-											&& Widget.widgets[i_390_].interfaceContentType == 600) {
-										anInt1203 = anInt882 = Widget.widgets[i_390_].interfaceParentId;
+											&& Widget.widgets[i_390_].contentType == 600) {
+										anInt1203 = anInt882 = Widget.widgets[i_390_].widgetParentId;
 										break;
 									}
 								}
@@ -4872,10 +4872,10 @@ public class Client extends GameStub {
 						anInt1269 = interfaceid;
 						anInt1270 = itemSlot;
 						anInt1271 = 2;
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt882) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt882) {
 							anInt1271 = 1;
 						}
-						if (Widget.widgets[interfaceid].interfaceParentId == anInt1301) {
+						if (Widget.widgets[interfaceid].widgetParentId == anInt1301) {
 							anInt1271 = 3;
 						}
 					}
@@ -5746,20 +5746,20 @@ public class Client extends GameStub {
 	public final void method75(int i, Widget widget) {
 		do {
 			try {
-				int i_431_ = widget.interfaceContentType;
+				int i_431_ = widget.contentType;
 				if (i <= 0) {
 					outBuffer.put(49);
 				}
 				if (i_431_ >= 1 && i_431_ <= 100 || i_431_ >= 701 && i_431_ <= 800) {
 					if (i_431_ == 1 && friendListStatus == 0) {
 						widget.disabledText = "Loading friend list";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else if (i_431_ == 1 && friendListStatus == 1) {
 						widget.disabledText = "Connecting to friendserver";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else if (i_431_ == 2 && friendListStatus != 2) {
 						widget.disabledText = "Please wait...";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else {
 						int i_432_ = anInt924;
 						if (friendListStatus != 2) {
@@ -5772,10 +5772,10 @@ public class Client extends GameStub {
 						}
 						if (i_431_ >= i_432_) {
 							widget.disabledText = "";
-							widget.interfaceActionType = 0;
+							widget.actionType = 0;
 						} else {
 							widget.disabledText = aStringArray1107[i_431_];
-							widget.interfaceActionType = 1;
+							widget.actionType = 1;
 						}
 					}
 				} else if (i_431_ >= 101 && i_431_ <= 200 || i_431_ >= 801 && i_431_ <= 900) {
@@ -5790,7 +5790,7 @@ public class Client extends GameStub {
 					}
 					if (i_431_ >= i_433_) {
 						widget.disabledText = "";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else {
 						if (anIntArray851[i_431_] == 0) {
 							widget.disabledText = "@red@Offline";
@@ -5799,25 +5799,25 @@ public class Client extends GameStub {
 						} else {
 							widget.disabledText = "@yel@World-" + (anIntArray851[i_431_] - 9);
 						}
-						widget.interfaceActionType = 1;
+						widget.actionType = 1;
 					}
 				} else if (i_431_ == 203) {
 					int i_434_ = anInt924;
 					if (friendListStatus != 2) {
 						i_434_ = 0;
 					}
-					widget.interfaceScrollLimit = i_434_ * 15 + 20;
-					if (widget.interfaceScrollLimit <= widget.interfaceHeight) {
-						widget.interfaceScrollLimit = widget.interfaceHeight + 1;
+					widget.scrollLimit = i_434_ * 15 + 20;
+					if (widget.scrollLimit <= widget.widgetHeight) {
+						widget.scrollLimit = widget.widgetHeight + 1;
 					}
 				} else if (i_431_ >= 401 && i_431_ <= 500) {
 					i_431_ -= 401;
 					if (i_431_ == 0 && friendListStatus == 0) {
 						widget.disabledText = "Loading ignore list";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else if (i_431_ == 1 && friendListStatus == 0) {
 						widget.disabledText = "Please wait...";
-						widget.interfaceActionType = 0;
+						widget.actionType = 0;
 					} else {
 						int i_435_ = anInt847;
 						if (friendListStatus == 0) {
@@ -5825,16 +5825,16 @@ public class Client extends GameStub {
 						}
 						if (i_431_ >= i_435_) {
 							widget.disabledText = "";
-							widget.interfaceActionType = 0;
+							widget.actionType = 0;
 						} else {
 							widget.disabledText = TextUtils.formatName(TextUtils.longToName(aLongArray950[i_431_]));
-							widget.interfaceActionType = 1;
+							widget.actionType = 1;
 						}
 					}
 				} else if (i_431_ == 503) {
-					widget.interfaceScrollLimit = anInt847 * 15 + 20;
-					if (widget.interfaceScrollLimit <= widget.interfaceHeight) {
-						widget.interfaceScrollLimit = widget.interfaceHeight + 1;
+					widget.scrollLimit = anInt847 * 15 + 20;
+					if (widget.scrollLimit <= widget.widgetHeight) {
+						widget.scrollLimit = widget.widgetHeight + 1;
 					}
 				} else if (i_431_ == 327) {
 					widget.rotationX = 150;
@@ -8282,11 +8282,11 @@ public class Client extends GameStub {
 			aBoolean1178 = false;
 		}
 		if (anInt1301 == -1) {
-			aWidget1084.interfaceScrollPosition = anInt1236 - anInt1114 - 77;
+			aWidget1084.scrollPosition = anInt1236 - anInt1114 - 77;
 			if (mouseEventX > 448 && mouseEventX < 560 && mouseEventY > 332) {
 				method65(463, 77, mouseEventX - 17, mouseEventY - 357, aWidget1084, 0, false, anInt1236, 0);
 			}
-			int i = anInt1236 - 77 - aWidget1084.interfaceScrollPosition;
+			int i = anInt1236 - 77 - aWidget1084.scrollPosition;
 			if (i < 0) {
 				i = 0;
 			}
@@ -8477,7 +8477,7 @@ public class Client extends GameStub {
 
 	public final boolean method103(Widget widget, boolean bool) {
 		try {
-			int i = widget.interfaceContentType;
+			int i = widget.contentType;
 			if (bool) {
 				startup();
 			}
@@ -8540,45 +8540,45 @@ public class Client extends GameStub {
 			if (i != 8) {
 				aBoolean1016 = !aBoolean1016;
 			}
-			if (widget.interfaceType == 0
-					&& widget.interfaceChildren != null
-					&& (!widget.hiddenUntilHovered || anInt1051 == widget.interfaceId
-							|| anInt1073 == widget.interfaceId || anInt1064 == widget.interfaceId)) {
+			if (widget.widgetType == 0
+					&& widget.children != null
+					&& (!widget.hiddenUntilHovered || anInt1051 == widget.widgetId
+							|| anInt1073 == widget.widgetId || anInt1064 == widget.widgetId)) {
 				int i_627_ = Rasterizer.topX;
 				int i_628_ = Rasterizer.topY;
 				int i_629_ = Rasterizer.bottomX;
 				int i_630_ = Rasterizer.bottomY;
-				Rasterizer.setCoordinates(i_625_, i_626_, i_625_ + widget.interfaceWidth, i_626_
-						+ widget.interfaceHeight);
-				int i_631_ = widget.interfaceChildren.length;
+				Rasterizer.setCoordinates(i_625_, i_626_, i_625_ + widget.widgetWidth, i_626_
+						+ widget.widgetHeight);
+				int i_631_ = widget.children.length;
 				for (int i_632_ = 0; i_632_ < i_631_; i_632_++) {
-					int i_633_ = widget.interfaceChildrenX[i_632_] + i_625_;
-					int i_634_ = widget.interfaceChildrenY[i_632_] + i_626_ - i_624_;
-					Widget widget_635_ = Widget.widgets[widget.interfaceChildren[i_632_]];
-					i_633_ += widget_635_.interfacePositionX;
-					i_634_ += widget_635_.interfacePositionY;
-					if (widget_635_.interfaceContentType > 0) {
+					int i_633_ = widget.childrenX[i_632_] + i_625_;
+					int i_634_ = widget.childrenY[i_632_] + i_626_ - i_624_;
+					Widget widget_635_ = Widget.widgets[widget.children[i_632_]];
+					i_633_ += widget_635_.widgetPositionX;
+					i_634_ += widget_635_.widgetPositionY;
+					if (widget_635_.contentType > 0) {
 						method75(950, widget_635_);
 					}
-					if (widget_635_.interfaceType == 0) {
-						if (widget_635_.interfaceScrollPosition > widget_635_.interfaceScrollLimit
-								- widget_635_.interfaceHeight) {
-							widget_635_.interfaceScrollPosition = widget_635_.interfaceScrollLimit
-									- widget_635_.interfaceHeight;
+					if (widget_635_.widgetType == 0) {
+						if (widget_635_.scrollPosition > widget_635_.scrollLimit
+								- widget_635_.widgetHeight) {
+							widget_635_.scrollPosition = widget_635_.scrollLimit
+									- widget_635_.widgetHeight;
 						}
-						if (widget_635_.interfaceScrollPosition < 0) {
-							widget_635_.interfaceScrollPosition = 0;
+						if (widget_635_.scrollPosition < 0) {
+							widget_635_.scrollPosition = 0;
 						}
-						method105(8, widget_635_.interfaceScrollPosition, i_633_, widget_635_, i_634_);
-						if (widget_635_.interfaceScrollLimit > widget_635_.interfaceHeight) {
-							method30(widget_635_.interfaceHeight, widget_635_.interfaceScrollPosition, i_634_, i_633_
-									+ widget_635_.interfaceWidth, widget_635_.interfaceScrollLimit);
+						method105(8, widget_635_.scrollPosition, i_633_, widget_635_, i_634_);
+						if (widget_635_.scrollLimit > widget_635_.widgetHeight) {
+							method30(widget_635_.widgetHeight, widget_635_.scrollPosition, i_634_, i_633_
+									+ widget_635_.widgetWidth, widget_635_.scrollLimit);
 						}
-					} else if (widget_635_.interfaceType != 1) {
-						if (widget_635_.interfaceType == 2) {
+					} else if (widget_635_.widgetType != 1) {
+						if (widget_635_.widgetType == 2) {
 							int i_636_ = 0;
-							for (int i_637_ = 0; i_637_ < widget_635_.interfaceHeight; i_637_++) {
-								for (int i_638_ = 0; i_638_ < widget_635_.interfaceWidth; i_638_++) {
+							for (int i_637_ = 0; i_637_ < widget_635_.widgetHeight; i_637_++) {
+								for (int i_638_ = 0; i_638_ < widget_635_.widgetWidth; i_638_++) {
 									int i_639_ = i_633_ + i_638_ * (32 + widget_635_.itemSpritePadsX);
 									int i_640_ = i_634_ + i_637_ * (32 + widget_635_.itemSpritePadsY);
 									if (i_636_ < 20) {
@@ -8594,14 +8594,14 @@ public class Client extends GameStub {
 												|| anInt1111 != 0 && anInt1110 == i_636_) {
 											int i_644_ = 0;
 											if (anInt1307 == 1 && anInt1308 == i_636_
-													&& anInt1309 == widget_635_.interfaceId) {
+													&& anInt1309 == widget_635_.widgetId) {
 												i_644_ = 16777215;
 											}
 											ImageRGB imagergb = ItemDefinition.getSprite(i_643_,
 													widget_635_.itemAmounts[i_636_], i_644_);
 											if (imagergb != null) {
 												if (anInt1111 != 0 && anInt1110 == i_636_
-														&& anInt1109 == widget_635_.interfaceId) {
+														&& anInt1109 == widget_635_.widgetId) {
 													i_641_ = mouseEventX - anInt1112;
 													i_642_ = mouseEventY - anInt1113;
 													if (i_641_ < 5 && i_641_ > -5) {
@@ -8616,37 +8616,37 @@ public class Client extends GameStub {
 													}
 													imagergb.drawImageAlpha(i_639_ + i_641_, i_640_ + i_642_, 128);
 													if (i_640_ + i_642_ < Rasterizer.topY
-															&& widget.interfaceScrollPosition > 0) {
+															&& widget.scrollPosition > 0) {
 														int i_645_ = anInt970 * (Rasterizer.topY - i_640_ - i_642_) / 3;
 														if (i_645_ > anInt970 * 10) {
 															i_645_ = anInt970 * 10;
 														}
-														if (i_645_ > widget.interfaceScrollPosition) {
-															i_645_ = widget.interfaceScrollPosition;
+														if (i_645_ > widget.scrollPosition) {
+															i_645_ = widget.scrollPosition;
 														}
-														widget.interfaceScrollPosition -= i_645_;
+														widget.scrollPosition -= i_645_;
 														anInt1113 += i_645_;
 													}
 													if (i_640_ + i_642_ + 32 > Rasterizer.bottomY
-															&& widget.interfaceScrollPosition < widget.interfaceScrollLimit
-																	- widget.interfaceHeight) {
+															&& widget.scrollPosition < widget.scrollLimit
+																	- widget.widgetHeight) {
 														int i_646_ = anInt970
 																* (i_640_ + i_642_ + 32 - Rasterizer.bottomY) / 3;
 														if (i_646_ > anInt970 * 10) {
 															i_646_ = anInt970 * 10;
 														}
-														if (i_646_ > widget.interfaceScrollLimit
-																- widget.interfaceHeight
-																- widget.interfaceScrollPosition) {
-															i_646_ = widget.interfaceScrollLimit
-																	- widget.interfaceHeight
-																	- widget.interfaceScrollPosition;
+														if (i_646_ > widget.scrollLimit
+																- widget.widgetHeight
+																- widget.scrollPosition) {
+															i_646_ = widget.scrollLimit
+																	- widget.widgetHeight
+																	- widget.scrollPosition;
 														}
-														widget.interfaceScrollPosition += i_646_;
+														widget.scrollPosition += i_646_;
 														anInt1113 -= i_646_;
 													}
 												} else if (anInt1271 != 0 && anInt1270 == i_636_
-														&& anInt1269 == widget_635_.interfaceId) {
+														&& anInt1269 == widget_635_.widgetId) {
 													imagergb.drawImageAlpha(i_639_, i_640_, 128);
 												} else {
 													imagergb.drawSprite(i_639_, 16083, i_640_);
@@ -8669,10 +8669,10 @@ public class Client extends GameStub {
 									i_636_++;
 								}
 							}
-						} else if (widget_635_.interfaceType == 3) {
+						} else if (widget_635_.widgetType == 3) {
 							boolean bool = false;
-							if (anInt1064 == widget_635_.interfaceId || anInt1073 == widget_635_.interfaceId
-									|| anInt1051 == widget_635_.interfaceId) {
+							if (anInt1064 == widget_635_.widgetId || anInt1073 == widget_635_.widgetId
+									|| anInt1051 == widget_635_.widgetId) {
 								bool = true;
 							}
 							int i_648_;
@@ -8687,27 +8687,27 @@ public class Client extends GameStub {
 									i_648_ = widget_635_.disabledHoveredColor;
 								}
 							}
-							if (widget_635_.interfaceAlpha == 0) {
+							if (widget_635_.widgetAlpha == 0) {
 								if (widget_635_.filled) {
-									Rasterizer.drawFilledRectangle(i_633_, i_634_, widget_635_.interfaceWidth,
-											widget_635_.interfaceHeight, i_648_);
+									Rasterizer.drawFilledRectangle(i_633_, i_634_, widget_635_.widgetWidth,
+											widget_635_.widgetHeight, i_648_);
 								} else {
-									Rasterizer.drawUnfilledRectangle(i_633_, i_634_, widget_635_.interfaceWidth,
-											widget_635_.interfaceHeight, i_648_);
+									Rasterizer.drawUnfilledRectangle(i_633_, i_634_, widget_635_.widgetWidth,
+											widget_635_.widgetHeight, i_648_);
 								}
 							} else if (widget_635_.filled) {
-								Rasterizer.drawFilledRectangleAlhpa(i_633_, i_634_, widget_635_.interfaceWidth,
-										widget_635_.interfaceHeight, i_648_, 256 - (widget_635_.interfaceAlpha & 0xff));
+								Rasterizer.drawFilledRectangleAlhpa(i_633_, i_634_, widget_635_.widgetWidth,
+										widget_635_.widgetHeight, i_648_, 256 - (widget_635_.widgetAlpha & 0xff));
 							} else {
-								Rasterizer.drawUnfilledRectangleAlpha(i_633_, i_634_, widget_635_.interfaceWidth,
-										widget_635_.interfaceHeight, i_648_, 256 - (widget_635_.interfaceAlpha & 0xff));
+								Rasterizer.drawUnfilledRectangleAlpha(i_633_, i_634_, widget_635_.widgetWidth,
+										widget_635_.widgetHeight, i_648_, 256 - (widget_635_.widgetAlpha & 0xff));
 							}
-						} else if (widget_635_.interfaceType == 4) {
+						} else if (widget_635_.widgetType == 4) {
 							TypeFace typeface = widget_635_.typeFaces;
 							String string = widget_635_.disabledText;
 							boolean bool = false;
-							if (anInt1064 == widget_635_.interfaceId || anInt1073 == widget_635_.interfaceId
-									|| anInt1051 == widget_635_.interfaceId) {
+							if (anInt1064 == widget_635_.widgetId || anInt1073 == widget_635_.widgetId
+									|| anInt1051 == widget_635_.widgetId) {
 								bool = true;
 							}
 							int i_649_;
@@ -8725,7 +8725,7 @@ public class Client extends GameStub {
 									i_649_ = widget_635_.disabledHoveredColor;
 								}
 							}
-							if (widget_635_.interfaceActionType == 6 && aBoolean1174) {
+							if (widget_635_.actionType == 6 && aBoolean1174) {
 								string = "Please wait...";
 								i_649_ = widget_635_.disabledColor;
 							}
@@ -8797,7 +8797,7 @@ public class Client extends GameStub {
 								}
 								if (widget_635_.typeFaceCentered) {
 									typeface.drawCenteredShadowedString(string_657_, i_633_
-											+ widget_635_.interfaceWidth / 2, i_650_, i_649_,
+											+ widget_635_.widgetWidth / 2, i_650_, i_649_,
 											widget_635_.typeFaceShadowed);
 								} else {
 									typeface.drawShadowedString(string_657_, i_633_, i_650_,
@@ -8805,7 +8805,7 @@ public class Client extends GameStub {
 								}
 								i_650_ += typeface.characterDefaultHeight;
 							}
-						} else if (widget_635_.interfaceType == 5) {
+						} else if (widget_635_.widgetType == 5) {
 							ImageRGB imagergb;
 							if (method131(widget_635_, false)) {
 								imagergb = widget_635_.enabledSprite;
@@ -8815,11 +8815,11 @@ public class Client extends GameStub {
 							if (imagergb != null) {
 								imagergb.drawSprite(i_633_, 16083, i_634_);
 							}
-						} else if (widget_635_.interfaceType == 6) {
+						} else if (widget_635_.widgetType == 6) {
 							int i_658_ = Rasterizer3D.centerX;
 							int i_659_ = Rasterizer3D.centerY;
-							Rasterizer3D.centerX = i_633_ + widget_635_.interfaceWidth / 2;
-							Rasterizer3D.centerY = i_634_ + widget_635_.interfaceHeight / 2;
+							Rasterizer3D.centerX = i_633_ + widget_635_.widgetWidth / 2;
+							Rasterizer3D.centerY = i_634_ + widget_635_.widgetHeight / 2;
 							int i_660_ = Rasterizer3D.SINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							int i_661_ = Rasterizer3D.COSINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							boolean bool = method131(widget_635_, false);
@@ -8843,11 +8843,11 @@ public class Client extends GameStub {
 							}
 							Rasterizer3D.centerX = i_658_;
 							Rasterizer3D.centerY = i_659_;
-						} else if (widget_635_.interfaceType == 7) {
+						} else if (widget_635_.widgetType == 7) {
 							TypeFace typeface = widget_635_.typeFaces;
 							int i_663_ = 0;
-							for (int i_664_ = 0; i_664_ < widget_635_.interfaceHeight; i_664_++) {
-								for (int i_665_ = 0; i_665_ < widget_635_.interfaceWidth; i_665_++) {
+							for (int i_664_ = 0; i_664_ < widget_635_.widgetHeight; i_664_++) {
+								for (int i_665_ = 0; i_665_ < widget_635_.widgetWidth; i_665_++) {
 									if (widget_635_.items[i_663_] > 0) {
 										ItemDefinition itemdefinition = ItemDefinition
 												.getDefinition(widget_635_.items[i_663_] - 1);
@@ -8859,7 +8859,7 @@ public class Client extends GameStub {
 										int i_667_ = i_634_ + i_664_ * (12 + widget_635_.itemSpritePadsY);
 										if (widget_635_.typeFaceCentered) {
 											typeface.drawCenteredShadowedString(string, i_666_
-													+ widget_635_.interfaceWidth / 2, i_667_,
+													+ widget_635_.widgetWidth / 2, i_667_,
 													widget_635_.disabledColor, widget_635_.typeFaceShadowed);
 										} else {
 											typeface.drawShadowedString(string, i_666_, i_667_,
@@ -9637,15 +9637,15 @@ public class Client extends GameStub {
 				throw new NullPointerException();
 			}
 			Widget widget = Widget.widgets[i_741_];
-			for (int i_743_ = 0; i_743_ < widget.interfaceChildren.length; i_743_++) {
-				if (widget.interfaceChildren[i_743_] == -1) {
+			for (int i_743_ = 0; i_743_ < widget.children.length; i_743_++) {
+				if (widget.children[i_743_] == -1) {
 					break;
 				}
-				Widget widget_744_ = Widget.widgets[widget.interfaceChildren[i_743_]];
-				if (widget_744_.interfaceType == 1) {
-					bool_742_ |= method119(i, false, widget_744_.interfaceId);
+				Widget widget_744_ = Widget.widgets[widget.children[i_743_]];
+				if (widget_744_.widgetType == 1) {
+					bool_742_ |= method119(i, false, widget_744_.widgetId);
 				}
-				if (widget_744_.interfaceType == 6
+				if (widget_744_.widgetType == 6
 						&& (widget_744_.disabledAnimation != -1 || widget_744_.enabledAnimation != -1)) {
 					boolean bool_745_ = method131(widget_744_, false);
 					int i_746_;
@@ -10270,21 +10270,21 @@ public class Client extends GameStub {
 		try {
 			if (bool) {
 			}
-			if (widget.interfaceConditionTypes == null) {
+			if (widget.conditionTypes == null) {
 				return false;
 			}
-			for (int i = 0; i < widget.interfaceConditionTypes.length; i++) {
+			for (int i = 0; i < widget.conditionTypes.length; i++) {
 				int i_819_ = parseWidgetOpcode(widget, i);
-				int i_820_ = widget.interfaceConditionValues[i];
-				if (widget.interfaceConditionTypes[i] == 2) {
+				int i_820_ = widget.conditionValues[i];
+				if (widget.conditionTypes[i] == 2) {
 					if (i_819_ >= i_820_) {
 						return false;
 					}
-				} else if (widget.interfaceConditionTypes[i] == 3) {
+				} else if (widget.conditionTypes[i] == 3) {
 					if (i_819_ <= i_820_) {
 						return false;
 					}
-				} else if (widget.interfaceConditionTypes[i] == 4) {
+				} else if (widget.conditionTypes[i] == 4) {
 					if (i_819_ == i_820_) {
 						return false;
 					}
@@ -11350,8 +11350,8 @@ public class Client extends GameStub {
 						aBoolean1183 = false;
 						for (int i_1030_ = 0; i_1030_ < Widget.widgets.length; i_1030_++) {
 							if (Widget.widgets[i_1030_] != null
-									&& Widget.widgets[i_1030_].interfaceContentType == i_1029_) {
-								anInt882 = Widget.widgets[i_1030_].interfaceParentId;
+									&& Widget.widgets[i_1030_].contentType == i_1029_) {
+								anInt882 = Widget.widgets[i_1030_].widgetParentId;
 								break;
 							}
 						}
@@ -11501,8 +11501,8 @@ public class Client extends GameStub {
 					int interfacePositionY = inBuffer.getForceLEShort();
 					int interfaceId = inBuffer.getUnsignedShort();
 					Widget widget = Widget.widgets[interfaceId];
-					widget.interfacePositionX = interfacePositionX;
-					widget.interfacePositionY = interfacePositionY;
+					widget.widgetPositionX = interfacePositionX;
+					widget.widgetPositionY = interfacePositionY;
 					opcode = -1;
 					return true;
 				}
@@ -11970,14 +11970,14 @@ public class Client extends GameStub {
 					int interfaceId = inBuffer.getUnsignedShort();
 					int interfaceScrollPosition = inBuffer.getUnsignedLEShortA();
 					Widget widget = Widget.widgets[interfaceId];
-					if (widget != null && widget.interfaceType == 0) {
+					if (widget != null && widget.widgetType == 0) {
 						if (interfaceScrollPosition < 0) {
 							interfaceScrollPosition = 0;
 						}
-						if (interfaceScrollPosition > widget.interfaceScrollLimit - widget.interfaceHeight) {
-							interfaceScrollPosition = widget.interfaceScrollLimit - widget.interfaceHeight;
+						if (interfaceScrollPosition > widget.scrollLimit - widget.widgetHeight) {
+							interfaceScrollPosition = widget.scrollLimit - widget.widgetHeight;
 						}
-						widget.interfaceScrollPosition = interfaceScrollPosition;
+						widget.scrollPosition = interfaceScrollPosition;
 					}
 					opcode = -1;
 					return true;
@@ -12104,7 +12104,7 @@ public class Client extends GameStub {
 					String interfaceText = inBuffer.getString();
 					int interfaceid = inBuffer.getUnsignedLEShortA();
 					Widget.widgets[interfaceid].disabledText = interfaceText;
-					if (Widget.widgets[interfaceid].interfaceParentId == anIntArray1155[anInt1246]) {
+					if (Widget.widgets[interfaceid].widgetParentId == anIntArray1155[anInt1246]) {
 						aBoolean1178 = true;
 					}
 					opcode = -1;
