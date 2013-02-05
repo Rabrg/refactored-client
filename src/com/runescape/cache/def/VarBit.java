@@ -2,36 +2,29 @@ package com.runescape.cache.def;
 
 import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
-import com.runescape.util.SignLink;
-
-/* VarBit - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 
 public class VarBit {
-	public static int anInt734;
-	public static VarBit[] cache;
-	public String aString736;
-	public int anInt737;
-	public int anInt738;
-	public int anInt739;
-	public boolean aBoolean740 = false;
-	public int anInt741 = -1;
-	public int anInt742;
 
-	public static void load(int i, Archive archive) {
+	public static int size;
+	public static VarBit[] cache;
+	public int configId;
+	public int leastSignificantBit;
+	public int mostSignificantBit;
+	public boolean aBoolean740 = false;
+
+	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
-		VarBit.anInt734 = buffer.getUnsignedLEShort();
+		VarBit.size = buffer.getUnsignedLEShort();
 		if (VarBit.cache == null) {
-			VarBit.cache = new VarBit[VarBit.anInt734];
+			VarBit.cache = new VarBit[VarBit.size];
 		}
-		for (int index = 0; index < VarBit.anInt734; index++) {
+		for (int index = 0; index < VarBit.size; index++) {
 			if (VarBit.cache[index] == null) {
 				VarBit.cache[index] = new VarBit();
 			}
-			VarBit.cache[index].method591(buffer, false, index);
+			VarBit.cache[index].loadDefinition(buffer);
 			if (VarBit.cache[index].aBoolean740) {
-				Varp.aVarpArray746[VarBit.cache[index].anInt737].aBoolean758 = true;
+				Varp.aVarpArray746[VarBit.cache[index].configId].aBoolean758 = true;
 			}
 		}
 		if (buffer.offset == buffer.payload.length) {
@@ -40,34 +33,27 @@ public class VarBit {
 		System.out.println("varbit load mismatch");
 	}
 
-	public void method591(Buffer buffer, boolean bool, int i) {
-		try {
-			if (!bool) {
-				while (true) {
-					int i_1_ = buffer.getUnsignedByte();
-					if (i_1_ == 0) {
-						break;
-					}
-					if (i_1_ == 1) {
-						anInt737 = buffer.getUnsignedLEShort();
-						anInt738 = buffer.getUnsignedByte();
-						anInt739 = buffer.getUnsignedByte();
-					} else if (i_1_ == 10) {
-						aString736 = buffer.getString();
-					} else if (i_1_ == 2) {
-						aBoolean740 = true;
-					} else if (i_1_ == 3) {
-						anInt741 = buffer.getInt();
-					} else if (i_1_ == 4) {
-						anInt742 = buffer.getInt();
-					} else {
-						System.out.println("Error unrecognised config code: " + i_1_);
-					}
-				}
+	public void loadDefinition(Buffer buffer) {
+		while (true) {
+			int attributeId = buffer.getUnsignedByte();
+			if (attributeId == 0) {
+				break;
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("71039, " + buffer + ", " + bool + ", " + i + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+			if (attributeId == 1) {
+				configId = buffer.getUnsignedLEShort();
+				leastSignificantBit = buffer.getUnsignedByte();
+				mostSignificantBit = buffer.getUnsignedByte();
+				System.out.println(configId + ":" + leastSignificantBit + ":" + leastSignificantBit);
+			} else if (attributeId == 10) {
+				buffer.getString();
+			} else if (attributeId == 2) {
+			} else if (attributeId == 3) {
+				buffer.getInt();
+			} else if (attributeId == 4) {
+				buffer.getInt();
+			} else {
+				System.out.println("Error unrecognised config code: " + attributeId);
+			}
 		}
 	}
 }

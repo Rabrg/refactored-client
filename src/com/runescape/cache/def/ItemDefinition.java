@@ -37,7 +37,7 @@ public class ItemDefinition {
 	private static int cacheIndex;
 	public int modelZoom;
 	public static boolean playerIsMember = true;
-	private static Buffer dataBuffer;
+	private static Buffer buffer;
 	private int shadowModifier;
 	public int maleEmblem;
 	private int maleEquipSecondaryModel;
@@ -47,7 +47,7 @@ public class ItemDefinition {
 	private int modelSizeY;
 	public int[] stackableIds;
 	private int sine;
-	private static int[] dataOffsets;
+	private static int[] bufferOffsets;
 	private int lightModifier;
 	public int femaleDialogue;
 	public int modelRotation2;
@@ -61,9 +61,9 @@ public class ItemDefinition {
 	public static final void reset() {
 		ItemDefinition.modelCache = null;
 		ItemDefinition.rgbImageCache = null;
-		ItemDefinition.dataOffsets = null;
+		ItemDefinition.bufferOffsets = null;
 		ItemDefinition.cache = null;
-		ItemDefinition.dataBuffer = null;
+		ItemDefinition.buffer = null;
 	}
 
 	public final boolean isDialogueCached(int gender) {
@@ -87,13 +87,13 @@ public class ItemDefinition {
 	}
 
 	public static final void load(Archive archive) {
-		ItemDefinition.dataBuffer = new Buffer(archive.getFile("obj.dat"));
+		ItemDefinition.buffer = new Buffer(archive.getFile("obj.dat"));
 		Buffer buffer = new Buffer(archive.getFile("obj.idx"));
 		ItemDefinition.itemCount = buffer.getUnsignedLEShort();
-		ItemDefinition.dataOffsets = new int[ItemDefinition.itemCount];
+		ItemDefinition.bufferOffsets = new int[ItemDefinition.itemCount];
 		int offset = 2;
 		for (int item = 0; item < ItemDefinition.itemCount; item++) {
-			ItemDefinition.dataOffsets[item] = offset;
+			ItemDefinition.bufferOffsets[item] = offset;
 			offset += buffer.getUnsignedLEShort();
 		}
 		ItemDefinition.cache = new ItemDefinition[10];
@@ -239,10 +239,10 @@ public class ItemDefinition {
 		}
 		ItemDefinition.cacheIndex = (ItemDefinition.cacheIndex + 1) % 10;
 		ItemDefinition itemDefinition = ItemDefinition.cache[ItemDefinition.cacheIndex];
-		ItemDefinition.dataBuffer.offset = ItemDefinition.dataOffsets[itemId];
+		ItemDefinition.buffer.offset = ItemDefinition.bufferOffsets[itemId];
 		itemDefinition.itemId = itemId;
 		itemDefinition.setDefaultValues();
-		itemDefinition.loadDefinition(ItemDefinition.dataBuffer);
+		itemDefinition.loadDefinition(ItemDefinition.buffer);
 		if (itemDefinition.noteTemplateId != -1) {
 			itemDefinition.toNote();
 		}
@@ -449,27 +449,27 @@ public class ItemDefinition {
 	}
 
 	public final Model getInventoryModel(int amount) {
-			if (stackableIds != null && amount > 1) {
-				int amountItemId = -1;
-				for (int index = 0; index < 10; index++) {
-					if (amount >= stackableAmounts[index] && stackableAmounts[index] != 0) {
-						amountItemId = stackableIds[index];
-					}
-				}
-				if (amountItemId != -1) {
-					return ItemDefinition.getDefinition(amountItemId).getInventoryModel(1);
+		if (stackableIds != null && amount > 1) {
+			int amountItemId = -1;
+			for (int index = 0; index < 10; index++) {
+				if (amount >= stackableAmounts[index] && stackableAmounts[index] != 0) {
+					amountItemId = stackableIds[index];
 				}
 			}
-			Model inventoryModel = Model.getModel(inventoryModelId);
-			if (inventoryModel == null) {
-				return null;
+			if (amountItemId != -1) {
+				return ItemDefinition.getDefinition(amountItemId).getInventoryModel(1);
 			}
-			if (originalModelColors != null) {
-				for (int color = 0; color < originalModelColors.length; color++) {
-					inventoryModel.recolor(originalModelColors[color], modifiedModelColors[color]);
-				}
+		}
+		Model inventoryModel = Model.getModel(inventoryModelId);
+		if (inventoryModel == null) {
+			return null;
+		}
+		if (originalModelColors != null) {
+			for (int color = 0; color < originalModelColors.length; color++) {
+				inventoryModel.recolor(originalModelColors[color], modifiedModelColors[color]);
 			}
-			return inventoryModel;
+		}
+		return inventoryModel;
 	}
 
 	public final void loadDefinition(Buffer buffer) {

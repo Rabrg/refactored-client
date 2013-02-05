@@ -88,7 +88,8 @@ public class SignLink implements Runnable {
 			}
 			SignLink.aRandomAccessFile613 = new RandomAccessFile(cacheDirectory + "main_file_cache.dat", "rw");
 			for (int i = 0; i < 5; i++) {
-				SignLink.aRandomAccessFileArray614[i] = new RandomAccessFile(cacheDirectory + "main_file_cache.idx" + i, "rw");
+				SignLink.aRandomAccessFileArray614[i] = new RandomAccessFile(
+						cacheDirectory + "main_file_cache.idx" + i, "rw");
 			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
@@ -118,7 +119,8 @@ public class SignLink implements Runnable {
 			} else if (SignLink.soundFileName != null) {
 				if (SignLink.aByteArray629 != null) {
 					try {
-						FileOutputStream fileoutputstream = new FileOutputStream(cacheDirectory + SignLink.soundFileName);
+						FileOutputStream fileoutputstream = new FileOutputStream(cacheDirectory
+								+ SignLink.soundFileName);
 						fileoutputstream.write(SignLink.aByteArray629, 0, SignLink.anInt627);
 						fileoutputstream.close();
 					} catch (Exception exception) {

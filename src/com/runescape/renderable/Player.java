@@ -204,7 +204,7 @@ public class Player extends Actor {
 			} else if (anInt1537 >= 0) {
 				i_11_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
 			}
-			Model model = npcDefinition.method442(0, -1, i_11_, null);
+			Model model = npcDefinition.getChildModel(-1, i_11_, null);
 			return model;
 		}
 		long l = appearanceOffset;
@@ -301,11 +301,12 @@ public class Player extends Actor {
 		Model model_25_ = Model.aModel1614;
 		model_25_.method412(7, model, Animation.exists(i_12_) & Animation.exists(i_13_));
 		if (i_12_ != -1 && i_13_ != -1) {
-			model_25_.method419(-20491, AnimationSequence.animationSequences[animation].anIntArray55, i_13_, i_12_);
+			model_25_.mixAnimationFrames(-20491, AnimationSequence.animationSequences[animation].anIntArray55, i_13_,
+					i_12_);
 		} else if (i_12_ != -1) {
 			model_25_.applyTransform(i_12_);
 		}
-		model_25_.method414(false);
+		model_25_.calculateDiagonals(false);
 		model_25_.triangleSkin = null;
 		model_25_.vectorSkin = null;
 		return model_25_;
@@ -324,7 +325,7 @@ public class Player extends Actor {
 			return null;
 		}
 		if (npcDefinition != null) {
-			return npcDefinition.getModel(true);
+			return npcDefinition.getHeadModel();
 		}
 		boolean cached = false;
 		for (int index = 0; index < 12; index++) {

@@ -276,8 +276,7 @@ public class Widget {
 			if (widget.widgetType == 8) {
 				widget.disabledText = buffer.getString();
 			}
-			if (widget.actionType == 1 || widget.actionType == 4 || widget.actionType == 5
-					|| widget.actionType == 6) {
+			if (widget.actionType == 1 || widget.actionType == 4 || widget.actionType == 5 || widget.actionType == 6) {
 				widget.tooltip = buffer.getString();
 				if (widget.tooltip.length() == 0) {
 					if (widget.actionType == 1) {
@@ -307,7 +306,7 @@ public class Widget {
 			model = Model.getModel(modelId);
 		}
 		if (modelType == 2) {
-			model = NpcDefinition.getDefinition(modelId).getModel(true);
+			model = NpcDefinition.getDefinition(modelId).getHeadModel();
 		}
 		if (modelType == 3) {
 			model = Client.clientsPlayer.getHeadModel();

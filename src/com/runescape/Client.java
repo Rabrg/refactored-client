@@ -462,7 +462,7 @@ public class Client extends GameStub {
 	private int[] anIntArray1254 = new int[151];
 	private CollisionMap[] currentCollisionMap = new CollisionMap[4];
 	private static boolean aBoolean1256;
-	public static int[] anIntArray1257;
+	public static int[] BITFIELD_MAX_VALUE;
 	private boolean aBoolean1258 = false;
 	private int[] anIntArray1259;
 	private int[] anIntArray1260;
@@ -1163,7 +1163,7 @@ public class Client extends GameStub {
 		try {
 			GameObjectDefinition.modelCache.removeAll();
 			GameObjectDefinition.modelCache2.removeAll();
-			NpcDefinition.aCache451.removeAll();
+			NpcDefinition.modelCache.removeAll();
 			ItemDefinition.modelCache.removeAll();
 			ItemDefinition.rgbImageCache.removeAll();
 			if (bool) {
@@ -1304,7 +1304,7 @@ public class Client extends GameStub {
 			for (int i_107_ = 0; i_107_ < anInt861; i_107_++) {
 				Npc npc = localNpcs[anIntArray862[i_107_]];
 				int i_108_ = 536870912 + (anIntArray862[i_107_] << 14);
-				if (npc != null && npc.isVisibile() && npc.npcDefinition.aBoolean449 == bool) {
+				if (npc != null && npc.isVisibile() && npc.npcDefinition.visible == bool) {
 					int i_109_ = npc.xWithBoundary >> 7;
 					int i_110_ = npc.yWithBoundary >> 7;
 					if (i_109_ >= 0 && i_109_ < 104 && i_110_ >= 0 && i_110_ < 104) {
@@ -1315,7 +1315,7 @@ public class Client extends GameStub {
 							}
 							anIntArrayArray954[i_109_][i_110_] = anInt1290;
 						}
-						if (!npc.npcDefinition.aBoolean440) {
+						if (!npc.npcDefinition.clickable) {
 							i_108_ += -2147483648;
 						}
 						currentScene.method507(currentSceneId, npc.anInt1572, (byte) 6,
@@ -1379,8 +1379,8 @@ public class Client extends GameStub {
 					Widget widget_120_ = Widget.widgets[widget.children[i_117_]];
 					i_118_ += widget_120_.widgetPositionX;
 					i_119_ += widget_120_.widgetPositionY;
-					if ((widget_120_.hoveredPopup >= 0 || widget_120_.disabledHoveredColor != 0)
-							&& i_112_ >= i_118_ && i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
+					if ((widget_120_.hoveredPopup >= 0 || widget_120_.disabledHoveredColor != 0) && i_112_ >= i_118_
+							&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
 							&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 						if (widget_120_.hoveredPopup >= 0) {
 							anInt911 = widget_120_.hoveredPopup;
@@ -1389,8 +1389,7 @@ public class Client extends GameStub {
 						}
 					}
 					if (widget_120_.widgetType == 0) {
-						method29(i_118_, 13037, widget_120_, i_112_, i_119_, i_114_,
-								widget_120_.scrollPosition);
+						method29(i_118_, 13037, widget_120_, i_112_, i_119_, i_114_, widget_120_.scrollPosition);
 						if (widget_120_.scrollLimit > widget_120_.widgetHeight) {
 							method65(i_118_ + widget_120_.widgetWidth, widget_120_.widgetHeight, i_112_, i_114_,
 									widget_120_, i_119_, true, widget_120_.scrollLimit, 0);
@@ -1410,8 +1409,8 @@ public class Client extends GameStub {
 								menuActionRow++;
 							}
 						}
-						if (widget_120_.actionType == 2 && anInt1161 == 0 && i_112_ >= i_118_
-								&& i_114_ >= i_119_ && i_112_ < i_118_ + widget_120_.widgetWidth
+						if (widget_120_.actionType == 2 && anInt1161 == 0 && i_112_ >= i_118_ && i_114_ >= i_119_
+								&& i_112_ < i_118_ + widget_120_.widgetWidth
 								&& i_114_ < i_119_ + widget_120_.widgetHeight) {
 							String string = widget_120_.selectedActionName;
 							if (string.indexOf(" ") != -1) {
@@ -1527,8 +1526,7 @@ public class Client extends GameStub {
 													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
 												}
-												if (widget_120_.itemWidget
-														&& itemdefinition.inventoryActions != null) {
+												if (widget_120_.itemWidget && itemdefinition.inventoryActions != null) {
 													for (int i_127_ = 2; i_127_ >= 0; i_127_--) {
 														if (itemdefinition.inventoryActions[i_127_] != null) {
 															menuActionNames[menuActionRow] = itemdefinition.inventoryActions[i_127_]
@@ -1841,8 +1839,8 @@ public class Client extends GameStub {
 				if (actor != null && actor.isVisibile()) {
 					if (actor instanceof Npc) {
 						NpcDefinition npcdefinition = ((Npc) actor).npcDefinition;
-						if (npcdefinition.anIntArray444 != null) {
-							npcdefinition = npcdefinition.method439(anInt902);
+						if (npcdefinition.childrenIds != null) {
+							npcdefinition = npcdefinition.getChildDefinition();
 						}
 						if (npcdefinition == null) {
 							continue;
@@ -1870,10 +1868,10 @@ public class Client extends GameStub {
 						}
 					} else {
 						NpcDefinition npcdefinition = ((Npc) actor).npcDefinition;
-						if (npcdefinition.anInt431 >= 0 && npcdefinition.anInt431 < anImageRGBArray1120.length) {
+						if (npcdefinition.headIcon >= 0 && npcdefinition.headIcon < anImageRGBArray1120.length) {
 							method127(true, actor, actor.modelHeight + 15);
 							if (anInt988 > -1) {
-								anImageRGBArray1120[npcdefinition.anInt431].drawSprite(anInt988 - 12, 16083,
+								anImageRGBArray1120[npcdefinition.headIcon].drawSprite(anInt988 - 12, 16083,
 										anInt989 - 30);
 							}
 						}
@@ -2557,13 +2555,13 @@ public class Client extends GameStub {
 				if (i_215_ == 1) {
 					anIntArray919[anInt918++] = i_211_;
 				}
-				npc.boundaryDimension = npc.npcDefinition.aByte424;
-				npc.anInt1524 = npc.npcDefinition.anInt435;
-				npc.walkAnimationId = npc.npcDefinition.anInt423;
-				npc.turnAroundAnimationId = npc.npcDefinition.anInt414;
-				npc.turnRightAnimationId = npc.npcDefinition.anInt439;
-				npc.turnLeftAnimationId = npc.npcDefinition.anInt411;
-				npc.standAnimationId = npc.npcDefinition.anInt433;
+				npc.boundaryDimension = npc.npcDefinition.boundaryDimension;
+				npc.anInt1524 = npc.npcDefinition.degreesToTurn;
+				npc.walkAnimationId = npc.npcDefinition.walkAnimationId;
+				npc.turnAroundAnimationId = npc.npcDefinition.turnAroundAnimationId;
+				npc.turnRightAnimationId = npc.npcDefinition.turnRightAnimationId;
+				npc.turnLeftAnimationId = npc.npcDefinition.turnLeftAnimationId;
+				npc.standAnimationId = npc.npcDefinition.standAnimationId;
 				npc.setPosition(Client.clientsPlayer.pathX[0] + i_213_, Client.clientsPlayer.pathY[0] + i_212_);
 			}
 			buffer.finishBitAccess();
@@ -4665,15 +4663,15 @@ public class Client extends GameStub {
 						Npc npc = localNpcs[itemId];
 						if (npc != null) {
 							NpcDefinition npcdefinition = npc.npcDefinition;
-							if (npcdefinition.anIntArray444 != null) {
-								npcdefinition = npcdefinition.method439(anInt902);
+							if (npcdefinition.childrenIds != null) {
+								npcdefinition = npcdefinition.getChildDefinition();
 							}
 							if (npcdefinition != null) {
 								String string;
-								if (npcdefinition.aByteArray445 != null) {
-									string = new String(npcdefinition.aByteArray445);
+								if (npcdefinition.description != null) {
+									string = new String(npcdefinition.description);
 								} else {
-									string = "It's a " + npcdefinition.aString421 + ".";
+									string = "It's a " + npcdefinition.name + ".";
 								}
 								sendMessage(string, 0, "", aBoolean1016);
 							}
@@ -4812,8 +4810,7 @@ public class Client extends GameStub {
 								aString906 = string.substring(i_389_ + 5).trim();
 								aBoolean1183 = false;
 								for (int i_390_ = 0; i_390_ < Widget.widgets.length; i_390_++) {
-									if (Widget.widgets[i_390_] != null
-											&& Widget.widgets[i_390_].contentType == 600) {
+									if (Widget.widgets[i_390_] != null && Widget.widgets[i_390_].contentType == 600) {
 										anInt1203 = anInt882 = Widget.widgets[i_390_].widgetParentId;
 										break;
 									}
@@ -5121,11 +5118,12 @@ public class Client extends GameStub {
 						}
 						if (i_404_ == 1) {
 							Npc npc = localNpcs[i_405_];
-							if (npc.npcDefinition.aByte424 == 1 && (npc.xWithBoundary & 0x7f) == 64
+							if (npc.npcDefinition.boundaryDimension == 1 && (npc.xWithBoundary & 0x7f) == 64
 									&& (npc.yWithBoundary & 0x7f) == 64) {
 								for (int i_407_ = 0; i_407_ < anInt861; i_407_++) {
 									Npc npc_408_ = localNpcs[anIntArray862[i_407_]];
-									if (npc_408_ != null && npc_408_ != npc && npc_408_.npcDefinition.aByte424 == 1
+									if (npc_408_ != null && npc_408_ != npc
+											&& npc_408_.npcDefinition.boundaryDimension == 1
 											&& npc_408_.xWithBoundary == npc.xWithBoundary
 											&& npc_408_.yWithBoundary == npc.yWithBoundary) {
 										method87(npc_408_.npcDefinition, anIntArray862[i_407_], false, i_403_, i_402_);
@@ -5146,7 +5144,7 @@ public class Client extends GameStub {
 							if ((player.xWithBoundary & 0x7f) == 64 && (player.yWithBoundary & 0x7f) == 64) {
 								for (int i_410_ = 0; i_410_ < anInt861; i_410_++) {
 									Npc npc = localNpcs[anIntArray862[i_410_]];
-									if (npc != null && npc.npcDefinition.aByte424 == 1
+									if (npc != null && npc.npcDefinition.boundaryDimension == 1
 											&& npc.xWithBoundary == player.xWithBoundary
 											&& npc.yWithBoundary == player.yWithBoundary) {
 										method87(npc.npcDefinition, anIntArray862[i_410_], false, i_403_, i_402_);
@@ -5361,7 +5359,7 @@ public class Client extends GameStub {
 		aProducingGraphicsBuffer1140 = null;
 		method118(3);
 		GameObjectDefinition.reset();
-		NpcDefinition.method441(-501);
+		NpcDefinition.reset();
 		ItemDefinition.reset();
 		FloorDefinition.cache = null;
 		IdentityKit.identityKitCache = null;
@@ -6909,13 +6907,13 @@ public class Client extends GameStub {
 				}
 				if ((i_514_ & 0x2) != 0) {
 					npc.npcDefinition = NpcDefinition.getDefinition(buffer.getUnsignedShortA());
-					npc.boundaryDimension = npc.npcDefinition.aByte424;
-					npc.anInt1524 = npc.npcDefinition.anInt435;
-					npc.walkAnimationId = npc.npcDefinition.anInt423;
-					npc.turnAroundAnimationId = npc.npcDefinition.anInt414;
-					npc.turnRightAnimationId = npc.npcDefinition.anInt439;
-					npc.turnLeftAnimationId = npc.npcDefinition.anInt411;
-					npc.standAnimationId = npc.npcDefinition.anInt433;
+					npc.boundaryDimension = npc.npcDefinition.boundaryDimension;
+					npc.anInt1524 = npc.npcDefinition.degreesToTurn;
+					npc.walkAnimationId = npc.npcDefinition.walkAnimationId;
+					npc.turnAroundAnimationId = npc.npcDefinition.turnAroundAnimationId;
+					npc.turnRightAnimationId = npc.npcDefinition.turnRightAnimationId;
+					npc.turnLeftAnimationId = npc.npcDefinition.turnLeftAnimationId;
+					npc.standAnimationId = npc.npcDefinition.standAnimationId;
 				}
 				if ((i_514_ & 0x4) != 0) {
 					npc.faceTowardX = buffer.getUnsignedShort();
@@ -6932,17 +6930,17 @@ public class Client extends GameStub {
 	public final void method87(NpcDefinition npcdefinition, int i, boolean bool, int i_523_, int i_524_) {
 		try {
 			if (menuActionRow < 400) {
-				if (npcdefinition.anIntArray444 != null) {
-					npcdefinition = npcdefinition.method439(anInt902);
+				if (npcdefinition.childrenIds != null) {
+					npcdefinition = npcdefinition.getChildDefinition();
 				}
-				if (npcdefinition != null && npcdefinition.aBoolean440) {
-					String string = npcdefinition.aString421;
+				if (npcdefinition != null && npcdefinition.clickable) {
+					String string = npcdefinition.name;
 					if (bool) {
 						Client.aBoolean944 = !Client.aBoolean944;
 					}
-					if (npcdefinition.anInt417 != 0) {
-						string += Client.method110(Client.clientsPlayer.combatLevel, npcdefinition.anInt417, true)
-								+ " (level-" + npcdefinition.anInt417 + ")";
+					if (npcdefinition.combatLevel != 0) {
+						string += Client.method110(Client.clientsPlayer.combatLevel, npcdefinition.combatLevel, true)
+								+ " (level-" + npcdefinition.combatLevel + ")";
 					}
 					if (anInt1307 == 1) {
 						menuActionNames[menuActionRow] = "Use " + aString1311 + " with @yel@" + string;
@@ -6961,12 +6959,11 @@ public class Client extends GameStub {
 							menuActionRow++;
 						}
 					} else {
-						if (npcdefinition.aStringArray422 != null) {
+						if (npcdefinition.actions != null) {
 							for (int i_525_ = 4; i_525_ >= 0; i_525_--) {
-								if (npcdefinition.aStringArray422[i_525_] != null
-										&& !npcdefinition.aStringArray422[i_525_].equalsIgnoreCase("attack")) {
-									menuActionNames[menuActionRow] = npcdefinition.aStringArray422[i_525_] + " @yel@"
-											+ string;
+								if (npcdefinition.actions[i_525_] != null
+										&& !npcdefinition.actions[i_525_].equalsIgnoreCase("attack")) {
+									menuActionNames[menuActionRow] = npcdefinition.actions[i_525_] + " @yel@" + string;
 									if (i_525_ == 0) {
 										menuActionIds[menuActionRow] = 20;
 									}
@@ -6989,16 +6986,15 @@ public class Client extends GameStub {
 								}
 							}
 						}
-						if (npcdefinition.aStringArray422 != null) {
+						if (npcdefinition.actions != null) {
 							for (int i_526_ = 4; i_526_ >= 0; i_526_--) {
-								if (npcdefinition.aStringArray422[i_526_] != null
-										&& npcdefinition.aStringArray422[i_526_].equalsIgnoreCase("attack")) {
+								if (npcdefinition.actions[i_526_] != null
+										&& npcdefinition.actions[i_526_].equalsIgnoreCase("attack")) {
 									int i_527_ = 0;
-									if (npcdefinition.anInt417 > Client.clientsPlayer.combatLevel) {
+									if (npcdefinition.combatLevel > Client.clientsPlayer.combatLevel) {
 										i_527_ = 2000;
 									}
-									menuActionNames[menuActionRow] = npcdefinition.aStringArray422[i_526_] + " @yel@"
-											+ string;
+									menuActionNames[menuActionRow] = npcdefinition.actions[i_526_] + " @yel@" + string;
 									if (i_526_ == 0) {
 										menuActionIds[menuActionRow] = 20 + i_527_;
 									}
@@ -7546,11 +7542,11 @@ public class Client extends GameStub {
 					GameObjectDefinition.load(archive);
 					FloorDefinition.load(archive);
 					ItemDefinition.load(archive);
-					NpcDefinition.method440(archive);
+					NpcDefinition.load(archive);
 					IdentityKit.load(archive);
 					SpotAnimation.load(archive);
 					Varp.method592(0, archive);
-					VarBit.load(0, archive);
+					VarBit.load(archive);
 					ItemDefinition.playerIsMember = Client.membersWorld;
 					if (!Client.lowMemory) {
 						drawLoadingText(90, "Unpacking sounds");
@@ -7614,7 +7610,7 @@ public class Client extends GameStub {
 					startRunnable(mouseCapturer, 10);
 					GameObject.aClient1600 = this;
 					GameObjectDefinition.client = this;
-					NpcDefinition.aClient438 = this;
+					NpcDefinition.client = this;
 				} catch (Exception exception) {
 					SignLink.reportError("loaderror " + aString1074 + " " + anInt1104);
 					aBoolean951 = true;
@@ -7844,7 +7840,7 @@ public class Client extends GameStub {
 					int i_599_ = anIntArray862[i_598_];
 					Npc npc = localNpcs[i_599_];
 					if (npc != null) {
-						method96(46988, npc.npcDefinition.aByte424, npc);
+						method96(46988, npc.npcDefinition.boundaryDimension, npc);
 					}
 				}
 				if (i == -8066) {
@@ -8542,14 +8538,12 @@ public class Client extends GameStub {
 			}
 			if (widget.widgetType == 0
 					&& widget.children != null
-					&& (!widget.hiddenUntilHovered || anInt1051 == widget.widgetId
-							|| anInt1073 == widget.widgetId || anInt1064 == widget.widgetId)) {
+					&& (!widget.hiddenUntilHovered || anInt1051 == widget.widgetId || anInt1073 == widget.widgetId || anInt1064 == widget.widgetId)) {
 				int i_627_ = Rasterizer.topX;
 				int i_628_ = Rasterizer.topY;
 				int i_629_ = Rasterizer.bottomX;
 				int i_630_ = Rasterizer.bottomY;
-				Rasterizer.setCoordinates(i_625_, i_626_, i_625_ + widget.widgetWidth, i_626_
-						+ widget.widgetHeight);
+				Rasterizer.setCoordinates(i_625_, i_626_, i_625_ + widget.widgetWidth, i_626_ + widget.widgetHeight);
 				int i_631_ = widget.children.length;
 				for (int i_632_ = 0; i_632_ < i_631_; i_632_++) {
 					int i_633_ = widget.childrenX[i_632_] + i_625_;
@@ -8561,10 +8555,8 @@ public class Client extends GameStub {
 						method75(950, widget_635_);
 					}
 					if (widget_635_.widgetType == 0) {
-						if (widget_635_.scrollPosition > widget_635_.scrollLimit
-								- widget_635_.widgetHeight) {
-							widget_635_.scrollPosition = widget_635_.scrollLimit
-									- widget_635_.widgetHeight;
+						if (widget_635_.scrollPosition > widget_635_.scrollLimit - widget_635_.widgetHeight) {
+							widget_635_.scrollPosition = widget_635_.scrollLimit - widget_635_.widgetHeight;
 						}
 						if (widget_635_.scrollPosition < 0) {
 							widget_635_.scrollPosition = 0;
@@ -8615,8 +8607,7 @@ public class Client extends GameStub {
 														i_642_ = 0;
 													}
 													imagergb.drawImageAlpha(i_639_ + i_641_, i_640_ + i_642_, 128);
-													if (i_640_ + i_642_ < Rasterizer.topY
-															&& widget.scrollPosition > 0) {
+													if (i_640_ + i_642_ < Rasterizer.topY && widget.scrollPosition > 0) {
 														int i_645_ = anInt970 * (Rasterizer.topY - i_640_ - i_642_) / 3;
 														if (i_645_ > anInt970 * 10) {
 															i_645_ = anInt970 * 10;
@@ -8635,11 +8626,9 @@ public class Client extends GameStub {
 														if (i_646_ > anInt970 * 10) {
 															i_646_ = anInt970 * 10;
 														}
-														if (i_646_ > widget.scrollLimit
-																- widget.widgetHeight
+														if (i_646_ > widget.scrollLimit - widget.widgetHeight
 																- widget.scrollPosition) {
-															i_646_ = widget.scrollLimit
-																	- widget.widgetHeight
+															i_646_ = widget.scrollLimit - widget.widgetHeight
 																	- widget.scrollPosition;
 														}
 														widget.scrollPosition += i_646_;
@@ -8796,9 +8785,8 @@ public class Client extends GameStub {
 									string = "";
 								}
 								if (widget_635_.typeFaceCentered) {
-									typeface.drawCenteredShadowedString(string_657_, i_633_
-											+ widget_635_.widgetWidth / 2, i_650_, i_649_,
-											widget_635_.typeFaceShadowed);
+									typeface.drawCenteredShadowedString(string_657_, i_633_ + widget_635_.widgetWidth
+											/ 2, i_650_, i_649_, widget_635_.typeFaceShadowed);
 								} else {
 									typeface.drawShadowedString(string_657_, i_633_, i_650_,
 											widget_635_.typeFaceShadowed, i_649_);
@@ -8859,8 +8847,8 @@ public class Client extends GameStub {
 										int i_667_ = i_634_ + i_664_ * (12 + widget_635_.itemSpritePadsY);
 										if (widget_635_.typeFaceCentered) {
 											typeface.drawCenteredShadowedString(string, i_666_
-													+ widget_635_.widgetWidth / 2, i_667_,
-													widget_635_.disabledColor, widget_635_.typeFaceShadowed);
+													+ widget_635_.widgetWidth / 2, i_667_, widget_635_.disabledColor,
+													widget_635_.typeFaceShadowed);
 										} else {
 											typeface.drawShadowedString(string, i_666_, i_667_,
 													widget_635_.typeFaceShadowed, widget_635_.disabledColor);
@@ -9923,10 +9911,10 @@ public class Client extends GameStub {
 				if (opcode == 14) {
 					int i_777_ = opcodes[counter++];
 					VarBit varbit = VarBit.cache[i_777_];
-					int i_778_ = varbit.anInt737;
-					int i_779_ = varbit.anInt738;
-					int i_780_ = varbit.anInt739;
-					int i_781_ = Client.anIntArray1257[i_780_ - i_779_];
+					int i_778_ = varbit.configId;
+					int i_779_ = varbit.leastSignificantBit;
+					int i_780_ = varbit.mostSignificantBit;
+					int i_781_ = Client.BITFIELD_MAX_VALUE[i_780_ - i_779_];
 					value = settings[i_778_] >> i_779_ & i_781_;
 				}
 				if (opcode == 15) {
@@ -10042,10 +10030,10 @@ public class Client extends GameStub {
 						Npc npc = localNpcs[anIntArray862[i_789_]];
 						if (npc != null && npc.isVisibile()) {
 							NpcDefinition npcdefinition = npc.npcDefinition;
-							if (npcdefinition.anIntArray444 != null) {
-								npcdefinition = npcdefinition.method439(anInt902);
+							if (npcdefinition.childrenIds != null) {
+								npcdefinition = npcdefinition.getChildDefinition();
 							}
-							if (npcdefinition != null && npcdefinition.aBoolean443 && npcdefinition.aBoolean440) {
+							if (npcdefinition != null && npcdefinition.minimapVisible && npcdefinition.clickable) {
 								i_784_ = npc.xWithBoundary / 32 - Client.clientsPlayer.xWithBoundary / 32;
 								i_785_ = npc.yWithBoundary / 32 - Client.clientsPlayer.yWithBoundary / 32;
 								method141(anImageRGB1100, i_784_, i_785_, false);
@@ -10782,8 +10770,8 @@ public class Client extends GameStub {
 							int i_922_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_];
 							int i_923_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_ + 1];
 							int i_924_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_ + 1];
-							Model model = gameobjectdefinition.getGameObjectModel(i_915_, i_916_, i_921_, i_922_, i_923_,
-									i_924_, -1);
+							Model model = gameobjectdefinition.getGameObjectModel(i_915_, i_916_, i_921_, i_922_,
+									i_923_, i_924_, -1);
 							if (model != null) {
 								method130(404, i_913_ + 1, -1, 0, i_917_, i_908_, 0, currentSceneId, i_907_, i_911_ + 1);
 								player.anInt1727 = i_911_ + Client.currentCycle;
@@ -11116,8 +11104,8 @@ public class Client extends GameStub {
 					imagergb.method351(anIndexedImage1222, false, 83 - i_993_ - imagergb.maxHeight / 2 - 4, 94 + i_992_
 							- imagergb.maxWidth / 2 + 4);
 				} else {
-					imagergb.drawSprite(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_ - imagergb.maxHeight
-							/ 2 - 4);
+					imagergb.drawSprite(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_
+							- imagergb.maxHeight / 2 - 4);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -11161,8 +11149,8 @@ public class Client extends GameStub {
 							currentScene.method513(i_997_, i_994_, i, (byte) -119);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].method221(i_1006_, i_1005_,
-										gameobjectdefinition.walkable, true, i_997_, i);
+								currentCollisionMap[i_994_].method221(i_1006_, i_1005_, gameobjectdefinition.walkable,
+										true, i_997_, i);
 							}
 						}
 						if (i_998_ == 1) {
@@ -11349,8 +11337,7 @@ public class Client extends GameStub {
 						aString906 = "";
 						aBoolean1183 = false;
 						for (int i_1030_ = 0; i_1030_ < Widget.widgets.length; i_1030_++) {
-							if (Widget.widgets[i_1030_] != null
-									&& Widget.widgets[i_1030_].contentType == i_1029_) {
+							if (Widget.widgets[i_1030_] != null && Widget.widgets[i_1030_].contentType == i_1029_) {
 								anInt882 = Widget.widgets[i_1030_].widgetParentId;
 								break;
 							}
@@ -11391,7 +11378,7 @@ public class Client extends GameStub {
 								+ (Client.clientsPlayer.appearance[8] << 10)
 								+ (Client.clientsPlayer.appearance[11] << 5) + Client.clientsPlayer.appearance[1];
 					} else {
-						Widget.widgets[i_1033_].modelId = (int) (305419896L + Client.clientsPlayer.npcDefinition.aLong434);
+						Widget.widgets[i_1033_].modelId = (int) (305419896L + Client.clientsPlayer.npcDefinition.id);
 					}
 					opcode = -1;
 					return true;
@@ -12531,10 +12518,10 @@ public class Client extends GameStub {
 		anIntArray1229 = new int[] { 9104, 10275, 7595, 3610, 7975, 8526, 918, 38802, 24466, 10145, 58654, 5027, 1457,
 				16565, 34991, 25486 };
 		Client.aBoolean1249 = true;
-		Client.anIntArray1257 = new int[32];
+		Client.BITFIELD_MAX_VALUE = new int[32];
 		i = 2;
 		for (int i_1192_ = 0; i_1192_ < 32; i_1192_++) {
-			Client.anIntArray1257[i_1192_] = i - 1;
+			Client.BITFIELD_MAX_VALUE[i_1192_] = i - 1;
 			i += i;
 		}
 	}

@@ -16,14 +16,14 @@ public class Npc extends Actor {
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {
 				frameId2 = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
 			}
-			return npcDefinition.method442(0, frameId2, frameId,
+			return npcDefinition.getChildModel(frameId2, frameId,
 					AnimationSequence.animationSequences[animation].anIntArray55);
 		}
 		int i_3_ = -1;
 		if (anInt1537 >= 0) {
 			i_3_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
 		}
-		return npcDefinition.method442(0, -1, i_3_, null);
+		return npcDefinition.getChildModel(-1, i_3_, null);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class Npc extends Actor {
 				model = new Model(2, -819, true, models);
 			}
 		}
-		if (npcDefinition.aByte424 == 1) {
+		if (npcDefinition.boundaryDimension == 1) {
 			model.oneSquareModel = true;
 		}
 		return model;

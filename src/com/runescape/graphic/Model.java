@@ -613,7 +613,7 @@ public class Model extends Renderable {
 					i_56_ += model_58_.texturedTriangleCount;
 				}
 			}
-			method414(false);
+			calculateDiagonals(false);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("65900, " + i + ", " + i_48_ + ", " + bool + ", " + models + ", "
 					+ runtimeexception.toString());
@@ -837,7 +837,7 @@ public class Model extends Renderable {
 		return i_86_;
 	}
 
-	public void method414(boolean bool) {
+	public void calculateDiagonals(boolean bool) {
 		try {
 			modelHeight = 0;
 			anInt1643 = 0;
@@ -1002,7 +1002,7 @@ public class Model extends Renderable {
 		}
 	}
 
-	public void method419(int i, int[] is, int i_114_, int i_115_) {
+	public void mixAnimationFrames(int i, int[] is, int i_114_, int i_115_) {
 		try {
 			if (i_115_ != -1) {
 				if (is == null || i_114_ == -1) {
@@ -1334,7 +1334,7 @@ public class Model extends Renderable {
 			}
 		}
 		if (bool) {
-			method414(false);
+			calculateDiagonals(false);
 		} else {
 			method416(21073);
 		}

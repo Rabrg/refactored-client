@@ -62,8 +62,8 @@ public class GameObject extends Renderable {
 		if (gameobjectdefinition == null) {
 			return null;
 		}
-		Model model = gameobjectdefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596, anInt1597,
-				i_0_);
+		Model model = gameobjectdefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596,
+				anInt1597, i_0_);
 		return model;
 	}
 
@@ -77,10 +77,10 @@ public class GameObject extends Renderable {
 			}
 			if (anInt1592 != -1) {
 				VarBit varbit = VarBit.cache[anInt1592];
-				int i_3_ = varbit.anInt737;
-				int i_4_ = varbit.anInt738;
-				int i_5_ = varbit.anInt739;
-				int i_6_ = Client.anIntArray1257[i_5_ - i_4_];
+				int i_3_ = varbit.configId;
+				int i_4_ = varbit.leastSignificantBit;
+				int i_5_ = varbit.mostSignificantBit;
+				int i_6_ = Client.BITFIELD_MAX_VALUE[i_5_ - i_4_];
 				i = GameObject.aClient1600.settings[i_3_] >> i_4_ & i_6_;
 			} else if (anInt1593 != -1) {
 				i = GameObject.aClient1600.settings[anInt1593];
