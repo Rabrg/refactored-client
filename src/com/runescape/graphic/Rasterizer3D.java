@@ -10,10 +10,10 @@ public class Rasterizer3D extends Rasterizer {
 	public static boolean lowMemory = true;
 	public static boolean aBoolean1482;
 	static boolean aBoolean1483;
-	public static boolean aBoolean1484 = true;
+	public static boolean textured = true;
 	public static int anInt1485;
-	public static int centerWidth;
-	public static int centerHeight;
+	public static int centerX;
+	public static int centerY;
 	public static int[] shadowDecay = new int[512];
 	public static int[] anIntArray1489 = new int[2048];
 	public static int[] SINE = new int[2048];
@@ -47,13 +47,13 @@ public class Rasterizer3D extends Rasterizer {
 		Rasterizer3D.anIntArrayArray1503 = null;
 	}
 
-	public static final void method361() {
+	public static final void setDefaultBoundaries() {
 		Rasterizer3D.lineOffsets = new int[Rasterizer.height];
 		for (int lineOffset = 0; lineOffset < Rasterizer.height; lineOffset++) {
 			Rasterizer3D.lineOffsets[lineOffset] = Rasterizer.width * lineOffset;
 		}
-		Rasterizer3D.centerWidth = Rasterizer.width / 2;
-		Rasterizer3D.centerHeight = Rasterizer.height / 2;
+		Rasterizer3D.centerX = Rasterizer.width / 2;
+		Rasterizer3D.centerY = Rasterizer.height / 2;
 	}
 
 	public static final void method362(int i, int i_1_, int i_2_) {
@@ -63,8 +63,8 @@ public class Rasterizer3D extends Rasterizer {
 				for (int i_3_ = 0; i_3_ < i_2_; i_3_++) {
 					Rasterizer3D.lineOffsets[i_3_] = i_1_ * i_3_;
 				}
-				Rasterizer3D.centerWidth = i_1_ / 2;
-				Rasterizer3D.centerHeight = i_2_ / 2;
+				Rasterizer3D.centerX = i_1_ / 2;
+				Rasterizer3D.centerY = i_2_ / 2;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("8612, " + i + ", " + i_1_ + ", " + i_2_ + ", " + runtimeexception.toString());
@@ -765,7 +765,7 @@ public class Rasterizer3D extends Rasterizer {
 	}
 
 	public static final void method372(int[] is, int i, int i_67_, int i_68_, int i_69_, int i_70_, int i_71_, int i_72_) {
-		if (Rasterizer3D.aBoolean1484) {
+		if (Rasterizer3D.textured) {
 			int i_73_;
 			if (Rasterizer3D.aBoolean1482) {
 				if (i_70_ - i_69_ > 3) {
@@ -1298,7 +1298,7 @@ public class Rasterizer3D extends Rasterizer {
 						i_100_ -= i_124_ * i_94_;
 						i_94_ = 0;
 					}
-					int i_127_ = i - Rasterizer3D.centerHeight;
+					int i_127_ = i - Rasterizer3D.centerY;
 					i_112_ += i_114_ * i_127_;
 					i_115_ += i_117_ * i_127_;
 					i_118_ += i_120_ * i_127_;
@@ -1376,7 +1376,7 @@ public class Rasterizer3D extends Rasterizer {
 						i_101_ -= i_124_ * i_95_;
 						i_95_ = 0;
 					}
-					int i_128_ = i - Rasterizer3D.centerHeight;
+					int i_128_ = i - Rasterizer3D.centerY;
 					i_112_ += i_114_ * i_128_;
 					i_115_ += i_117_ * i_128_;
 					i_118_ += i_120_ * i_128_;
@@ -1464,7 +1464,7 @@ public class Rasterizer3D extends Rasterizer {
 						i_101_ -= i_126_ * i_95_;
 						i_95_ = 0;
 					}
-					int i_129_ = i_94_ - Rasterizer3D.centerHeight;
+					int i_129_ = i_94_ - Rasterizer3D.centerY;
 					i_112_ += i_114_ * i_129_;
 					i_115_ += i_117_ * i_129_;
 					i_118_ += i_120_ * i_129_;
@@ -1542,7 +1542,7 @@ public class Rasterizer3D extends Rasterizer {
 						i_99_ -= i_126_ * i;
 						i = 0;
 					}
-					int i_130_ = i_94_ - Rasterizer3D.centerHeight;
+					int i_130_ = i_94_ - Rasterizer3D.centerY;
 					i_112_ += i_114_ * i_130_;
 					i_115_ += i_117_ * i_130_;
 					i_118_ += i_120_ * i_130_;
@@ -1629,7 +1629,7 @@ public class Rasterizer3D extends Rasterizer {
 					i_99_ -= i_122_ * i;
 					i = 0;
 				}
-				int i_131_ = i_95_ - Rasterizer3D.centerHeight;
+				int i_131_ = i_95_ - Rasterizer3D.centerY;
 				i_112_ += i_114_ * i_131_;
 				i_115_ += i_117_ * i_131_;
 				i_118_ += i_120_ * i_131_;
@@ -1707,7 +1707,7 @@ public class Rasterizer3D extends Rasterizer {
 					i_100_ -= i_122_ * i_94_;
 					i_94_ = 0;
 				}
-				int i_132_ = i_95_ - Rasterizer3D.centerHeight;
+				int i_132_ = i_95_ - Rasterizer3D.centerY;
 				i_112_ += i_114_ * i_132_;
 				i_115_ += i_117_ * i_132_;
 				i_118_ += i_120_ * i_132_;
@@ -1806,7 +1806,7 @@ public class Rasterizer3D extends Rasterizer {
 			if (Rasterizer3D.lowMemory) {
 				int i_148_ = 0;
 				int i_149_ = 0;
-				int i_150_ = i_136_ - Rasterizer3D.centerWidth;
+				int i_150_ = i_136_ - Rasterizer3D.centerX;
 				i_140_ += (i_143_ >> 3) * i_150_;
 				i_141_ += (i_144_ >> 3) * i_150_;
 				i_142_ += (i_145_ >> 3) * i_150_;
@@ -1972,7 +1972,7 @@ public class Rasterizer3D extends Rasterizer {
 			} else {
 				int i_157_ = 0;
 				int i_158_ = 0;
-				int i_159_ = i_136_ - Rasterizer3D.centerWidth;
+				int i_159_ = i_136_ - Rasterizer3D.centerX;
 				i_140_ += (i_143_ >> 3) * i_159_;
 				i_141_ += (i_144_ >> 3) * i_159_;
 				i_142_ += (i_145_ >> 3) * i_159_;

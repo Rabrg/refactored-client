@@ -48,7 +48,7 @@ public class Model extends Renderable {
 	public int[] triangleSkinValues;
 	public int[][] vectorSkin;
 	public int[][] triangleSkin;
-	public boolean aBoolean1652 = false;
+	public boolean oneSquareModel = false;
 	public VertexNormal[] aVertexNormalArray1653;
 	static ModelHeader[] modelHeaders;
 	static Requester requester;
@@ -1410,8 +1410,8 @@ public class Model extends Renderable {
 	}
 
 	public final void method430(int i, int i_225_, int i_226_, int i_227_, int i_228_, int i_229_, int i_230_) {
-		int i_231_ = Rasterizer3D.centerWidth;
-		int i_232_ = Rasterizer3D.centerHeight;
+		int i_231_ = Rasterizer3D.centerX;
+		int i_232_ = Rasterizer3D.centerY;
 		int i_233_ = Model.anIntArray1682[i];
 		int i_234_ = Model.anIntArray1683[i];
 		int i_235_ = Model.anIntArray1682[i_225_];
@@ -1507,18 +1507,18 @@ public class Model extends Renderable {
 									i_267_ /= i_261_;
 									i_269_ /= i_272_;
 								}
-								int i_273_ = Model.anInt1678 - Rasterizer3D.centerWidth;
-								int i_274_ = Model.anInt1679 - Rasterizer3D.centerHeight;
+								int i_273_ = Model.anInt1678 - Rasterizer3D.centerX;
+								int i_274_ = Model.anInt1679 - Rasterizer3D.centerY;
 								if (i_273_ > i_263_ && i_273_ < i_264_ && i_274_ > i_269_ && i_274_ < i_267_) {
-									if (aBoolean1652) {
+									if (oneSquareModel) {
 										Model.anIntArray1681[Model.anInt1680++] = i_257_;
 									} else {
 										bool_271_ = true;
 									}
 								}
 							}
-							int i_275_ = Rasterizer3D.centerWidth;
-							int i_276_ = Rasterizer3D.centerHeight;
+							int i_275_ = Rasterizer3D.centerX;
+							int i_276_ = Rasterizer3D.centerY;
 							int i_277_ = 0;
 							int i_278_ = 0;
 							if (i != 0) {
@@ -1802,8 +1802,8 @@ public class Model extends Renderable {
 	}
 
 	private final void method433(int i) {
-		int i_329_ = Rasterizer3D.centerWidth;
-		int i_330_ = Rasterizer3D.centerHeight;
+		int i_329_ = Rasterizer3D.centerX;
+		int i_330_ = Rasterizer3D.centerY;
 		int i_331_ = 0;
 		int i_332_ = trianglePointsX[i];
 		int i_333_ = trianglePointsY[i];

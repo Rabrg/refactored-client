@@ -1950,14 +1950,14 @@ public class Scene {
 					i_374_ = i_378_ * i_361_ + i_374_ * i_362_ >> 16;
 					i_378_ = i_379_;
 					if (i_374_ >= 50) {
-						int i_380_ = Rasterizer3D.centerWidth + (i_367_ << 9) / i_369_;
-						int i_381_ = Rasterizer3D.centerHeight + (i_375_ << 9) / i_369_;
-						int i_382_ = Rasterizer3D.centerWidth + (i_371_ << 9) / i_370_;
-						int i_383_ = Rasterizer3D.centerHeight + (i_376_ << 9) / i_370_;
-						int i_384_ = Rasterizer3D.centerWidth + (i_372_ << 9) / i_373_;
-						int i_385_ = Rasterizer3D.centerHeight + (i_377_ << 9) / i_373_;
-						int i_386_ = Rasterizer3D.centerWidth + (i_368_ << 9) / i_374_;
-						int i_387_ = Rasterizer3D.centerHeight + (i_378_ << 9) / i_374_;
+						int i_380_ = Rasterizer3D.centerX + (i_367_ << 9) / i_369_;
+						int i_381_ = Rasterizer3D.centerY + (i_375_ << 9) / i_369_;
+						int i_382_ = Rasterizer3D.centerX + (i_371_ << 9) / i_370_;
+						int i_383_ = Rasterizer3D.centerY + (i_376_ << 9) / i_370_;
+						int i_384_ = Rasterizer3D.centerX + (i_372_ << 9) / i_373_;
+						int i_385_ = Rasterizer3D.centerY + (i_377_ << 9) / i_373_;
+						int i_386_ = Rasterizer3D.centerX + (i_368_ << 9) / i_374_;
+						int i_387_ = Rasterizer3D.centerY + (i_378_ << 9) / i_374_;
 						Rasterizer3D.anInt1485 = 0;
 						if ((i_384_ - i_386_) * (i_383_ - i_387_) - (i_385_ - i_387_) * (i_382_ - i_386_) > 0) {
 							Rasterizer3D.aBoolean1482 = false;
@@ -2055,8 +2055,8 @@ public class Scene {
 						ComplexTile.anIntArray213[i_396_] = i_398_;
 						ComplexTile.anIntArray214[i_396_] = i_399_;
 					}
-					ComplexTile.anIntArray210[i_396_] = Rasterizer3D.centerWidth + (i_397_ << 9) / i_399_;
-					ComplexTile.anIntArray211[i_396_] = Rasterizer3D.centerHeight + (i_398_ << 9) / i_399_;
+					ComplexTile.anIntArray210[i_396_] = Rasterizer3D.centerX + (i_397_ << 9) / i_399_;
+					ComplexTile.anIntArray211[i_396_] = Rasterizer3D.centerY + (i_398_ << 9) / i_399_;
 				}
 				Rasterizer3D.anInt1485 = 0;
 				i_395_ = complextile.anIntArray201.length;

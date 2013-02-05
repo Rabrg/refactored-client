@@ -193,7 +193,7 @@ public class ImageRGB extends Rasterizer {
 		}
 	}
 
-	public void method345(int x, int i_42_, int y) {
+	public void drawSprite(int x, int i_42_, int y) {
 		try {
 			x += offsetX;
 			y += offsetY;

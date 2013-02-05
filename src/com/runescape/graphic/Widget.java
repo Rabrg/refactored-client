@@ -313,7 +313,7 @@ public class Widget {
 			model = Client.clientsPlayer.getHeadModel();
 		}
 		if (modelType == 4) {
-			model = ItemDefinition.getDefinition(modelId).getModel(50, true);
+			model = ItemDefinition.getDefinition(modelId).getInventoryModel(50);
 		}
 		if (modelType == 5) {
 			model = null;

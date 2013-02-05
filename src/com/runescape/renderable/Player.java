@@ -50,7 +50,7 @@ public class Player extends Actor {
 			return null;
 		}
 		modelHeight = model.modelHeight;
-		model.aBoolean1652 = true;
+		model.oneSquareModel = true;
 		if (aBoolean1719) {
 			return model;
 		}
@@ -107,7 +107,7 @@ public class Player extends Actor {
 				model_2_.translate(xWithBoundary - anInt1731, anInt1729 - anInt1732, yWithBoundary - anInt1733);
 			}
 		}
-		model.aBoolean1652 = true;
+		model.oneSquareModel = true;
 		return model;
 	}
 
@@ -243,7 +243,7 @@ public class Player extends Actor {
 				if (i_18_ >= 256 && i_18_ < 512 && !IdentityKit.identityKitCache[i_18_ - 256].isBodyModelCached()) {
 					bool = true;
 				}
-				if (i_18_ >= 512 && !ItemDefinition.getDefinition(i_18_ - 512).isEquipModelCached(40903, gender)) {
+				if (i_18_ >= 512 && !ItemDefinition.getDefinition(i_18_ - 512).isEquipModelCached(gender)) {
 					bool = true;
 				}
 			}

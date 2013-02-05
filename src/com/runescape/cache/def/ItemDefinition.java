@@ -7,7 +7,6 @@ import com.runescape.graphic.Rasterizer;
 import com.runescape.graphic.Rasterizer3D;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
-import com.runescape.util.SignLink;
 
 public class ItemDefinition {
 
@@ -21,8 +20,8 @@ public class ItemDefinition {
 	public boolean membersOnly;
 	public int femaleEmblem;
 	public int noteTemplateId;
-	private int femaleEqupModel2;
-	private int maleEquipModel1;
+	private int femaleEquipSecondaryModel;
+	private int maleEquipPrimaryModel;
 	public int maleDialogueHat;
 	private int modelSizeX;
 	public String[] groundActions;
@@ -41,18 +40,18 @@ public class ItemDefinition {
 	private static Buffer dataBuffer;
 	private int shadowModifier;
 	public int maleEmblem;
-	private int maleEquipModel2;
+	private int maleEquipSecondaryModel;
 	public String[] inventoryActions;
 	public int modelRotation1;
 	private int modelSizeZ;
 	private int modelSizeY;
 	public int[] stackableIds;
-	private int modelOffset2;
+	private int sine;
 	private static int[] streamIndices;
 	private int lightModifier;
 	public int femaleDialogue;
 	public int modelRotation2;
-	private int femaleEqupModel1;
+	private int femaleEquipPrimaryModel;
 	public int[] stackableAmounts;
 	public int teamId;
 	public static int itemCount;
@@ -67,10 +66,10 @@ public class ItemDefinition {
 		ItemDefinition.dataBuffer = null;
 	}
 
-	public final boolean isDialogueCached(int type) {
+	public final boolean isDialogueCached(int gender) {
 		int dialogue = maleDialogue;
 		int dialogueHat = maleDialogueHat;
-		if (type == 1) {
+		if (gender == 1) {
 			dialogue = femaleDialogue;
 			dialogueHat = femaleDialogueHat;
 		}
@@ -127,23 +126,23 @@ public class ItemDefinition {
 		return dialogueModel;
 	}
 
-	public final boolean isEquipModelCached(int i, int type) {
-		int equipModel1 = maleEquipModel1;
-		int equipModel2 = maleEquipModel2;
+	public final boolean isEquipModelCached(int gender) {
+		int equipPrimaryModel = maleEquipPrimaryModel;
+		int equipSecondaryModel = maleEquipSecondaryModel;
 		int emblem = maleEmblem;
-		if (type == 1) {
-			equipModel1 = femaleEqupModel1;
-			equipModel2 = femaleEqupModel2;
+		if (gender == 1) {
+			equipPrimaryModel = femaleEquipPrimaryModel;
+			equipSecondaryModel = femaleEquipSecondaryModel;
 			emblem = femaleEmblem;
 		}
-		if (equipModel1 == -1) {
+		if (equipPrimaryModel == -1) {
 			return true;
 		}
 		boolean isCached = true;
-		if (!Model.isCached(equipModel1)) {
+		if (!Model.isCached(equipPrimaryModel)) {
 			isCached = false;
 		}
-		if (equipModel2 != -1 && !Model.isCached(equipModel2)) {
+		if (equipSecondaryModel != -1 && !Model.isCached(equipSecondaryModel)) {
 			isCached = false;
 		}
 		if (emblem != -1 && !Model.isCached(emblem)) {
@@ -152,35 +151,35 @@ public class ItemDefinition {
 		return isCached;
 	}
 
-	public final Model getEquipModel(int type) {
-		int equipModel1 = maleEquipModel1;
-		int equipModel2 = maleEquipModel2;
+	public final Model getEquipModel(int gender) {
+		int equipPrimaryModel = maleEquipPrimaryModel;
+		int equipSecondaryModel = maleEquipSecondaryModel;
 		int emblem = maleEmblem;
-		if (type == 1) {
-			equipModel1 = femaleEqupModel1;
-			equipModel2 = femaleEqupModel2;
+		if (gender == 1) {
+			equipPrimaryModel = femaleEquipPrimaryModel;
+			equipSecondaryModel = femaleEquipSecondaryModel;
 			emblem = femaleEmblem;
 		}
-		if (equipModel1 == -1) {
+		if (equipPrimaryModel == -1) {
 			return null;
 		}
-		Model modelEquip1 = Model.getModel(equipModel1);
-		if (equipModel2 != -1) {
+		Model modelEquip1 = Model.getModel(equipPrimaryModel);
+		if (equipSecondaryModel != -1) {
 			if (emblem != -1) {
-				Model modelEquip2 = Model.getModel(equipModel2);
+				Model modelEquip2 = Model.getModel(equipSecondaryModel);
 				Model modelEmblem = Model.getModel(emblem);
 				Model[] equipModelsWithEmblem = { modelEquip1, modelEquip2, modelEmblem };
 				modelEquip1 = new Model(3, equipModelsWithEmblem);
 			} else {
-				Model modelEquip2 = Model.getModel(equipModel2);
+				Model modelEquip2 = Model.getModel(equipSecondaryModel);
 				Model[] equipModelsWithoutEmblem = { modelEquip1, modelEquip2 };
 				modelEquip1 = new Model(2, equipModelsWithoutEmblem);
 			}
 		}
-		if (type == 0 && maleEquipOffset != 0) {
+		if (gender == 0 && maleEquipOffset != 0) {
 			modelEquip1.translate(0, maleEquipOffset, 0);
 		}
-		if (type == 1 && femaleEquipOffset != 0) {
+		if (gender == 1 && femaleEquipOffset != 0) {
 			modelEquip1.translate(0, femaleEquipOffset, 0);
 		}
 		if (originalModelColors != null) {
@@ -202,17 +201,17 @@ public class ItemDefinition {
 		modelRotation2 = 0;
 		diagonalRotation = 0;
 		modelOffset1 = 0;
-		modelOffset2 = 0;
+		sine = 0;
 		stackable = false;
 		value = 1;
 		membersOnly = false;
 		groundActions = null;
 		inventoryActions = null;
-		maleEquipModel1 = -1;
-		maleEquipModel2 = -1;
+		maleEquipPrimaryModel = -1;
+		maleEquipSecondaryModel = -1;
 		maleEquipOffset = (byte) 0;
-		femaleEqupModel1 = -1;
-		femaleEqupModel2 = -1;
+		femaleEquipPrimaryModel = -1;
+		femaleEquipSecondaryModel = -1;
 		femaleEquipOffset = (byte) 0;
 		maleEmblem = -1;
 		femaleEmblem = -1;
@@ -265,7 +264,7 @@ public class ItemDefinition {
 		modelRotation2 = noteTemplateDefinition.modelRotation2;
 		diagonalRotation = noteTemplateDefinition.diagonalRotation;
 		modelOffset1 = noteTemplateDefinition.modelOffset1;
-		modelOffset2 = noteTemplateDefinition.modelOffset2;
+		sine = noteTemplateDefinition.sine;
 		originalModelColors = noteTemplateDefinition.originalModelColors;
 		modifiedModelColors = noteTemplateDefinition.modifiedModelColors;
 		ItemDefinition noteDefinition = ItemDefinition.getDefinition(noteId);
@@ -282,15 +281,15 @@ public class ItemDefinition {
 		stackable = true;
 	}
 
-	public static final ImageRGB getSprite(int itemId, int itemAmount, int i_25_) {
-		if (i_25_ == 0) {
-			ImageRGB imageRGB = (ImageRGB) ItemDefinition.rgbImageCache.get(itemId);
-			if (imageRGB != null && imageRGB.maxHeight != itemAmount && imageRGB.maxHeight != -1) {
-				imageRGB.remove();
-				imageRGB = null;
+	public static final ImageRGB getSprite(int itemId, int itemAmount, int type) {
+		if (type == 0) {
+			ImageRGB cachedSprite = (ImageRGB) ItemDefinition.rgbImageCache.get(itemId);
+			if (cachedSprite != null && cachedSprite.maxHeight != itemAmount && cachedSprite.maxHeight != -1) {
+				cachedSprite.remove();
+				cachedSprite = null;
 			}
-			if (imageRGB != null) {
-				return imageRGB;
+			if (cachedSprite != null) {
+				return cachedSprite;
 			}
 		}
 		ItemDefinition itemDefinition = ItemDefinition.getDefinition(itemId);
@@ -313,172 +312,164 @@ public class ItemDefinition {
 		if (model == null) {
 			return null;
 		}
-		ImageRGB imageRGB = null;
+		ImageRGB noteSprite = null;
 		if (itemDefinition.noteTemplateId != -1) {
-			imageRGB = ItemDefinition.getSprite(itemDefinition.noteId, 10, -1);
-			if (imageRGB == null) {
+			noteSprite = ItemDefinition.getSprite(itemDefinition.noteId, 10, -1);
+			if (noteSprite == null) {
 				return null;
 			}
 		}
-		ImageRGB imagergb_29_ = new ImageRGB(32, 32);
-		int i_30_ = Rasterizer3D.centerWidth;
-		int i_31_ = Rasterizer3D.centerHeight;
-		int[] is = Rasterizer3D.lineOffsets;
-		int[] is_32_ = Rasterizer.pixels;
-		int i_33_ = Rasterizer.width;
-		int i_34_ = Rasterizer.height;
-		int i_35_ = Rasterizer.topX;
-		int i_36_ = Rasterizer.bottomX;
-		int i_37_ = Rasterizer.topY;
-		int i_38_ = Rasterizer.bottomY;
-		Rasterizer3D.aBoolean1484 = false;
-		Rasterizer.createRasterizer(imagergb_29_.pixels, 32, 32);
+		ImageRGB itemSprite = new ImageRGB(32, 32);
+		int rasterizerCenterX = Rasterizer3D.centerX;
+		int rasterizerCenterY = Rasterizer3D.centerY;
+		int[] rasterizerLineOffsets = Rasterizer3D.lineOffsets;
+		int[] rasterizerPixels = Rasterizer.pixels;
+		int rasterizerWidth = Rasterizer.width;
+		int rasterizerHeight = Rasterizer.height;
+		int rasterizerTopX = Rasterizer.topX;
+		int rasterizerBottomX = Rasterizer.bottomX;
+		int rasterizerTopY = Rasterizer.topY;
+		int rasterizerBottomY = Rasterizer.bottomY;
+		Rasterizer3D.textured = false;
+		Rasterizer.createRasterizer(itemSprite.pixels, 32, 32);
 		Rasterizer.drawFilledRectangle(0, 0, 32, 32, 0);
-		Rasterizer3D.method361();
-		int i_39_ = itemDefinition.modelZoom;
-		if (i_25_ == -1) {
-			i_39_ *= 1.5;
+		Rasterizer3D.setDefaultBoundaries();
+		int modelZoom = itemDefinition.modelZoom;
+		if (type == -1) {
+			modelZoom *= 1.5;
 		}
-		if (i_25_ > 0) {
-			i_39_ *= 1.04;
+		if (type > 0) {
+			modelZoom *= 1.04;
 		}
-		int i_40_ = Rasterizer3D.SINE[itemDefinition.modelRotation1] * i_39_ >> 16;
-		int i_41_ = Rasterizer3D.COSINE[itemDefinition.modelRotation1] * i_39_ >> 16;
+		int sine = Rasterizer3D.SINE[itemDefinition.modelRotation1] * modelZoom >> 16;
+		int cosine = Rasterizer3D.COSINE[itemDefinition.modelRotation1] * modelZoom >> 16;
 		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation,
-				itemDefinition.modelRotation1, itemDefinition.modelOffset1, i_40_ + model.modelHeight / 2
-						+ itemDefinition.modelOffset2, i_41_ + itemDefinition.modelOffset2);
-		for (int i_42_ = 31; i_42_ >= 0; i_42_--) {
-			for (i_41_ = 31; i_41_ >= 0; i_41_--) {
-				if (imagergb_29_.pixels[i_42_ + i_41_ * 32] == 0) {
-					if (i_42_ > 0 && imagergb_29_.pixels[i_42_ - 1 + i_41_ * 32] > 1) {
-						imagergb_29_.pixels[i_42_ + i_41_ * 32] = 1;
-					} else if (i_41_ > 0 && imagergb_29_.pixels[i_42_ + (i_41_ - 1) * 32] > 1) {
-						imagergb_29_.pixels[i_42_ + i_41_ * 32] = 1;
-					} else if (i_42_ < 31 && imagergb_29_.pixels[i_42_ + 1 + i_41_ * 32] > 1) {
-						imagergb_29_.pixels[i_42_ + i_41_ * 32] = 1;
-					} else if (i_41_ < 31 && imagergb_29_.pixels[i_42_ + (i_41_ + 1) * 32] > 1) {
-						imagergb_29_.pixels[i_42_ + i_41_ * 32] = 1;
+				itemDefinition.modelRotation1, itemDefinition.modelOffset1, sine + model.modelHeight / 2
+						+ itemDefinition.sine, cosine + itemDefinition.sine);
+		for (int pixel = 31; pixel >= 0; pixel--) {
+			for (cosine = 31; cosine >= 0; cosine--) {
+				if (itemSprite.pixels[pixel + cosine * 32] == 0) {
+					if (pixel > 0 && itemSprite.pixels[pixel - 1 + cosine * 32] > 1) {
+						itemSprite.pixels[pixel + cosine * 32] = 1;
+					} else if (cosine > 0 && itemSprite.pixels[pixel + (cosine - 1) * 32] > 1) {
+						itemSprite.pixels[pixel + cosine * 32] = 1;
+					} else if (pixel < 31 && itemSprite.pixels[pixel + 1 + cosine * 32] > 1) {
+						itemSprite.pixels[pixel + cosine * 32] = 1;
+					} else if (cosine < 31 && itemSprite.pixels[pixel + (cosine + 1) * 32] > 1) {
+						itemSprite.pixels[pixel + cosine * 32] = 1;
 					}
 				}
 			}
 		}
-		if (i_25_ > 0) {
-			for (int i_43_ = 31; i_43_ >= 0; i_43_--) {
-				for (i_41_ = 31; i_41_ >= 0; i_41_--) {
-					if (imagergb_29_.pixels[i_43_ + i_41_ * 32] == 0) {
-						if (i_43_ > 0 && imagergb_29_.pixels[i_43_ - 1 + i_41_ * 32] == 1) {
-							imagergb_29_.pixels[i_43_ + i_41_ * 32] = i_25_;
-						} else if (i_41_ > 0 && imagergb_29_.pixels[i_43_ + (i_41_ - 1) * 32] == 1) {
-							imagergb_29_.pixels[i_43_ + i_41_ * 32] = i_25_;
-						} else if (i_43_ < 31 && imagergb_29_.pixels[i_43_ + 1 + i_41_ * 32] == 1) {
-							imagergb_29_.pixels[i_43_ + i_41_ * 32] = i_25_;
-						} else if (i_41_ < 31 && imagergb_29_.pixels[i_43_ + (i_41_ + 1) * 32] == 1) {
-							imagergb_29_.pixels[i_43_ + i_41_ * 32] = i_25_;
+		if (type > 0) {
+			for (int pixel = 31; pixel >= 0; pixel--) {
+				for (cosine = 31; cosine >= 0; cosine--) {
+					if (itemSprite.pixels[pixel + cosine * 32] == 0) {
+						if (pixel > 0 && itemSprite.pixels[pixel - 1 + cosine * 32] == 1) {
+							itemSprite.pixels[pixel + cosine * 32] = type;
+						} else if (cosine > 0 && itemSprite.pixels[pixel + (cosine - 1) * 32] == 1) {
+							itemSprite.pixels[pixel + cosine * 32] = type;
+						} else if (pixel < 31 && itemSprite.pixels[pixel + 1 + cosine * 32] == 1) {
+							itemSprite.pixels[pixel + cosine * 32] = type;
+						} else if (cosine < 31 && itemSprite.pixels[pixel + (cosine + 1) * 32] == 1) {
+							itemSprite.pixels[pixel + cosine * 32] = type;
 						}
 					}
 				}
 			}
-		} else if (i_25_ == 0) {
-			for (int i_44_ = 31; i_44_ >= 0; i_44_--) {
-				for (i_41_ = 31; i_41_ >= 0; i_41_--) {
-					if (imagergb_29_.pixels[i_44_ + i_41_ * 32] == 0 && i_44_ > 0 && i_41_ > 0
-							&& imagergb_29_.pixels[i_44_ - 1 + (i_41_ - 1) * 32] > 0) {
-						imagergb_29_.pixels[i_44_ + i_41_ * 32] = 3153952;
+		} else if (type == 0) {
+			for (int pixel = 31; pixel >= 0; pixel--) {
+				for (cosine = 31; cosine >= 0; cosine--) {
+					if (itemSprite.pixels[pixel + cosine * 32] == 0 && pixel > 0 && cosine > 0
+							&& itemSprite.pixels[pixel - 1 + (cosine - 1) * 32] > 0) {
+						itemSprite.pixels[pixel + cosine * 32] = 3153952;
 					}
 				}
 			}
 		}
 		if (itemDefinition.noteTemplateId != -1) {
-			int i_45_ = imageRGB.maxWidth;
-			int i_46_ = imageRGB.maxHeight;
-			imageRGB.maxWidth = 32;
-			imageRGB.maxHeight = 32;
-			imageRGB.method345(0, 16083, 0);
-			imageRGB.maxWidth = i_45_;
-			imageRGB.maxHeight = i_46_;
+			int maxWidth = noteSprite.maxWidth;
+			int maxHeight = noteSprite.maxHeight;
+			noteSprite.maxWidth = 32;
+			noteSprite.maxHeight = 32;
+			noteSprite.drawSprite(0, 16083, 0);
+			noteSprite.maxWidth = maxWidth;
+			noteSprite.maxHeight = maxHeight;
 		}
-		if (i_25_ == 0) {
-			ItemDefinition.rgbImageCache.put(imagergb_29_, itemId);
+		if (type == 0) {
+			ItemDefinition.rgbImageCache.put(itemSprite, itemId);
 		}
-		Rasterizer.createRasterizer(is_32_, i_33_, i_34_);
-		Rasterizer.setCoordinates(i_35_, i_37_, i_36_, i_38_);
-		Rasterizer3D.centerWidth = i_30_;
-		Rasterizer3D.centerHeight = i_31_;
-		Rasterizer3D.lineOffsets = is;
-		Rasterizer3D.aBoolean1484 = true;
+		Rasterizer.createRasterizer(rasterizerPixels, rasterizerWidth, rasterizerHeight);
+		Rasterizer.setCoordinates(rasterizerTopX, rasterizerTopY, rasterizerBottomX, rasterizerBottomY);
+		Rasterizer3D.centerX = rasterizerCenterX;
+		Rasterizer3D.centerY = rasterizerCenterY;
+		Rasterizer3D.lineOffsets = rasterizerLineOffsets;
+		Rasterizer3D.textured = true;
 		if (itemDefinition.stackable) {
-			imagergb_29_.maxWidth = 33;
+			itemSprite.maxWidth = 33;
 		} else {
-			imagergb_29_.maxWidth = 32;
+			itemSprite.maxWidth = 32;
 		}
-		imagergb_29_.maxHeight = itemAmount;
-		return imagergb_29_;
+		itemSprite.maxHeight = itemAmount;
+		return itemSprite;
 	}
 
-	public final Model getAmountModel(int i) {
-		if (stackableIds != null && i > 1) {
-			int i_48_ = -1;
-			for (int i_49_ = 0; i_49_ < 10; i_49_++) {
-				if (i >= stackableAmounts[i_49_] && stackableAmounts[i_49_] != 0) {
-					i_48_ = stackableIds[i_49_];
+	public final Model getAmountModel(int amount) {
+		if (stackableIds != null && amount > 1) {
+			int stackedItemId = -1;
+			for (int index = 0; index < 10; index++) {
+				if (amount >= stackableAmounts[index] && stackableAmounts[index] != 0) {
+					stackedItemId = stackableIds[index];
 				}
 			}
-			if (i_48_ != -1) {
-				return ItemDefinition.getDefinition(i_48_).getAmountModel(1);
+			if (stackedItemId != -1) {
+				return ItemDefinition.getDefinition(stackedItemId).getAmountModel(1);
 			}
 		}
-		Model model = (Model) ItemDefinition.modelCache.get(itemId);
-		if (model != null) {
-			return model;
+		Model stackedModel = (Model) ItemDefinition.modelCache.get(itemId);
+		if (stackedModel != null) {
+			return stackedModel;
 		}
-		model = Model.getModel(inventoryModelId);
-		if (model == null) {
+		stackedModel = Model.getModel(inventoryModelId);
+		if (stackedModel == null) {
 			return null;
 		}
 		if (modelSizeX != 128 || modelSizeY != 128 || modelSizeZ != 128) {
-			model.scaleT(modelSizeX, modelSizeZ, modelSizeY);
+			stackedModel.scaleT(modelSizeX, modelSizeZ, modelSizeY);
 		}
 		if (originalModelColors != null) {
 			for (int modelColor = 0; modelColor < originalModelColors.length; modelColor++) {
-				model.recolor(originalModelColors[modelColor], modifiedModelColors[modelColor]);
+				stackedModel.recolor(originalModelColors[modelColor], modifiedModelColors[modelColor]);
 			}
 		}
-		model.applyLighting(64 + lightModifier, 768 + shadowModifier, -50, -10, -50, true);
-		model.aBoolean1652 = true;
-		ItemDefinition.modelCache.put(model, itemId);
-		return model;
+		stackedModel.applyLighting(64 + lightModifier, 768 + shadowModifier, -50, -10, -50, true);
+		stackedModel.oneSquareModel = true;
+		ItemDefinition.modelCache.put(stackedModel, itemId);
+		return stackedModel;
 	}
 
-	public final Model getModel(int i, boolean bool) {
-		try {
-			if (stackableIds != null && i > 1) {
-				int i_51_ = -1;
-				for (int i_52_ = 0; i_52_ < 10; i_52_++) {
-					if (i >= stackableAmounts[i_52_] && stackableAmounts[i_52_] != 0) {
-						i_51_ = stackableIds[i_52_];
+	public final Model getInventoryModel(int amount) {
+			if (stackableIds != null && amount > 1) {
+				int amountItemId = -1;
+				for (int index = 0; index < 10; index++) {
+					if (amount >= stackableAmounts[index] && stackableAmounts[index] != 0) {
+						amountItemId = stackableIds[index];
 					}
 				}
-				if (i_51_ != -1) {
-					return ItemDefinition.getDefinition(i_51_).getModel(1, true);
+				if (amountItemId != -1) {
+					return ItemDefinition.getDefinition(amountItemId).getInventoryModel(1);
 				}
 			}
-			Model model = Model.getModel(inventoryModelId);
-			if (!bool) {
-				throw new NullPointerException();
-			}
-			if (model == null) {
+			Model inventoryModel = Model.getModel(inventoryModelId);
+			if (inventoryModel == null) {
 				return null;
 			}
 			if (originalModelColors != null) {
-				for (int i_53_ = 0; i_53_ < originalModelColors.length; i_53_++) {
-					model.recolor(originalModelColors[i_53_], modifiedModelColors[i_53_]);
+				for (int color = 0; color < originalModelColors.length; color++) {
+					inventoryModel.recolor(originalModelColors[color], modifiedModelColors[color]);
 				}
 			}
-			return model;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("80813, " + i + ", " + bool + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
+			return inventoryModel;
 	}
 
 	public final void loadDefinition(Buffer buffer) {
@@ -505,9 +496,9 @@ public class ItemDefinition {
 					modelOffset1 -= 65536;
 				}
 			} else if (attributeId == 8) {
-				modelOffset2 = buffer.getUnsignedLEShort();
-				if (modelOffset2 > 32767) {
-					modelOffset2 -= 65536;
+				sine = buffer.getUnsignedLEShort();
+				if (sine > 32767) {
+					sine -= 65536;
 				}
 			} else if (attributeId == 10) {
 				buffer.getUnsignedLEShort(); // dummy
@@ -518,15 +509,15 @@ public class ItemDefinition {
 			} else if (attributeId == 16) {
 				membersOnly = true;
 			} else if (attributeId == 23) {
-				maleEquipModel1 = buffer.getUnsignedLEShort();
+				maleEquipPrimaryModel = buffer.getUnsignedLEShort();
 				maleEquipOffset = buffer.get();
 			} else if (attributeId == 24) {
-				maleEquipModel2 = buffer.getUnsignedLEShort();
+				maleEquipSecondaryModel = buffer.getUnsignedLEShort();
 			} else if (attributeId == 25) {
-				femaleEqupModel1 = buffer.getUnsignedLEShort();
+				femaleEquipPrimaryModel = buffer.getUnsignedLEShort();
 				femaleEquipOffset = buffer.get();
 			} else if (attributeId == 26) {
-				femaleEqupModel2 = buffer.getUnsignedLEShort();
+				femaleEquipSecondaryModel = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 30 && attributeId < 35) {
 				if (groundActions == null) {
 					groundActions = new String[5];

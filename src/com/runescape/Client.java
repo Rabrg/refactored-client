@@ -1856,7 +1856,7 @@ public class Client extends GameStub {
 							if (anInt988 > -1) {
 								for (int i_145_ = 0; i_145_ < 8; i_145_++) {
 									if ((player.headIcon & 1 << i_145_) != 0) {
-										anImageRGBArray1120[i_145_].method345(anInt988 - 12, 16083, anInt989 - i_144_);
+										anImageRGBArray1120[i_145_].drawSprite(anInt988 - 12, 16083, anInt989 - i_144_);
 										i_144_ -= 25;
 									}
 								}
@@ -1865,7 +1865,7 @@ public class Client extends GameStub {
 						if (i_143_ >= 0 && hintIconType == 10 && hintIconPlayerId == anIntArray917[i_143_]) {
 							method127(true, actor, actor.modelHeight + 15);
 							if (anInt988 > -1) {
-								anImageRGBArray1120[7].method345(anInt988 - 12, 16083, anInt989 - i_144_);
+								anImageRGBArray1120[7].drawSprite(anInt988 - 12, 16083, anInt989 - i_144_);
 							}
 						}
 					} else {
@@ -1873,7 +1873,7 @@ public class Client extends GameStub {
 						if (npcdefinition.anInt431 >= 0 && npcdefinition.anInt431 < anImageRGBArray1120.length) {
 							method127(true, actor, actor.modelHeight + 15);
 							if (anInt988 > -1) {
-								anImageRGBArray1120[npcdefinition.anInt431].method345(anInt988 - 12, 16083,
+								anImageRGBArray1120[npcdefinition.anInt431].drawSprite(anInt988 - 12, 16083,
 										anInt989 - 30);
 							}
 						}
@@ -1881,7 +1881,7 @@ public class Client extends GameStub {
 								&& Client.currentCycle % 20 < 10) {
 							method127(true, actor, actor.modelHeight + 15);
 							if (anInt988 > -1) {
-								anImageRGBArray1120[2].method345(anInt988 - 12, 16083, anInt989 - 28);
+								anImageRGBArray1120[2].drawSprite(anInt988 - 12, 16083, anInt989 - 28);
 							}
 						}
 					}
@@ -1937,7 +1937,7 @@ public class Client extends GameStub {
 									anInt988 += 15;
 									anInt989 -= 10;
 								}
-								anImageRGBArray1012[actor.hitTypes[i_147_]].method345(anInt988 - 12, 16083,
+								anImageRGBArray1012[actor.hitTypes[i_147_]].drawSprite(anInt988 - 12, 16083,
 										anInt989 - 12);
 								aTypeFace1295.drawString(String.valueOf(actor.hitDamages[i_147_]), anInt988,
 										anInt989 + 4, 0);
@@ -3236,7 +3236,7 @@ public class Client extends GameStub {
 				imagergb.drawInverse(-180, -171);
 				imagergb = new ImageRGB(anArchive1078, "logo", 0);
 				aProducingGraphicsBuffer1132.createRasterizer();
-				imagergb.method345(382 - imagergb.width / 2 - 128, 16083, 18);
+				imagergb.drawSprite(382 - imagergb.width / 2 - 128, 16083, 18);
 				System.gc();
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -3420,7 +3420,7 @@ public class Client extends GameStub {
 					if (anInt988 <= -1 || Client.currentCycle % 20 >= 10) {
 						break;
 					}
-					anImageRGBArray1120[2].method345(anInt988 - 12, 16083, anInt989 - 28);
+					anImageRGBArray1120[2].drawSprite(anInt988 - 12, 16083, anInt989 - 28);
 				}
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("10525, " + i + ", " + runtimeexception.toString());
@@ -8649,7 +8649,7 @@ public class Client extends GameStub {
 														&& anInt1269 == widget_635_.interfaceId) {
 													imagergb.drawImageAlpha(i_639_, i_640_, 128);
 												} else {
-													imagergb.method345(i_639_, 16083, i_640_);
+													imagergb.drawSprite(i_639_, 16083, i_640_);
 												}
 												if (imagergb.maxWidth == 33 || widget_635_.itemAmounts[i_636_] != 1) {
 													int i_647_ = widget_635_.itemAmounts[i_636_];
@@ -8663,7 +8663,7 @@ public class Client extends GameStub {
 									} else if (widget_635_.sprites != null && i_636_ < 20) {
 										ImageRGB imagergb = widget_635_.sprites[i_636_];
 										if (imagergb != null) {
-											imagergb.method345(i_639_, 16083, i_640_);
+											imagergb.drawSprite(i_639_, 16083, i_640_);
 										}
 									}
 									i_636_++;
@@ -8813,13 +8813,13 @@ public class Client extends GameStub {
 								imagergb = widget_635_.disabledSprite;
 							}
 							if (imagergb != null) {
-								imagergb.method345(i_633_, 16083, i_634_);
+								imagergb.drawSprite(i_633_, 16083, i_634_);
 							}
 						} else if (widget_635_.interfaceType == 6) {
-							int i_658_ = Rasterizer3D.centerWidth;
-							int i_659_ = Rasterizer3D.centerHeight;
-							Rasterizer3D.centerWidth = i_633_ + widget_635_.interfaceWidth / 2;
-							Rasterizer3D.centerHeight = i_634_ + widget_635_.interfaceHeight / 2;
+							int i_658_ = Rasterizer3D.centerX;
+							int i_659_ = Rasterizer3D.centerY;
+							Rasterizer3D.centerX = i_633_ + widget_635_.interfaceWidth / 2;
+							Rasterizer3D.centerY = i_634_ + widget_635_.interfaceHeight / 2;
 							int i_660_ = Rasterizer3D.SINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							int i_661_ = Rasterizer3D.COSINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							boolean bool = method131(widget_635_, false);
@@ -8841,8 +8841,8 @@ public class Client extends GameStub {
 							if (model != null) {
 								model.method430(0, widget_635_.rotationY, 0, widget_635_.rotationX, 0, i_660_, i_661_);
 							}
-							Rasterizer3D.centerWidth = i_658_;
-							Rasterizer3D.centerHeight = i_659_;
+							Rasterizer3D.centerX = i_658_;
+							Rasterizer3D.centerY = i_659_;
 						} else if (widget_635_.interfaceType == 7) {
 							TypeFace typeface = widget_635_.typeFaces;
 							int i_663_ = 0;
@@ -9286,7 +9286,7 @@ public class Client extends GameStub {
 		do {
 			method76((byte) -13);
 			if (anInt942 == 1) {
-				anImageRGBArray1175[anInt941 / 100].method345(anInt939 - 8 - 4, 16083, anInt940 - 8 - 4);
+				anImageRGBArray1175[anInt941 / 100].drawSprite(anInt939 - 8 - 4, 16083, anInt940 - 8 - 4);
 				Client.anInt1167++;
 				if (Client.anInt1167 > 67) {
 					Client.anInt1167 = 0;
@@ -9294,7 +9294,7 @@ public class Client extends GameStub {
 				}
 			}
 			if (anInt942 == 2) {
-				anImageRGBArray1175[4 + anInt941 / 100].method345(anInt939 - 8 - 4, 16083, anInt940 - 8 - 4);
+				anImageRGBArray1175[4 + anInt941 / 100].drawSprite(anInt939 - 8 - 4, 16083, anInt940 - 8 - 4);
 			}
 			if (anInt1043 != -1) {
 				method119(anInt970, false, anInt1043);
@@ -9312,7 +9312,7 @@ public class Client extends GameStub {
 				method40((byte) 9);
 			}
 			if (anInt1080 == 1) {
-				anImageRGBArray1120[1].method345(472, 16083, 296);
+				anImageRGBArray1120[1].drawSprite(472, 16083, 296);
 			}
 			if (Client.displayFps) {
 				int i_712_ = 507;
@@ -10155,8 +10155,8 @@ public class Client extends GameStub {
 				i_796_ = i_797_ * i_798_ + i_796_ * i_799_ >> 16;
 				i_797_ = i_802_;
 				if (i_796_ >= 50) {
-					anInt988 = Rasterizer3D.centerWidth + (i << 9) / i_796_;
-					anInt989 = Rasterizer3D.centerHeight + (i_797_ << 9) / i_796_;
+					anInt988 = Rasterizer3D.centerX + (i << 9) / i_796_;
+					anInt989 = Rasterizer3D.centerY + (i_797_ << 9) / i_796_;
 				} else {
 					anInt988 = -1;
 					anInt989 = -1;
@@ -11116,7 +11116,7 @@ public class Client extends GameStub {
 					imagergb.method351(anIndexedImage1222, false, 83 - i_993_ - imagergb.maxHeight / 2 - 4, 94 + i_992_
 							- imagergb.maxWidth / 2 + 4);
 				} else {
-					imagergb.method345(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_ - imagergb.maxHeight
+					imagergb.drawSprite(94 + i_992_ - imagergb.maxWidth / 2 + 4, 16083, 83 - i_993_ - imagergb.maxHeight
 							/ 2 - 4);
 				}
 			}

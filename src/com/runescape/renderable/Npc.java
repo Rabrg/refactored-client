@@ -57,7 +57,7 @@ public class Npc extends Actor {
 			}
 		}
 		if (npcDefinition.aByte424 == 1) {
-			model.aBoolean1652 = true;
+			model.oneSquareModel = true;
 		}
 		return model;
 	}

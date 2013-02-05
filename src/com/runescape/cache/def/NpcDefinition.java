@@ -226,7 +226,7 @@ public class NpcDefinition {
 			model_17_.triangleSkin = null;
 			model_17_.vectorSkin = null;
 			if (aByte424 == 1) {
-				model_17_.aBoolean1652 = true;
+				model_17_.oneSquareModel = true;
 			}
 			return model_17_;
 		} catch (RuntimeException runtimeexception) {
