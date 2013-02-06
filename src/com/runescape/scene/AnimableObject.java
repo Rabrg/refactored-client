@@ -63,8 +63,8 @@ public class AnimableObject extends Renderable {
 		return animatedModel;
 	}
 
-	public final void method404(int i) {
-		duration += i;
+	public final void nextFrame(int frame) {
+		duration += frame;
 		while (duration > spotAnimation.animationSequences.getFrameLength(eclapsedFrames, (byte) -39)) {
 			duration -= spotAnimation.animationSequences.getFrameLength(eclapsedFrames, (byte) -39) + 1;
 			eclapsedFrames++;
