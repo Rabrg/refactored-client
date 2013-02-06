@@ -14,7 +14,7 @@ public class Widget {
 	public ImageRGB disabledSprite;
 	public int animationDuration;
 	public ImageRGB[] sprites;
-	public static Widget[] widgets;
+	public static Widget[] cache;
 	public int unknownOne;
 	public int[] conditionValues;
 	public int contentType;
@@ -90,14 +90,14 @@ public class Widget {
 		Buffer buffer = new Buffer(widgetArchive.getFile("data"));
 		int parentId = -1;
 		int widgetCount = buffer.getUnsignedLEShort();
-		Widget.widgets = new Widget[widgetCount];
+		Widget.cache = new Widget[widgetCount];
 		while (buffer.offset < buffer.payload.length) {
 			int widgetId = buffer.getUnsignedLEShort();
 			if (widgetId == 65535) {
 				parentId = buffer.getUnsignedLEShort();
 				widgetId = buffer.getUnsignedLEShort();
 			}
-			Widget widget = Widget.widgets[widgetId] = new Widget();
+			Widget widget = Widget.cache[widgetId] = new Widget();
 			widget.widgetId = widgetId;
 			widget.widgetParentId = parentId;
 			widget.widgetType = buffer.getUnsignedByte();
