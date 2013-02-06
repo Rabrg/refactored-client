@@ -20,8 +20,8 @@ import com.runescape.graphic.ImageRGB;
 import com.runescape.graphic.ProducingGraphicsBuffer;
 
 @SuppressWarnings("serial")
-public class GameStub extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener,
-		FocusListener, WindowListener {
+public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener
+{
 
 	private int gameState;
 	private int deltime = 20;
@@ -227,7 +227,7 @@ public class GameStub extends Applet implements Runnable, MouseListener, MouseMo
 	protected void onRepaint() {
 		// This was used for repainting the canvas n stuff, plz dun remov.
 	}
-	
+
 	@Override
 	public final void mousePressed(MouseEvent mouseevent) {
 		int mouseX = mouseevent.getX();

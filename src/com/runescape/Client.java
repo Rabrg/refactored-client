@@ -67,7 +67,7 @@ import com.runescape.util.SkillConstants;
 import com.runescape.util.TextUtils;
 
 @SuppressWarnings("serial")
-public class Client extends GameStub
+public class Client extends GameShell
 {
 
 	private int ignoreListCount;
@@ -2803,6 +2803,7 @@ public class Client extends GameStub
 				titleboxImage = new IndexedImage(anArchive1078, "titlebox", 0);
 				titleboxButtonImage = new IndexedImage(anArchive1078, "titlebutton", 0);
 				titleFlameEmblem = new IndexedImage[12];
+				
 				int icon = 0;
 				try {
 					icon = Integer.parseInt(getParameter("fl_icon"));

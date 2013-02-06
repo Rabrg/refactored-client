@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.runescape.GameStub;
+import com.runescape.GameShell;
 
 public class BufferedConnection implements Runnable {
 
@@ -13,14 +13,14 @@ public class BufferedConnection implements Runnable {
 	private OutputStream outputStream;
 	private Socket socket;
 	private boolean closed = false;
-	protected GameStub gameStub;
+	protected GameShell gameStub;
 	private byte[] buffer;
 	private int writerPosition;
 	private int bufferPosition;
 	private boolean writing = false;
 	private boolean ioError = false;
 
-	public BufferedConnection(GameStub gameStub, Socket socket) throws IOException {
+	public BufferedConnection(GameShell gameStub, Socket socket) throws IOException {
 		this.gameStub = gameStub;
 		this.socket = socket;
 		this.socket.setSoTimeout(30000);
