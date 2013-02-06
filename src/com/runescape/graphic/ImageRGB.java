@@ -228,12 +228,12 @@ public class ImageRGB extends Rasterizer {
 			deviation += xOffset;
 		}
 		if (imageWidth > 0 && imageHeight > 0) {
-			copyPixels(pixels, Rasterizer.pixels, pixelOffset, rasterizerOffset, imageWidth, imageHeight,
+			shapeImageToPixels(pixels, Rasterizer.pixels, pixelOffset, rasterizerOffset, imageWidth, imageHeight,
 					originalDeviation, deviation, 0);
 		}
 	}
 
-	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int width,
+	private void shapeImageToPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int width,
 			int height, int pixelOffset, int rasterizerPixelOffset, int pixelColor) {
 		int shiftedWidth = -(width >> 2);
 		width = -(width & 0x3);
