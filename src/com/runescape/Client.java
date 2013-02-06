@@ -590,7 +590,7 @@ public class Client extends GameStub
 				} catch (Exception exception) {
 					problem = "logic problem";
 					crcValues[8] = 0;
-					if (!SignLink.aBoolean639) {
+					if (!SignLink.accessible) {
 						break;
 					}
 				}
@@ -3938,19 +3938,19 @@ public class Client extends GameStub
 				} catch (NullPointerException nullpointerexception) {
 					string_360_ = "Null error";
 					bs = null;
-					if (!SignLink.aBoolean639) {
+					if (!SignLink.accessible) {
 						return null;
 					}
 				} catch (ArrayIndexOutOfBoundsException arrayindexoutofboundsexception) {
 					string_360_ = "Bounds error";
 					bs = null;
-					if (!SignLink.aBoolean639) {
+					if (!SignLink.accessible) {
 						return null;
 					}
 				} catch (Exception exception) {
 					string_360_ = "Unexpected error";
 					bs = null;
-					if (!SignLink.aBoolean639) {
+					if (!SignLink.accessible) {
 						return null;
 					}
 				}
@@ -5073,7 +5073,7 @@ public class Client extends GameStub
 
 	@Override
 	public final void shutdown() {
-		SignLink.aBoolean639 = false;
+		SignLink.accessible = false;
 		try {
 			if (bufferedConnection != null) {
 				bufferedConnection.close();

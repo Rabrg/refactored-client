@@ -44,7 +44,7 @@ public class SignLink implements Runnable
 	private static int nextWaveIndex;
 	public static String nextEffectName = null;
 	public static int waveVolume;
-	public static boolean aBoolean639 = true;
+	public static boolean accessible = true;
 	public static String lastUsername = "";
 
 	public static final void method547(InetAddress inetaddress) {
@@ -250,7 +250,7 @@ public class SignLink implements Runnable
 	}
 
 	public static final void reportError(String error) {
-		if (SignLink.aBoolean639 && SignLink.active) {
+		if (SignLink.accessible && SignLink.active) {
 			System.out.println("Error: " + error);
 			try {
 				error = error.replace(':', '_');
