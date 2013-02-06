@@ -6,7 +6,8 @@ import com.runescape.net.Buffer;
 import com.runescape.renderable.Renderable;
 import com.runescape.util.SignLink;
 
-public class Model extends Renderable {
+public class Model extends Renderable
+{
 	private boolean aBoolean1608 = false;
 	private int anInt1610 = 1;
 	private boolean aBoolean1611 = true;
@@ -223,7 +224,8 @@ public class Model extends Renderable {
 		return true;
 	}
 
-	private Model(boolean bool) {
+	private Model(boolean bool)
+	{
 		do {
 			try {
 				if (bool) {
@@ -238,7 +240,8 @@ public class Model extends Renderable {
 		} while (false);
 	}
 
-	private Model(int modelId) {
+	private Model(int modelId)
+	{
 		ModelHeader modelheader = Model.modelHeaders[modelId];
 		vertexCount = modelheader.vertexCount;
 		triangleCount = modelheader.triangleCount;
@@ -381,7 +384,8 @@ public class Model extends Renderable {
 		}
 	}
 
-	public Model(int i, Model[] models) {
+	public Model(int i, Model[] models)
+	{
 		boolean bool = false;
 		boolean bool_37_ = false;
 		boolean bool_38_ = false;
@@ -477,12 +481,9 @@ public class Model extends Renderable {
 					triangleCount++;
 				}
 				for (int i_47_ = 0; i_47_ < model_44_.texturedTriangleCount; i_47_++) {
-					texturedTrianglePointsX[texturedTriangleCount] = method413(model_44_,
-							model_44_.texturedTrianglePointsX[i_47_]);
-					texturedTrianglePointsY[texturedTriangleCount] = method413(model_44_,
-							model_44_.texturedTrianglePointsY[i_47_]);
-					texturedTrianglePointsZ[texturedTriangleCount] = method413(model_44_,
-							model_44_.texturedTrianglePointsZ[i_47_]);
+					texturedTrianglePointsX[texturedTriangleCount] = method413(model_44_, model_44_.texturedTrianglePointsX[i_47_]);
+					texturedTrianglePointsY[texturedTriangleCount] = method413(model_44_, model_44_.texturedTrianglePointsY[i_47_]);
+					texturedTrianglePointsZ[texturedTriangleCount] = method413(model_44_, model_44_.texturedTrianglePointsZ[i_47_]);
 					texturedTriangleCount++;
 				}
 				i_42_ += model_44_.texturedTriangleCount;
@@ -490,7 +491,8 @@ public class Model extends Renderable {
 		}
 	}
 
-	public Model(int i, int i_48_, boolean bool, Model[] models) {
+	public Model(int i, int i_48_, boolean bool, Model[] models)
+	{
 		try {
 			boolean bool_49_ = false;
 			boolean bool_50_ = false;
@@ -602,12 +604,9 @@ public class Model extends Renderable {
 						triangleCount++;
 					}
 					for (int i_63_ = 0; i_63_ < model_58_.texturedTriangleCount; i_63_++) {
-						texturedTrianglePointsX[texturedTriangleCount] = model_58_.texturedTrianglePointsX[i_63_]
-								+ i_59_;
-						texturedTrianglePointsY[texturedTriangleCount] = model_58_.texturedTrianglePointsY[i_63_]
-								+ i_59_;
-						texturedTrianglePointsZ[texturedTriangleCount] = model_58_.texturedTrianglePointsZ[i_63_]
-								+ i_59_;
+						texturedTrianglePointsX[texturedTriangleCount] = model_58_.texturedTrianglePointsX[i_63_] + i_59_;
+						texturedTrianglePointsY[texturedTriangleCount] = model_58_.texturedTrianglePointsY[i_63_] + i_59_;
+						texturedTrianglePointsZ[texturedTriangleCount] = model_58_.texturedTrianglePointsZ[i_63_] + i_59_;
 						texturedTriangleCount++;
 					}
 					i_56_ += model_58_.texturedTriangleCount;
@@ -615,13 +614,13 @@ public class Model extends Renderable {
 			}
 			calculateDiagonals(false);
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("65900, " + i + ", " + i_48_ + ", " + bool + ", " + models + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("65900, " + i + ", " + i_48_ + ", " + bool + ", " + models + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
 
-	public Model(boolean bool, boolean bool_64_, boolean bool_65_, Model model) {
+	public Model(boolean bool, boolean bool_64_, boolean bool_65_, Model model)
+	{
 		vertexCount = model.vertexCount;
 		triangleCount = model.triangleCount;
 		texturedTriangleCount = model.texturedTriangleCount;
@@ -674,7 +673,8 @@ public class Model extends Renderable {
 		texturedTrianglePointsZ = model.texturedTrianglePointsZ;
 	}
 
-	public Model(boolean bool, int i, boolean bool_72_, Model model) {
+	public Model(boolean bool, int i, boolean bool_72_, Model model)
+	{
 		try {
 			vertexCount = model.vertexCount;
 			triangleCount = model.triangleCount;
@@ -747,8 +747,7 @@ public class Model extends Renderable {
 			anInt1642 = model.anInt1642;
 			anInt1640 = model.anInt1640;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("16425, " + bool + ", " + i + ", " + bool_72_ + ", " + model + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("16425, " + bool + ", " + i + ", " + bool_72_ + ", " + model + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -995,8 +994,7 @@ public class Model extends Renderable {
 				Model.vertexZModifier = 0;
 				for (int stepId = 0; stepId < animation.stepCount; stepId++) {
 					int opcode = animation.opcodeTable[stepId];
-					transformStep(skins.opcodes[opcode], skins.skinList[opcode], animation.modifier1[stepId],
-							animation.modifier2[stepId], animation.modifier3[stepId]);
+					transformStep(skins.opcodes[opcode], skins.skinList[opcode], animation.modifier1[stepId], animation.modifier2[stepId], animation.modifier3[stepId]);
 				}
 			}
 		}
@@ -1027,9 +1025,7 @@ public class Model extends Renderable {
 										/* empty */
 									}
 									if (i_120_ != i_118_ || skins.opcodes[i_120_] == 0) {
-										transformStep(skins.opcodes[i_120_], skins.skinList[i_120_],
-												animation.modifier1[i_119_], animation.modifier2[i_119_],
-												animation.modifier3[i_119_]);
+										transformStep(skins.opcodes[i_120_], skins.skinList[i_120_], animation.modifier1[i_119_], animation.modifier2[i_119_], animation.modifier3[i_119_]);
 									}
 								}
 								Model.vertexXModifier = 0;
@@ -1043,9 +1039,7 @@ public class Model extends Renderable {
 										/* empty */
 									}
 									if (i_122_ == i_118_ || skins.opcodes[i_122_] == 0) {
-										transformStep(skins.opcodes[i_122_], skins.skinList[i_122_],
-												animation_116_.modifier1[i_121_], animation_116_.modifier2[i_121_],
-												animation_116_.modifier3[i_121_]);
+										transformStep(skins.opcodes[i_122_], skins.skinList[i_122_], animation_116_.modifier1[i_121_], animation_116_.modifier2[i_121_], animation_116_.modifier3[i_121_]);
 									}
 								}
 							}
@@ -1054,8 +1048,7 @@ public class Model extends Renderable {
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("63853, " + i + ", " + is + ", " + i_114_ + ", " + i_115_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("63853, " + i + ", " + is + ", " + i_114_ + ", " + i_115_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1214,18 +1207,31 @@ public class Model extends Renderable {
 		}
 	}
 
-	public void translate(int i, int i_172_, int i_174_) {
-		for (int i_175_ = 0; i_175_ < vertexCount; i_175_++) {
-			verticesX[i_175_] += i;
-			verticesY[i_175_] += i_172_;
-			verticesZ[i_175_] += i_174_;
+	public void translate(int x, int y, int z) {
+		for (int i = 0; i < vertexCount; i++) {
+			verticesX[i] += x;
+			verticesY[i] += y;
+			verticesZ[i] += z;
 		}
 	}
 
-	public void recolor(int i, int i_176_) {
-		for (int i_177_ = 0; i_177_ < triangleCount; i_177_++) {
-			if (triangleColorValues[i_177_] == i) {
-				triangleColorValues[i_177_] = i_176_;
+	public void recolor(int[] from, int[] to) {
+		for (int colorIndex = 0; colorIndex < from.length; colorIndex++) {
+			if (from[colorIndex] == 0 || colorIndex > to.length) {
+				break;
+			}
+			for (int i = 0; i < triangleCount; i++) {
+				if (triangleColorValues[i] == from[colorIndex]) {
+					triangleColorValues[i] = to[colorIndex];
+				}
+			}
+		}
+	}
+
+	public void recolor(int from, int to) {
+		for (int i = 0; i < triangleCount; i++) {
+			if (triangleColorValues[i] == from) {
+				triangleColorValues[i] = to;
 			}
 		}
 	}
@@ -1287,8 +1293,7 @@ public class Model extends Renderable {
 			int i_202_ = i_197_ * i_201_ - i_200_ * i_198_;
 			int i_203_ = i_198_ * i_199_ - i_201_ * i_196_;
 			int i_204_;
-			for (i_204_ = i_196_ * i_200_ - i_199_ * i_197_; i_202_ > 8192 || i_203_ > 8192 || i_204_ > 8192
-					|| i_202_ < -8192 || i_203_ < -8192 || i_204_ < -8192; i_204_ >>= 1) {
+			for (i_204_ = i_196_ * i_200_ - i_199_ * i_197_; i_202_ > 8192 || i_203_ > 8192 || i_204_ > 8192 || i_202_ < -8192 || i_203_ < -8192 || i_204_ < -8192; i_204_ >>= 1) {
 				i_202_ >>= 1;
 				i_203_ >>= 1;
 			}
@@ -1348,31 +1353,25 @@ public class Model extends Renderable {
 			if (texturePoints == null) {
 				int i_217_ = triangleColorValues[i_213_];
 				VertexNormal vertexnormal = verticesNormal[i_214_];
-				int i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				int i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1627[i_213_] = Model.method429(i_217_, i_218_, 0);
 				vertexnormal = verticesNormal[i_215_];
-				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1628[i_213_] = Model.method429(i_217_, i_218_, 0);
 				vertexnormal = verticesNormal[i_216_];
-				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1629[i_213_] = Model.method429(i_217_, i_218_, 0);
 			} else if ((texturePoints[i_213_] & 0x1) == 0) {
 				int i_219_ = triangleColorValues[i_213_];
 				int i_220_ = texturePoints[i_213_];
 				VertexNormal vertexnormal = verticesNormal[i_214_];
-				int i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				int i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1627[i_213_] = Model.method429(i_219_, i_221_, i_220_);
 				vertexnormal = verticesNormal[i_215_];
-				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1628[i_213_] = Model.method429(i_219_, i_221_, i_220_);
 				vertexnormal = verticesNormal[i_216_];
-				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
+				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z) / (i_209_ * vertexnormal.magnitude);
 				anIntArray1629[i_213_] = Model.method429(i_219_, i_221_, i_220_);
 			}
 		}
@@ -1463,8 +1462,7 @@ public class Model extends Renderable {
 	}
 
 	@Override
-	public final void renderAtPoint(int i, int i_250_, int i_251_, int i_252_, int i_253_, int i_254_, int i_255_,
-			int i_256_, int i_257_) {
+	public final void renderAtPoint(int i, int i_250_, int i_251_, int i_252_, int i_253_, int i_254_, int i_255_, int i_256_, int i_257_) {
 		int i_258_ = i_256_ * i_253_ - i_254_ * i_252_ >> 16;
 		int i_259_ = i_255_ * i_250_ + i_258_ * i_251_ >> 16;
 		int i_260_ = anInt1643 * i_251_ >> 16;
@@ -1583,27 +1581,21 @@ public class Model extends Renderable {
 				int i_293_ = Model.anIntArray1658[i_290_];
 				if (bool && (i_291_ == -5000 || i_292_ == -5000 || i_293_ == -5000)) {
 					Model.aBooleanArray1657[i_287_] = true;
-					int i_294_ = (Model.anIntArray1660[i_288_] + Model.anIntArray1660[i_289_] + Model.anIntArray1660[i_290_])
-							/ 3 + anInt1646;
+					int i_294_ = (Model.anIntArray1660[i_288_] + Model.anIntArray1660[i_289_] + Model.anIntArray1660[i_290_]) / 3 + anInt1646;
 					Model.anIntArrayArray1665[i_294_][Model.anIntArray1664[i_294_]++] = i_287_;
 				} else {
-					if (bool_285_
-							&& method434(Model.anInt1678, Model.anInt1679, Model.anIntArray1659[i_288_],
-									Model.anIntArray1659[i_289_], Model.anIntArray1659[i_290_], i_291_, i_292_, i_293_)) {
+					if (bool_285_ && method434(Model.anInt1678, Model.anInt1679, Model.anIntArray1659[i_288_], Model.anIntArray1659[i_289_], Model.anIntArray1659[i_290_], i_291_, i_292_, i_293_)) {
 						Model.anIntArray1681[Model.anInt1680++] = i;
 						bool_285_ = false;
 					}
-					if ((i_291_ - i_292_) * (Model.anIntArray1659[i_290_] - Model.anIntArray1659[i_289_])
-							- (Model.anIntArray1659[i_288_] - Model.anIntArray1659[i_289_]) * (i_293_ - i_292_) > 0) {
+					if ((i_291_ - i_292_) * (Model.anIntArray1659[i_290_] - Model.anIntArray1659[i_289_]) - (Model.anIntArray1659[i_288_] - Model.anIntArray1659[i_289_]) * (i_293_ - i_292_) > 0) {
 						Model.aBooleanArray1657[i_287_] = false;
-						if (i_291_ < 0 || i_292_ < 0 || i_293_ < 0 || i_291_ > Rasterizer.virtualBottomX
-								|| i_292_ > Rasterizer.virtualBottomX || i_293_ > Rasterizer.virtualBottomX) {
+						if (i_291_ < 0 || i_292_ < 0 || i_293_ < 0 || i_291_ > Rasterizer.virtualBottomX || i_292_ > Rasterizer.virtualBottomX || i_293_ > Rasterizer.virtualBottomX) {
 							Model.aBooleanArray1656[i_287_] = true;
 						} else {
 							Model.aBooleanArray1656[i_287_] = false;
 						}
-						int i_295_ = (Model.anIntArray1660[i_288_] + Model.anIntArray1660[i_289_] + Model.anIntArray1660[i_290_])
-								/ 3 + anInt1646;
+						int i_295_ = (Model.anIntArray1660[i_288_] + Model.anIntArray1660[i_289_] + Model.anIntArray1660[i_290_]) / 3 + anInt1646;
 						Model.anIntArrayArray1665[i_295_][Model.anIntArray1664[i_295_]++] = i_287_;
 					}
 				}
@@ -1645,18 +1637,15 @@ public class Model extends Renderable {
 			}
 			int i_306_ = 0;
 			if (Model.anIntArray1666[1] > 0 || Model.anIntArray1666[2] > 0) {
-				i_306_ = (Model.anIntArray1670[1] + Model.anIntArray1670[2])
-						/ (Model.anIntArray1666[1] + Model.anIntArray1666[2]);
+				i_306_ = (Model.anIntArray1670[1] + Model.anIntArray1670[2]) / (Model.anIntArray1666[1] + Model.anIntArray1666[2]);
 			}
 			int i_307_ = 0;
 			if (Model.anIntArray1666[3] > 0 || Model.anIntArray1666[4] > 0) {
-				i_307_ = (Model.anIntArray1670[3] + Model.anIntArray1670[4])
-						/ (Model.anIntArray1666[3] + Model.anIntArray1666[4]);
+				i_307_ = (Model.anIntArray1670[3] + Model.anIntArray1670[4]) / (Model.anIntArray1666[3] + Model.anIntArray1666[4]);
 			}
 			int i_308_ = 0;
 			if (Model.anIntArray1666[6] > 0 || Model.anIntArray1666[8] > 0) {
-				i_308_ = (Model.anIntArray1670[6] + Model.anIntArray1670[8])
-						/ (Model.anIntArray1666[6] + Model.anIntArray1666[8]);
+				i_308_ = (Model.anIntArray1670[6] + Model.anIntArray1670[8]) / (Model.anIntArray1666[6] + Model.anIntArray1666[8]);
 			}
 			int i_309_ = 0;
 			int i_310_ = Model.anIntArray1666[10];
@@ -1766,37 +1755,21 @@ public class Model extends Renderable {
 				i_320_ = texturePoints[i] & 0x3;
 			}
 			if (i_320_ == 0) {
-				Rasterizer3D.method371(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_],
-						Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_],
-						Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1628[i], anIntArray1629[i]);
+				Rasterizer3D.method371(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_], Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_], Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1628[i], anIntArray1629[i]);
 			} else if (i_320_ == 1) {
-				Rasterizer3D.method373(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_],
-						Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_],
-						Model.anIntArray1658[i_319_], Model.anIntArray1684[anIntArray1627[i]]);
+				Rasterizer3D.method373(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_], Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_], Model.anIntArray1658[i_319_], Model.anIntArray1684[anIntArray1627[i]]);
 			} else if (i_320_ == 2) {
 				int i_321_ = texturePoints[i] >> 2;
 				int i_322_ = texturedTrianglePointsX[i_321_];
 				int i_323_ = texturedTrianglePointsY[i_321_];
 				int i_324_ = texturedTrianglePointsZ[i_321_];
-				Rasterizer3D.method375(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_],
-						Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_],
-						Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1628[i], anIntArray1629[i],
-						Model.anIntArray1661[i_322_], Model.anIntArray1661[i_323_], Model.anIntArray1661[i_324_],
-						Model.anIntArray1662[i_322_], Model.anIntArray1662[i_323_], Model.anIntArray1662[i_324_],
-						Model.anIntArray1663[i_322_], Model.anIntArray1663[i_323_], Model.anIntArray1663[i_324_],
-						triangleColorValues[i]);
+				Rasterizer3D.method375(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_], Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_], Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1628[i], anIntArray1629[i], Model.anIntArray1661[i_322_], Model.anIntArray1661[i_323_], Model.anIntArray1661[i_324_], Model.anIntArray1662[i_322_], Model.anIntArray1662[i_323_], Model.anIntArray1662[i_324_], Model.anIntArray1663[i_322_], Model.anIntArray1663[i_323_], Model.anIntArray1663[i_324_], triangleColorValues[i]);
 			} else if (i_320_ == 3) {
 				int i_325_ = texturePoints[i] >> 2;
 				int i_326_ = texturedTrianglePointsX[i_325_];
 				int i_327_ = texturedTrianglePointsY[i_325_];
 				int i_328_ = texturedTrianglePointsZ[i_325_];
-				Rasterizer3D.method375(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_],
-						Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_],
-						Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1627[i], anIntArray1627[i],
-						Model.anIntArray1661[i_326_], Model.anIntArray1661[i_327_], Model.anIntArray1661[i_328_],
-						Model.anIntArray1662[i_326_], Model.anIntArray1662[i_327_], Model.anIntArray1662[i_328_],
-						Model.anIntArray1663[i_326_], Model.anIntArray1663[i_327_], Model.anIntArray1663[i_328_],
-						triangleColorValues[i]);
+				Rasterizer3D.method375(Model.anIntArray1659[i_317_], Model.anIntArray1659[i_318_], Model.anIntArray1659[i_319_], Model.anIntArray1658[i_317_], Model.anIntArray1658[i_318_], Model.anIntArray1658[i_319_], anIntArray1627[i], anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_326_], Model.anIntArray1661[i_327_], Model.anIntArray1661[i_328_], Model.anIntArray1662[i_326_], Model.anIntArray1662[i_327_], Model.anIntArray1662[i_328_], Model.anIntArray1663[i_326_], Model.anIntArray1663[i_327_], Model.anIntArray1663[i_328_], triangleColorValues[i]);
 			}
 		}
 	}
@@ -1821,18 +1794,14 @@ public class Model extends Renderable {
 			int i_340_ = anIntArray1627[i];
 			if (i_337_ >= 50) {
 				int i_341_ = (50 - i_335_) * Model.anIntArray1685[i_337_ - i_335_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_338_ + ((Model.anIntArray1661[i_334_] - i_338_) * i_341_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_339_ + ((Model.anIntArray1662[i_334_] - i_339_) * i_341_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_338_ + ((Model.anIntArray1661[i_334_] - i_338_) * i_341_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_339_ + ((Model.anIntArray1662[i_334_] - i_339_) * i_341_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_340_ + ((anIntArray1629[i] - i_340_) * i_341_ >> 16);
 			}
 			if (i_336_ >= 50) {
 				int i_342_ = (50 - i_335_) * Model.anIntArray1685[i_336_ - i_335_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_338_ + ((Model.anIntArray1661[i_333_] - i_338_) * i_342_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_339_ + ((Model.anIntArray1662[i_333_] - i_339_) * i_342_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_338_ + ((Model.anIntArray1661[i_333_] - i_338_) * i_342_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_339_ + ((Model.anIntArray1662[i_333_] - i_339_) * i_342_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_340_ + ((anIntArray1628[i] - i_340_) * i_342_ >> 16);
 			}
 		}
@@ -1846,18 +1815,14 @@ public class Model extends Renderable {
 			int i_345_ = anIntArray1628[i];
 			if (i_335_ >= 50) {
 				int i_346_ = (50 - i_336_) * Model.anIntArray1685[i_335_ - i_336_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_343_ + ((Model.anIntArray1661[i_332_] - i_343_) * i_346_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_344_ + ((Model.anIntArray1662[i_332_] - i_344_) * i_346_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_343_ + ((Model.anIntArray1661[i_332_] - i_343_) * i_346_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_344_ + ((Model.anIntArray1662[i_332_] - i_344_) * i_346_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_345_ + ((anIntArray1627[i] - i_345_) * i_346_ >> 16);
 			}
 			if (i_337_ >= 50) {
 				int i_347_ = (50 - i_336_) * Model.anIntArray1685[i_337_ - i_336_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_343_ + ((Model.anIntArray1661[i_334_] - i_343_) * i_347_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_344_ + ((Model.anIntArray1662[i_334_] - i_344_) * i_347_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_343_ + ((Model.anIntArray1661[i_334_] - i_343_) * i_347_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_344_ + ((Model.anIntArray1662[i_334_] - i_344_) * i_347_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_345_ + ((anIntArray1629[i] - i_345_) * i_347_ >> 16);
 			}
 		}
@@ -1871,18 +1836,14 @@ public class Model extends Renderable {
 			int i_350_ = anIntArray1629[i];
 			if (i_336_ >= 50) {
 				int i_351_ = (50 - i_337_) * Model.anIntArray1685[i_336_ - i_337_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_348_ + ((Model.anIntArray1661[i_333_] - i_348_) * i_351_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_349_ + ((Model.anIntArray1662[i_333_] - i_349_) * i_351_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_348_ + ((Model.anIntArray1661[i_333_] - i_348_) * i_351_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_349_ + ((Model.anIntArray1662[i_333_] - i_349_) * i_351_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_350_ + ((anIntArray1628[i] - i_350_) * i_351_ >> 16);
 			}
 			if (i_335_ >= 50) {
 				int i_352_ = (50 - i_337_) * Model.anIntArray1685[i_335_ - i_337_];
-				Model.anIntArray1671[i_331_] = i_329_
-						+ (i_348_ + ((Model.anIntArray1661[i_332_] - i_348_) * i_352_ >> 16) << 9) / 50;
-				Model.anIntArray1672[i_331_] = i_330_
-						+ (i_349_ + ((Model.anIntArray1662[i_332_] - i_349_) * i_352_ >> 16) << 9) / 50;
+				Model.anIntArray1671[i_331_] = i_329_ + (i_348_ + ((Model.anIntArray1661[i_332_] - i_348_) * i_352_ >> 16) << 9) / 50;
+				Model.anIntArray1672[i_331_] = i_330_ + (i_349_ + ((Model.anIntArray1662[i_332_] - i_349_) * i_352_ >> 16) << 9) / 50;
 				Model.anIntArray1673[i_331_++] = i_350_ + ((anIntArray1627[i] - i_350_) * i_352_ >> 16);
 			}
 		}
@@ -1895,8 +1856,7 @@ public class Model extends Renderable {
 		if ((i_353_ - i_354_) * (i_358_ - i_357_) - (i_356_ - i_357_) * (i_355_ - i_354_) > 0) {
 			Rasterizer3D.aBoolean1482 = false;
 			if (i_331_ == 3) {
-				if (i_353_ < 0 || i_354_ < 0 || i_355_ < 0 || i_353_ > Rasterizer.virtualBottomX
-						|| i_354_ > Rasterizer.virtualBottomX || i_355_ > Rasterizer.virtualBottomX) {
+				if (i_353_ < 0 || i_354_ < 0 || i_355_ < 0 || i_353_ > Rasterizer.virtualBottomX || i_354_ > Rasterizer.virtualBottomX || i_355_ > Rasterizer.virtualBottomX) {
 					Rasterizer3D.aBoolean1482 = true;
 				}
 				int i_359_;
@@ -1906,37 +1866,25 @@ public class Model extends Renderable {
 					i_359_ = texturePoints[i] & 0x3;
 				}
 				if (i_359_ == 0) {
-					Rasterizer3D.method371(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0],
-							Model.anIntArray1673[1], Model.anIntArray1673[2]);
+					Rasterizer3D.method371(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0], Model.anIntArray1673[1], Model.anIntArray1673[2]);
 				} else if (i_359_ == 1) {
-					Rasterizer3D.method373(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_,
-							Model.anIntArray1684[anIntArray1627[i]]);
+					Rasterizer3D.method373(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1684[anIntArray1627[i]]);
 				} else if (i_359_ == 2) {
 					int i_360_ = texturePoints[i] >> 2;
 					int i_361_ = texturedTrianglePointsX[i_360_];
 					int i_362_ = texturedTrianglePointsY[i_360_];
 					int i_363_ = texturedTrianglePointsZ[i_360_];
-					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0],
-							Model.anIntArray1673[1], Model.anIntArray1673[2], Model.anIntArray1661[i_361_],
-							Model.anIntArray1661[i_362_], Model.anIntArray1661[i_363_], Model.anIntArray1662[i_361_],
-							Model.anIntArray1662[i_362_], Model.anIntArray1662[i_363_], Model.anIntArray1663[i_361_],
-							Model.anIntArray1663[i_362_], Model.anIntArray1663[i_363_], triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0], Model.anIntArray1673[1], Model.anIntArray1673[2], Model.anIntArray1661[i_361_], Model.anIntArray1661[i_362_], Model.anIntArray1661[i_363_], Model.anIntArray1662[i_361_], Model.anIntArray1662[i_362_], Model.anIntArray1662[i_363_], Model.anIntArray1663[i_361_], Model.anIntArray1663[i_362_], Model.anIntArray1663[i_363_], triangleColorValues[i]);
 				} else if (i_359_ == 3) {
 					int i_364_ = texturePoints[i] >> 2;
 					int i_365_ = texturedTrianglePointsX[i_364_];
 					int i_366_ = texturedTrianglePointsY[i_364_];
 					int i_367_ = texturedTrianglePointsZ[i_364_];
-					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, anIntArray1627[i],
-							anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_365_],
-							Model.anIntArray1661[i_366_], Model.anIntArray1661[i_367_], Model.anIntArray1662[i_365_],
-							Model.anIntArray1662[i_366_], Model.anIntArray1662[i_367_], Model.anIntArray1663[i_365_],
-							Model.anIntArray1663[i_366_], Model.anIntArray1663[i_367_], triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, anIntArray1627[i], anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_365_], Model.anIntArray1661[i_366_], Model.anIntArray1661[i_367_], Model.anIntArray1662[i_365_], Model.anIntArray1662[i_366_], Model.anIntArray1662[i_367_], Model.anIntArray1663[i_365_], Model.anIntArray1663[i_366_], Model.anIntArray1663[i_367_], triangleColorValues[i]);
 				}
 			}
 			if (i_331_ == 4) {
-				if (i_353_ < 0 || i_354_ < 0 || i_355_ < 0 || i_353_ > Rasterizer.virtualBottomX
-						|| i_354_ > Rasterizer.virtualBottomX || i_355_ > Rasterizer.virtualBottomX
-						|| Model.anIntArray1671[3] < 0 || Model.anIntArray1671[3] > Rasterizer.virtualBottomX) {
+				if (i_353_ < 0 || i_354_ < 0 || i_355_ < 0 || i_353_ > Rasterizer.virtualBottomX || i_354_ > Rasterizer.virtualBottomX || i_355_ > Rasterizer.virtualBottomX || Model.anIntArray1671[3] < 0 || Model.anIntArray1671[3] > Rasterizer.virtualBottomX) {
 					Rasterizer3D.aBoolean1482 = true;
 				}
 				int i_368_;
@@ -1946,55 +1894,32 @@ public class Model extends Renderable {
 					i_368_ = texturePoints[i] & 0x3;
 				}
 				if (i_368_ == 0) {
-					Rasterizer3D.method371(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0],
-							Model.anIntArray1673[1], Model.anIntArray1673[2]);
-					Rasterizer3D.method371(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_,
-							Model.anIntArray1671[3], Model.anIntArray1673[0], Model.anIntArray1673[2],
-							Model.anIntArray1673[3]);
+					Rasterizer3D.method371(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0], Model.anIntArray1673[1], Model.anIntArray1673[2]);
+					Rasterizer3D.method371(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_, Model.anIntArray1671[3], Model.anIntArray1673[0], Model.anIntArray1673[2], Model.anIntArray1673[3]);
 				} else if (i_368_ == 1) {
 					int i_369_ = Model.anIntArray1684[anIntArray1627[i]];
 					Rasterizer3D.method373(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, i_369_);
-					Rasterizer3D.method373(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_,
-							Model.anIntArray1671[3], i_369_);
+					Rasterizer3D.method373(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_, Model.anIntArray1671[3], i_369_);
 				} else if (i_368_ == 2) {
 					int i_370_ = texturePoints[i] >> 2;
 					int i_371_ = texturedTrianglePointsX[i_370_];
 					int i_372_ = texturedTrianglePointsY[i_370_];
 					int i_373_ = texturedTrianglePointsZ[i_370_];
-					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0],
-							Model.anIntArray1673[1], Model.anIntArray1673[2], Model.anIntArray1661[i_371_],
-							Model.anIntArray1661[i_372_], Model.anIntArray1661[i_373_], Model.anIntArray1662[i_371_],
-							Model.anIntArray1662[i_372_], Model.anIntArray1662[i_373_], Model.anIntArray1663[i_371_],
-							Model.anIntArray1663[i_372_], Model.anIntArray1663[i_373_], triangleColorValues[i]);
-					Rasterizer3D.method375(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_,
-							Model.anIntArray1671[3], Model.anIntArray1673[0], Model.anIntArray1673[2],
-							Model.anIntArray1673[3], Model.anIntArray1661[i_371_], Model.anIntArray1661[i_372_],
-							Model.anIntArray1661[i_373_], Model.anIntArray1662[i_371_], Model.anIntArray1662[i_372_],
-							Model.anIntArray1662[i_373_], Model.anIntArray1663[i_371_], Model.anIntArray1663[i_372_],
-							Model.anIntArray1663[i_373_], triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, Model.anIntArray1673[0], Model.anIntArray1673[1], Model.anIntArray1673[2], Model.anIntArray1661[i_371_], Model.anIntArray1661[i_372_], Model.anIntArray1661[i_373_], Model.anIntArray1662[i_371_], Model.anIntArray1662[i_372_], Model.anIntArray1662[i_373_], Model.anIntArray1663[i_371_], Model.anIntArray1663[i_372_], Model.anIntArray1663[i_373_], triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_, Model.anIntArray1671[3], Model.anIntArray1673[0], Model.anIntArray1673[2], Model.anIntArray1673[3], Model.anIntArray1661[i_371_], Model.anIntArray1661[i_372_], Model.anIntArray1661[i_373_], Model.anIntArray1662[i_371_], Model.anIntArray1662[i_372_], Model.anIntArray1662[i_373_], Model.anIntArray1663[i_371_], Model.anIntArray1663[i_372_], Model.anIntArray1663[i_373_], triangleColorValues[i]);
 				} else if (i_368_ == 3) {
 					int i_374_ = texturePoints[i] >> 2;
 					int i_375_ = texturedTrianglePointsX[i_374_];
 					int i_376_ = texturedTrianglePointsY[i_374_];
 					int i_377_ = texturedTrianglePointsZ[i_374_];
-					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, anIntArray1627[i],
-							anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_375_],
-							Model.anIntArray1661[i_376_], Model.anIntArray1661[i_377_], Model.anIntArray1662[i_375_],
-							Model.anIntArray1662[i_376_], Model.anIntArray1662[i_377_], Model.anIntArray1663[i_375_],
-							Model.anIntArray1663[i_376_], Model.anIntArray1663[i_377_], triangleColorValues[i]);
-					Rasterizer3D.method375(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_,
-							Model.anIntArray1671[3], anIntArray1627[i], anIntArray1627[i], anIntArray1627[i],
-							Model.anIntArray1661[i_375_], Model.anIntArray1661[i_376_], Model.anIntArray1661[i_377_],
-							Model.anIntArray1662[i_375_], Model.anIntArray1662[i_376_], Model.anIntArray1662[i_377_],
-							Model.anIntArray1663[i_375_], Model.anIntArray1663[i_376_], Model.anIntArray1663[i_377_],
-							triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_357_, i_358_, i_353_, i_354_, i_355_, anIntArray1627[i], anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_375_], Model.anIntArray1661[i_376_], Model.anIntArray1661[i_377_], Model.anIntArray1662[i_375_], Model.anIntArray1662[i_376_], Model.anIntArray1662[i_377_], Model.anIntArray1663[i_375_], Model.anIntArray1663[i_376_], Model.anIntArray1663[i_377_], triangleColorValues[i]);
+					Rasterizer3D.method375(i_356_, i_358_, Model.anIntArray1672[3], i_353_, i_355_, Model.anIntArray1671[3], anIntArray1627[i], anIntArray1627[i], anIntArray1627[i], Model.anIntArray1661[i_375_], Model.anIntArray1661[i_376_], Model.anIntArray1661[i_377_], Model.anIntArray1662[i_375_], Model.anIntArray1662[i_376_], Model.anIntArray1662[i_377_], Model.anIntArray1663[i_375_], Model.anIntArray1663[i_376_], Model.anIntArray1663[i_377_], triangleColorValues[i]);
 				}
 			}
 		}
 	}
 
-	private final boolean method434(int i, int i_378_, int i_379_, int i_380_, int i_381_, int i_382_, int i_383_,
-			int i_384_) {
+	private final boolean method434(int i, int i_378_, int i_379_, int i_380_, int i_381_, int i_382_, int i_383_, int i_384_) {
 		if (i_378_ < i_379_ && i_378_ < i_380_ && i_378_ < i_381_) {
 			return false;
 		}

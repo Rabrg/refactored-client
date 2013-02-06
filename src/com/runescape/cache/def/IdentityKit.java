@@ -4,7 +4,8 @@ import com.runescape.cache.Archive;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
 
-public class IdentityKit {
+public class IdentityKit
+{
 
 	public static int count;
 	public static IdentityKit[] cache;
@@ -62,8 +63,8 @@ public class IdentityKit {
 			return true;
 		}
 		boolean isCached = true;
-		for (int model = 0; model < modelIndexes.length; model++) {
-			if (!Model.isCached(modelIndexes[model])) {
+		for (int i = 0; i < modelIndexes.length; i++) {
+			if (!Model.isCached(modelIndexes[i])) {
 				isCached = false;
 			}
 		}
@@ -75,8 +76,8 @@ public class IdentityKit {
 			return null;
 		}
 		Model[] models = new Model[modelIndexes.length];
-		for (int model = 0; model < modelIndexes.length; model++) {
-			models[model] = Model.getModel(modelIndexes[model]);
+		for (int i = 0; i < modelIndexes.length; i++) {
+			models[i] = Model.getModel(modelIndexes[i]);
 		}
 		Model model;
 		if (models.length == 1) {
@@ -84,40 +85,41 @@ public class IdentityKit {
 		} else {
 			model = new Model(models.length, models);
 		}
-		for (int modelColor = 0; modelColor < 6; modelColor++) {
-			if (originalModelColors[modelColor] == 0) {
+		for (int i = 0; i < 6; i++) {
+			if (originalModelColors[i] == 0) {
 				break;
 			}
-			model.recolor(originalModelColors[modelColor], modifiedModelColors[modelColor]);
+			model.recolor(originalModelColors[i], modifiedModelColors[i]);
 		}
 		return model;
 	}
 
 	public boolean isHeadModelCached() {
-		boolean isCached = true;
-		for (int model = 0; model < 5; model++) {
-			if (dialogueIndexes[model] != -1 && !Model.isCached(dialogueIndexes[model])) {
-				isCached = false;
+		boolean cached = true;
+		for (int i = 0; i < 5; i++) {
+			if (dialogueIndexes[i] != -1 && !Model.isCached(dialogueIndexes[i])) {
+				cached = false;
 			}
 		}
-		return isCached;
+		return cached;
 	}
 
 	public Model getHeadModel() {
 		Model[] models = new Model[5];
-		int modelAmount = 0;
+		int count = 0;
 		for (int model = 0; model < 5; model++) {
 			if (dialogueIndexes[model] != -1) {
-				models[modelAmount++] = Model.getModel(dialogueIndexes[model]);
+				models[count++] = Model.getModel(dialogueIndexes[model]);
 			}
 		}
-		Model model = new Model(modelAmount, models);
-		for (int modelColor = 0; modelColor < 6; modelColor++) {
-			if (originalModelColors[modelColor] == 0) {
+		Model model = new Model(count, models);
+		model.recolor(originalModelColors, modifiedModelColors);
+		/*for (int i = 0; i < 6; i++) {
+			if (originalModelColors[i] == 0) {
 				break;
 			}
-			model.recolor(originalModelColors[modelColor], modifiedModelColors[modelColor]);
-		}
+			model.recolor(originalModelColors[i], modifiedModelColors[i]);
+		}*/
 		return model;
 	}
 }
