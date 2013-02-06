@@ -234,13 +234,8 @@ public class Rasterizer3D extends Rasterizer {
 		return is;
 	}
 
-	public static final void method369(double d, byte b) {
+	public static final void method369(double d) {
 		try {
-			if (b != 9) {
-				for (int i = 1; i > 0; i++) {
-					/* empty */
-				}
-			}
 			d += Math.random() * 0.03 - 0.015;
 			int i = 0;
 			for (int i_27_ = 0; i_27_ < 512; i_27_++) {
@@ -323,7 +318,7 @@ public class Rasterizer3D extends Rasterizer {
 				Rasterizer3D.method367(i_46_, -477);
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("71578, " + d + ", " + b + ", " + runtimeexception.toString());
+			SignLink.reportError("71578, " + d + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}

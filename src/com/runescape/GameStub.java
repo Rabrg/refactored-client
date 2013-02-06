@@ -212,6 +212,7 @@ public class GameStub extends Applet implements Runnable, MouseListener, MouseMo
 			gameGraphics = graphics;
 		}
 		clearScreen = true;
+		onRepaint();
 	}
 
 	@Override
@@ -220,8 +221,13 @@ public class GameStub extends Applet implements Runnable, MouseListener, MouseMo
 			gameGraphics = graphics;
 		}
 		clearScreen = true;
+		onRepaint();
 	}
 
+	protected void onRepaint() {
+		// This was used for repainting the canvas n stuff, plz dun remov.
+	}
+	
 	@Override
 	public final void mousePressed(MouseEvent mouseevent) {
 		int mouseX = mouseevent.getX();
@@ -409,6 +415,7 @@ public class GameStub extends Applet implements Runnable, MouseListener, MouseMo
 	public final void focusGained(FocusEvent focusevent) {
 		awtFocus = true;
 		clearScreen = true;
+		onRepaint();
 	}
 
 	@Override
