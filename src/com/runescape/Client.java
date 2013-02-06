@@ -11099,7 +11099,7 @@ public class Client extends GameStub {
 		}
 	}
 
-	private final void method142(int y, int i_994_, int i_995_, int i_996_, int x, int i_998_, int i_999_, int i_1000_) {
+	private final void method142(int y, int plane, int i_995_, int i_996_, int x, int i_998_, int i_999_, int i_1000_) {
 		do {
 			try {
 				if (i_1000_ < 4 || i_1000_ > 4) {
@@ -11108,69 +11108,69 @@ public class Client extends GameStub {
 				if (x < 1 || y < 1 || x > 102 || y > 102) {
 					break;
 				}
-				if (!Client.lowMemory || i_994_ == currentSceneId) {
+				if (!Client.lowMemory || plane == currentSceneId) {
 					int i_1001_ = 0;
 					int i_1002_ = -1;
 					if (i_998_ == 0) {
-						i_1001_ = currentScene.method522(i_994_, x, y);
+						i_1001_ = currentScene.method522(plane, x, y);
 					}
 					if (i_998_ == 1) {
-						i_1001_ = currentScene.method523(i_994_, x, 0, y);
+						i_1001_ = currentScene.method523(plane, x, 0, y);
 					}
 					if (i_998_ == 2) {
-						i_1001_ = currentScene.method524(i_994_, x, y);
+						i_1001_ = currentScene.method524(plane, x, y);
 					}
 					if (i_998_ == 3) {
-						i_1001_ = currentScene.getFloorHash(i_994_, x, y);
+						i_1001_ = currentScene.getFloorHash(plane, x, y);
 					}
 					if (i_1001_ != 0) {
-						int i_1004_ = currentScene.method526(i_994_, x, y, i_1001_);
+						int i_1004_ = currentScene.method526(plane, x, y, i_1001_);
 						i_1002_ = i_1001_ >> 14 & 0x7fff;
 						int position = i_1004_ & 0x1f;
 						int orientation = i_1004_ >> 6;
 						if (i_998_ == 0) {
-							currentScene.method513(x, i_994_, y, (byte) -119);
+							currentScene.method513(x, plane, y, (byte) -119);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].unmarkWall(orientation, x, y, position,
+								currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
 										gameobjectdefinition.walkable);
 							}
 						}
 						if (i_998_ == 1) {
-							currentScene.method514(0, y, i_994_, x);
+							currentScene.method514(0, y, plane, x);
 						}
 						if (i_998_ == 2) {
-							currentScene.method515(i_994_, -978, x, y);
+							currentScene.method515(plane, -978, x, y);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (x + gameobjectdefinition.width > 103 || y + gameobjectdefinition.width > 103
 									|| x + gameobjectdefinition.height > 103 || y + gameobjectdefinition.height > 103) {
 								break;
 							}
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
+								currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
 										gameobjectdefinition.height, orientation, gameobjectdefinition.walkable);
 							}
 						}
 						if (i_998_ == 3) {
-							currentScene.method516((byte) 9, i_994_, y, x);
+							currentScene.method516((byte) 9, plane, y, x);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
-								currentCollisionMap[i_994_].unmarkConcealed(x, y);
+								currentCollisionMap[plane].unmarkConcealed(x, y);
 							}
 						}
 					}
 					if (i_999_ < 0) {
 						break;
 					}
-					int i_1007_ = i_994_;
+					int i_1007_ = plane;
 					if (i_1007_ < 3 && (currentSceneTileFlags[1][x][y] & 0x2) == 2) {
 						i_1007_++;
 					}
-					Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[i_994_],
-							anIntArrayArrayArray1239, x, i_999_, i_994_, (byte) 93);
+					Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[plane],
+							anIntArrayArrayArray1239, x, i_999_, plane, (byte) 93);
 				}
 			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("56911, " + y + ", " + i_994_ + ", " + i_995_ + ", " + i_996_ + ", " + x + ", "
+				SignLink.reportError("56911, " + y + ", " + plane + ", " + i_995_ + ", " + i_996_ + ", " + x + ", "
 						+ i_998_ + ", " + i_999_ + ", " + i_1000_ + ", " + runtimeexception.toString());
 				throw new RuntimeException();
 			}
