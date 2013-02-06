@@ -343,7 +343,7 @@ public class Widget {
 		Widget.modelCache.put(model, (modelType << 16) + modelId);
 	}
 
-	public Model getAnimatedModel(int frame1Id, int fram2Id, boolean modelEnabled) {
+	public Model getAnimatedModel(int frame1Id, int frame2Id, boolean modelEnabled) {
 		Model model;
 		if (modelEnabled) {
 			model = getModel(enabledModelType, enabledModelId);
@@ -353,15 +353,15 @@ public class Widget {
 		if (model == null) {
 			return null;
 		}
-		if (fram2Id == -1 && frame1Id == -1 && model.triangleColorValues == null) {
+		if (frame2Id == -1 && frame1Id == -1 && model.triangleColorValues == null) {
 			return model;
 		}
-		Model animatedModel = new Model(true, Animation.exists(fram2Id) & Animation.exists(frame1Id), false, model);
-		if (fram2Id != -1 || frame1Id != -1) {
+		Model animatedModel = new Model(true, Animation.exists(frame2Id) & Animation.exists(frame1Id), false, model);
+		if (frame2Id != -1 || frame1Id != -1) {
 			animatedModel.createBones();
 		}
-		if (fram2Id != -1) {
-			animatedModel.applyTransform(fram2Id);
+		if (frame2Id != -1) {
+			animatedModel.applyTransform(frame2Id);
 		}
 		if (frame1Id != -1) {
 			animatedModel.applyTransform(frame1Id);

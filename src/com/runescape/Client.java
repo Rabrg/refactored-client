@@ -3042,7 +3042,7 @@ public class Client extends GameStub {
 			Client.setHighMemory();
 			Client.membersWorld = true;
 			SignLink.storeIndex = 32;
-			SignLink.method547(InetAddress.getLocalHost());
+			SignLink.initialize(InetAddress.getLocalHost());
 			Client client = new Client();
 			client.initializeApplication(765, 503);
 		} catch (Exception exception) {

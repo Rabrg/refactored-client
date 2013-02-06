@@ -1,8 +1,5 @@
 package com.runescape.util;
 
-/* SignLink - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 import java.applet.Applet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,7 +12,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 
-public class SignLink implements Runnable {
+public class SignLink implements Runnable
+{
 	public static int uid;
 	public static int storeIndex = 32;
 	public static RandomAccessFile mainCache = null;
@@ -46,7 +44,7 @@ public class SignLink implements Runnable {
 	public static boolean accessible = true;
 	public static String lastUsername = "";
 
-	public static final void method547(InetAddress inetaddress) {
+	public static final void initialize(InetAddress inetaddress) {
 		if (SignLink.active) {
 			try {
 				Thread.sleep(500L);
@@ -134,8 +132,7 @@ public class SignLink implements Runnable {
 				SignLink.nextWriteName = null;
 			} else if (SignLink.nextURL != null) {
 				try {
-					SignLink.nextURLStream = new DataInputStream(new URL(SignLink.applet.getCodeBase(),
-							SignLink.nextURL).openStream());
+					SignLink.nextURLStream = new DataInputStream(new URL(SignLink.applet.getCodeBase(), SignLink.nextURL).openStream());
 				} catch (Exception exception) {
 					SignLink.nextURLStream = null;
 				}
@@ -257,8 +254,7 @@ public class SignLink implements Runnable {
 				error = error.replace('@', '_');
 				error = error.replace('&', '_');
 				error = error.replace('#', '_');
-				DataInputStream in = SignLink.getURLStream("reporterror" + 317 + ".cgi?error=" + SignLink.lastUsername
-						+ " " + error);
+				DataInputStream in = SignLink.getURLStream("reporterror" + 317 + ".cgi?error=" + SignLink.lastUsername + " " + error);
 				in.readUTF();
 				in.close();
 			} catch (IOException ioexception) {
