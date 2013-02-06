@@ -65,9 +65,9 @@ public class Widget {
 	public ImageRGB enabledSprite;
 	public int scrollLimit;
 	public int widgetType;
-	public int widgetPositionX;
+	public int x;
 	static Cache modelCache = new Cache(30);
-	public int widgetPositionY;
+	public int y;
 	public boolean hiddenUntilHovered;
 	public int widgetHeight;
 	public boolean typeFaceShadowed;
