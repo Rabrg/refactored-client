@@ -8,7 +8,8 @@ import com.runescape.graphic.Rasterizer3D;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 
-public class ItemDefinition {
+public class ItemDefinition
+{
 
 	private byte femaleEquipOffset;
 	public int value;
@@ -263,8 +264,7 @@ public class ItemDefinition {
 		value = noteDefinition.value;
 		String plural = "a";
 		char firstCharacter = noteDefinition.name.charAt(0);
-		if (firstCharacter == 'A' || firstCharacter == 'E' || firstCharacter == 'I' || firstCharacter == 'O'
-				|| firstCharacter == 'U') {
+		if (firstCharacter == 'A' || firstCharacter == 'E' || firstCharacter == 'I' || firstCharacter == 'O' || firstCharacter == 'U') {
 			plural = "an";
 		}
 		description = ("Swap this note at any bank for " + plural + " " + noteDefinition.name + ".").getBytes();
@@ -289,8 +289,7 @@ public class ItemDefinition {
 		if (itemAmount > 1) {
 			int stackedId = -1;
 			for (int amount = 0; amount < 10; amount++) {
-				if (itemAmount >= itemDefinition.stackableAmounts[amount]
-						&& itemDefinition.stackableAmounts[amount] != 0) {
+				if (itemAmount >= itemDefinition.stackableAmounts[amount] && itemDefinition.stackableAmounts[amount] != 0) {
 					stackedId = itemDefinition.stackableIds[amount];
 				}
 			}
@@ -333,9 +332,7 @@ public class ItemDefinition {
 		}
 		int sine = Rasterizer3D.SINE[itemDefinition.modelRotation1] * modelZoom >> 16;
 		int cosine = Rasterizer3D.COSINE[itemDefinition.modelRotation1] * modelZoom >> 16;
-		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation,
-				itemDefinition.modelRotation1, itemDefinition.modelOffset1, sine + model.modelHeight / 2
-						+ itemDefinition.sine, cosine + itemDefinition.sine);
+		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation, itemDefinition.modelRotation1, itemDefinition.modelOffset1, sine + model.modelHeight / 2 + itemDefinition.sine, cosine + itemDefinition.sine);
 		for (int pixel = 31; pixel >= 0; pixel--) {
 			for (cosine = 31; cosine >= 0; cosine--) {
 				if (itemSprite.pixels[pixel + cosine * 32] == 0) {
@@ -370,8 +367,7 @@ public class ItemDefinition {
 		} else if (type == 0) {
 			for (int pixel = 31; pixel >= 0; pixel--) {
 				for (cosine = 31; cosine >= 0; cosine--) {
-					if (itemSprite.pixels[pixel + cosine * 32] == 0 && pixel > 0 && cosine > 0
-							&& itemSprite.pixels[pixel - 1 + (cosine - 1) * 32] > 0) {
+					if (itemSprite.pixels[pixel + cosine * 32] == 0 && pixel > 0 && cosine > 0 && itemSprite.pixels[pixel - 1 + (cosine - 1) * 32] > 0) {
 						itemSprite.pixels[pixel + cosine * 32] = 3153952;
 					}
 				}
@@ -382,7 +378,7 @@ public class ItemDefinition {
 			int maxHeight = noteSprite.maxHeight;
 			noteSprite.maxWidth = 32;
 			noteSprite.maxHeight = 32;
-			noteSprite.drawSprite(0, 16083, 0);
+			noteSprite.drawSprite(0, 0);
 			noteSprite.maxWidth = maxWidth;
 			noteSprite.maxHeight = maxHeight;
 		}
