@@ -9,8 +9,7 @@ import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 import com.runescape.util.TextUtils;
 
-public class Widget
-{
+public class Widget {
 
 	public ImageRGB disabledImage;
 	public int animationDuration;
@@ -170,7 +169,9 @@ public class Widget
 						String spriteName = buffer.getString();
 						if (mediaArchive != null && spriteName.length() > 0) {
 							int spriteId = spriteName.lastIndexOf(",");
-							widget.images[sprite] = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
+							widget.images[sprite] = Widget.getImage(
+									Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive,
+									spriteName.substring(0, spriteId));
 						}
 					}
 				}
@@ -209,12 +210,14 @@ public class Widget
 				String spriteName = buffer.getString();
 				if (mediaArchive != null && spriteName.length() > 0) {
 					int spriteId = spriteName.lastIndexOf(",");
-					widget.disabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
+					widget.disabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)),
+							mediaArchive, spriteName.substring(0, spriteId));
 				}
 				spriteName = buffer.getString();
 				if (mediaArchive != null && spriteName.length() > 0) {
 					int spriteId = spriteName.lastIndexOf(",");
-					widget.enabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
+					widget.enabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)),
+							mediaArchive, spriteName.substring(0, spriteId));
 				}
 			}
 			if (widget.type == 6) {

@@ -4,8 +4,7 @@ import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
-public class AnimationSequence
-{
+public class AnimationSequence {
 	private boolean aBoolean47 = false;
 	public static int count;
 	public static AnimationSequence[] cache;

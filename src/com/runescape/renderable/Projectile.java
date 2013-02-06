@@ -4,8 +4,7 @@ import com.runescape.anim.Animation;
 import com.runescape.anim.SpotAnimation;
 import com.runescape.graphic.Model;
 
-public class Projectile extends Renderable
-{
+public class Projectile extends Renderable {
 
 	public int delay;
 	public int endCycle;
@@ -48,7 +47,8 @@ public class Projectile extends Renderable
 		if (!moving) {
 			speedVectorZ = -speedVectorScalar * Math.tan(startSlope * 0.02454369);
 		}
-		heightOffset = 2.0 * (targetZ - currentHeight - speedVectorZ * cyclesRemaining) / (cyclesRemaining * cyclesRemaining);
+		heightOffset = 2.0 * (targetZ - currentHeight - speedVectorZ * cyclesRemaining)
+				/ (cyclesRemaining * cyclesRemaining);
 	}
 
 	@Override
@@ -76,8 +76,8 @@ public class Projectile extends Renderable
 		return projectileModel;
 	}
 
-	public Projectile(int startSlope, int endHeight, int delay, int speed, int startDistanceFromTarget, int sceneId, int height, int projectileY, int projectileX, int targetedEntityIndex, int spotAnimationId)
-	{
+	public Projectile(int startSlope, int endHeight, int delay, int speed, int startDistanceFromTarget, int sceneId,
+			int height, int projectileY, int projectileX, int targetedEntityIndex, int spotAnimationId) {
 		this.animation = SpotAnimation.cache[spotAnimationId];
 		this.sceneId = sceneId;
 		this.startX = projectileX;

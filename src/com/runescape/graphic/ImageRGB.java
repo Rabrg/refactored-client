@@ -10,8 +10,7 @@ import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
-public class ImageRGB extends Rasterizer
-{
+public class ImageRGB extends Rasterizer {
 
 	public int[] pixels;
 	public int width;
@@ -21,16 +20,14 @@ public class ImageRGB extends Rasterizer
 	public int maxWidth;
 	public int maxHeight;
 
-	public ImageRGB(int width, int height)
-	{
+	public ImageRGB(int width, int height) {
 		pixels = new int[width * height];
 		this.width = maxWidth = width;
 		this.height = maxHeight = height;
 		offsetX = offsetY = 0;
 	}
 
-	public ImageRGB(byte[] imagedata, Component component)
-	{
+	public ImageRGB(byte[] imagedata, Component component) {
 		try {
 			Image image = Toolkit.getDefaultToolkit().createImage(imagedata);
 			MediaTracker mediaTracker = new MediaTracker(component);
@@ -50,8 +47,7 @@ public class ImageRGB extends Rasterizer
 		}
 	}
 
-	public ImageRGB(Archive archive, String string, int archiveIndex)
-	{
+	public ImageRGB(Archive archive, String string, int archiveIndex) {
 		Buffer dataBuffer = new Buffer(archive.getFile(string + ".dat"));
 		Buffer indexBuffer = new Buffer(archive.getFile("index.dat"));
 		indexBuffer.offset = dataBuffer.getUnsignedLEShort();
@@ -173,11 +169,13 @@ public class ImageRGB extends Rasterizer
 			rasterizerPixelOffset += widthOffset;
 		}
 		if (newWidth > 0 && newHeight > 0) {
-			copyPixels(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth, newHeight);
+			copyPixels(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth,
+					newHeight);
 		}
 	}
 
-	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset, int rasterizerPixelOffset, int width, int height) {
+	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset,
+			int rasterizerPixelOffset, int width, int height) {
 		int shiftedWidth = -(width >> 2);
 		width = -(width & 0x3);
 		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
@@ -195,90 +193,87 @@ public class ImageRGB extends Rasterizer
 		}
 	}
 
-	public void drawSprite(int x, int y) {
-		try {
-			x += offsetX;
-			y += offsetY;
-			int i_44_ = x + y * Rasterizer.width;
-			int i_45_ = 0;
-			int i_46_ = height;
-			int i_47_ = width;
-			int i_48_ = Rasterizer.width - i_47_;
-			int i_49_ = 0;
-			if (y < Rasterizer.topY) {
-				int i_50_ = Rasterizer.topY - y;
-				i_46_ -= i_50_;
-				y = Rasterizer.topY;
-				i_45_ += i_50_ * i_47_;
-				i_44_ += i_50_ * Rasterizer.width;
-			}
-			if (y + i_46_ > Rasterizer.bottomY) {
-				i_46_ -= y + i_46_ - Rasterizer.bottomY;
-			}
-			if (x < Rasterizer.topX) {
-				int i_51_ = Rasterizer.topX - x;
-				i_47_ -= i_51_;
-				x = Rasterizer.topX;
-				i_45_ += i_51_;
-				i_44_ += i_51_;
-				i_49_ += i_51_;
-				i_48_ += i_51_;
-			}
-			if (x + i_47_ > Rasterizer.bottomX) {
-				int i_52_ = x + i_47_ - Rasterizer.bottomX;
-				i_47_ -= i_52_;
-				i_49_ += i_52_;
-				i_48_ += i_52_;
-			}
-			if (i_47_ > 0 && i_46_ > 0) {
-				method346(Rasterizer.pixels, pixels, 0, i_45_, i_44_, i_47_, i_46_, i_48_, i_49_);
-			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("50442, " + x + ", " + y + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+	public void drawImage(int x, int y) {
+		x += offsetX;
+		y += offsetY;
+		int rasterizerOffset = x + y * Rasterizer.width;
+		int pixelOffset = 0;
+		int imageHeight = height;
+		int imageWidth = width;
+		int deviation = Rasterizer.width - imageWidth;
+		int originalDeviation = 0;
+		if (y < Rasterizer.topY) {
+			int yOffset = Rasterizer.topY - y;
+			imageHeight -= yOffset;
+			y = Rasterizer.topY;
+			pixelOffset += yOffset * imageWidth;
+			rasterizerOffset += yOffset * Rasterizer.width;
+		}
+		if (y + imageHeight > Rasterizer.bottomY) {
+			imageHeight -= y + imageHeight - Rasterizer.bottomY;
+		}
+		if (x < Rasterizer.topX) {
+			int xOffset = Rasterizer.topX - x;
+			imageWidth -= xOffset;
+			x = Rasterizer.topX;
+			pixelOffset += xOffset;
+			rasterizerOffset += xOffset;
+			originalDeviation += xOffset;
+			deviation += xOffset;
+		}
+		if (x + imageWidth > Rasterizer.bottomX) {
+			int xOffset = x + imageWidth - Rasterizer.bottomX;
+			imageWidth -= xOffset;
+			originalDeviation += xOffset;
+			deviation += xOffset;
+		}
+		if (imageWidth > 0 && imageHeight > 0) {
+			copyPixels(pixels, Rasterizer.pixels, pixelOffset, rasterizerOffset, imageWidth, imageHeight,
+					originalDeviation, deviation, 0);
 		}
 	}
 
-	private void method346(int[] is, int[] is_53_, int i, int i_54_, int i_55_, int i_56_, int i_57_, int i_58_, int i_59_) {
-		int i_60_ = -(i_56_ >> 2);
-		i_56_ = -(i_56_ & 0x3);
-		for (int i_61_ = -i_57_; i_61_ < 0; i_61_++) {
-			for (int i_62_ = i_60_; i_62_ < 0; i_62_++) {
-				i = is_53_[i_54_++];
-				if (i != 0) {
-					is[i_55_++] = i;
+	private void copyPixels(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int width,
+			int height, int pixelOffset, int rasterizerPixelOffset, int pixelColor) {
+		int shiftedWidth = -(width >> 2);
+		width = -(width & 0x3);
+		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
+			for (int widthCounter = shiftedWidth; widthCounter < 0; widthCounter++) {
+				pixelColor = pixels[pixel++];
+				if (pixelColor != 0) {
+					rasterizerPixels[rasterizerPixel++] = pixelColor;
 				} else {
-					i_55_++;
+					rasterizerPixel++;
 				}
-				i = is_53_[i_54_++];
-				if (i != 0) {
-					is[i_55_++] = i;
+				pixelColor = pixels[pixel++];
+				if (pixelColor != 0) {
+					rasterizerPixels[rasterizerPixel++] = pixelColor;
 				} else {
-					i_55_++;
+					rasterizerPixel++;
 				}
-				i = is_53_[i_54_++];
-				if (i != 0) {
-					is[i_55_++] = i;
+				pixelColor = pixels[pixel++];
+				if (pixelColor != 0) {
+					rasterizerPixels[rasterizerPixel++] = pixelColor;
 				} else {
-					i_55_++;
+					rasterizerPixel++;
 				}
-				i = is_53_[i_54_++];
-				if (i != 0) {
-					is[i_55_++] = i;
+				pixelColor = pixels[pixel++];
+				if (pixelColor != 0) {
+					rasterizerPixels[rasterizerPixel++] = pixelColor;
 				} else {
-					i_55_++;
-				}
-			}
-			for (int i_63_ = i_56_; i_63_ < 0; i_63_++) {
-				i = is_53_[i_54_++];
-				if (i != 0) {
-					is[i_55_++] = i;
-				} else {
-					i_55_++;
+					rasterizerPixel++;
 				}
 			}
-			i_55_ += i_58_;
-			i_54_ += i_59_;
+			for (int widthCounter = width; widthCounter < 0; widthCounter++) {
+				pixelColor = pixels[pixel++];
+				if (pixelColor != 0) {
+					rasterizerPixels[rasterizerPixel++] = pixelColor;
+				} else {
+					rasterizerPixel++;
+				}
+			}
+			rasterizerPixel += rasterizerPixelOffset;
+			pixel += pixelOffset;
 		}
 	}
 
@@ -317,18 +312,22 @@ public class ImageRGB extends Rasterizer
 			rasterizerPixelOffset += xOffset;
 		}
 		if (newWidth > 0 && newHeight > 0) {
-			copyPixelsAlpha(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset, newWidth, newHeight, 0, alpha);
+			copyPixelsAlpha(pixels, Rasterizer.pixels, pixel, rasterizerPixel, pixelOffset, rasterizerPixelOffset,
+					newWidth, newHeight, 0, alpha);
 		}
 	}
 
-	private void copyPixelsAlpha(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset, int rasterizerPixelOffset, int width, int height, int color, int alpha) {
+	private void copyPixelsAlpha(int[] pixels, int[] rasterizerPixels, int pixel, int rasterizerPixel, int pixelOffset,
+			int rasterizerPixelOffset, int width, int height, int color, int alpha) {
 		int alphaValue = 256 - alpha;
 		for (int heightCounter = -height; heightCounter < 0; heightCounter++) {
 			for (int widthCounter = -width; widthCounter < 0; widthCounter++) {
 				color = pixels[pixel++];
 				if (color != 0) {
 					int rasterizerPixelColor = rasterizerPixels[rasterizerPixel];
-					rasterizerPixels[rasterizerPixel++] = ((color & 0xff00ff) * alpha + (rasterizerPixelColor & 0xff00ff) * alphaValue & ~0xff00ff) + ((color & 0xff00) * alpha + (rasterizerPixelColor & 0xff00) * alphaValue & 0xff0000) >> 8;
+					rasterizerPixels[rasterizerPixel++] = ((color & 0xff00ff) * alpha
+							+ (rasterizerPixelColor & 0xff00ff) * alphaValue & ~0xff00ff)
+							+ ((color & 0xff00) * alpha + (rasterizerPixelColor & 0xff00) * alphaValue & 0xff0000) >> 8;
 				} else {
 					rasterizerPixel++;
 				}
@@ -338,44 +337,35 @@ public class ImageRGB extends Rasterizer
 		}
 	}
 
-	public void method349(int i, int i_89_, int[] is, int i_90_, int[] is_91_, int i_92_, int i_93_, int i_94_, int i_95_, int i_96_, int i_97_) {
-		try {
-			while (i_92_ >= 0) {
+	public void shapeImageToPixels(int i, int i_89_, int[] is, int i_90_, int[] is_91_, int i_93_, int i_94_,
+			int i_95_, int i_96_, int i_97_) {
+		int i_98_ = -i_96_ / 2;
+		int i_99_ = -i / 2;
+		int i_100_ = (int) (Math.sin(i_89_ / 326.11) * 65536.0);
+		int i_101_ = (int) (Math.cos(i_89_ / 326.11) * 65536.0);
+		i_100_ = i_100_ * i_90_ >> 8;
+		i_101_ = i_101_ * i_90_ >> 8;
+		int i_102_ = (i_97_ << 16) + (i_99_ * i_100_ + i_98_ * i_101_);
+		int i_103_ = (i_93_ << 16) + (i_99_ * i_101_ - i_98_ * i_100_);
+		int i_104_ = i_95_ + i_94_ * Rasterizer.width;
+		for (i_94_ = 0; i_94_ < i; i_94_++) {
+			int i_105_ = is_91_[i_94_];
+			int rasterizerPixel = i_104_ + i_105_;
+			int i_107_ = i_102_ + i_101_ * i_105_;
+			int i_108_ = i_103_ - i_100_ * i_105_;
+			for (i_95_ = -is[i_94_]; i_95_ < 0; i_95_++) {
+				Rasterizer.pixels[rasterizerPixel++] = pixels[(i_107_ >> 16) + (i_108_ >> 16) * width];
+				i_107_ += i_101_;
+				i_108_ -= i_100_;
 			}
-			try {
-				int i_98_ = -i_96_ / 2;
-				int i_99_ = -i / 2;
-				int i_100_ = (int) (Math.sin(i_89_ / 326.11) * 65536.0);
-				int i_101_ = (int) (Math.cos(i_89_ / 326.11) * 65536.0);
-				i_100_ = i_100_ * i_90_ >> 8;
-				i_101_ = i_101_ * i_90_ >> 8;
-				int i_102_ = (i_97_ << 16) + (i_99_ * i_100_ + i_98_ * i_101_);
-				int i_103_ = (i_93_ << 16) + (i_99_ * i_101_ - i_98_ * i_100_);
-				int i_104_ = i_95_ + i_94_ * Rasterizer.width;
-				for (i_94_ = 0; i_94_ < i; i_94_++) {
-					int i_105_ = is_91_[i_94_];
-					int i_106_ = i_104_ + i_105_;
-					int i_107_ = i_102_ + i_101_ * i_105_;
-					int i_108_ = i_103_ - i_100_ * i_105_;
-					for (i_95_ = -is[i_94_]; i_95_ < 0; i_95_++) {
-						Rasterizer.pixels[i_106_++] = pixels[(i_107_ >> 16) + (i_108_ >> 16) * width];
-						i_107_ += i_101_;
-						i_108_ -= i_100_;
-					}
-					i_102_ += i_100_;
-					i_103_ += i_101_;
-					i_104_ += Rasterizer.width;
-				}
-			} catch (Exception exception) {
-				/* empty */
-			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("8964, " + i + ", " + i_89_ + ", " + is + ", " + i_90_ + ", " + is_91_ + ", " + i_92_ + ", " + i_93_ + ", " + i_94_ + ", " + i_95_ + ", " + i_96_ + ", " + i_97_ + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+			i_102_ += i_100_;
+			i_103_ += i_101_;
+			i_104_ += Rasterizer.width;
 		}
 	}
 
-	public void method350(int i, int i_109_, int i_110_, int i_111_, int i_112_, int i_113_, int i_114_, double d, int i_115_) {
+	public void method350(int i, int i_109_, int i_110_, int i_111_, int i_112_, int i_113_, int i_114_, double d,
+			int i_115_) {
 		try {
 			if (i_112_ == 41960) {
 				try {
@@ -411,7 +401,8 @@ public class ImageRGB extends Rasterizer
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("71953, " + i + ", " + i_109_ + ", " + i_110_ + ", " + i_111_ + ", " + i_112_ + ", " + i_113_ + ", " + i_114_ + ", " + d + ", " + i_115_ + ", " + runtimeexception.toString());
+			SignLink.reportError("71953, " + i + ", " + i_109_ + ", " + i_110_ + ", " + i_111_ + ", " + i_112_ + ", "
+					+ i_113_ + ", " + i_114_ + ", " + d + ", " + i_115_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -454,15 +445,18 @@ public class ImageRGB extends Rasterizer
 				i_132_ += i_136_;
 			}
 			if (i_131_ > 0 && i_130_ > 0) {
-				method352(pixels, i_131_, indexedimage.pixels, i_130_, Rasterizer.pixels, 0, i_132_, i_128_, i_133_, i_129_);
+				method352(pixels, i_131_, indexedimage.pixels, i_130_, Rasterizer.pixels, 0, i_132_, i_128_, i_133_,
+						i_129_);
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("70668, " + indexedimage + ", " + bool + ", " + i + ", " + i_127_ + ", " + runtimeexception.toString());
+			SignLink.reportError("70668, " + indexedimage + ", " + bool + ", " + i + ", " + i_127_ + ", "
+					+ runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
 
-	private void method352(int[] is, int i, byte[] bs, int i_137_, int[] is_138_, int i_139_, int i_140_, int i_141_, int i_142_, int i_143_) {
+	private void method352(int[] is, int i, byte[] bs, int i_137_, int[] is_138_, int i_139_, int i_140_, int i_141_,
+			int i_142_, int i_143_) {
 		int i_144_ = -(i >> 2);
 		i = -(i & 0x3);
 		for (int i_146_ = -i_137_; i_146_ < 0; i_146_++) {

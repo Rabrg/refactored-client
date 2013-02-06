@@ -12,8 +12,7 @@ import com.runescape.util.SignLink;
  * Visit http://jode.sourceforge.net/
  */
 
-public class GameObject extends Renderable
-{
+public class GameObject extends Renderable {
 	private byte aByte1589 = 7;
 	private int anInt1590;
 	protected int[] anIntArray1591;
@@ -63,7 +62,8 @@ public class GameObject extends Renderable
 		if (gameobjectdefinition == null) {
 			return null;
 		}
-		Model model = gameobjectdefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596, anInt1597, i_0_);
+		Model model = gameobjectdefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596,
+				anInt1597, i_0_);
 		return model;
 	}
 
@@ -95,8 +95,8 @@ public class GameObject extends Renderable
 		}
 	}
 
-	public GameObject(int i, int i_7_, int i_8_, int i_9_, byte b, int i_10_, int i_11_, int i_12_, int i_13_, boolean bool)
-	{
+	public GameObject(int i, int i_7_, int i_8_, int i_9_, byte b, int i_10_, int i_11_, int i_12_, int i_13_,
+			boolean bool) {
 		try {
 			if (b != aByte1589) {
 				for (int i_14_ = 1; i_14_ > 0; i_14_++) {
@@ -124,7 +124,8 @@ public class GameObject extends Renderable
 			anInt1593 = gameobjectdefinition.anInt254;
 			anIntArray1591 = gameobjectdefinition.anIntArray264;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("84816, " + i + ", " + i_7_ + ", " + i_8_ + ", " + i_9_ + ", " + b + ", " + i_10_ + ", " + i_11_ + ", " + i_12_ + ", " + i_13_ + ", " + bool + ", " + runtimeexception.toString());
+			SignLink.reportError("84816, " + i + ", " + i_7_ + ", " + i_8_ + ", " + i_9_ + ", " + b + ", " + i_10_
+					+ ", " + i_11_ + ", " + i_12_ + ", " + i_13_ + ", " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}

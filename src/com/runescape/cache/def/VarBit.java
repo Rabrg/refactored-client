@@ -43,7 +43,8 @@ public class VarBit {
 				configId = buffer.getUnsignedLEShort();
 				leastSignificantBit = buffer.getUnsignedByte();
 				mostSignificantBit = buffer.getUnsignedByte();
-				//System.out.println(configId + ":" + leastSignificantBit + ":" + leastSignificantBit);
+				// System.out.println(configId + ":" + leastSignificantBit + ":"
+				// + leastSignificantBit);
 			} else if (attributeId == 10) {
 				buffer.getString();
 			} else if (attributeId == 2) {

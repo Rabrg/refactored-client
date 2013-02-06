@@ -62,8 +62,7 @@ public class Player extends Actor {
 						spotAnimationModel);
 				spotAnimationModel2.translate(0, -spotAnimationDelay, 0);
 				spotAnimationModel2.createBones();
-				spotAnimationModel2
-						.applyTransform(spotAnimation.sequences.animationForFrame[currentAnimationFrame]);
+				spotAnimationModel2.applyTransform(spotAnimation.sequences.animationForFrame[currentAnimationFrame]);
 				spotAnimationModel2.triangleSkin = null;
 				spotAnimationModel2.vectorSkin = null;
 				if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
@@ -301,8 +300,7 @@ public class Player extends Actor {
 		Model model_25_ = Model.aModel1614;
 		model_25_.method412(7, model, Animation.exists(i_12_) & Animation.exists(i_13_));
 		if (i_12_ != -1 && i_13_ != -1) {
-			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].anIntArray55, i_13_,
-					i_12_);
+			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].anIntArray55, i_13_, i_12_);
 		} else if (i_12_ != -1) {
 			model_25_.applyTransform(i_12_);
 		}

@@ -5,8 +5,7 @@ import com.runescape.anim.SpotAnimation;
 import com.runescape.graphic.Model;
 import com.runescape.renderable.Renderable;
 
-public class AnimableObject extends Renderable
-{
+public class AnimableObject extends Renderable {
 
 	public int plane;
 	public int x;
@@ -18,8 +17,7 @@ public class AnimableObject extends Renderable
 	private int eclapsedFrames;
 	private int duration;
 
-	public AnimableObject(int plane, int loopCycle, int loopCycleOffset, int animationIndex, int z, int y, int x)
-	{
+	public AnimableObject(int plane, int loopCycle, int loopCycleOffset, int animationIndex, int z, int y, int x) {
 		this.animation = SpotAnimation.cache[animationIndex];
 		this.plane = plane;
 		this.x = x;
@@ -69,7 +67,8 @@ public class AnimableObject extends Renderable
 		while (duration > animation.sequences.getFrameLength(eclapsedFrames)) {
 			duration -= animation.sequences.getFrameLength(eclapsedFrames) + 1;
 			eclapsedFrames++;
-			if (eclapsedFrames >= animation.sequences.anInt50 && (eclapsedFrames < 0 || eclapsedFrames >= animation.sequences.anInt50)) {
+			if (eclapsedFrames >= animation.sequences.anInt50
+					&& (eclapsedFrames < 0 || eclapsedFrames >= animation.sequences.anInt50)) {
 				eclapsedFrames = 0;
 				transformCompleted = true;
 			}

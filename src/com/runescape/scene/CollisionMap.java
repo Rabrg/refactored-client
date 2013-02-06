@@ -1,7 +1,6 @@
 package com.runescape.scene;
 
-public class CollisionMap
-{
+public class CollisionMap {
 
 	public int insetX;
 	public int insetY;
@@ -9,8 +8,7 @@ public class CollisionMap
 	public int height;
 	public int[][] adjacency;
 
-	public CollisionMap(int width, int height, boolean bool)
-	{
+	public CollisionMap(int width, int height, boolean bool) {
 		insetX = 0;
 		insetY = 0;
 		this.width = width;
@@ -357,15 +355,15 @@ public class CollisionMap
 			if (goalOrientation == 0) {
 				if (currentX == goalX - 1 && currentY == goalY) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall south
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall south
+								 */
 				}
 				if (currentX == goalX && currentY == goalY + 1 && (adjacency[currentX][currentY] & 0x1280120) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall north
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall north
+								 */
 				}
 				if (currentX == goalX && currentY == goalY - 1 && (adjacency[currentX][currentY] & 0x1280102) == 0) {
 					return true;
@@ -373,15 +371,15 @@ public class CollisionMap
 			} else if (goalOrientation == 1) {
 				if (currentX == goalX && currentY == goalY + 1) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall east
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall east
+								 */
 				}
 				if (currentX == goalX - 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280108) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall west
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall west
+								 */
 				}
 				if (currentX == goalX + 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280180) == 0) {
 					return true;
@@ -389,15 +387,15 @@ public class CollisionMap
 			} else if (goalOrientation == 2) {
 				if (currentX == goalX + 1 && currentY == goalY) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall south
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall south
+								 */
 				}
 				if (currentX == goalX && currentY == goalY + 1 && (adjacency[currentX][currentY] & 0x1280120) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall north
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall north
+								 */
 				}
 				if (currentX == goalX && currentY == goalY - 1 && (adjacency[currentX][currentY] & 0x1280102) == 0) {
 					return true;
@@ -405,15 +403,15 @@ public class CollisionMap
 			} else if (goalOrientation == 3) {
 				if (currentX == goalX && currentY == goalY - 1) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall east
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall east
+								 */
 				}
 				if (currentX == goalX - 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280108) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall west
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall west
+								 */
 				}
 				if (currentX == goalX + 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280180) == 0) {
 					return true;
@@ -427,15 +425,15 @@ public class CollisionMap
 				}
 				if (currentX == goalX && currentY == goalY + 1) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall west
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall west
+								 */
 				}
 				if (currentX == goalX + 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280180) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall north
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall north
+								 */
 				}
 				if (currentX == goalX && currentY == goalY - 1 && (adjacency[currentX][currentY] & 0x1280102) == 0) {
 					return true;
@@ -452,9 +450,9 @@ public class CollisionMap
 				}
 				if (currentX == goalX + 1 && currentY == goalY) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall north
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall north
+								 */
 				}
 				if (currentX == goalX && currentY == goalY - 1 && (adjacency[currentX][currentY] & 0x1280102) == 0) {
 					return true;
@@ -465,9 +463,9 @@ public class CollisionMap
 												 */
 				if (currentX == goalX - 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280108) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall south
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall south
+								 */
 				}
 				if (currentX == goalX && currentY == goalY + 1 && (adjacency[currentX][currentY] & 0x1280120) == 0) {
 					return true;
@@ -481,15 +479,15 @@ public class CollisionMap
 			} else if (goalOrientation == 3) {
 				if (currentX == goalX - 1 && currentY == goalY) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall south
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall south
+								 */
 				}
 				if (currentX == goalX && currentY == goalY + 1 && (adjacency[currentX][currentY] & 0x1280120) == 0) {
 					return true; /*
-									* uninitialized | blocked | ? | solid occupied
-									* | wall west
-									*/
+								 * uninitialized | blocked | ? | solid occupied
+								 * | wall west
+								 */
 				}
 				if (currentX == goalX + 1 && currentY == goalY && (adjacency[currentX][currentY] & 0x1280180) == 0) {
 					return true;
@@ -516,7 +514,8 @@ public class CollisionMap
 		return false;
 	}
 
-	public boolean reachedWallDecoration(int currentX, int currentY, int goalX, int goalY, int goalPosition, int goalOrientation) {
+	public boolean reachedWallDecoration(int currentX, int currentY, int goalX, int goalY, int goalPosition,
+			int goalOrientation) {
 		if (currentX == goalX && currentY == goalY) {
 			return true;
 		}
@@ -575,7 +574,8 @@ public class CollisionMap
 		return false;
 	}
 
-	public boolean reachedFacingObject(int currentX, int currentY, int goalX, int goalY, int goalDX, int goalDY, int surroundings) {
+	public boolean reachedFacingObject(int currentX, int currentY, int goalX, int goalY, int goalDX, int goalDY,
+			int surroundings) {
 		int goalX2 = (goalX + goalDX) - 1;
 		int goalY2 = (goalY + goalDY) - 1;
 		if (currentX >= goalX && currentX <= goalX2 && currentY >= goalY && currentY <= goalY2) {
