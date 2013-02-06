@@ -7,6 +7,7 @@ import com.runescape.renderable.Renderable;
 import com.runescape.util.SignLink;
 
 public class Model extends Renderable {
+	
 	private boolean aBoolean1608 = false;
 	private int anInt1610 = 1;
 	private boolean aBoolean1611 = true;
@@ -1253,10 +1254,10 @@ public class Model extends Renderable {
 	}
 
 	public void scaleT(int i, int i_181_, int i_183_) {
-		for (int i_184_ = 0; i_184_ < vertexCount; i_184_++) {
-			verticesX[i_184_] = verticesX[i_184_] * i / 128;
-			verticesY[i_184_] = verticesY[i_184_] * i_183_ / 128;
-			verticesZ[i_184_] = verticesZ[i_184_] * i_181_ / 128;
+		for (int vertex = 0; vertex < vertexCount; vertex++) {
+			verticesX[vertex] = verticesX[vertex] * i / 128;
+			verticesY[vertex] = verticesY[vertex] * i_183_ / 128;
+			verticesZ[vertex] = verticesZ[vertex] * i_181_ / 128;
 		}
 	}
 
@@ -1270,54 +1271,54 @@ public class Model extends Renderable {
 		}
 		if (verticesNormal == null) {
 			verticesNormal = new VertexNormal[vertexCount];
-			for (int i_191_ = 0; i_191_ < vertexCount; i_191_++) {
-				verticesNormal[i_191_] = new VertexNormal();
+			for (int vertexNormal = 0; vertexNormal < vertexCount; vertexNormal++) {
+				verticesNormal[vertexNormal] = new VertexNormal();
 			}
 		}
-		for (int i_192_ = 0; i_192_ < triangleCount; i_192_++) {
-			int i_193_ = trianglePointsX[i_192_];
-			int i_194_ = trianglePointsY[i_192_];
-			int i_195_ = trianglePointsZ[i_192_];
-			int i_196_ = verticesX[i_194_] - verticesX[i_193_];
-			int i_197_ = verticesY[i_194_] - verticesY[i_193_];
-			int i_198_ = verticesZ[i_194_] - verticesZ[i_193_];
-			int i_199_ = verticesX[i_195_] - verticesX[i_193_];
-			int i_200_ = verticesY[i_195_] - verticesY[i_193_];
-			int i_201_ = verticesZ[i_195_] - verticesZ[i_193_];
-			int i_202_ = i_197_ * i_201_ - i_200_ * i_198_;
-			int i_203_ = i_198_ * i_199_ - i_201_ * i_196_;
-			int i_204_;
-			for (i_204_ = i_196_ * i_200_ - i_199_ * i_197_; i_202_ > 8192 || i_203_ > 8192 || i_204_ > 8192
-					|| i_202_ < -8192 || i_203_ < -8192 || i_204_ < -8192; i_204_ >>= 1) {
-				i_202_ >>= 1;
-				i_203_ >>= 1;
+		for (int triangle = 0; triangle < triangleCount; triangle++) {
+			int trianglePointX = trianglePointsX[triangle];
+			int trianglePointY = trianglePointsY[triangle];
+			int trianglePointZ = trianglePointsZ[triangle];
+			int i_196_ = verticesX[trianglePointY] - verticesX[trianglePointX];
+			int i_197_ = verticesY[trianglePointY] - verticesY[trianglePointX];
+			int i_198_ = verticesZ[trianglePointY] - verticesZ[trianglePointX];
+			int i_199_ = verticesX[trianglePointZ] - verticesX[trianglePointX];
+			int i_200_ = verticesY[trianglePointZ] - verticesY[trianglePointX];
+			int i_201_ = verticesZ[trianglePointZ] - verticesZ[trianglePointX];
+			int xOffset = i_197_ * i_201_ - i_200_ * i_198_;
+			int yOffset = i_198_ * i_199_ - i_201_ * i_196_;
+			int zOffset;
+			for (zOffset = i_196_ * i_200_ - i_199_ * i_197_; xOffset > 8192 || yOffset > 8192 || zOffset > 8192
+					|| xOffset < -8192 || yOffset < -8192 || zOffset < -8192; zOffset >>= 1) {
+				xOffset >>= 1;
+				yOffset >>= 1;
 			}
-			int i_205_ = (int) Math.sqrt(i_202_ * i_202_ + i_203_ * i_203_ + i_204_ * i_204_);
+			int i_205_ = (int) Math.sqrt(xOffset * xOffset + yOffset * yOffset + zOffset * zOffset);
 			if (i_205_ <= 0) {
 				i_205_ = 1;
 			}
-			i_202_ = i_202_ * 256 / i_205_;
-			i_203_ = i_203_ * 256 / i_205_;
-			i_204_ = i_204_ * 256 / i_205_;
-			if (texturePoints == null || (texturePoints[i_192_] & 0x1) == 0) {
-				VertexNormal vertexnormal = verticesNormal[i_193_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+			xOffset = xOffset * 256 / i_205_;
+			yOffset = yOffset * 256 / i_205_;
+			zOffset = zOffset * 256 / i_205_;
+			if (texturePoints == null || (texturePoints[triangle] & 0x1) == 0) {
+				VertexNormal vertexnormal = verticesNormal[trianglePointX];
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
-				vertexnormal = verticesNormal[i_194_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+				vertexnormal = verticesNormal[trianglePointY];
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
-				vertexnormal = verticesNormal[i_195_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+				vertexnormal = verticesNormal[trianglePointZ];
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
 			} else {
-				int i_206_ = i + (i_186_ * i_202_ + i_187_ * i_203_ + i_188_ * i_204_) / (i_190_ + i_190_ / 2);
-				anIntArray1627[i_192_] = Model.method429(triangleColorValues[i_192_], i_206_, texturePoints[i_192_]);
+				int i_206_ = i + (i_186_ * xOffset + i_187_ * yOffset + i_188_ * zOffset) / (i_190_ + i_190_ / 2);
+				anIntArray1627[triangle] = Model.method429(triangleColorValues[triangle], i_206_, texturePoints[triangle]);
 			}
 		}
 		if (bool) {

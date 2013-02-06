@@ -123,7 +123,6 @@ public class Client extends GameStub {
 	private int anInt899 = -1;
 	private int anInt900 = -680;
 	private boolean[] aBooleanArray901 = new boolean[5];
-	private int anInt902 = 1834;
 	private int playerWeight;
 	protected MouseCapturer mouseCapturer;
 	private volatile boolean aBoolean905 = false;
@@ -827,7 +826,7 @@ public class Client extends GameStub {
 
 	public final Socket createSocket(int i) throws IOException {
 		if (SignLink.applet != null) {
-			return SignLink.openPort(i);
+			return SignLink.openSocket(i);
 		}
 		return new Socket(InetAddress.getByName(getCodeBase().getHost()), i);
 	}
@@ -1118,7 +1117,7 @@ public class Client extends GameStub {
 				outBuffer.putOpcode(210);
 				outBuffer.putInt(1057001181);
 			}
-			if (Client.lowMemory && SignLink.mainCache != null) {
+			if (Client.lowMemory && SignLink.cacheDat != null) {
 				int i = onDemandRequester.fileCount(0);
 				for (int i_70_ = 0; i_70_ < i; i_70_++) {
 					int i_71_ = onDemandRequester.modelIndex(i_70_);
@@ -1622,9 +1621,6 @@ public class Client extends GameStub {
 		try {
 			anInt864 = 0;
 			anInt918 = 0;
-			if (i_136_ <= 0) {
-				anInt902 = isaacCipher.nextInt();
-			}
 			method139(buffer, -45, i);
 			method46(i, buffer, (byte) 2);
 			method86(i, buffer, true);
@@ -2138,7 +2134,7 @@ public class Client extends GameStub {
 					}
 					indexedimage.pixels = bs_166_;
 					aByteArray937 = bs;
-					Rasterizer3D.method367(17, -477);
+					Rasterizer3D.resetTexture(17);
 					Client.anInt879++;
 					if (Client.anInt879 > 1235) {
 						Client.anInt879 = 0;
@@ -2171,7 +2167,7 @@ public class Client extends GameStub {
 					}
 					indexedimage.pixels = bs_171_;
 					aByteArray937 = bs;
-					Rasterizer3D.method367(24, -477);
+					Rasterizer3D.resetTexture(24);
 				}
 				if (Rasterizer3D.anIntArray1500[34] < i_163_) {
 					break;
@@ -2186,7 +2182,7 @@ public class Client extends GameStub {
 				}
 				indexedimage.pixels = bs_175_;
 				aByteArray937 = bs;
-				Rasterizer3D.method367(34, -477);
+				Rasterizer3D.resetTexture(34);
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("86342, " + i + ", " + i_163_ + ", " + runtimeexception.toString());
 				throw new RuntimeException();
@@ -3042,7 +3038,7 @@ public class Client extends GameStub {
 			Client.setHighMemory();
 			Client.membersWorld = true;
 			SignLink.storeIndex = 32;
-			SignLink.method547(InetAddress.getLocalHost());
+			SignLink.initiate(InetAddress.getLocalHost());
 			Client client = new Client();
 			client.initializeApplication(765, 503);
 		} catch (Exception exception) {
@@ -7246,9 +7242,9 @@ public class Client extends GameStub {
 			if (!bool) {
 				aBoolean1201 = true;
 			} else {
-				if (SignLink.mainCache != null) {
+				if (SignLink.cacheDat != null) {
 					for (int i = 0; i < 5; i++) {
-						stores[i] = new Index(SignLink.mainCache, SignLink.cacheIndexes[i], i + 1);
+						stores[i] = new Index(SignLink.cacheDat, SignLink.cacheIndexes[i], i + 1);
 					}
 				}
 				try {

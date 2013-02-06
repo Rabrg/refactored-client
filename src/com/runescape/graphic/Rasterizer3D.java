@@ -19,13 +19,13 @@ public class Rasterizer3D extends Rasterizer {
 	public static int[] SINE = new int[2048];
 	public static int[] COSINE = new int[2048];
 	public static int[] lineOffsets;
-	static int anInt1493;
+	static int indexedImageCount;
 	public static IndexedImage[] indexedImages;
 	static boolean[] aBooleanArray1495;
 	static int[] anIntArray1496;
-	static int anInt1497;
-	static int[][] anIntArrayArray1498;
-	static int[][] anIntArrayArray1499;
+	static int texelPoolPointer;
+	static int[][] texelArrayPool;
+	static int[][] texelCache;
 	public static int[] anIntArray1500;
 	public static int anInt1501;
 	public static int[] getRgbLookupTableId;
@@ -40,8 +40,8 @@ public class Rasterizer3D extends Rasterizer {
 		Rasterizer3D.indexedImages = null;
 		Rasterizer3D.aBooleanArray1495 = null;
 		Rasterizer3D.anIntArray1496 = null;
-		Rasterizer3D.anIntArrayArray1498 = null;
-		Rasterizer3D.anIntArrayArray1499 = null;
+		Rasterizer3D.texelArrayPool = null;
+		Rasterizer3D.texelCache = null;
 		Rasterizer3D.anIntArray1500 = null;
 		Rasterizer3D.getRgbLookupTableId = null;
 		Rasterizer3D.anIntArrayArray1503 = null;
@@ -75,9 +75,9 @@ public class Rasterizer3D extends Rasterizer {
 	public static final void method363(int i) {
 		try {
 			if (i >= 0 && i <= 0) {
-				Rasterizer3D.anIntArrayArray1498 = null;
+				Rasterizer3D.texelArrayPool = null;
 				for (int i_4_ = 0; i_4_ < 50; i_4_++) {
-					Rasterizer3D.anIntArrayArray1499[i_4_] = null;
+					Rasterizer3D.texelCache[i_4_] = null;
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -94,17 +94,17 @@ public class Rasterizer3D extends Rasterizer {
 						/* empty */
 					}
 				}
-				if (Rasterizer3D.anIntArrayArray1498 != null) {
+				if (Rasterizer3D.texelArrayPool != null) {
 					break;
 				}
-				Rasterizer3D.anInt1497 = i;
+				Rasterizer3D.texelPoolPointer = i;
 				if (Rasterizer3D.lowMemory) {
-					Rasterizer3D.anIntArrayArray1498 = new int[Rasterizer3D.anInt1497][16384];
+					Rasterizer3D.texelArrayPool = new int[Rasterizer3D.texelPoolPointer][16384];
 				} else {
-					Rasterizer3D.anIntArrayArray1498 = new int[Rasterizer3D.anInt1497][65536];
+					Rasterizer3D.texelArrayPool = new int[Rasterizer3D.texelPoolPointer][65536];
 				}
 				for (int i_6_ = 0; i_6_ < 50; i_6_++) {
-					Rasterizer3D.anIntArrayArray1499[i_6_] = null;
+					Rasterizer3D.texelCache[i_6_] = null;
 				}
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("54075, " + i + ", " + bool + ", " + runtimeexception.toString());
@@ -115,15 +115,15 @@ public class Rasterizer3D extends Rasterizer {
 	}
 
 	public static final void loadIndexedImages(Archive archive) {
-		Rasterizer3D.anInt1493 = 0;
-		for (int indexImageId = 0; indexImageId < 50; indexImageId++) {
-			Rasterizer3D.indexedImages[indexImageId] = new IndexedImage(archive, String.valueOf(indexImageId), 0);
-			if (Rasterizer3D.lowMemory && Rasterizer3D.indexedImages[indexImageId].maxWidth == 128) {
-				Rasterizer3D.indexedImages[indexImageId].resizeToHalfMax();
+		Rasterizer3D.indexedImageCount = 0;
+		for (int indexImage = 0; indexImage < 50; indexImage++) {
+			Rasterizer3D.indexedImages[indexImage] = new IndexedImage(archive, String.valueOf(indexImage), 0);
+			if (Rasterizer3D.lowMemory && Rasterizer3D.indexedImages[indexImage].maxWidth == 128) {
+				Rasterizer3D.indexedImages[indexImage].resizeToHalfMax();
 			} else {
-				Rasterizer3D.indexedImages[indexImageId].resizeToMax();
+				Rasterizer3D.indexedImages[indexImage].resizeToMax();
 			}
-			Rasterizer3D.anInt1493++;
+			Rasterizer3D.indexedImageCount++;
 		}
 	}
 
@@ -157,43 +157,36 @@ public class Rasterizer3D extends Rasterizer {
 		}
 	}
 
-	public static final void method367(int i, int i_15_) {
-		try {
-			if (Rasterizer3D.anIntArrayArray1499[i] != null) {
-				Rasterizer3D.anIntArrayArray1498[Rasterizer3D.anInt1497++] = Rasterizer3D.anIntArrayArray1499[i];
-				while (i_15_ >= 0) {
-				}
-				Rasterizer3D.anIntArrayArray1499[i] = null;
+	public static final void resetTexture(int texture) {
+			if (Rasterizer3D.texelCache[texture] != null) {
+				Rasterizer3D.texelArrayPool[Rasterizer3D.texelPoolPointer++] = Rasterizer3D.texelCache[texture];
+				Rasterizer3D.texelCache[texture] = null;
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("64331, " + i + ", " + i_15_ + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public static final int[] method368(int i) {
 		Rasterizer3D.anIntArray1500[i] = Rasterizer3D.anInt1501++;
-		if (Rasterizer3D.anIntArrayArray1499[i] != null) {
-			return Rasterizer3D.anIntArrayArray1499[i];
+		if (Rasterizer3D.texelCache[i] != null) {
+			return Rasterizer3D.texelCache[i];
 		}
 		int[] is;
-		if (Rasterizer3D.anInt1497 > 0) {
-			is = Rasterizer3D.anIntArrayArray1498[--Rasterizer3D.anInt1497];
-			Rasterizer3D.anIntArrayArray1498[Rasterizer3D.anInt1497] = null;
+		if (Rasterizer3D.texelPoolPointer > 0) {
+			is = Rasterizer3D.texelArrayPool[--Rasterizer3D.texelPoolPointer];
+			Rasterizer3D.texelArrayPool[Rasterizer3D.texelPoolPointer] = null;
 		} else {
 			int i_16_ = 0;
 			int i_17_ = -1;
-			for (int i_18_ = 0; i_18_ < Rasterizer3D.anInt1493; i_18_++) {
-				if (Rasterizer3D.anIntArrayArray1499[i_18_] != null
+			for (int i_18_ = 0; i_18_ < Rasterizer3D.indexedImageCount; i_18_++) {
+				if (Rasterizer3D.texelCache[i_18_] != null
 						&& (Rasterizer3D.anIntArray1500[i_18_] < i_16_ || i_17_ == -1)) {
 					i_16_ = Rasterizer3D.anIntArray1500[i_18_];
 					i_17_ = i_18_;
 				}
 			}
-			is = Rasterizer3D.anIntArrayArray1499[i_17_];
-			Rasterizer3D.anIntArrayArray1499[i_17_] = null;
+			is = Rasterizer3D.texelCache[i_17_];
+			Rasterizer3D.texelCache[i_17_] = null;
 		}
-		Rasterizer3D.anIntArrayArray1499[i] = is;
+		Rasterizer3D.texelCache[i] = is;
 		IndexedImage indexedimage = Rasterizer3D.indexedImages[i];
 		int[] is_19_ = Rasterizer3D.anIntArrayArray1503[i];
 		if (Rasterizer3D.lowMemory) {
@@ -320,7 +313,7 @@ public class Rasterizer3D extends Rasterizer {
 				}
 			}
 			for (int i_46_ = 0; i_46_ < 50; i_46_++) {
-				Rasterizer3D.method367(i_46_, -477);
+				Rasterizer3D.resetTexture(i_46_);
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("71578, " + d + ", " + b + ", " + runtimeexception.toString());
@@ -2153,7 +2146,7 @@ public class Rasterizer3D extends Rasterizer {
 		Rasterizer3D.indexedImages = new IndexedImage[50];
 		Rasterizer3D.aBooleanArray1495 = new boolean[50];
 		Rasterizer3D.anIntArray1496 = new int[50];
-		Rasterizer3D.anIntArrayArray1499 = new int[50][];
+		Rasterizer3D.texelCache = new int[50][];
 		Rasterizer3D.anIntArray1500 = new int[50];
 		Rasterizer3D.getRgbLookupTableId = new int[65536];
 		Rasterizer3D.anIntArrayArray1503 = new int[50][];

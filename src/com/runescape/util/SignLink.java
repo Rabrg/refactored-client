@@ -1,8 +1,5 @@
 package com.runescape.util;
 
-/* SignLink - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 import java.applet.Applet;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,9 +13,10 @@ import java.net.Socket;
 import java.net.URL;
 
 public class SignLink implements Runnable {
+	
 	public static int uid;
 	public static int storeIndex = 32;
-	public static RandomAccessFile mainCache = null;
+	public static RandomAccessFile cacheDat = null;
 	public static RandomAccessFile[] cacheIndexes = new RandomAccessFile[5];
 	public static Applet applet = null;
 	private static boolean active;
@@ -46,7 +44,7 @@ public class SignLink implements Runnable {
 	public static boolean accessible = true;
 	public static String lastUsername = "";
 
-	public static final void method547(InetAddress inetaddress) {
+	public static final void initiate(InetAddress inetaddress) {
 		if (SignLink.active) {
 			try {
 				Thread.sleep(500L);
@@ -84,7 +82,7 @@ public class SignLink implements Runnable {
 			if (file.exists() && file.length() > 0x3200000) {
 				file.delete();
 			}
-			SignLink.mainCache = new RandomAccessFile(directory + "main_file_cache.dat", "rw");
+			SignLink.cacheDat = new RandomAccessFile(directory + "main_file_cache.dat", "rw");
 			for (int i = 0; i < 5; i++) {
 				SignLink.cacheIndexes[i] = new RandomAccessFile(directory + "main_file_cache.idx" + i, "rw");
 			}
@@ -166,15 +164,15 @@ public class SignLink implements Runnable {
 		}
 		try {
 			DataInputStream in = new DataInputStream(new FileInputStream(directory + "uid.dat"));
-			int i = in.readInt();
+			int uid = in.readInt();
 			in.close();
-			return i + 1;
+			return uid + 1;
 		} catch (Exception exception) {
 			return 0;
 		}
 	}
 
-	public static final synchronized Socket openPort(int port) throws IOException {
+	public static final synchronized Socket openSocket(int port) throws IOException {
 		SignLink.nextPort = port;
 		while (SignLink.nextPort != 0) {
 			try {
