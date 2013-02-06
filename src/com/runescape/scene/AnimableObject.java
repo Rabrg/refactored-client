@@ -5,35 +5,37 @@ import com.runescape.anim.SpotAnimation;
 import com.runescape.graphic.Model;
 import com.runescape.renderable.Renderable;
 
-public class AnimableObject extends Renderable {
+public class AnimableObject extends Renderable
+{
 
 	public int plane;
 	public int x;
 	public int y;
-	public int worldZ;
+	public int z;
 	public int loopCycle;
 	public boolean transformCompleted = false;
-	private SpotAnimation spotAnimation;
+	private SpotAnimation animation;
 	private int eclapsedFrames;
 	private int duration;
 
-	public AnimableObject(int plane, int loopCycle, int loopCycleOffset, int animationId, int worldZ, int y, int x) {
-		this.spotAnimation = SpotAnimation.cache[animationId];
+	public AnimableObject(int plane, int loopCycle, int loopCycleOffset, int animationIndex, int z, int y, int x)
+	{
+		this.animation = SpotAnimation.cache[animationIndex];
 		this.plane = plane;
 		this.x = x;
 		this.y = y;
-		this.worldZ = worldZ;
+		this.z = z;
 		this.loopCycle = loopCycle + loopCycleOffset;
 		this.transformCompleted = false;
 	}
 
 	@Override
 	public final Model getRotatedModel() {
-		Model model = spotAnimation.getModel();
+		Model model = animation.getModel();
 		if (model == null) {
 			return null;
 		}
-		int frame = spotAnimation.animationSequences.animationForFrame[eclapsedFrames];
+		int frame = animation.sequences.animationForFrame[eclapsedFrames];
 		Model animatedModel = new Model(true, Animation.exists(frame), false, model);
 		if (!transformCompleted) {
 			animatedModel.createBones();
@@ -41,35 +43,33 @@ public class AnimableObject extends Renderable {
 			animatedModel.triangleSkin = null;
 			animatedModel.vectorSkin = null;
 		}
-		if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
-			animatedModel.scaleT(spotAnimation.resizeXY, spotAnimation.resizeXY, spotAnimation.resizeZ);
+		if (animation.resizeXY != 128 || animation.resizeZ != 128) {
+			animatedModel.scaleT(animation.resizeXY, animation.resizeXY, animation.resizeZ);
 		}
-		if (spotAnimation.rotation != 0) {
-			if (spotAnimation.rotation == 90) {
+		if (animation.rotation != 0) {
+			if (animation.rotation == 90) {
 				animatedModel.rotate90Degrees(360);
 			}
-			if (spotAnimation.rotation == 180) {
+			if (animation.rotation == 180) {
 				animatedModel.rotate90Degrees(360);
 				animatedModel.rotate90Degrees(360);
 			}
-			if (spotAnimation.rotation == 270) {
+			if (animation.rotation == 270) {
 				animatedModel.rotate90Degrees(360);
 				animatedModel.rotate90Degrees(360);
 				animatedModel.rotate90Degrees(360);
 			}
 		}
-		animatedModel.applyLighting(64 + spotAnimation.modelBrightness, 850 + spotAnimation.modelShadow, -30, -50, -30,
-				true);
+		animatedModel.applyLighting(64 + animation.modelBrightness, 850 + animation.modelShadow, -30, -50, -30, true);
 		return animatedModel;
 	}
 
 	public final void nextFrame(int frame) {
 		duration += frame;
-		while (duration > spotAnimation.animationSequences.getFrameLength(eclapsedFrames, (byte) -39)) {
-			duration -= spotAnimation.animationSequences.getFrameLength(eclapsedFrames, (byte) -39) + 1;
+		while (duration > animation.sequences.getFrameLength(eclapsedFrames)) {
+			duration -= animation.sequences.getFrameLength(eclapsedFrames) + 1;
 			eclapsedFrames++;
-			if (eclapsedFrames >= spotAnimation.animationSequences.anInt50
-					&& (eclapsedFrames < 0 || eclapsedFrames >= spotAnimation.animationSequences.anInt50)) {
+			if (eclapsedFrames >= animation.sequences.anInt50 && (eclapsedFrames < 0 || eclapsedFrames >= animation.sequences.anInt50)) {
 				eclapsedFrames = 0;
 				transformCompleted = true;
 			}

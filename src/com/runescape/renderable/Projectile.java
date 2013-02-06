@@ -4,7 +4,8 @@ import com.runescape.anim.Animation;
 import com.runescape.anim.SpotAnimation;
 import com.runescape.graphic.Model;
 
-public class Projectile extends Renderable {
+public class Projectile extends Renderable
+{
 
 	public int delay;
 	public int endCycle;
@@ -24,7 +25,7 @@ public class Projectile extends Renderable {
 	public int startSlope;
 	public int startDistanceFromTarget;
 	public int targetedEntityIndex;
-	private SpotAnimation spotAnimation;
+	private SpotAnimation animation;
 	private int animationFrame;
 	private int duration;
 	public int modelRotationY;
@@ -47,19 +48,18 @@ public class Projectile extends Renderable {
 		if (!moving) {
 			speedVectorZ = -speedVectorScalar * Math.tan(startSlope * 0.02454369);
 		}
-		heightOffset = 2.0 * (targetZ - currentHeight - speedVectorZ * cyclesRemaining)
-				/ (cyclesRemaining * cyclesRemaining);
+		heightOffset = 2.0 * (targetZ - currentHeight - speedVectorZ * cyclesRemaining) / (cyclesRemaining * cyclesRemaining);
 	}
 
 	@Override
 	public final Model getRotatedModel() {
-		Model model = spotAnimation.getModel();
+		Model model = animation.getModel();
 		if (model == null) {
 			return null;
 		}
 		int frameId = -1;
-		if (spotAnimation.animationSequences != null) {
-			frameId = spotAnimation.animationSequences.animationForFrame[animationFrame];
+		if (animation.sequences != null) {
+			frameId = animation.sequences.animationForFrame[animationFrame];
 		}
 		Model projectileModel = new Model(true, Animation.exists(frameId), false, model);
 		if (frameId != -1) {
@@ -68,18 +68,17 @@ public class Projectile extends Renderable {
 			projectileModel.triangleSkin = null;
 			projectileModel.vectorSkin = null;
 		}
-		if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
-			projectileModel.scaleT(spotAnimation.resizeXY, spotAnimation.resizeXY, spotAnimation.resizeZ);
+		if (animation.resizeXY != 128 || animation.resizeZ != 128) {
+			projectileModel.scaleT(animation.resizeXY, animation.resizeXY, animation.resizeZ);
 		}
 		projectileModel.rotateX(modelRotationX, 1);
-		projectileModel.applyLighting(64 + spotAnimation.modelBrightness, 850 + spotAnimation.modelShadow, -30, -50,
-				-30, true);
+		projectileModel.applyLighting(64 + animation.modelBrightness, 850 + animation.modelShadow, -30, -50, -30, true);
 		return projectileModel;
 	}
 
-	public Projectile(int startSlope, int endHeight, int delay, int speed, int startDistanceFromTarget, int sceneId,
-			int height, int projectileY, int projectileX, int targetedEntityIndex, int spotAnimationId) {
-		this.spotAnimation = SpotAnimation.cache[spotAnimationId];
+	public Projectile(int startSlope, int endHeight, int delay, int speed, int startDistanceFromTarget, int sceneId, int height, int projectileY, int projectileX, int targetedEntityIndex, int spotAnimationId)
+	{
+		this.animation = SpotAnimation.cache[spotAnimationId];
 		this.sceneId = sceneId;
 		this.startX = projectileX;
 		this.startY = projectileY;
@@ -101,14 +100,14 @@ public class Projectile extends Renderable {
 		speedVectorZ += heightOffset * time;
 		modelRotationY = (int) (Math.atan2(speedVectorX, speedVectorY) * 325.949) + 1024 & 0x7ff;
 		modelRotationX = (int) (Math.atan2(speedVectorZ, speedVectorScalar) * 325.949) & 0x7ff;
-		if (spotAnimation.animationSequences == null) {
+		if (animation.sequences == null) {
 			return;
 		}
 		duration += time;
-		while (duration > spotAnimation.animationSequences.getFrameLength(animationFrame, (byte) -39)) {
-			duration -= spotAnimation.animationSequences.getFrameLength(animationFrame, (byte) -39) + 1;
+		while (duration > animation.sequences.getFrameLength(animationFrame)) {
+			duration -= animation.sequences.getFrameLength(animationFrame) + 1;
 			animationFrame++;
-			if (animationFrame >= spotAnimation.animationSequences.anInt50) {
+			if (animationFrame >= animation.sequences.anInt50) {
 				animationFrame = 0;
 			}
 		}

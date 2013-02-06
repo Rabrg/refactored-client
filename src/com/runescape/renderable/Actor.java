@@ -34,7 +34,7 @@ public class Actor extends Renderable {
 	public int aniomationDelay;
 	public int anInt1550;
 	public int chatEffect;
-	public int anInt1552 = -1000;
+	public int endCycle = -1000;
 	public int maxHealth;
 	public int currentHealth;
 	public int anInt1555 = 100;
@@ -61,7 +61,7 @@ public class Actor extends Renderable {
 	public int turnLeftAnimationId = -1;
 
 	public final void setPosition(int x, int y) {
-		if (animation != -1 && AnimationSequence.animationSequences[animation].priority == 1) {
+		if (animation != -1 && AnimationSequence.cache[animation].priority == 1) {
 			animation = -1;
 		}
 		int xOffset = x - pathX[0];
@@ -136,7 +136,7 @@ public class Actor extends Renderable {
 			x++;
 			y--;
 		}
-		if (animation != -1 && AnimationSequence.animationSequences[animation].priority == 1) {
+		if (animation != -1 && AnimationSequence.cache[animation].priority == 1) {
 			animation = -1;
 		}
 		if (pathLength < 9) {

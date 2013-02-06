@@ -7,7 +7,8 @@ import com.runescape.net.Buffer;
  * Visit http://jode.sourceforge.net/
  */
 
-public class ChatCensor {
+public class ChatCensor
+{
 	private static boolean aBoolean156;
 	private static int anInt157 = 748;
 	private static byte aByte161 = -117;
@@ -23,8 +24,7 @@ public class ChatCensor {
 	private static char[][] domains;
 	private static char[][] topLevelDomains;
 	private static int[] topLevelDomainsType;
-	private static final String[] aStringArray175 = { "cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops",
-			"faq", "noob", "noobs" };
+	private static final String[] aStringArray175 = { "cook", "cook's", "cooks", "seeks", "sheet", "woop", "woops", "faq", "noob", "noobs" };
 
 	public static final void load(Archive archive) {
 		Buffer fragmentsEnc = new Buffer(archive.getFile("fragmentsenc.txt"));
@@ -34,8 +34,7 @@ public class ChatCensor {
 		ChatCensor.loadDictionaries(fragmentsEnc, badEnc, domainEnc, topLevelDomainsBuffer);
 	}
 
-	private static final void loadDictionaries(Buffer fragmentsEnc, Buffer badEnc, Buffer domainEnc,
-			Buffer topLevelDomainsBuffer) {
+	private static final void loadDictionaries(Buffer fragmentsEnc, Buffer badEnc, Buffer domainEnc, Buffer topLevelDomainsBuffer) {
 		ChatCensor.loadBadEnc(badEnc);
 		ChatCensor.loadDomainEnc(domainEnc);
 		ChatCensor.loadFragmentsEnc(fragmentsEnc, true);
@@ -122,8 +121,7 @@ public class ChatCensor {
 	}
 
 	private static final boolean isLegalCharacter(char character) {
-		if ((character < ' ' || character > '\u007f') && character != ' ' && character != '\n' && character != '\t'
-				&& character != '\u00a3' && character != '\u20ac') {
+		if ((character < ' ' || character > '\u007f') && character != ' ' && character != '\n' && character != '\t' && character != '\u00a3' && character != '\u20ac') {
 			return false;
 		}
 		return true;
@@ -164,7 +162,7 @@ public class ChatCensor {
 				return;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("66493, " + cs + ", " + i + ", " + cs_25_ + ", " + runtimeexception.toString());
+			SignLink.reportError("66493, " + new String(cs) + ", " + i + ", " + new String(cs_25_) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -190,7 +188,7 @@ public class ChatCensor {
 				return;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("29891, " + i + ", " + cs + ", " + runtimeexception.toString());
+			SignLink.reportError("29891, " + i + ", " + new String(cs) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -200,13 +198,12 @@ public class ChatCensor {
 			if (bool) {
 				for (int i = 0; i < 2; i++) {
 					for (int i_28_ = ChatCensor.badWords.length - 1; i_28_ >= 0; i_28_--) {
-						ChatCensor.method197(ChatCensor.badBytes[i_28_], cs, ChatCensor.anInt162,
-								ChatCensor.badWords[i_28_]);
+						ChatCensor.method197(ChatCensor.badBytes[i_28_], cs, ChatCensor.anInt162, ChatCensor.badWords[i_28_]);
 					}
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("1109, " + cs + ", " + bool + ", " + runtimeexception.toString());
+			SignLink.reportError("1109, " + new String(cs) + ", " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -226,7 +223,7 @@ public class ChatCensor {
 				return;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("73832, " + b + ", " + cs + ", " + runtimeexception.toString());
+			SignLink.reportError("73832, " + b + ", " + new String(cs) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -282,8 +279,7 @@ public class ChatCensor {
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("48695, " + i + ", " + cs + ", " + cs_33_ + ", " + cs_34_ + ", " + cs_35_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("48695, " + i + ", " + new String(cs) + ", " + new String(cs_33_) + ", " + new String(cs_34_) + ", " + new String(cs_35_) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -321,8 +317,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("87152, " + cs + ", " + i + ", " + cs_47_ + ", " + i_48_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("87152, " + new String(cs) + ", " + i + ", " + new String(cs_47_) + ", " + i_48_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -360,8 +355,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("50081, " + b + ", " + cs + ", " + i + ", " + cs_52_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("50081, " + b + ", " + new String(cs) + ", " + i + ", " + new String(cs_52_) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -376,12 +370,11 @@ public class ChatCensor {
 				char[] cs_59_ = { 's', 'l', 'a', 's', 'h' };
 				ChatCensor.method197(null, cs_58_, ChatCensor.anInt162, cs_59_);
 				for (int i = 0; i < ChatCensor.topLevelDomains.length; i++) {
-					ChatCensor.method194(cs_58_, ChatCensor.topLevelDomains[i], ChatCensor.topLevelDomainsType[i],
-							(byte) 51, cs_56_, cs);
+					ChatCensor.method194(cs_58_, ChatCensor.topLevelDomains[i], ChatCensor.topLevelDomainsType[i], (byte) 51, cs_56_, cs);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("41909, " + bool + ", " + cs + ", " + runtimeexception.toString());
+			SignLink.reportError("41909, " + bool + ", " + new String(cs) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -402,8 +395,7 @@ public class ChatCensor {
 								c_68_ = cs_62_[i_65_ + 1];
 							}
 							int i_69_;
-							if (i_66_ < cs_60_.length
-									&& (i_69_ = ChatCensor.method199(43, c, cs_60_[i_66_], c_68_)) > 0) {
+							if (i_66_ < cs_60_.length && (i_69_ = ChatCensor.method199(43, c, cs_60_[i_66_], c_68_)) > 0) {
 								i_65_ += i_69_;
 								i_66_++;
 							} else {
@@ -510,8 +502,7 @@ public class ChatCensor {
 					ChatCensor.aBoolean168 = !ChatCensor.aBoolean168;
 				}
 			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("17314, " + cs + ", " + cs_60_ + ", " + i + ", " + b + ", " + cs_61_ + ", "
-						+ cs_62_ + ", " + runtimeexception.toString());
+				SignLink.reportError("17314, " + new String(cs) + ", " + new String(cs_60_) + ", " + i + ", " + b + ", " + new String(cs_61_) + ", " + new String(cs_62_) + ", " + runtimeexception.toString());
 				throw new RuntimeException();
 			}
 			break;
@@ -551,8 +542,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("50325, " + i + ", " + cs + ", " + i_84_ + ", " + cs_85_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("50325, " + i + ", " + new String(cs) + ", " + i_84_ + ", " + new String(cs_85_) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -590,8 +580,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("27208, " + bool + ", " + cs + ", " + cs_89_ + ", " + i + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("27208, " + bool + ", " + new String(cs) + ", " + new String(cs_89_) + ", " + i + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -615,8 +604,7 @@ public class ChatCensor {
 							c_103_ = cs[i_96_ + 1];
 						}
 						int i_104_;
-						if (i_97_ < cs_93_.length
-								&& (i_104_ = ChatCensor.method200(c_103_, c, ChatCensor.aBoolean163, cs_93_[i_97_])) > 0) {
+						if (i_97_ < cs_93_.length && (i_104_ = ChatCensor.method200(c_103_, c, ChatCensor.aBoolean163, cs_93_[i_97_])) > 0) {
 							if (i_104_ == 1 && ChatCensor.method208(c, -976)) {
 								bool_100_ = true;
 							}
@@ -683,14 +671,11 @@ public class ChatCensor {
 									i_111_ = i_94_;
 								}
 								for (/**/; !bool_110_ && i_111_ < i_96_; i_111_++) {
-									if (i_111_ >= 0
-											&& (!ChatCensor.method205(-12789, cs[i_111_]) || cs[i_111_] == '\'')) {
+									if (i_111_ >= 0 && (!ChatCensor.method205(-12789, cs[i_111_]) || cs[i_111_] == '\'')) {
 										char[] cs_112_ = new char[3];
 										int i_113_;
 										for (i_113_ = 0; i_113_ < 3; i_113_++) {
-											if (i_111_ + i_113_ >= cs.length
-													|| ChatCensor.method205(-12789, cs[i_111_ + i_113_])
-													&& cs[i_111_ + i_113_] != '\'') {
+											if (i_111_ + i_113_ >= cs.length || ChatCensor.method205(-12789, cs[i_111_ + i_113_]) && cs[i_111_ + i_113_] != '\'') {
 												break;
 											}
 											cs_112_[i_113_] = cs[i_111_ + i_113_];
@@ -699,9 +684,7 @@ public class ChatCensor {
 										if (i_113_ == 0) {
 											bool_114_ = false;
 										}
-										if (i_113_ < 3
-												&& i_111_ - 1 >= 0
-												&& (!ChatCensor.method205(-12789, cs[i_111_ - 1]) || cs[i_111_ - 1] == '\'')) {
+										if (i_113_ < 3 && i_111_ - 1 >= 0 && (!ChatCensor.method205(-12789, cs[i_111_ - 1]) || cs[i_111_ - 1] == '\'')) {
 											bool_114_ = false;
 										}
 										if (bool_114_ && !ChatCensor.method211(cs_112_, (byte) 4)) {
@@ -741,8 +724,7 @@ public class ChatCensor {
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("25459, " + bs + ", " + cs + ", " + i + ", " + cs_93_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("25459, " + bs + ", " + new String(cs) + ", " + i + ", " + new String(cs_93_) + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -773,8 +755,7 @@ public class ChatCensor {
 			} while (i != i_122_ && i + 1 != i_122_);
 			return false;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("67276, " + b + ", " + b_120_ + ", " + bs + ", " + b_121_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("67276, " + b + ", " + b_120_ + ", " + bs + ", " + b_121_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -807,8 +788,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("60577, " + i + ", " + c + ", " + c_124_ + ", " + c_125_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("60577, " + i + ", " + c + ", " + c_124_ + ", " + c_125_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -880,8 +860,7 @@ public class ChatCensor {
 					return 0;
 				}
 				if (c_127_ == 'i') {
-					if (c_126_ == 'y' || c_126_ == 'l' || c_126_ == 'j' || c_126_ == '1' || c_126_ == '!'
-							|| c_126_ == ':' || c_126_ == ';' || c_126_ == '|') {
+					if (c_126_ == 'y' || c_126_ == 'l' || c_126_ == 'j' || c_126_ == '1' || c_126_ == '!' || c_126_ == ':' || c_126_ == ';' || c_126_ == '|') {
 						return 1;
 					}
 					return 0;
@@ -910,8 +889,7 @@ public class ChatCensor {
 					if (c_126_ == '0' || c_126_ == '*') {
 						return 1;
 					}
-					if (c_126_ == '(' && c == ')' || c_126_ == '[' && c == ']' || c_126_ == '{' && c == '}'
-							|| c_126_ == '<' && c == '>') {
+					if (c_126_ == '(' && c == ')' || c_126_ == '[' && c == ']' || c_126_ == '{' && c == '}' || c_126_ == '<' && c == '>') {
 						return 2;
 					}
 					return 0;
@@ -959,8 +937,7 @@ public class ChatCensor {
 					return 0;
 				}
 				if (c_127_ == 'x') {
-					if (c_126_ == ')' && c == '(' || c_126_ == '}' && c == '{' || c_126_ == ']' && c == '['
-							|| c_126_ == '>' && c == '<') {
+					if (c_126_ == ')' && c == '(' || c_126_ == '}' && c == '{' || c_126_ == ']' && c == '[' || c_126_ == '>' && c == '<') {
 						return 2;
 					}
 					return 0;
@@ -1010,8 +987,7 @@ public class ChatCensor {
 			}
 			return 0;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("9538, " + c + ", " + c_126_ + ", " + bool + ", " + c_127_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("9538, " + c + ", " + c_126_ + ", " + bool + ", " + c_127_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1076,7 +1052,7 @@ public class ChatCensor {
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("38921, " + cs + ", " + i + ", " + runtimeexception.toString());
+			SignLink.reportError("38921, " + new String(cs) + ", " + i + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1091,7 +1067,7 @@ public class ChatCensor {
 			}
 			return -1;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("27983, " + cs + ", " + i + ", " + i_137_ + ", " + runtimeexception.toString());
+			SignLink.reportError("27983, " + new String(cs) + ", " + i + ", " + i_137_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1108,7 +1084,7 @@ public class ChatCensor {
 			}
 			return cs.length;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("1466, " + cs + ", " + i + ", " + i_139_ + ", " + runtimeexception.toString());
+			SignLink.reportError("1466, " + new String(cs) + ", " + i + ", " + i_139_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1245,7 +1221,7 @@ public class ChatCensor {
 			} while (i_143_ != i_144_ && i_143_ + 1 != i_144_);
 			return false;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("62482, " + cs + ", " + b + ", " + runtimeexception.toString());
+			SignLink.reportError("62482, " + new String(cs) + ", " + b + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -1275,7 +1251,7 @@ public class ChatCensor {
 			}
 			return i_147_;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("67682, " + cs + ", " + i + ", " + runtimeexception.toString());
+			SignLink.reportError("67682, " + new String(cs) + ", " + i + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}

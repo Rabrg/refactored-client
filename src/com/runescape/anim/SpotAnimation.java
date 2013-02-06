@@ -13,7 +13,7 @@ public class SpotAnimation {
 	public int id;
 	public int modelId;
 	public int animationId = -1;
-	public AnimationSequence animationSequences;
+	public AnimationSequence sequences;
 	public int[] originalModelColors = new int[6];
 	public int[] modifiedModelColors = new int[6];
 	public int resizeXY = 128;
@@ -48,8 +48,8 @@ public class SpotAnimation {
 				modelId = buffer.getUnsignedLEShort();
 			} else if (attributeId == 2) {
 				animationId = buffer.getUnsignedLEShort();
-				if (AnimationSequence.animationSequences != null) {
-					animationSequences = AnimationSequence.animationSequences[animationId];
+				if (AnimationSequence.cache != null) {
+					sequences = AnimationSequence.cache[animationId];
 				}
 			} else if (attributeId == 4) {
 				resizeXY = buffer.getUnsignedLEShort();

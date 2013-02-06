@@ -9,36 +9,37 @@ import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 import com.runescape.util.TextUtils;
 
-public class Widget {
+public class Widget
+{
 
-	public ImageRGB disabledSprite;
+	public ImageRGB disabledImage;
 	public int animationDuration;
-	public ImageRGB[] sprites;
+	public ImageRGB[] images;
 	public static Widget[] cache;
 	public int unknownOne;
 	public int[] conditionValues;
 	public int contentType;
-	public int[] spritesX;
+	public int[] imageX;
 	public int disabledHoveredColor;
 	public int actionType;
 	public String spellName;
 	public int enabledColor;
-	public int widgetWidth;
+	public int width;
 	public String tooltip;
 	public String selectedActionName;
 	public boolean typeFaceCentered;
 	public int scrollPosition;
 	public String[] actions;
-	public int[][] widgetOpcodes;
+	public int[][] opcodes;
 	public boolean filled;
 	public String enabledText;
 	public int hoveredPopup;
 	public int itemSpritePadsX;
 	public int disabledColor;
 	public int modelType;
-	public int modelId;
+	public int modelIndex;
 	public boolean itemDeletesDraged;
-	public int widgetParentId;
+	public int parentIndex;
 	public int spellUsableOn;
 	private static Cache spriteCache;
 	public int enabledHoveredColor;
@@ -49,27 +50,27 @@ public class Widget {
 	public int itemSpritePadsY;
 	public int[] conditionTypes;
 	public int animationFrame;
-	public int[] spritesY;
+	public int[] imageY;
 	public String disabledText;
-	public boolean itemWidget;
-	public int widgetId;
+	public boolean isInventory;
+	public int index;
 	public boolean unknownTwo;
 	public int[] itemAmounts;
 	public int[] items;
-	public byte widgetAlpha;
+	public byte alpha;
 	public int enabledModelType;
 	public int enabledModelId;
 	public int disabledAnimation;
 	public int enabledAnimation;
 	public boolean itemSwapable;
-	public ImageRGB enabledSprite;
+	public ImageRGB enabledImage;
 	public int scrollLimit;
-	public int widgetType;
+	public int type;
 	public int x;
 	static Cache modelCache = new Cache(30);
 	public int y;
 	public boolean hiddenUntilHovered;
-	public int widgetHeight;
+	public int height;
 	public boolean typeFaceShadowed;
 	public int zoom;
 	public int rotationX;
@@ -85,27 +86,27 @@ public class Widget {
 		itemAmounts[newSlot] = originalItem;
 	}
 
-	public static void load(Archive widgetArchive, TypeFace[] typeFaces, Archive mediaArchive) {
+	public static void load(Archive widgetArchive, TypeFace[] fonts, Archive mediaArchive) {
 		Widget.spriteCache = new Cache(50000);
 		Buffer buffer = new Buffer(widgetArchive.getFile("data"));
 		int parentId = -1;
 		int widgetCount = buffer.getUnsignedLEShort();
 		Widget.cache = new Widget[widgetCount];
 		while (buffer.offset < buffer.payload.length) {
-			int widgetId = buffer.getUnsignedLEShort();
-			if (widgetId == 65535) {
+			int widgetIndex = buffer.getUnsignedLEShort();
+			if (widgetIndex == 65535) {
 				parentId = buffer.getUnsignedLEShort();
-				widgetId = buffer.getUnsignedLEShort();
+				widgetIndex = buffer.getUnsignedLEShort();
 			}
-			Widget widget = Widget.cache[widgetId] = new Widget();
-			widget.widgetId = widgetId;
-			widget.widgetParentId = parentId;
-			widget.widgetType = buffer.getUnsignedByte();
+			Widget widget = Widget.cache[widgetIndex] = new Widget();
+			widget.index = widgetIndex;
+			widget.parentIndex = parentId;
+			widget.type = buffer.getUnsignedByte();
 			widget.actionType = buffer.getUnsignedByte();
 			widget.contentType = buffer.getUnsignedLEShort();
-			widget.widgetWidth = buffer.getUnsignedLEShort();
-			widget.widgetHeight = buffer.getUnsignedLEShort();
-			widget.widgetAlpha = (byte) buffer.getUnsignedByte();
+			widget.width = buffer.getUnsignedLEShort();
+			widget.height = buffer.getUnsignedLEShort();
+			widget.alpha = (byte) buffer.getUnsignedByte();
 			widget.hoveredPopup = buffer.getUnsignedByte();
 			if (widget.hoveredPopup != 0) {
 				widget.hoveredPopup = (widget.hoveredPopup - 1 << 8) + buffer.getUnsignedByte();
@@ -123,16 +124,16 @@ public class Widget {
 			}
 			int opcodeCount = buffer.getUnsignedByte();
 			if (opcodeCount > 0) {
-				widget.widgetOpcodes = new int[opcodeCount][];
+				widget.opcodes = new int[opcodeCount][];
 				for (int opcode = 0; opcode < opcodeCount; opcode++) {
 					int subOpcodeCount = buffer.getUnsignedLEShort();
-					widget.widgetOpcodes[opcode] = new int[subOpcodeCount];
+					widget.opcodes[opcode] = new int[subOpcodeCount];
 					for (int subOpcode = 0; subOpcode < subOpcodeCount; subOpcode++) {
-						widget.widgetOpcodes[opcode][subOpcode] = buffer.getUnsignedLEShort();
+						widget.opcodes[opcode][subOpcode] = buffer.getUnsignedLEShort();
 					}
 				}
 			}
-			if (widget.widgetType == 0) {
+			if (widget.type == 0) {
 				widget.scrollLimit = buffer.getUnsignedLEShort();
 				widget.hiddenUntilHovered = buffer.getUnsignedByte() == 1;
 				int childrenCount = buffer.getUnsignedLEShort();
@@ -145,33 +146,31 @@ public class Widget {
 					widget.childrenY[child] = buffer.getShort();
 				}
 			}
-			if (widget.widgetType == 1) {
+			if (widget.type == 1) {
 				widget.unknownOne = buffer.getUnsignedLEShort();
 				widget.unknownTwo = buffer.getUnsignedByte() == 1;
 			}
-			if (widget.widgetType == 2) {
-				widget.items = new int[widget.widgetWidth * widget.widgetHeight];
-				widget.itemAmounts = new int[widget.widgetWidth * widget.widgetHeight];
+			if (widget.type == 2) {
+				widget.items = new int[widget.width * widget.height];
+				widget.itemAmounts = new int[widget.width * widget.height];
 				widget.itemSwapable = buffer.getUnsignedByte() == 1;
-				widget.itemWidget = buffer.getUnsignedByte() == 1;
+				widget.isInventory = buffer.getUnsignedByte() == 1;
 				widget.itemUsable = buffer.getUnsignedByte() == 1;
 				widget.itemDeletesDraged = buffer.getUnsignedByte() == 1;
 				widget.itemSpritePadsX = buffer.getUnsignedByte();
 				widget.itemSpritePadsY = buffer.getUnsignedByte();
-				widget.spritesX = new int[20];
-				widget.spritesY = new int[20];
-				widget.sprites = new ImageRGB[20];
+				widget.imageX = new int[20];
+				widget.imageY = new int[20];
+				widget.images = new ImageRGB[20];
 				for (int sprite = 0; sprite < 20; sprite++) {
 					int hasSprite = buffer.getUnsignedByte();
 					if (hasSprite == 1) {
-						widget.spritesX[sprite] = buffer.getShort();
-						widget.spritesY[sprite] = buffer.getShort();
+						widget.imageX[sprite] = buffer.getShort();
+						widget.imageY[sprite] = buffer.getShort();
 						String spriteName = buffer.getString();
 						if (mediaArchive != null && spriteName.length() > 0) {
 							int spriteId = spriteName.lastIndexOf(",");
-							widget.sprites[sprite] = Widget.getSprite(
-									Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive,
-									spriteName.substring(0, spriteId));
+							widget.images[sprite] = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
 						}
 					}
 				}
@@ -183,63 +182,61 @@ public class Widget {
 					}
 				}
 			}
-			if (widget.widgetType == 3) {
+			if (widget.type == 3) {
 				widget.filled = buffer.getUnsignedByte() == 1;
 			}
-			if (widget.widgetType == 4 || widget.widgetType == 1) {
+			if (widget.type == 4 || widget.type == 1) {
 				widget.typeFaceCentered = buffer.getUnsignedByte() == 1;
 				int typeFace = buffer.getUnsignedByte();
-				if (typeFaces != null) {
-					widget.typeFaces = typeFaces[typeFace];
+				if (fonts != null) {
+					widget.typeFaces = fonts[typeFace];
 				}
 				widget.typeFaceShadowed = buffer.getUnsignedByte() == 1;
 			}
-			if (widget.widgetType == 4) {
+			if (widget.type == 4) {
 				widget.disabledText = buffer.getString();
 				widget.enabledText = buffer.getString();
 			}
-			if (widget.widgetType == 1 || widget.widgetType == 3 || widget.widgetType == 4) {
+			if (widget.type == 1 || widget.type == 3 || widget.type == 4) {
 				widget.disabledColor = buffer.getInt();
 			}
-			if (widget.widgetType == 3 || widget.widgetType == 4) {
+			if (widget.type == 3 || widget.type == 4) {
 				widget.enabledColor = buffer.getInt();
 				widget.disabledHoveredColor = buffer.getInt();
 				widget.enabledHoveredColor = buffer.getInt();
 			}
-			if (widget.widgetType == 5) {
+			if (widget.type == 5) {
 				String spriteName = buffer.getString();
 				if (mediaArchive != null && spriteName.length() > 0) {
 					int spriteId = spriteName.lastIndexOf(",");
-					widget.disabledSprite = Widget.getSprite(Integer.parseInt(spriteName.substring(spriteId + 1)),
-							mediaArchive, spriteName.substring(0, spriteId));
+					widget.disabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
 				}
 				spriteName = buffer.getString();
 				if (mediaArchive != null && spriteName.length() > 0) {
 					int spriteId = spriteName.lastIndexOf(",");
-					widget.enabledSprite = Widget.getSprite(Integer.parseInt(spriteName.substring(spriteId + 1)),
-							mediaArchive, spriteName.substring(0, spriteId));
+					widget.enabledImage = Widget.getImage(Integer.parseInt(spriteName.substring(spriteId + 1)), mediaArchive, spriteName.substring(0, spriteId));
 				}
 			}
-			if (widget.widgetType == 6) {
-				widgetId = buffer.getUnsignedByte();
-				if (widgetId != 0) {
+			if (widget.type == 6) {
+				widgetIndex = buffer.getUnsignedByte();
+				if (widgetIndex != 0) {
 					widget.modelType = 1;
-					widget.modelId = (widgetId - 1 << 8) + buffer.getUnsignedByte();
+					widget.modelIndex = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
 				}
-				widgetId = buffer.getUnsignedByte();
-				if (widgetId != 0) {
+				widgetIndex = buffer.getUnsignedByte();
+				if (widgetIndex != 0) {
 					widget.enabledModelType = 1;
-					widget.enabledModelId = (widgetId - 1 << 8) + buffer.getUnsignedByte();
+					widget.enabledModelId = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
 				}
-				widgetId = buffer.getUnsignedByte();
-				if (widgetId != 0) {
-					widget.disabledAnimation = (widgetId - 1 << 8) + buffer.getUnsignedByte();
+				widgetIndex = buffer.getUnsignedByte();
+				if (widgetIndex != 0) {
+					widget.disabledAnimation = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
 				} else {
 					widget.disabledAnimation = -1;
 				}
-				widgetId = buffer.getUnsignedByte();
-				if (widgetId != 0) {
-					widget.enabledAnimation = (widgetId - 1 << 8) + buffer.getUnsignedByte();
+				widgetIndex = buffer.getUnsignedByte();
+				if (widgetIndex != 0) {
+					widget.enabledAnimation = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
 				} else {
 					widget.enabledAnimation = -1;
 				}
@@ -247,19 +244,19 @@ public class Widget {
 				widget.rotationX = buffer.getUnsignedLEShort();
 				widget.rotationY = buffer.getUnsignedLEShort();
 			}
-			if (widget.widgetType == 7) {
-				widget.items = new int[widget.widgetWidth * widget.widgetHeight];
-				widget.itemAmounts = new int[widget.widgetWidth * widget.widgetHeight];
+			if (widget.type == 7) {
+				widget.items = new int[widget.width * widget.height];
+				widget.itemAmounts = new int[widget.width * widget.height];
 				widget.typeFaceCentered = buffer.getUnsignedByte() == 1;
 				int typeFaceCount = buffer.getUnsignedByte();
-				if (typeFaces != null) {
-					widget.typeFaces = typeFaces[typeFaceCount];
+				if (fonts != null) {
+					widget.typeFaces = fonts[typeFaceCount];
 				}
 				widget.typeFaceShadowed = buffer.getUnsignedByte() == 1;
 				widget.disabledColor = buffer.getInt();
 				widget.itemSpritePadsX = buffer.getShort();
 				widget.itemSpritePadsY = buffer.getShort();
-				widget.itemWidget = buffer.getUnsignedByte() == 1;
+				widget.isInventory = buffer.getUnsignedByte() == 1;
 				widget.actions = new String[5];
 				for (int action = 0; action < 5; action++) {
 					widget.actions[action] = buffer.getString();
@@ -268,12 +265,12 @@ public class Widget {
 					}
 				}
 			}
-			if (widget.actionType == 2 || widget.widgetType == 2) {
+			if (widget.actionType == 2 || widget.type == 2) {
 				widget.selectedActionName = buffer.getString();
 				widget.spellName = buffer.getString();
 				widget.spellUsableOn = buffer.getUnsignedLEShort();
 			}
-			if (widget.widgetType == 8) {
+			if (widget.type == 8) {
 				widget.disabledText = buffer.getString();
 			}
 			if (widget.actionType == 1 || widget.actionType == 4 || widget.actionType == 5 || widget.actionType == 6) {
@@ -309,7 +306,7 @@ public class Widget {
 			model = ActorDefinition.get(modelId).getHeadModel();
 		}
 		if (modelType == 3) {
-			model = Client.clientsPlayer.getHeadModel();
+			model = Client.localPlayer.getHeadModel();
 		}
 		if (modelType == 4) {
 			model = ItemDefinition.get(modelId).getInventoryModel(50);
@@ -323,7 +320,7 @@ public class Widget {
 		return model;
 	}
 
-	private static ImageRGB getSprite(int spriteId, Archive mediaArchive, String spriteName) {
+	private static ImageRGB getImage(int spriteId, Archive mediaArchive, String spriteName) {
 		long spriteHash = (TextUtils.spriteToHash(spriteName) << 8) + spriteId;
 		ImageRGB sprite = (ImageRGB) Widget.spriteCache.get(spriteHash);
 		if (sprite != null) {
@@ -348,7 +345,7 @@ public class Widget {
 		if (modelEnabled) {
 			model = getModel(enabledModelType, enabledModelId);
 		} else {
-			model = getModel(modelType, modelId);
+			model = getModel(modelType, modelIndex);
 		}
 		if (model == null) {
 			return null;
