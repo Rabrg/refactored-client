@@ -1,16 +1,14 @@
 package com.runescape.anim;
 
-/* AnimationSequence - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
 import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
-public class AnimationSequence {
+public class AnimationSequence
+{
 	private boolean aBoolean47 = false;
-	public static int anInt48;
-	public static AnimationSequence[] animationSequences;
+	public static int count;
+	public static AnimationSequence[] cache;
 	public int anInt50;
 	public int[] animationForFrame;
 	public int[] anIntArray52;
@@ -27,42 +25,31 @@ public class AnimationSequence {
 	public int anInt63 = 2;
 	public int anInt64;
 
-	public static void method153(int i, Archive archive) {
+	public static void load(Archive archive) {
 		do {
 			try {
 				Buffer buffer = new Buffer(archive.getFile("seq.dat"));
-				AnimationSequence.anInt48 = buffer.getUnsignedLEShort();
-				if (AnimationSequence.animationSequences == null) {
-					AnimationSequence.animationSequences = new AnimationSequence[AnimationSequence.anInt48];
+				AnimationSequence.count = buffer.getUnsignedLEShort();
+				if (AnimationSequence.cache == null) {
+					AnimationSequence.cache = new AnimationSequence[AnimationSequence.count];
 				}
-				for (int i_0_ = 0; i_0_ < AnimationSequence.anInt48; i_0_++) {
-					if (AnimationSequence.animationSequences[i_0_] == null) {
-						AnimationSequence.animationSequences[i_0_] = new AnimationSequence();
+				for (int i = 0; i < AnimationSequence.count; i++) {
+					if (AnimationSequence.cache[i] == null) {
+						AnimationSequence.cache[i] = new AnimationSequence();
 					}
-					AnimationSequence.animationSequences[i_0_].method155(true, buffer);
-				}
-				if (i == 0) {
-					break;
-				}
-				for (int i_1_ = 1; i_1_ > 0; i_1_++) {
-					/* empty */
+					AnimationSequence.cache[i].method155(true, buffer);
 				}
 			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("95447, " + i + ", " + archive + ", " + runtimeexception.toString());
+				SignLink.reportError("95447, " + archive + ", " + runtimeexception.toString());
 				throw new RuntimeException();
 			}
 			break;
 		} while (false);
 	}
 
-	public int getFrameLength(int i, byte b) {
+	public int getFrameLength(int i) {
 		try {
 			int i_2_ = anIntArray53[i];
-			if (b != -39) {
-				for (int i_3_ = 1; i_3_ > 0; i_3_++) {
-					/* empty */
-				}
-			}
 			if (i_2_ == 0) {
 				Animation animation = Animation.getAnimation(animationForFrame[i]);
 				if (animation != null) {
@@ -74,7 +61,7 @@ public class AnimationSequence {
 			}
 			return i_2_;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("1006, " + i + ", " + b + ", " + runtimeexception.toString());
+			SignLink.reportError("1006, " + i + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}

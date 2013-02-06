@@ -6,9 +6,9 @@ import java.awt.Graphics;
 @SuppressWarnings("serial")
 public class GameFrame extends Frame {
 
-	private final GameStub gameStub;
+	private final GameShell gameStub;
 
-	public GameFrame(GameStub gameStub, int width, int height) {
+	public GameFrame(GameShell gameStub, int width, int height) {
 		this.gameStub = gameStub;
 		this.setTitle("Jagex");
 		this.setResizable(false);

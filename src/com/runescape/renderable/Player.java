@@ -63,7 +63,7 @@ public class Player extends Actor {
 				spotAnimationModel2.translate(0, -spotAnimationDelay, 0);
 				spotAnimationModel2.createBones();
 				spotAnimationModel2
-						.applyTransform(spotAnimation.animationSequences.animationForFrame[currentAnimationFrame]);
+						.applyTransform(spotAnimation.sequences.animationForFrame[currentAnimationFrame]);
 				spotAnimationModel2.triangleSkin = null;
 				spotAnimationModel2.vectorSkin = null;
 				if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
@@ -200,9 +200,9 @@ public class Player extends Actor {
 		if (npcDefinition != null) {
 			int i_11_ = -1;
 			if (animation >= 0 && aniomationDelay == 0) {
-				i_11_ = AnimationSequence.animationSequences[animation].animationForFrame[anInt1547];
+				i_11_ = AnimationSequence.cache[animation].animationForFrame[anInt1547];
 			} else if (anInt1537 >= 0) {
-				i_11_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
+				i_11_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
 			}
 			Model model = npcDefinition.getChildModel(-1, i_11_, null);
 			return model;
@@ -213,10 +213,10 @@ public class Player extends Actor {
 		int i_14_ = -1;
 		int i_15_ = -1;
 		if (animation >= 0 && aniomationDelay == 0) {
-			AnimationSequence animationsequence = AnimationSequence.animationSequences[animation];
+			AnimationSequence animationsequence = AnimationSequence.cache[animation];
 			i_12_ = animationsequence.animationForFrame[anInt1547];
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {
-				i_13_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
+				i_13_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
 			}
 			if (animationsequence.anInt58 >= 0) {
 				i_14_ = animationsequence.anInt58;
@@ -227,7 +227,7 @@ public class Player extends Actor {
 				l += i_15_ - appearance[3] << 16;
 			}
 		} else if (anInt1537 >= 0) {
-			i_12_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
+			i_12_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
 		}
 		Model model = (Model) Player.modelCache.get(l);
 		if (model == null) {
@@ -301,7 +301,7 @@ public class Player extends Actor {
 		Model model_25_ = Model.aModel1614;
 		model_25_.method412(7, model, Animation.exists(i_12_) & Animation.exists(i_13_));
 		if (i_12_ != -1 && i_13_ != -1) {
-			model_25_.mixAnimationFrames(-20491, AnimationSequence.animationSequences[animation].anIntArray55, i_13_,
+			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].anIntArray55, i_13_,
 					i_12_);
 		} else if (i_12_ != -1) {
 			model_25_.applyTransform(i_12_);

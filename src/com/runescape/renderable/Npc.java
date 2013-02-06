@@ -6,22 +6,22 @@ import com.runescape.anim.SpotAnimation;
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.graphic.Model;
 
-public class Npc extends Actor {
+public class Npc extends Actor
+{
 	public ActorDefinition npcDefinition;
 
 	private final Model method400() {
 		if (animation >= 0 && aniomationDelay == 0) {
-			int frameId = AnimationSequence.animationSequences[animation].animationForFrame[anInt1547];
+			int frameId = AnimationSequence.cache[animation].animationForFrame[anInt1547];
 			int frameId2 = -1;
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {
-				frameId2 = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
+				frameId2 = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
 			}
-			return npcDefinition.getChildModel(frameId2, frameId,
-					AnimationSequence.animationSequences[animation].anIntArray55);
+			return npcDefinition.getChildModel(frameId2, frameId, AnimationSequence.cache[animation].anIntArray55);
 		}
 		int i_3_ = -1;
 		if (anInt1537 >= 0) {
-			i_3_ = AnimationSequence.animationSequences[anInt1537].animationForFrame[anInt1538];
+			i_3_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
 		}
 		return npcDefinition.getChildModel(-1, i_3_, null);
 	}
@@ -40,7 +40,7 @@ public class Npc extends Actor {
 			SpotAnimation spotanimation = SpotAnimation.cache[spotAnimationId];
 			Model model_4_ = spotanimation.getModel();
 			if (model_4_ != null) {
-				int animationId = spotanimation.animationSequences.animationForFrame[currentAnimationFrame];
+				int animationId = spotanimation.sequences.animationForFrame[currentAnimationFrame];
 				Model animationModel = new Model(true, Animation.exists(animationId), false, model_4_);
 				animationModel.translate(0, -spotAnimationDelay, 0);
 				animationModel.createBones();
@@ -50,8 +50,7 @@ public class Npc extends Actor {
 				if (spotanimation.resizeXY != 128 || spotanimation.resizeZ != 128) {
 					animationModel.scaleT(spotanimation.resizeXY, spotanimation.resizeXY, spotanimation.resizeZ);
 				}
-				animationModel.applyLighting(64 + spotanimation.modelBrightness, 850 + spotanimation.modelShadow, -30,
-						-50, -30, true);
+				animationModel.applyLighting(64 + spotanimation.modelBrightness, 850 + spotanimation.modelShadow, -30, -50, -30, true);
 				Model[] models = { model, animationModel };
 				model = new Model(2, -819, true, models);
 			}

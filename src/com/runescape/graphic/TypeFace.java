@@ -78,7 +78,7 @@ public class TypeFace extends Rasterizer {
 		drawRegularString(string, x - getStringWidth(string) / 2, y, color);
 	}
 
-	public void drawCenteredShadowedString(String string, int x, int y, int color, boolean shadowed) {
+	public void drawString(String string, int x, int y, int color, boolean shadowed) {
 		drawShadowedString(string, x - getStringEffectWidth(string) / 2, y, shadowed, color);
 	}
 

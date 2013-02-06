@@ -13,7 +13,7 @@ public class IdentityKit {
 	public int[] originalModelColors = new int[6];
 	public int[] modifiedModelColors = new int[6];
 	public int[] headModelIndexes = { -1, -1, -1, -1, -1 };
-	public boolean interfaceDisplayed = false;
+	public boolean widgetDisplayed = false;
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("idk.dat"));
@@ -44,7 +44,7 @@ public class IdentityKit {
 					modelIndexes[model] = buffer.getUnsignedLEShort();
 				}
 			} else if (attributeId == 3) {
-				interfaceDisplayed = true;
+				widgetDisplayed = true;
 			} else if (attributeId >= 40 && attributeId < 50) {
 				originalModelColors[attributeId - 40] = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 50 && attributeId < 60) {
