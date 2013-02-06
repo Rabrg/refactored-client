@@ -2510,9 +2510,9 @@ public class Client extends GameStub {
 			aBoolean1056 = true;
 			for (int i_208_ = 0; i_208_ < 7; i_208_++) {
 				anIntArray1090[i_208_] = -1;
-				for (int i_209_ = 0; i_209_ < IdentityKit.identityKitCount; i_209_++) {
-					if (!IdentityKit.identityKitCache[i_209_].interfaceDisplayed
-							&& IdentityKit.identityKitCache[i_209_].partId == i_208_ + (aBoolean1072 ? 0 : 7)) {
+				for (int i_209_ = 0; i_209_ < IdentityKit.count; i_209_++) {
+					if (!IdentityKit.cache[i_209_].interfaceDisplayed
+							&& IdentityKit.cache[i_209_].partIndex == i_208_ + (aBoolean1072 ? 0 : 7)) {
 						anIntArray1090[i_208_] = i_209_;
 						break;
 					}
@@ -2702,13 +2702,13 @@ public class Client extends GameStub {
 				if (i_225_ != -1) {
 					do {
 						if (i_224_ == 0 && --i_225_ < 0) {
-							i_225_ = IdentityKit.identityKitCount - 1;
+							i_225_ = IdentityKit.count - 1;
 						}
-						if (i_224_ == 1 && ++i_225_ >= IdentityKit.identityKitCount) {
+						if (i_224_ == 1 && ++i_225_ >= IdentityKit.count) {
 							i_225_ = 0;
 						}
-					} while (IdentityKit.identityKitCache[i_225_].interfaceDisplayed
-							|| IdentityKit.identityKitCache[i_225_].partId != i_223_ + (aBoolean1072 ? 0 : 7));
+					} while (IdentityKit.cache[i_225_].interfaceDisplayed
+							|| IdentityKit.cache[i_225_].partIndex != i_223_ + (aBoolean1072 ? 0 : 7));
 					anIntArray1090[i_223_] = i_225_;
 					aBoolean1056 = true;
 				}
@@ -5363,7 +5363,7 @@ public class Client extends GameStub {
 		ActorDefinition.reset();
 		ItemDefinition.reset();
 		FloorDefinition.cache = null;
-		IdentityKit.identityKitCache = null;
+		IdentityKit.cache = null;
 		Widget.widgets = null;
 		AnimationSequence.animationSequences = null;
 		SpotAnimation.cache = null;
@@ -5841,7 +5841,7 @@ public class Client extends GameStub {
 					if (aBoolean1056) {
 						for (int i_436_ = 0; i_436_ < 7; i_436_++) {
 							int i_437_ = anIntArray1090[i_436_];
-							if (i_437_ >= 0 && !IdentityKit.identityKitCache[i_437_].isBodyModelCached()) {
+							if (i_437_ >= 0 && !IdentityKit.cache[i_437_].isBodyModelCached()) {
 								return;
 							}
 						}
@@ -5851,7 +5851,7 @@ public class Client extends GameStub {
 						for (int i_439_ = 0; i_439_ < 7; i_439_++) {
 							int i_440_ = anIntArray1090[i_439_];
 							if (i_440_ >= 0) {
-								models[i_438_++] = IdentityKit.identityKitCache[i_440_].getBodyModel();
+								models[i_438_++] = IdentityKit.cache[i_440_].getBodyModel();
 							}
 						}
 						Model model = new Model(i_438_, models);

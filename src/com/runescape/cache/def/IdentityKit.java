@@ -6,26 +6,26 @@ import com.runescape.net.Buffer;
 
 public class IdentityKit {
 
-	public static int identityKitCount;
-	public static IdentityKit[] identityKitCache;
-	public int partId = -1;
-	public int[] bodyModelIds;
+	public static int count;
+	public static IdentityKit[] cache;
+	public int partIndex = -1;
+	public int[] modelIndexes;
 	public int[] originalModelColors = new int[6];
 	public int[] modifiedModelColors = new int[6];
-	public int[] headModels = { -1, -1, -1, -1, -1 };
+	public int[] dialogueIndexes = { -1, -1, -1, -1, -1 };
 	public boolean interfaceDisplayed = false;
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("idk.dat"));
-		IdentityKit.identityKitCount = buffer.getUnsignedLEShort();
-		if (IdentityKit.identityKitCache == null) {
-			IdentityKit.identityKitCache = new IdentityKit[IdentityKit.identityKitCount];
+		IdentityKit.count = buffer.getUnsignedLEShort();
+		if (IdentityKit.cache == null) {
+			IdentityKit.cache = new IdentityKit[IdentityKit.count];
 		}
-		for (int identityKit = 0; identityKit < IdentityKit.identityKitCount; identityKit++) {
-			if (IdentityKit.identityKitCache[identityKit] == null) {
-				IdentityKit.identityKitCache[identityKit] = new IdentityKit();
+		for (int identityKit = 0; identityKit < IdentityKit.count; identityKit++) {
+			if (IdentityKit.cache[identityKit] == null) {
+				IdentityKit.cache[identityKit] = new IdentityKit();
 			}
-			IdentityKit.identityKitCache[identityKit].loadDefinition(buffer);
+			IdentityKit.cache[identityKit].loadDefinition(buffer);
 		}
 	}
 
@@ -36,12 +36,12 @@ public class IdentityKit {
 				break;
 			}
 			if (attributeId == 1) {
-				partId = buffer.getUnsignedByte();
+				partIndex = buffer.getUnsignedByte();
 			} else if (attributeId == 2) {
 				int modelCount = buffer.getUnsignedByte();
-				bodyModelIds = new int[modelCount];
+				modelIndexes = new int[modelCount];
 				for (int model = 0; model < modelCount; model++) {
-					bodyModelIds[model] = buffer.getUnsignedLEShort();
+					modelIndexes[model] = buffer.getUnsignedLEShort();
 				}
 			} else if (attributeId == 3) {
 				interfaceDisplayed = true;
@@ -50,7 +50,7 @@ public class IdentityKit {
 			} else if (attributeId >= 50 && attributeId < 60) {
 				modifiedModelColors[attributeId - 50] = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 60 && attributeId < 70) {
-				headModels[attributeId - 60] = buffer.getUnsignedLEShort();
+				dialogueIndexes[attributeId - 60] = buffer.getUnsignedLEShort();
 			} else {
 				System.out.println("Error unrecognised config code: " + attributeId);
 			}
@@ -58,12 +58,12 @@ public class IdentityKit {
 	}
 
 	public boolean isBodyModelCached() {
-		if (bodyModelIds == null) {
+		if (modelIndexes == null) {
 			return true;
 		}
 		boolean isCached = true;
-		for (int model = 0; model < bodyModelIds.length; model++) {
-			if (!Model.isCached(bodyModelIds[model])) {
+		for (int model = 0; model < modelIndexes.length; model++) {
+			if (!Model.isCached(modelIndexes[model])) {
 				isCached = false;
 			}
 		}
@@ -71,12 +71,12 @@ public class IdentityKit {
 	}
 
 	public Model getBodyModel() {
-		if (bodyModelIds == null) {
+		if (modelIndexes == null) {
 			return null;
 		}
-		Model[] models = new Model[bodyModelIds.length];
-		for (int model = 0; model < bodyModelIds.length; model++) {
-			models[model] = Model.getModel(bodyModelIds[model]);
+		Model[] models = new Model[modelIndexes.length];
+		for (int model = 0; model < modelIndexes.length; model++) {
+			models[model] = Model.getModel(modelIndexes[model]);
 		}
 		Model model;
 		if (models.length == 1) {
@@ -96,7 +96,7 @@ public class IdentityKit {
 	public boolean isHeadModelCached() {
 		boolean isCached = true;
 		for (int model = 0; model < 5; model++) {
-			if (headModels[model] != -1 && !Model.isCached(headModels[model])) {
+			if (dialogueIndexes[model] != -1 && !Model.isCached(dialogueIndexes[model])) {
 				isCached = false;
 			}
 		}
@@ -107,8 +107,8 @@ public class IdentityKit {
 		Model[] models = new Model[5];
 		int modelAmount = 0;
 		for (int model = 0; model < 5; model++) {
-			if (headModels[model] != -1) {
-				models[modelAmount++] = Model.getModel(headModels[model]);
+			if (dialogueIndexes[model] != -1) {
+				models[modelAmount++] = Model.getModel(dialogueIndexes[model]);
 			}
 		}
 		Model model = new Model(modelAmount, models);

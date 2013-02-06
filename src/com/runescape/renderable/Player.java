@@ -240,7 +240,7 @@ public class Player extends Actor {
 				if (i_14_ >= 0 && i_17_ == 5) {
 					i_18_ = i_14_;
 				}
-				if (i_18_ >= 256 && i_18_ < 512 && !IdentityKit.identityKitCache[i_18_ - 256].isBodyModelCached()) {
+				if (i_18_ >= 256 && i_18_ < 512 && !IdentityKit.cache[i_18_ - 256].isBodyModelCached()) {
 					bool = true;
 				}
 				if (i_18_ >= 512 && !ItemDefinition.getDefinition(i_18_ - 512).isEquipModelCached(gender)) {
@@ -268,7 +268,7 @@ public class Player extends Actor {
 					i_21_ = i_14_;
 				}
 				if (i_21_ >= 256 && i_21_ < 512) {
-					Model model_22_ = IdentityKit.identityKitCache[i_21_ - 256].getBodyModel();
+					Model model_22_ = IdentityKit.cache[i_21_ - 256].getBodyModel();
 					if (model_22_ != null) {
 						models[i_19_++] = model_22_;
 					}
@@ -331,7 +331,7 @@ public class Player extends Actor {
 		for (int index = 0; index < 12; index++) {
 			int appearanceId = appearance[index];
 			if (appearanceId >= 256 && appearanceId < 512
-					&& !IdentityKit.identityKitCache[appearanceId - 256].isHeadModelCached()) {
+					&& !IdentityKit.cache[appearanceId - 256].isHeadModelCached()) {
 				cached = true;
 			}
 			if (appearanceId >= 512 && !ItemDefinition.getDefinition(appearanceId - 512).isDialogueCached(gender)) {
@@ -346,7 +346,7 @@ public class Player extends Actor {
 		for (int modelIndex = 0; modelIndex < 12; modelIndex++) {
 			int appearanceId = appearance[modelIndex];
 			if (appearanceId >= 256 && appearanceId < 512) {
-				Model subModel = IdentityKit.identityKitCache[appearanceId - 256].getHeadModel();
+				Model subModel = IdentityKit.cache[appearanceId - 256].getHeadModel();
 				if (subModel != null) {
 					headModels[headModelsOffset++] = subModel;
 				}
