@@ -539,7 +539,7 @@ public class Client extends GameStub
 	public final void method15(int i) {
 		do {
 			try {
-				SignLink.anInt634 = 0;
+				SignLink.midiFade = 0;
 				SignLink.nextSongName = "stop";
 				if (i > 0) {
 					break;
@@ -942,7 +942,7 @@ public class Client extends GameStub
 	public final void method21(boolean bool, int i, byte[] bs) {
 		do {
 			try {
-				SignLink.anInt634 = bool ? 1 : 0;
+				SignLink.midiFade = bool ? 1 : 0;
 				SignLink.writeMidi(bs, bs.length);
 				if (i == 0) {
 					break;
@@ -6984,9 +6984,6 @@ public class Client extends GameStub
 	@Override
 	public final void startup() {
 		drawLoadingText(20, "Starting up");
-		if (SignLink.wait) {
-			mindel = 5;
-		}
 		if (Client.aBoolean1018) {
 			aBoolean1277 = true;
 		} else {

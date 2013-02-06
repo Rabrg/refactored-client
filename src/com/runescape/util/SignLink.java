@@ -21,7 +21,6 @@ public class SignLink implements Runnable
 	public static int storeIndex = 32;
 	public static RandomAccessFile mainCache = null;
 	public static RandomAccessFile[] cacheIndexes = new RandomAccessFile[5];
-	public static boolean wait;
 	public static Applet applet = null;
 	private static boolean active;
 	private static InetAddress nextInetAddress;
@@ -40,7 +39,7 @@ public class SignLink implements Runnable
 	private static int nextMidiIndex;
 	public static String nextSongName = null;
 	public static int midiVolume;
-	public static int anInt634;
+	public static int midiFade;
 	private static boolean writeSoundEffect;
 	private static int nextWaveIndex;
 	public static String nextEffectName = null;
