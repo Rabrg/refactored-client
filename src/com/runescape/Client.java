@@ -70,6 +70,8 @@ import com.runescape.util.TextUtils;
 public class Client extends GameShell
 {
 
+	public static final boolean JAGGRAB = false;
+	public static final boolean RSA = false;
 	private int ignoreListCount;
 	private long aLong849;
 	private int[][] distanceValues = new int[104][104];
@@ -110,7 +112,7 @@ public class Client extends GameShell
 	private int anInt886;
 	private int anInt887;
 	private int playerRights;
-	private int[] skillExps = new int[SkillConstants.SKILL_COUNT];
+	private int[] skillExperience = new int[SkillConstants.SKILL_COUNT];
 	private IndexedImage anIndexedImage890;
 	private IndexedImage anIndexedImage891;
 	private IndexedImage anIndexedImage892;
@@ -164,7 +166,7 @@ public class Client extends GameShell
 	private int anInt942;
 	private int currentSceneId;
 	private static boolean aBoolean944 = true;
-	private int[] skillLevels = new int[SkillConstants.SKILL_COUNT];
+	private int[] skillLevel = new int[SkillConstants.SKILL_COUNT];
 	private static int anInt949;
 	private long[] ignoreList = new long[100];
 	private boolean aBoolean951 = false;
@@ -277,8 +279,8 @@ public class Client extends GameShell
 	private int anInt1065;
 	private int anInt1066;
 	private int anInt1067 = -1;
-	private int[] maxSkillLevels = new int[SkillConstants.SKILL_COUNT];
-	private int[] anIntArray1070 = new int[2000];
+	private int[] skillMaxLevel = new int[SkillConstants.SKILL_COUNT];
+	private int[] defaultSettings = new int[2000];
 	private int anInt1071;
 	private boolean aBoolean1072 = true;
 	private int anInt1073;
@@ -506,8 +508,6 @@ public class Client extends GameShell
 	private int publicChatSetting;
 	private static int currentWalkingQueueSize;
 	private int anInt1314 = -1;
-	public static final boolean JAGGRAB = false;
-	public static final boolean RSA = false;
 
 	private static final String formatNumber(int value) {
 		try {
@@ -2803,7 +2803,7 @@ public class Client extends GameShell
 				titleboxImage = new IndexedImage(anArchive1078, "titlebox", 0);
 				titleboxButtonImage = new IndexedImage(anArchive1078, "titlebutton", 0);
 				titleFlameEmblem = new IndexedImage[12];
-				
+
 				int icon = 0;
 				try {
 					icon = Integer.parseInt(getParameter("fl_icon"));
@@ -8249,7 +8249,7 @@ public class Client extends GameShell
 								bool = true;
 							}
 							int i_648_;
-							if (method131(widget_635_, false)) {
+							if (method131(widget_635_)) {
 								i_648_ = widget_635_.enabledColor;
 								if (bool && widget_635_.enabledHoveredColor != 0) {
 									i_648_ = widget_635_.enabledHoveredColor;
@@ -8279,7 +8279,7 @@ public class Client extends GameShell
 								bool = true;
 							}
 							int i_649_;
-							if (method131(widget_635_, false)) {
+							if (method131(widget_635_)) {
 								i_649_ = widget_635_.enabledColor;
 								if (bool && widget_635_.enabledHoveredColor != 0) {
 									i_649_ = widget_635_.enabledHoveredColor;
@@ -8362,7 +8362,7 @@ public class Client extends GameShell
 							}
 						} else if (widget_635_.type == 5) {
 							ImageRGB imagergb;
-							if (method131(widget_635_, false)) {
+							if (method131(widget_635_)) {
 								imagergb = widget_635_.enabledImage;
 							} else {
 								imagergb = widget_635_.disabledImage;
@@ -8377,7 +8377,7 @@ public class Client extends GameShell
 							Rasterizer3D.centerY = i_634_ + widget_635_.height / 2;
 							int i_660_ = Rasterizer3D.SINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
 							int i_661_ = Rasterizer3D.COSINE[widget_635_.rotationX] * widget_635_.zoom >> 16;
-							boolean bool = method131(widget_635_, false);
+							boolean bool = method131(widget_635_);
 							int i_662_;
 							if (bool) {
 								i_662_ = widget_635_.enabledAnimation;
@@ -9158,7 +9158,7 @@ public class Client extends GameShell
 					bool_742_ |= method119(i, widget_744_.index);
 				}
 				if (widget_744_.type == 6 && (widget_744_.disabledAnimation != -1 || widget_744_.enabledAnimation != -1)) {
-					boolean bool_745_ = method131(widget_744_, false);
+					boolean bool_745_ = method131(widget_744_);
 					int i_746_;
 					if (bool_745_) {
 						i_746_ = widget_744_.enabledAnimation;
@@ -9356,13 +9356,13 @@ public class Client extends GameShell
 					return result;
 				}
 				if (opcode == 1) {
-					value = skillLevels[opcodes[counter++]];
+					value = skillLevel[opcodes[counter++]];
 				}
 				if (opcode == 2) {
-					value = maxSkillLevels[opcodes[counter++]];
+					value = skillMaxLevel[opcodes[counter++]];
 				}
 				if (opcode == 3) {
-					value = skillExps[opcodes[counter++]];
+					value = skillExperience[opcodes[counter++]];
 				}
 				if (opcode == 4) {
 					Widget itemWidget = Widget.cache[opcodes[counter++]];
@@ -9379,7 +9379,7 @@ public class Client extends GameShell
 					value = settings[opcodes[counter++]];
 				}
 				if (opcode == 6) {
-					value = Client.xpForSkillLevel[maxSkillLevels[opcodes[counter++]] - 1];
+					value = Client.xpForSkillLevel[skillMaxLevel[opcodes[counter++]] - 1];
 				}
 				if (opcode == 7) {
 					value = settings[opcodes[counter++]] * 100 / 46875;
@@ -9390,7 +9390,7 @@ public class Client extends GameShell
 				if (opcode == 9) {
 					for (int skilll = 0; skilll < SkillConstants.SKILL_COUNT; skilll++) {
 						if (SkillConstants.SKILL_TOGGLES[skilll]) {
-							value += maxSkillLevels[skilll];
+							value += skillMaxLevel[skilll];
 						}
 					}
 				}
@@ -9738,35 +9738,33 @@ public class Client extends GameShell
 		}
 	}
 
-	public final boolean method131(Widget widget, boolean bool) {
+	public final boolean method131(Widget widget) {
 		try {
-			if (bool) {
-			}
 			if (widget.conditionTypes == null) {
 				return false;
 			}
 			for (int i = 0; i < widget.conditionTypes.length; i++) {
-				int i_819_ = parseWidgetOpcode(widget, i);
-				int i_820_ = widget.conditionValues[i];
+				int opcode = parseWidgetOpcode(widget, i);
+				int condition = widget.conditionValues[i];
 				if (widget.conditionTypes[i] == 2) {
-					if (i_819_ >= i_820_) {
+					if (opcode >= condition) {
 						return false;
 					}
 				} else if (widget.conditionTypes[i] == 3) {
-					if (i_819_ <= i_820_) {
+					if (opcode <= condition) {
 						return false;
 					}
 				} else if (widget.conditionTypes[i] == 4) {
-					if (i_819_ == i_820_) {
+					if (opcode == condition) {
 						return false;
 					}
-				} else if (i_819_ != i_820_) {
+				} else if (opcode != condition) {
 					return false;
 				}
 			}
 			return true;
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("43472, " + widget + ", " + bool + ", " + runtimeexception.toString());
+			SignLink.reportError("43472, " + widget + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -10844,15 +10842,15 @@ public class Client extends GameShell
 				/* Sets skill information */
 				if (opcode == 134) {
 					drawTabArea = true;
-					int skillIndex = inBuffer.getUnsignedByte();
-					int skillExperience = inBuffer.getInt2();
-					int skillLevel = inBuffer.getUnsignedByte();
-					skillExps[skillIndex] = skillExperience;
-					skillLevels[skillIndex] = skillLevel;
-					maxSkillLevels[skillIndex] = 1;
+					int index = inBuffer.getUnsignedByte();
+					int experience = inBuffer.getInt2();
+					int level = inBuffer.getUnsignedByte();
+					skillExperience[index] = experience;
+					skillLevel[index] = level;
+					skillMaxLevel[index] = 1;
 					for (int i_ = 0; i_ < 98; i_++) {
-						if (skillExperience >= Client.xpForSkillLevel[i_]) {
-							maxSkillLevels[skillIndex] = i_ + 2;
+						if (experience >= Client.xpForSkillLevel[i_]) {
+							skillMaxLevel[index] = i_ + 2;
 						}
 					}
 					opcode = -1;
@@ -11440,11 +11438,11 @@ public class Client extends GameShell
 					return true;
 				}
 
-				/* Resets all button states. */
+				/* Resets all settings. */
 				if (opcode == 68) {
 					for (int i_ = 0; i_ < settings.length; i_++) {
-						if (settings[i_] != anIntArray1070[i_]) {
-							settings[i_] = anIntArray1070[i_];
+						if (settings[i_] != defaultSettings[i_]) {
+							settings[i_] = defaultSettings[i_];
 							method33(i_);
 							drawTabArea = true;
 						}
@@ -11767,7 +11765,7 @@ public class Client extends GameShell
 				if (opcode == 87) {
 					int settingIndex = inBuffer.getUnsignedShort();
 					int settingValue = inBuffer.getInt2();
-					anIntArray1070[settingIndex] = settingValue;
+					defaultSettings[settingIndex] = settingValue;
 					if (settings[settingIndex] != settingValue) {
 						settings[settingIndex] = settingValue;
 						method33(settingIndex);
@@ -11784,7 +11782,7 @@ public class Client extends GameShell
 				if (opcode == 36) {
 					int i_1171_ = inBuffer.getUnsignedShort();
 					int i_1172_ = inBuffer.get();
-					anIntArray1070[i_1171_] = i_1172_;
+					defaultSettings[i_1171_] = i_1172_;
 					if (settings[i_1171_] != i_1172_) {
 						settings[i_1171_] = i_1172_;
 						method33(i_1171_);
