@@ -578,11 +578,11 @@ public class Region {
 							int i_128_;
 							int i_129_;
 							if (i_120_ == 1 || i_120_ == 3) {
-								i_128_ = gameobjectdefinition.sizeY;
-								i_129_ = gameobjectdefinition.sizeX;
+								i_128_ = gameobjectdefinition.height;
+								i_129_ = gameobjectdefinition.width;
 							} else {
-								i_128_ = gameobjectdefinition.sizeX;
-								i_129_ = gameobjectdefinition.sizeY;
+								i_128_ = gameobjectdefinition.width;
+								i_129_ = gameobjectdefinition.height;
 							}
 							if (scene.method506(i_126_, b, i_125_, i_129_, renderable, i_128_, i_117_, i_127_,
 									(byte) 110, i, i_118_) && gameobjectdefinition.aBoolean284) {
@@ -609,8 +609,8 @@ public class Region {
 							}
 						}
 						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.sizeX,
-									gameobjectdefinition.sizeY, i_120_, gameobjectdefinition.walkable);
+							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
+									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
 						}
 					} else if (i_116_ >= 12) {
 						Renderable renderable;
@@ -626,8 +626,8 @@ public class Region {
 							tileCullingBitsets[i_117_][i_118_][i] |= 0x924;
 						}
 						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.sizeX,
-									gameobjectdefinition.sizeY, i_120_, gameobjectdefinition.walkable);
+							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
+									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
 						}
 					} else if (i_116_ == 0) {
 						Renderable renderable;
@@ -778,8 +778,8 @@ public class Region {
 						}
 						scene.method506(i_126_, b, i_125_, 1, renderable, 1, i_117_, 0, (byte) 110, i, i_118_);
 						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.sizeX,
-									gameobjectdefinition.sizeY, i_120_, gameobjectdefinition.walkable);
+							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
+									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
 						}
 					} else {
 						if (gameobjectdefinition.adjustToTerrain) {
@@ -1110,11 +1110,11 @@ public class Region {
 							&& i_202_ < i_193_ + 8) {
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_198_);
 						int i_208_ = i_192_
-								+ TiledUtils.method588(i_196_, gameobjectdefinition.sizeY, i_203_ & 0x7, i_202_ & 0x7,
-										gameobjectdefinition.sizeX);
+								+ TiledUtils.method588(i_196_, gameobjectdefinition.height, i_203_ & 0x7, i_202_ & 0x7,
+										gameobjectdefinition.width);
 						int i_209_ = i_197_
-								+ TiledUtils.method589(i_202_ & 0x7, gameobjectdefinition.sizeY, i_196_,
-										gameobjectdefinition.sizeX, i_203_ & 0x7);
+								+ TiledUtils.method589(i_202_ & 0x7, gameobjectdefinition.height, i_196_,
+										gameobjectdefinition.width, i_203_ & 0x7);
 						if (i_208_ > 0 && i_209_ > 0 && i_208_ < 103 && i_209_ < 103) {
 							int i_210_ = i_204_;
 							if ((renderRuleFlags[1][i_208_][i_209_] & 0x2) == 2) {
@@ -1231,18 +1231,18 @@ public class Region {
 					int i_235_;
 					int i_236_;
 					if (i == 1 || i == 3) {
-						i_235_ = gameobjectdefinition.sizeY;
-						i_236_ = gameobjectdefinition.sizeX;
+						i_235_ = gameobjectdefinition.height;
+						i_236_ = gameobjectdefinition.width;
 					} else {
-						i_235_ = gameobjectdefinition.sizeX;
-						i_236_ = gameobjectdefinition.sizeY;
+						i_235_ = gameobjectdefinition.width;
+						i_236_ = gameobjectdefinition.height;
 					}
 					scene.method506(i_232_, b_233_, i_231_, i_236_, renderable, i_235_, i_226_, i_234_, (byte) 110,
 							i_221_, i_224_);
 				}
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
-							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
+							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
 				}
 			} else if (i_222_ >= 12) {
 				Renderable renderable;
@@ -1254,8 +1254,8 @@ public class Region {
 				}
 				scene.method506(i_232_, b_233_, i_231_, 1, renderable, 1, i_226_, 0, (byte) 110, i_221_, i_224_);
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
-							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
+							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
 				}
 			} else if (i_222_ == 0) {
 				Renderable renderable;
@@ -1325,8 +1325,8 @@ public class Region {
 				}
 				scene.method506(i_232_, b_233_, i_231_, 1, renderable, 1, i_226_, 0, (byte) 110, i_221_, i_224_);
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
-							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
+							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
 				}
 			} else {
 				if (gameobjectdefinition.adjustToTerrain) {

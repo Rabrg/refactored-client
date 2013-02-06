@@ -2806,10 +2806,10 @@ public class Client extends GameStub {
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
-								int i_246_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
-								int i_247_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
+								int i_246_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
+								int i_247_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
 								indexedimage.drawImage(48 + i_236_ * 4 + i_246_, 48
-										+ (104 - i - gameobjectdefinition.sizeY) * 4 + i_247_);
+										+ (104 - i - gameobjectdefinition.height) * 4 + i_247_);
 							}
 						} else {
 							if (i_242_ == 0 || i_242_ == 2) {
@@ -2881,10 +2881,10 @@ public class Client extends GameStub {
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
-								int i_252_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
-								int i_253_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
+								int i_252_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
+								int i_253_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
 								indexedimage.drawImage(48 + i_236_ * 4 + i_252_, 48
-										+ (104 - i - gameobjectdefinition.sizeY) * 4 + i_253_);
+										+ (104 - i - gameobjectdefinition.height) * 4 + i_253_);
 							}
 						} else if (i_250_ == 9) {
 							int i_254_ = 15658734;
@@ -2919,9 +2919,9 @@ public class Client extends GameStub {
 					if (indexedimage == null) {
 						break;
 					}
-					int i_257_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
-					int i_258_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
-					indexedimage.drawImage(48 + i_236_ * 4 + i_257_, 48 + (104 - i - gameobjectdefinition.sizeY) * 4
+					int i_257_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
+					int i_258_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
+					indexedimage.drawImage(48 + i_236_ * 4 + i_257_, 48 + (104 - i - gameobjectdefinition.height) * 4
 							+ i_258_);
 				}
 			} catch (RuntimeException runtimeexception) {
@@ -3949,11 +3949,11 @@ public class Client extends GameStub {
 				int i_351_;
 				int i_352_;
 				if (i_350_ == 0 || i_350_ == 2) {
-					i_351_ = gameobjectdefinition.sizeX;
-					i_352_ = gameobjectdefinition.sizeY;
+					i_351_ = gameobjectdefinition.width;
+					i_352_ = gameobjectdefinition.height;
 				} else {
-					i_351_ = gameobjectdefinition.sizeY;
-					i_352_ = gameobjectdefinition.sizeX;
+					i_351_ = gameobjectdefinition.height;
+					i_352_ = gameobjectdefinition.width;
 				}
 				int i_353_ = gameobjectdefinition.anInt273;
 				if (i_350_ != 0) {
@@ -10761,11 +10761,11 @@ public class Client extends GameStub {
 								player.anInt1727 = i_911_ + Client.currentCycle;
 								player.anInt1728 = i_913_ + Client.currentCycle;
 								player.aModel1734 = model;
-								int i_925_ = gameobjectdefinition.sizeX;
-								int i_926_ = gameobjectdefinition.sizeY;
+								int i_925_ = gameobjectdefinition.width;
+								int i_926_ = gameobjectdefinition.height;
 								if (i_916_ == 1 || i_916_ == 3) {
-									i_925_ = gameobjectdefinition.sizeY;
-									i_926_ = gameobjectdefinition.sizeX;
+									i_925_ = gameobjectdefinition.height;
+									i_926_ = gameobjectdefinition.width;
 								}
 								player.anInt1731 = i_907_ * 128 + i_925_ * 64;
 								player.anInt1733 = i_908_ * 128 + i_926_ * 64;
@@ -11142,13 +11142,13 @@ public class Client extends GameStub {
 						if (i_998_ == 2) {
 							currentScene.method515(i_994_, -978, x, y);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
-							if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
-									|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
+							if (x + gameobjectdefinition.width > 103 || y + gameobjectdefinition.width > 103
+									|| x + gameobjectdefinition.height > 103 || y + gameobjectdefinition.height > 103) {
 								break;
 							}
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].unmarkSolidOccupant(x, y, gameobjectdefinition.sizeX,
-										gameobjectdefinition.sizeY, orientation, gameobjectdefinition.walkable);
+								currentCollisionMap[i_994_].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
+										gameobjectdefinition.height, orientation, gameobjectdefinition.walkable);
 							}
 						}
 						if (i_998_ == 3) {

@@ -17,7 +17,7 @@ public class GameObjectDefinition {
 	private int modelSizeZ;
 	private static Model[] models = new Model[4];
 	private byte contrast;
-	public int sizeX;
+	public int width;
 	private int anInt250;
 	public int icon;
 	private int[] originalModelColors;
@@ -33,7 +33,7 @@ public class GameObjectDefinition {
 	public int anInt263;
 	public int[] anIntArray264;
 	public int solidInt;
-	public int sizeY;
+	public int height;
 	public boolean adjustToTerrain;
 	public boolean aBoolean269;
 	public static Client client;
@@ -80,8 +80,8 @@ public class GameObjectDefinition {
 		description = null;
 		modifiedModelColors = null;
 		originalModelColors = null;
-		sizeX = 1;
-		sizeY = 1;
+		width = 1;
+		height = 1;
 		solid = true;
 		walkable = true;
 		actionsBoolean = false;
@@ -372,9 +372,9 @@ public class GameObjectDefinition {
 					}
 				}
 			} else if (attributeId == 14) {
-				sizeX = buffer.getUnsignedByte();
+				width = buffer.getUnsignedByte();
 			} else if (attributeId == 15) {
-				sizeY = buffer.getUnsignedByte();
+				height = buffer.getUnsignedByte();
 			} else if (attributeId == 17) {
 				solid = false;
 			} else if (attributeId == 18) {
