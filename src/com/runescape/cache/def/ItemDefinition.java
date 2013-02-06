@@ -8,18 +8,19 @@ import com.runescape.graphic.Rasterizer3D;
 import com.runescape.net.Buffer;
 import com.runescape.node.Cache;
 
-public class ItemDefinition {
+public class ItemDefinition
+{
 
 	private byte femaleEquipOffset;
 	public int value;
 	private int[] originalModelColors;
-	public int itemId = -1;
+	public int index = -1;
 	public static Cache rgbImageCache = new Cache(100);
 	public static Cache modelCache = new Cache(50);
 	private int[] modifiedModelColors;
 	public boolean membersOnly;
 	public int femaleEmblem;
-	public int noteTemplateId;
+	public int noteTemplateIndex;
 	private int femaleEquipSecondaryModel;
 	private int maleEquipPrimaryModel;
 	public int maleDialogueHat;
@@ -29,11 +30,11 @@ public class ItemDefinition {
 	public String name;
 	private static ItemDefinition[] cache;
 	public int femaleDialogueHat;
-	private int inventoryModelId;
+	private int modelIndex;
 	private int maleDialogue;
 	public boolean stackable;
 	public byte[] description;
-	public int noteId;
+	public int noteIndex;
 	private static int cacheIndex;
 	public int modelZoom;
 	public static boolean playerIsMember = true;
@@ -53,7 +54,7 @@ public class ItemDefinition {
 	public int modelRotation2;
 	private int femaleEquipPrimaryModel;
 	public int[] stackableAmounts;
-	public int teamId;
+	public int teamIndex;
 	public static int itemCount;
 	private int diagonalRotation;
 	private byte maleEquipOffset;
@@ -67,20 +68,16 @@ public class ItemDefinition {
 	}
 
 	public final boolean isDialogueCached(int gender) {
-		int dialogue = maleDialogue;
-		int dialogueHat = maleDialogueHat;
-		if (gender == 1) {
-			dialogue = femaleDialogue;
-			dialogueHat = femaleDialogueHat;
-		}
-		if (dialogue == -1) {
+		int modelIndex = gender == 1 ? femaleDialogue : maleDialogue;
+		int hatModelIndex = gender == 1 ? femaleDialogueHat : maleDialogueHat;
+		if (modelIndex == -1) {
 			return true;
 		}
 		boolean isCached = true;
-		if (!Model.isCached(dialogue)) {
+		if (!Model.isCached(modelIndex)) {
 			isCached = false;
 		}
-		if (dialogueHat != -1 && !Model.isCached(dialogueHat)) {
+		if (hatModelIndex != -1 && !Model.isCached(hatModelIndex)) {
 			isCached = false;
 		}
 		return isCached;
@@ -103,27 +100,21 @@ public class ItemDefinition {
 	}
 
 	public final Model getDialogueModel(int gender) {
-		int dialogueModelId = maleDialogue;
-		int dialogueHatModelId = maleDialogueHat;
-		if (gender == 1) {
-			dialogueModelId = femaleDialogue;
-			dialogueHatModelId = femaleDialogueHat;
-		}
-		if (dialogueModelId == -1) {
+		int modelIndex = gender == 1 ? femaleDialogue : maleDialogue;
+		int hatModelIndex = gender == 1 ? femaleDialogueHat : maleDialogueHat;
+		if (modelIndex == -1) {
 			return null;
 		}
-		Model dialogueModel = Model.getModel(dialogueModelId);
-		if (dialogueHatModelId != -1) {
-			Model dialogueHatModel = Model.getModel(dialogueHatModelId);
-			Model[] dialogueModels = { dialogueModel, dialogueHatModel };
-			dialogueModel = new Model(2, dialogueModels);
+		Model model = Model.getModel(modelIndex);
+		if (hatModelIndex != -1) {
+			Model hatModel = Model.getModel(hatModelIndex);
+			Model[] models = { model, hatModel };
+			model = new Model(2, models);
 		}
 		if (originalModelColors != null) {
-			for (int modelColor = 0; modelColor < originalModelColors.length; modelColor++) {
-				dialogueModel.recolor(originalModelColors[modelColor], modifiedModelColors[modelColor]);
-			}
+			model.recolor(originalModelColors, modifiedModelColors);
 		}
-		return dialogueModel;
+		return model;
 	}
 
 	public final boolean isEquipModelCached(int gender) {
@@ -191,7 +182,7 @@ public class ItemDefinition {
 	}
 
 	public final void setDefaultValues() {
-		inventoryModelId = 0;
+		modelIndex = 0;
 		name = null;
 		description = null;
 		originalModelColors = null;
@@ -221,29 +212,29 @@ public class ItemDefinition {
 		femaleDialogueHat = -1;
 		stackableIds = null;
 		stackableAmounts = null;
-		noteId = -1;
-		noteTemplateId = -1;
+		noteIndex = -1;
+		noteTemplateIndex = -1;
 		modelSizeX = 128;
 		modelSizeY = 128;
 		modelSizeZ = 128;
 		lightModifier = 0;
 		shadowModifier = 0;
-		teamId = 0;
+		teamIndex = 0;
 	}
 
-	public static final ItemDefinition getDefinition(int itemId) {
+	public static final ItemDefinition get(int itemId) {
 		for (int i = 0; i < 10; i++) {
-			if (ItemDefinition.cache[i].itemId == itemId) {
+			if (ItemDefinition.cache[i].index == itemId) {
 				return ItemDefinition.cache[i];
 			}
 		}
 		ItemDefinition.cacheIndex = (ItemDefinition.cacheIndex + 1) % 10;
 		ItemDefinition itemDefinition = ItemDefinition.cache[ItemDefinition.cacheIndex];
 		ItemDefinition.buffer.offset = ItemDefinition.bufferOffsets[itemId];
-		itemDefinition.itemId = itemId;
+		itemDefinition.index = itemId;
 		itemDefinition.setDefaultValues();
 		itemDefinition.loadDefinition(ItemDefinition.buffer);
-		if (itemDefinition.noteTemplateId != -1) {
+		if (itemDefinition.noteTemplateIndex != -1) {
 			itemDefinition.toNote();
 		}
 		if (!ItemDefinition.playerIsMember && itemDefinition.membersOnly) {
@@ -251,14 +242,14 @@ public class ItemDefinition {
 			itemDefinition.description = "Login to a members' server to use this object.".getBytes();
 			itemDefinition.groundActions = null;
 			itemDefinition.inventoryActions = null;
-			itemDefinition.teamId = 0;
+			itemDefinition.teamIndex = 0;
 		}
 		return itemDefinition;
 	}
 
 	public void toNote() {
-		ItemDefinition noteTemplateDefinition = ItemDefinition.getDefinition(noteTemplateId);
-		inventoryModelId = noteTemplateDefinition.inventoryModelId;
+		ItemDefinition noteTemplateDefinition = ItemDefinition.get(noteTemplateIndex);
+		modelIndex = noteTemplateDefinition.modelIndex;
 		modelZoom = noteTemplateDefinition.modelZoom;
 		modelRotation1 = noteTemplateDefinition.modelRotation1;
 		modelRotation2 = noteTemplateDefinition.modelRotation2;
@@ -267,14 +258,13 @@ public class ItemDefinition {
 		sine = noteTemplateDefinition.sine;
 		originalModelColors = noteTemplateDefinition.originalModelColors;
 		modifiedModelColors = noteTemplateDefinition.modifiedModelColors;
-		ItemDefinition noteDefinition = ItemDefinition.getDefinition(noteId);
+		ItemDefinition noteDefinition = ItemDefinition.get(noteIndex);
 		name = noteDefinition.name;
 		membersOnly = noteDefinition.membersOnly;
 		value = noteDefinition.value;
 		String plural = "a";
 		char firstCharacter = noteDefinition.name.charAt(0);
-		if (firstCharacter == 'A' || firstCharacter == 'E' || firstCharacter == 'I' || firstCharacter == 'O'
-				|| firstCharacter == 'U') {
+		if (firstCharacter == 'A' || firstCharacter == 'E' || firstCharacter == 'I' || firstCharacter == 'O' || firstCharacter == 'U') {
 			plural = "an";
 		}
 		description = ("Swap this note at any bank for " + plural + " " + noteDefinition.name + ".").getBytes();
@@ -292,20 +282,19 @@ public class ItemDefinition {
 				return cachedSprite;
 			}
 		}
-		ItemDefinition itemDefinition = ItemDefinition.getDefinition(itemId);
+		ItemDefinition itemDefinition = ItemDefinition.get(itemId);
 		if (itemDefinition.stackableIds == null) {
 			itemAmount = -1;
 		}
 		if (itemAmount > 1) {
 			int stackedId = -1;
 			for (int amount = 0; amount < 10; amount++) {
-				if (itemAmount >= itemDefinition.stackableAmounts[amount]
-						&& itemDefinition.stackableAmounts[amount] != 0) {
+				if (itemAmount >= itemDefinition.stackableAmounts[amount] && itemDefinition.stackableAmounts[amount] != 0) {
 					stackedId = itemDefinition.stackableIds[amount];
 				}
 			}
 			if (stackedId != -1) {
-				itemDefinition = ItemDefinition.getDefinition(stackedId);
+				itemDefinition = ItemDefinition.get(stackedId);
 			}
 		}
 		Model model = itemDefinition.getAmountModel(1);
@@ -313,8 +302,8 @@ public class ItemDefinition {
 			return null;
 		}
 		ImageRGB noteSprite = null;
-		if (itemDefinition.noteTemplateId != -1) {
-			noteSprite = ItemDefinition.getSprite(itemDefinition.noteId, 10, -1);
+		if (itemDefinition.noteTemplateIndex != -1) {
+			noteSprite = ItemDefinition.getSprite(itemDefinition.noteIndex, 10, -1);
 			if (noteSprite == null) {
 				return null;
 			}
@@ -343,9 +332,7 @@ public class ItemDefinition {
 		}
 		int sine = Rasterizer3D.SINE[itemDefinition.modelRotation1] * modelZoom >> 16;
 		int cosine = Rasterizer3D.COSINE[itemDefinition.modelRotation1] * modelZoom >> 16;
-		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation,
-				itemDefinition.modelRotation1, itemDefinition.modelOffset1, sine + model.modelHeight / 2
-						+ itemDefinition.sine, cosine + itemDefinition.sine);
+		model.method430(0, itemDefinition.modelRotation2, itemDefinition.diagonalRotation, itemDefinition.modelRotation1, itemDefinition.modelOffset1, sine + model.modelHeight / 2 + itemDefinition.sine, cosine + itemDefinition.sine);
 		for (int pixel = 31; pixel >= 0; pixel--) {
 			for (cosine = 31; cosine >= 0; cosine--) {
 				if (itemSprite.pixels[pixel + cosine * 32] == 0) {
@@ -380,14 +367,13 @@ public class ItemDefinition {
 		} else if (type == 0) {
 			for (int pixel = 31; pixel >= 0; pixel--) {
 				for (cosine = 31; cosine >= 0; cosine--) {
-					if (itemSprite.pixels[pixel + cosine * 32] == 0 && pixel > 0 && cosine > 0
-							&& itemSprite.pixels[pixel - 1 + (cosine - 1) * 32] > 0) {
+					if (itemSprite.pixels[pixel + cosine * 32] == 0 && pixel > 0 && cosine > 0 && itemSprite.pixels[pixel - 1 + (cosine - 1) * 32] > 0) {
 						itemSprite.pixels[pixel + cosine * 32] = 3153952;
 					}
 				}
 			}
 		}
-		if (itemDefinition.noteTemplateId != -1) {
+		if (itemDefinition.noteTemplateIndex != -1) {
 			int maxWidth = noteSprite.maxWidth;
 			int maxHeight = noteSprite.maxHeight;
 			noteSprite.maxWidth = 32;
@@ -423,14 +409,14 @@ public class ItemDefinition {
 				}
 			}
 			if (stackedItemId != -1) {
-				return ItemDefinition.getDefinition(stackedItemId).getAmountModel(1);
+				return ItemDefinition.get(stackedItemId).getAmountModel(1);
 			}
 		}
-		Model stackedModel = (Model) ItemDefinition.modelCache.get(itemId);
+		Model stackedModel = (Model) ItemDefinition.modelCache.get(index);
 		if (stackedModel != null) {
 			return stackedModel;
 		}
-		stackedModel = Model.getModel(inventoryModelId);
+		stackedModel = Model.getModel(modelIndex);
 		if (stackedModel == null) {
 			return null;
 		}
@@ -444,7 +430,7 @@ public class ItemDefinition {
 		}
 		stackedModel.applyLighting(64 + lightModifier, 768 + shadowModifier, -50, -10, -50, true);
 		stackedModel.oneSquareModel = true;
-		ItemDefinition.modelCache.put(stackedModel, itemId);
+		ItemDefinition.modelCache.put(stackedModel, index);
 		return stackedModel;
 	}
 
@@ -457,10 +443,10 @@ public class ItemDefinition {
 				}
 			}
 			if (amountItemId != -1) {
-				return ItemDefinition.getDefinition(amountItemId).getInventoryModel(1);
+				return ItemDefinition.get(amountItemId).getInventoryModel(1);
 			}
 		}
-		Model inventoryModel = Model.getModel(inventoryModelId);
+		Model inventoryModel = Model.getModel(modelIndex);
 		if (inventoryModel == null) {
 			return null;
 		}
@@ -479,7 +465,7 @@ public class ItemDefinition {
 				break;
 			}
 			if (attributeId == 1) {
-				inventoryModelId = buffer.getUnsignedLEShort();
+				modelIndex = buffer.getUnsignedLEShort();
 			} else if (attributeId == 2) {
 				name = buffer.getString();
 			} else if (attributeId == 3) {
@@ -554,9 +540,9 @@ public class ItemDefinition {
 			} else if (attributeId == 95) {
 				diagonalRotation = buffer.getUnsignedLEShort();
 			} else if (attributeId == 97) {
-				noteId = buffer.getUnsignedLEShort();
+				noteIndex = buffer.getUnsignedLEShort();
 			} else if (attributeId == 98) {
-				noteTemplateId = buffer.getUnsignedLEShort();
+				noteTemplateIndex = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 100 && attributeId < 110) {
 				if (stackableIds == null) {
 					stackableIds = new int[10];
@@ -575,7 +561,7 @@ public class ItemDefinition {
 			} else if (attributeId == 114) {
 				shadowModifier = buffer.get() * 5;
 			} else if (attributeId == 115) {
-				teamId = buffer.getUnsignedByte();
+				teamIndex = buffer.getUnsignedByte();
 			}
 		}
 	}

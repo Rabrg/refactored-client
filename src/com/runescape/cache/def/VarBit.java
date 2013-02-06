@@ -5,7 +5,7 @@ import com.runescape.net.Buffer;
 
 public class VarBit {
 
-	public static int size;
+	public static int count;
 	public static VarBit[] cache;
 	public int configId;
 	public int leastSignificantBit;
@@ -14,11 +14,11 @@ public class VarBit {
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
-		VarBit.size = buffer.getUnsignedLEShort();
+		VarBit.count = buffer.getUnsignedLEShort();
 		if (VarBit.cache == null) {
-			VarBit.cache = new VarBit[VarBit.size];
+			VarBit.cache = new VarBit[VarBit.count];
 		}
-		for (int index = 0; index < VarBit.size; index++) {
+		for (int index = 0; index < VarBit.count; index++) {
 			if (VarBit.cache[index] == null) {
 				VarBit.cache[index] = new VarBit();
 			}

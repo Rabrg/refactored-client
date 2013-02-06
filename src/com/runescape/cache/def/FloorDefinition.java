@@ -5,7 +5,7 @@ import com.runescape.net.Buffer;
 
 public class FloorDefinition {
 
-	public static int length;
+	public static int count;
 	public static FloorDefinition[] cache;
 	public String name;
 	public int rgbColor;
@@ -21,11 +21,11 @@ public class FloorDefinition {
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("flo.dat"));
-		FloorDefinition.length = buffer.getUnsignedLEShort();
+		FloorDefinition.count = buffer.getUnsignedLEShort();
 		if (FloorDefinition.cache == null) {
-			FloorDefinition.cache = new FloorDefinition[FloorDefinition.length];
+			FloorDefinition.cache = new FloorDefinition[FloorDefinition.count];
 		}
-		for (int floor = 0; floor < FloorDefinition.length; floor++) {
+		for (int floor = 0; floor < FloorDefinition.count; floor++) {
 			if (FloorDefinition.cache[floor] == null) {
 				FloorDefinition.cache[floor] = new FloorDefinition();
 			}

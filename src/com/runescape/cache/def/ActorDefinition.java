@@ -23,7 +23,7 @@ public class ActorDefinition {
 	public byte boundaryDimension = 1;
 	private int[] originalModelColors;
 	private static int[] bufferOffsets;
-	private int[] headModelIds;
+	private int[] headModelIndexes;
 	public int headIcon = -1;
 	private int[] modifiedModelColors;
 	public int standAnimationId = -1;
@@ -36,7 +36,7 @@ public class ActorDefinition {
 	private int brightness;
 	private int sizeY = 128;
 	public boolean minimapVisible = true;
-	public int[] childrenIds;
+	public int[] childrenIndexes;
 	public byte[] description;
 	private int sizeXZ = 128;
 	private int contrast;
@@ -44,10 +44,10 @@ public class ActorDefinition {
 	private int[] modelIds;
 	public static Cache modelCache = new Cache(30);
 
-	public static final ActorDefinition getDefinition(int id) {
-		for (int cacheIndex = 0; cacheIndex < 20; cacheIndex++) {
-			if (ActorDefinition.cache[cacheIndex].id == id) {
-				return ActorDefinition.cache[cacheIndex];
+	public static final ActorDefinition get(int id) {
+		for (int i = 0; i < 20; i++) {
+			if (ActorDefinition.cache[i].id == id) {
+				return ActorDefinition.cache[i];
 			}
 		}
 		ActorDefinition.bufferIndex = (ActorDefinition.bufferIndex + 1) % 20;
@@ -59,28 +59,28 @@ public class ActorDefinition {
 	}
 
 	public final Model getHeadModel() {
-		if (childrenIds != null) {
+		if (childrenIndexes != null) {
 			ActorDefinition definition = getChildDefinition();
 			if (definition == null) {
 				return null;
 			}
 			return definition.getHeadModel();
 		}
-		if (headModelIds == null) {
+		if (headModelIndexes == null) {
 			return null;
 		}
 		boolean cached = false;
-		for (int headModel = 0; headModel < headModelIds.length; headModel++) {
-			if (!Model.isCached(headModelIds[headModel])) {
+		for (int headModel = 0; headModel < headModelIndexes.length; headModel++) {
+			if (!Model.isCached(headModelIndexes[headModel])) {
 				cached = true;
 			}
 		}
 		if (cached) {
 			return null;
 		}
-		Model[] headModels = new Model[headModelIds.length];
-		for (int model = 0; model < headModelIds.length; model++) {
-			headModels[model] = Model.getModel(headModelIds[model]);
+		Model[] headModels = new Model[headModelIndexes.length];
+		for (int model = 0; model < headModelIndexes.length; model++) {
+			headModels[model] = Model.getModel(headModelIndexes[model]);
 		}
 		Model headModel;
 		if (headModels.length == 1) {
@@ -108,10 +108,10 @@ public class ActorDefinition {
 		} else if (settingId != -1) {
 			childId = ActorDefinition.client.settings[settingId];
 		}
-		if (childId < 0 || childId >= childrenIds.length || childrenIds[childId] == -1) {
+		if (childId < 0 || childId >= childrenIndexes.length || childrenIndexes[childId] == -1) {
 			return null;
 		}
-		return ActorDefinition.getDefinition(childrenIds[childId]);
+		return ActorDefinition.get(childrenIndexes[childId]);
 	}
 
 	public static final void load(Archive archive) {
@@ -138,7 +138,7 @@ public class ActorDefinition {
 	}
 
 	public final Model getChildModel(int frameId2, int frameId, int[] framesFrom2) {
-		if (childrenIds != null) {
+		if (childrenIndexes != null) {
 			ActorDefinition childDefinition = getChildDefinition();
 			if (childDefinition == null) {
 				return null;
@@ -238,9 +238,9 @@ public class ActorDefinition {
 				}
 			} else if (attributeId == 60) {
 				int additionalModelCount = buffer.getUnsignedByte();
-				headModelIds = new int[additionalModelCount];
+				headModelIndexes = new int[additionalModelCount];
 				for (int model = 0; model < additionalModelCount; model++) {
-					headModelIds[model] = buffer.getUnsignedLEShort();
+					headModelIndexes[model] = buffer.getUnsignedLEShort();
 				}
 			} else if (attributeId == 90) {
 				buffer.getUnsignedLEShort(); // dummy
@@ -276,11 +276,11 @@ public class ActorDefinition {
 					settingId = -1;
 				}
 				int childrenCount = buffer.getUnsignedByte();
-				childrenIds = new int[childrenCount + 1];
+				childrenIndexes = new int[childrenCount + 1];
 				for (int child = 0; child <= childrenCount; child++) {
-					childrenIds[child] = buffer.getUnsignedLEShort();
-					if (childrenIds[child] == 65535) {
-						childrenIds[child] = -1;
+					childrenIndexes[child] = buffer.getUnsignedLEShort();
+					if (childrenIndexes[child] == 65535) {
+						childrenIndexes[child] = -1;
 					}
 				}
 			} else if (attributeId == 107) {

@@ -58,19 +58,19 @@ public class GameObjectDefinition {
 	public static Cache modelCache = new Cache(500);
 	public String[] actions;
 
-	public static final GameObjectDefinition getDefinition(int id) {
+	public static final GameObjectDefinition get(int id) {
 		for (int index = 0; index < 20; index++) {
 			if (GameObjectDefinition.cache[index].id == id) {
 				return GameObjectDefinition.cache[index];
 			}
 		}
 		GameObjectDefinition.cacheIndex = (GameObjectDefinition.cacheIndex + 1) % 20;
-		GameObjectDefinition definitionn = GameObjectDefinition.cache[GameObjectDefinition.cacheIndex];
+		GameObjectDefinition definition = GameObjectDefinition.cache[GameObjectDefinition.cacheIndex];
 		GameObjectDefinition.buffer.offset = GameObjectDefinition.bufferOffsets[id];
-		definitionn.id = id;
-		definitionn.setDefaultValues();
-		definitionn.load(GameObjectDefinition.buffer);
-		return definitionn;
+		definition.id = id;
+		definition.setDefaultValues();
+		definition.load(GameObjectDefinition.buffer);
+		return definition;
 	}
 
 	private final void setDefaultValues() {
@@ -215,7 +215,7 @@ public class GameObjectDefinition {
 		if (i < 0 || i >= anIntArray264.length || anIntArray264[i] == -1) {
 			return null;
 		}
-		return GameObjectDefinition.getDefinition(anIntArray264[i]);
+		return GameObjectDefinition.get(anIntArray264[i]);
 	}
 
 	private final Model getGameObjectAnimatedModel(int type, int animationId, int face) {

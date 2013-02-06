@@ -1217,7 +1217,7 @@ public class Model extends Renderable
 
 	public void recolor(int[] from, int[] to) {
 		for (int colorIndex = 0; colorIndex < from.length; colorIndex++) {
-			if (from[colorIndex] == 0 || colorIndex > to.length) {
+			if (colorIndex > to.length) {
 				break;
 			}
 			for (int i = 0; i < triangleCount; i++) {

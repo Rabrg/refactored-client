@@ -1219,7 +1219,7 @@ public class Client extends GameStub {
 					int floorHash = currentScene.getFloorHash(currentSceneId, viewportX, viewportY);
 					if (floorHash != 0) {
 						floorHash = floorHash >> 14 & 0x7fff;
-						int icon = GameObjectDefinition.getDefinition(floorHash).icon;
+						int icon = GameObjectDefinition.get(floorHash).icon;
 						if (icon >= 0) {
 							int drawPointX = viewportX;
 							int drawPointY = viewportY;
@@ -1271,7 +1271,7 @@ public class Client extends GameStub {
 			Item item = null;
 			for (Item item_101_ = (Item) linkedlist.getBack(); item_101_ != null; item_101_ = (Item) linkedlist
 					.getPrevious()) {
-				ItemDefinition itemdefinition = ItemDefinition.getDefinition(item_101_.itemId);
+				ItemDefinition itemdefinition = ItemDefinition.get(item_101_.itemId);
 				int i_102_ = itemdefinition.value;
 				if (itemdefinition.stackable) {
 					i_102_ *= item_101_.itemCount + 1;
@@ -1470,13 +1470,13 @@ public class Client extends GameStub {
 										anInt1092 = widget_120_.widgetId;
 										if (widget_120_.items[i_121_] > 0) {
 											ItemDefinition itemdefinition = ItemDefinition
-													.getDefinition(widget_120_.items[i_121_] - 1);
+													.get(widget_120_.items[i_121_] - 1);
 											if (anInt1307 == 1 && widget_120_.itemWidget) {
 												if (widget_120_.widgetId != anInt1309 || i_121_ != anInt1308) {
 													menuActionNames[menuActionRow] = "Use " + aString1311
 															+ " with @lre@" + itemdefinition.name;
 													menuActionIds[menuActionRow] = 870;
-													anIntArray1119[menuActionRow] = itemdefinition.itemId;
+													anIntArray1119[menuActionRow] = itemdefinition.index;
 													anIntArray1116[menuActionRow] = i_121_;
 													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
@@ -1486,7 +1486,7 @@ public class Client extends GameStub {
 													menuActionNames[menuActionRow] = aString1164 + " @lre@"
 															+ itemdefinition.name;
 													menuActionIds[menuActionRow] = 543;
-													anIntArray1119[menuActionRow] = itemdefinition.itemId;
+													anIntArray1119[menuActionRow] = itemdefinition.index;
 													anIntArray1116[menuActionRow] = i_121_;
 													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
@@ -1504,7 +1504,7 @@ public class Client extends GameStub {
 															if (i_126_ == 4) {
 																menuActionIds[menuActionRow] = 847;
 															}
-															anIntArray1119[menuActionRow] = itemdefinition.itemId;
+															anIntArray1119[menuActionRow] = itemdefinition.index;
 															anIntArray1116[menuActionRow] = i_121_;
 															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
@@ -1512,7 +1512,7 @@ public class Client extends GameStub {
 															menuActionNames[menuActionRow] = "Drop @lre@"
 																	+ itemdefinition.name;
 															menuActionIds[menuActionRow] = 847;
-															anIntArray1119[menuActionRow] = itemdefinition.itemId;
+															anIntArray1119[menuActionRow] = itemdefinition.index;
 															anIntArray1116[menuActionRow] = i_121_;
 															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
@@ -1522,7 +1522,7 @@ public class Client extends GameStub {
 												if (widget_120_.itemUsable) {
 													menuActionNames[menuActionRow] = "Use @lre@" + itemdefinition.name;
 													menuActionIds[menuActionRow] = 447;
-													anIntArray1119[menuActionRow] = itemdefinition.itemId;
+													anIntArray1119[menuActionRow] = itemdefinition.index;
 													anIntArray1116[menuActionRow] = i_121_;
 													anIntArray1117[menuActionRow] = widget_120_.widgetId;
 													menuActionRow++;
@@ -1541,7 +1541,7 @@ public class Client extends GameStub {
 															if (i_127_ == 2) {
 																menuActionIds[menuActionRow] = 539;
 															}
-															anIntArray1119[menuActionRow] = itemdefinition.itemId;
+															anIntArray1119[menuActionRow] = itemdefinition.index;
 															anIntArray1116[menuActionRow] = i_121_;
 															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
@@ -1568,7 +1568,7 @@ public class Client extends GameStub {
 															if (i_128_ == 4) {
 																menuActionIds[menuActionRow] = 53;
 															}
-															anIntArray1119[menuActionRow] = itemdefinition.itemId;
+															anIntArray1119[menuActionRow] = itemdefinition.index;
 															anIntArray1116[menuActionRow] = i_121_;
 															anIntArray1117[menuActionRow] = widget_120_.widgetId;
 															menuActionRow++;
@@ -1577,7 +1577,7 @@ public class Client extends GameStub {
 												}
 												menuActionNames[menuActionRow] = "Examine @lre@" + itemdefinition.name;
 												menuActionIds[menuActionRow] = 1125;
-												anIntArray1119[menuActionRow] = itemdefinition.itemId;
+												anIntArray1119[menuActionRow] = itemdefinition.index;
 												anIntArray1116[menuActionRow] = i_121_;
 												anIntArray1117[menuActionRow] = widget_120_.widgetId;
 												menuActionRow++;
@@ -1840,7 +1840,7 @@ public class Client extends GameStub {
 				if (actor != null && actor.isVisibile()) {
 					if (actor instanceof Npc) {
 						ActorDefinition npcdefinition = ((Npc) actor).npcDefinition;
-						if (npcdefinition.childrenIds != null) {
+						if (npcdefinition.childrenIndexes != null) {
 							npcdefinition = npcdefinition.getChildDefinition();
 						}
 						if (npcdefinition == null) {
@@ -2551,7 +2551,7 @@ public class Client extends GameStub {
 					i_213_ -= 32;
 				}
 				buffer.getBits(1);
-				npc.npcDefinition = ActorDefinition.getDefinition(buffer.getBits(12));
+				npc.npcDefinition = ActorDefinition.get(buffer.getBits(12));
 				int i_215_ = buffer.getBits(1);
 				if (i_215_ == 1) {
 					anIntArray919[anInt918++] = i_211_;
@@ -2802,7 +2802,7 @@ public class Client extends GameStub {
 						int[] is = minimap.pixels;
 						int i_244_ = 24624 + i_236_ * 4 + (103 - i) * 512 * 4;
 						int i_245_ = i_239_ >> 14 & 0x7fff;
-						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_245_);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_245_);
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
@@ -2877,7 +2877,7 @@ public class Client extends GameStub {
 						int i_249_ = i_248_ >> 6 & 0x3;
 						int i_250_ = i_248_ & 0x1f;
 						int i_251_ = i_239_ >> 14 & 0x7fff;
-						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_251_);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_251_);
 						if (gameobjectdefinition.anInt263 != -1) {
 							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
 							if (indexedimage != null) {
@@ -2911,7 +2911,7 @@ public class Client extends GameStub {
 						break;
 					}
 					int i_256_ = i_239_ >> 14 & 0x7fff;
-					GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_256_);
+					GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_256_);
 					if (gameobjectdefinition.anInt263 == -1) {
 						break;
 					}
@@ -3948,7 +3948,7 @@ public class Client extends GameStub {
 			int i_349_ = i_348_ & 0x1f;
 			int i_350_ = i_348_ >> 6 & 0x3;
 			if (i_349_ == 10 || i_349_ == 11 || i_349_ == 22) {
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_347_);
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_347_);
 				int i_351_;
 				int i_352_;
 				if (i_350_ == 0 || i_350_ == 2) {
@@ -4664,7 +4664,7 @@ public class Client extends GameStub {
 						Npc npc = localNpcs[itemId];
 						if (npc != null) {
 							ActorDefinition npcdefinition = npc.npcDefinition;
-							if (npcdefinition.childrenIds != null) {
+							if (npcdefinition.childrenIndexes != null) {
 								npcdefinition = npcdefinition.getChildDefinition();
 							}
 							if (npcdefinition != null) {
@@ -4920,7 +4920,7 @@ public class Client extends GameStub {
 						outBuffer.putShortA(interfaceid + regionAbsoluteBaseY);
 					}
 					if (menuActionId == 1125) {
-						ItemDefinition itemdefinition = ItemDefinition.getDefinition(itemId);
+						ItemDefinition itemdefinition = ItemDefinition.get(itemId);
 						Widget widget = Widget.widgets[interfaceid];
 						String string;
 						if (widget != null && widget.itemAmounts[itemSlot] >= 100000) {
@@ -4948,13 +4948,13 @@ public class Client extends GameStub {
 						anInt1308 = itemSlot;
 						anInt1309 = interfaceid;
 						anInt1310 = itemId;
-						aString1311 = ItemDefinition.getDefinition(itemId).name;
+						aString1311 = ItemDefinition.get(itemId).name;
 						anInt1161 = 0;
 						aBoolean1178 = true;
 					} else {
 						if (menuActionId == 1226) {
 							int hash = itemId >> 14 & 0x7fff;
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(hash);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(hash);
 							String description;
 							if (gameobjectdefinition.description != null) {
 								description = new String(gameobjectdefinition.description);
@@ -4980,7 +4980,7 @@ public class Client extends GameStub {
 							outBuffer.putShortA(itemId);
 						}
 						if (menuActionId == 1448) {
-							ItemDefinition itemdefinition = ItemDefinition.getDefinition(itemId);
+							ItemDefinition itemdefinition = ItemDefinition.get(itemId);
 							String string;
 							if (itemdefinition.description != null) {
 								string = new String(itemdefinition.description);
@@ -5057,7 +5057,7 @@ public class Client extends GameStub {
 					if (i_401_ != i_399_) {
 						i_399_ = i_401_;
 						if (i_404_ == 2 && currentScene.method526(currentSceneId, i_402_, i_403_, i_401_) >= 0) {
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_405_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_405_);
 							if (gameobjectdefinition.anIntArray264 != null) {
 								gameobjectdefinition = gameobjectdefinition.unknown2();
 							}
@@ -5167,7 +5167,7 @@ public class Client extends GameStub {
 							if (linkedlist != null) {
 								for (Item item = (Item) linkedlist.getFront(); item != null; item = (Item) linkedlist
 										.getNext()) {
-									ItemDefinition itemdefinition = ItemDefinition.getDefinition(item.itemId);
+									ItemDefinition itemdefinition = ItemDefinition.get(item.itemId);
 									if (anInt1307 == 1) {
 										menuActionNames[menuActionRow] = "Use " + aString1311 + " with @lre@"
 												+ itemdefinition.name;
@@ -6907,7 +6907,7 @@ public class Client extends GameStub {
 					npc.currentHealth = buffer.getUnsignedByteC();
 				}
 				if ((i_514_ & 0x2) != 0) {
-					npc.npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedShortA());
+					npc.npcDefinition = ActorDefinition.get(buffer.getUnsignedShortA());
 					npc.boundaryDimension = npc.npcDefinition.boundaryDimension;
 					npc.anInt1524 = npc.npcDefinition.degreesToTurn;
 					npc.walkAnimationId = npc.npcDefinition.walkAnimationId;
@@ -6931,7 +6931,7 @@ public class Client extends GameStub {
 	public final void method87(ActorDefinition npcdefinition, int i, boolean bool, int i_523_, int i_524_) {
 		try {
 			if (menuActionRow < 400) {
-				if (npcdefinition.childrenIds != null) {
+				if (npcdefinition.childrenIndexes != null) {
 					npcdefinition = npcdefinition.getChildDefinition();
 				}
 				if (npcdefinition != null && npcdefinition.clickable) {
@@ -8835,7 +8835,7 @@ public class Client extends GameStub {
 								for (int i_665_ = 0; i_665_ < widget_635_.widgetWidth; i_665_++) {
 									if (widget_635_.items[i_663_] > 0) {
 										ItemDefinition itemdefinition = ItemDefinition
-												.getDefinition(widget_635_.items[i_663_] - 1);
+												.get(widget_635_.items[i_663_] - 1);
 										String string = itemdefinition.name;
 										if (itemdefinition.stackable || widget_635_.itemAmounts[i_663_] != 1) {
 											string += " x" + Client.method14(widget_635_.itemAmounts[i_663_], 0);
@@ -9844,7 +9844,7 @@ public class Client extends GameStub {
 					Widget itemWidget = Widget.widgets[opcodes[counter++]];
 					int itemId = opcodes[counter++];
 					if (itemId >= 0 && itemId < ItemDefinition.itemCount
-							&& (!ItemDefinition.getDefinition(itemId).membersOnly || Client.membersWorld)) {
+							&& (!ItemDefinition.get(itemId).membersOnly || Client.membersWorld)) {
 						for (int item = 0; item < itemWidget.items.length; item++) {
 							if (itemWidget.items[item] == itemId + 1) {
 								value += itemWidget.itemAmounts[item];
@@ -9875,7 +9875,7 @@ public class Client extends GameStub {
 					Widget itemWidget = Widget.widgets[opcodes[counter++]];
 					int itemId = opcodes[counter++] + 1;
 					if (itemId >= 0 && itemId < ItemDefinition.itemCount
-							&& (!ItemDefinition.getDefinition(itemId).membersOnly || Client.membersWorld)) {
+							&& (!ItemDefinition.get(itemId).membersOnly || Client.membersWorld)) {
 						for (int item = 0; item < itemWidget.items.length; item++) {
 							if (itemWidget.items[item] == itemId) {
 								value = 999999999;
@@ -10017,7 +10017,7 @@ public class Client extends GameStub {
 						Npc npc = localNpcs[anIntArray862[i_789_]];
 						if (npc != null && npc.isVisibile()) {
 							ActorDefinition npcdefinition = npc.npcDefinition;
-							if (npcdefinition.childrenIds != null) {
+							if (npcdefinition.childrenIndexes != null) {
 								npcdefinition = npcdefinition.getChildDefinition();
 							}
 							if (npcdefinition != null && npcdefinition.minimapVisible && npcdefinition.clickable) {
@@ -10752,7 +10752,7 @@ public class Client extends GameStub {
 							player = localPlayers[i_909_];
 						}
 						if (player != null) {
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_919_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_919_);
 							int i_921_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_];
 							int i_922_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_];
 							int i_923_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_ + 1];
@@ -11134,7 +11134,7 @@ public class Client extends GameStub {
 						int i_1006_ = i_1004_ >> 6;
 						if (i_998_ == 0) {
 							currentScene.method513(i_997_, i_994_, i, (byte) -119);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (gameobjectdefinition.solid) {
 								currentCollisionMap[i_994_].method221(i_1006_, i_1005_, gameobjectdefinition.walkable,
 										true, i_997_, i);
@@ -11145,7 +11145,7 @@ public class Client extends GameStub {
 						}
 						if (i_998_ == 2) {
 							currentScene.method515(i_994_, -978, i_997_, i);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (i_997_ + gameobjectdefinition.sizeX > 103 || i + gameobjectdefinition.sizeX > 103
 									|| i_997_ + gameobjectdefinition.sizeY > 103
 									|| i + gameobjectdefinition.sizeY > 103) {
@@ -11158,7 +11158,7 @@ public class Client extends GameStub {
 						}
 						if (i_998_ == 3) {
 							currentScene.method516((byte) 9, i_994_, i, i_997_);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_1002_);
 							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
 								currentCollisionMap[i_994_].method224(360, i, i_997_);
 							}
@@ -12039,7 +12039,7 @@ public class Client extends GameStub {
 						opcode = -1;
 						return true;
 					}
-					ItemDefinition itemdefinition = ItemDefinition.getDefinition(interfaceModelId);
+					ItemDefinition itemdefinition = ItemDefinition.get(interfaceModelId);
 					Widget.widgets[interfaceId].modelType = 4;
 					Widget.widgets[interfaceId].modelId = interfaceModelId;
 					Widget.widgets[interfaceId].rotationX = itemdefinition.modelRotation1;

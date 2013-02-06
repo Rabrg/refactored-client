@@ -473,7 +473,7 @@ public class Region {
 					break;
 				}
 				i += i_108_;
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i);
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i);
 				gameobjectdefinition.passiveRequestModels(ondemandrequester);
 				for (;;) {
 					int i_109_ = buffer.getSmartB();
@@ -538,7 +538,7 @@ public class Region {
 				int i_123_ = vertexHeights[i_117_][i_118_ + 1][i + 1];
 				int i_124_ = vertexHeights[i_117_][i_118_][i + 1];
 				int i_125_ = i_121_ + i_122_ + i_123_ + i_124_ >> 2;
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_119_);
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_119_);
 				int i_126_ = i_118_ + (i << 7) + (i_119_ << 14) + 1073741824;
 				if (!gameobjectdefinition.actionsBoolean) {
 					i_126_ += -2147483648;
@@ -820,7 +820,7 @@ public class Region {
 							int i_138_ = 16;
 							int i_139_ = scene.method522(i_117_, i_118_, i);
 							if (i_139_ > 0) {
-								i_138_ = GameObjectDefinition.getDefinition(i_139_ >> 14 & 0x7fff).anInt280;
+								i_138_ = GameObjectDefinition.get(i_139_ >> 14 & 0x7fff).anInt280;
 							}
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
@@ -907,7 +907,7 @@ public class Region {
 
 	public static final boolean method460(int i, int i_155_, int i_156_) {
 		try {
-			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i);
+			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i);
 			if (i_156_ != 8) {
 				for (int i_157_ = 1; i_157_ > 0; i_157_++) {
 					/* empty */
@@ -1109,7 +1109,7 @@ public class Region {
 					int i_207_ = i_205_ & 0x3;
 					if (i_204_ == i && i_203_ >= i_195_ && i_203_ < i_195_ + 8 && i_202_ >= i_193_
 							&& i_202_ < i_193_ + 8) {
-						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_198_);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_198_);
 						int i_208_ = i_192_
 								+ TiledUtils.method588(i_196_, gameobjectdefinition.sizeY, i_203_ & 0x7, i_202_ & 0x7,
 										gameobjectdefinition.sizeX);
@@ -1198,7 +1198,7 @@ public class Region {
 			if (b != 93) {
 			}
 			int i_231_ = i_227_ + i_228_ + i_229_ + i_230_ >> 2;
-			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_225_);
+			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_225_);
 			int i_232_ = i_224_ + (i_221_ << 7) + (i_225_ << 14) + 1073741824;
 			if (!gameobjectdefinition.actionsBoolean) {
 				i_232_ += -2147483648;
@@ -1366,7 +1366,7 @@ public class Region {
 					int i_242_ = 16;
 					int i_243_ = scene.method522(i_226_, i_224_, i_221_);
 					if (i_243_ > 0) {
-						i_242_ = GameObjectDefinition.getDefinition(i_243_ >> 14 & 0x7fff).anInt280;
+						i_242_ = GameObjectDefinition.get(i_243_ >> 14 & 0x7fff).anInt280;
 					}
 					Renderable renderable;
 					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
@@ -1449,7 +1449,7 @@ public class Region {
 						int i_255_ = i_253_ + i;
 						int i_256_ = i_252_ + i_244_;
 						if (i_255_ > 0 && i_256_ > 0 && i_255_ < 103 && i_256_ < 103) {
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_246_);
+							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_246_);
 							if (i_254_ != 22 || !Region.lowMemory || gameobjectdefinition.actionsBoolean
 									|| gameobjectdefinition.aBoolean241) {
 								bool &= gameobjectdefinition.isModelCached();

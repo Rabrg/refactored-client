@@ -125,11 +125,11 @@ public class Player extends Actor {
 				int i_5_ = buffer.getUnsignedByte();
 				appearance[index] = (i_4_ << 8) + i_5_;
 				if (index == 0 && appearance[0] == 65535) {
-					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedLEShort());
+					npcDefinition = ActorDefinition.get(buffer.getUnsignedLEShort());
 					break;
 				}
 				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
-					int teamId = ItemDefinition.getDefinition(appearance[index] - 512).teamId;
+					int teamId = ItemDefinition.get(appearance[index] - 512).teamIndex;
 					if (teamId != 0) {
 						this.teamId = teamId;
 					}
@@ -243,7 +243,7 @@ public class Player extends Actor {
 				if (i_18_ >= 256 && i_18_ < 512 && !IdentityKit.cache[i_18_ - 256].isBodyModelCached()) {
 					bool = true;
 				}
-				if (i_18_ >= 512 && !ItemDefinition.getDefinition(i_18_ - 512).isEquipModelCached(gender)) {
+				if (i_18_ >= 512 && !ItemDefinition.get(i_18_ - 512).isEquipModelCached(gender)) {
 					bool = true;
 				}
 			}
@@ -274,7 +274,7 @@ public class Player extends Actor {
 					}
 				}
 				if (i_21_ >= 512) {
-					Model model_23_ = ItemDefinition.getDefinition(i_21_ - 512).getEquipModel(gender);
+					Model model_23_ = ItemDefinition.get(i_21_ - 512).getEquipModel(gender);
 					if (model_23_ != null) {
 						models[i_19_++] = model_23_;
 					}
@@ -334,7 +334,7 @@ public class Player extends Actor {
 					&& !IdentityKit.cache[appearanceId - 256].isHeadModelCached()) {
 				cached = true;
 			}
-			if (appearanceId >= 512 && !ItemDefinition.getDefinition(appearanceId - 512).isDialogueCached(gender)) {
+			if (appearanceId >= 512 && !ItemDefinition.get(appearanceId - 512).isDialogueCached(gender)) {
 				cached = true;
 			}
 		}
@@ -352,7 +352,7 @@ public class Player extends Actor {
 				}
 			}
 			if (appearanceId >= 512) {
-				Model subModel = ItemDefinition.getDefinition(appearanceId - 512).getDialogueModel(gender);
+				Model subModel = ItemDefinition.get(appearanceId - 512).getDialogueModel(gender);
 				if (subModel != null) {
 					headModels[headModelsOffset++] = subModel;
 				}
