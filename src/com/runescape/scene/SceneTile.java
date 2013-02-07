@@ -10,7 +10,7 @@ public class SceneTile extends Node {
 	public GenericTile aGenericTile1322;
 	public ComplexTile aComplexTile1323;
 	protected Wall aWall1324;
-	protected WallDecoration aWallDecoration1325;
+	protected WallDecoration wallDecoration;
 	protected FloorDecoration floor;
 	protected CameraAngle aCameraAngle1327;
 	protected int anInt1328;

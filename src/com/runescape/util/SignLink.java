@@ -43,7 +43,7 @@ public class SignLink implements Runnable {
 	public static boolean accessible = true;
 	public static String lastUsername = "";
 
-	public static final void initialize(InetAddress inetaddress) {
+	public static final void initialize(InetAddress inetAddress) {
 		if (SignLink.active) {
 			try {
 				Thread.sleep(500L);
@@ -57,7 +57,7 @@ public class SignLink implements Runnable {
 		SignLink.lastIP = null;
 		SignLink.nextWriteName = null;
 		SignLink.nextURL = null;
-		SignLink.nextInetAddress = inetaddress;
+		SignLink.nextInetAddress = inetAddress;
 		Thread thread = new Thread(new SignLink());
 		thread.setDaemon(true);
 		thread.start();

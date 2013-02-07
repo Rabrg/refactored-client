@@ -541,7 +541,7 @@ public class Client extends GameShell
 			int errors = 0;
 			while (crcValues[8] == 0) {
 				String problem = "Unknown problem";
-				renderLoadingText(20, "Connecting to web server");
+				drawLoadingText(20, "Connecting to web server");
 				try {
 					DataInputStream in = jaggrabRequest("crc" + (int) (Math.random() * 9.9999999E7) + "-" + 317);
 					Buffer buffer = new Buffer(new byte[40]);
@@ -576,10 +576,10 @@ public class Client extends GameShell
 					errors++;
 					for (int i_8_ = waitTime; i_8_ > 0; i_8_--) {
 						if (errors >= 10) {
-							renderLoadingText(10, "Game updated - please reload page");
+							drawLoadingText(10, "Game updated - please reload page");
 							i_8_ = 10;
 						} else {
-							renderLoadingText(10, problem + " - Will retry in " + i_8_ + " secs.");
+							drawLoadingText(10, problem + " - Will retry in " + i_8_ + " secs.");
 						}
 						try {
 							Thread.sleep(1000L);
@@ -945,7 +945,7 @@ public class Client extends GameShell
 						}
 					}
 				}
-				Region region = new Region(currentSceneTileFlags, -60, 104, 104, anIntArrayArrayArray1239);
+				Region region = new Region(currentSceneTileFlags, 104, 104, anIntArrayArrayArray1239);
 				int i = aByteArrayArray1208.length;
 				outBuffer.putOpcode(0);
 				if (!aBoolean1184) {
@@ -962,7 +962,7 @@ public class Client extends GameShell
 						int i_40_ = (anIntArray1259[i_38_] & 0xff) * 64 - regionAbsoluteBaseY;
 						byte[] bs = aByteArrayArray1208[i_38_];
 						if (bs == null && anInt1095 < 800) {
-							region.method456(i_40_, 64, 0, 64, i_39_);
+							region.initiateVertexHeights(i_39_, 64, i_40_, 64);
 						}
 					}
 					Client.anInt1122++;
@@ -1006,7 +1006,7 @@ public class Client extends GameShell
 						for (int i_55_ = 0; i_55_ < 13; i_55_++) {
 							int i_56_ = constructMapTiles[0][i_54_][i_55_];
 							if (i_56_ == -1) {
-								region.method456(i_55_ * 8, 8, 0, 8, i_54_ * 8);
+								region.initiateVertexHeights(i_54_ * 8, 8, i_55_ * 8, 8);
 							}
 						}
 					}
@@ -2393,7 +2393,7 @@ public class Client extends GameShell
 	}
 
 	@Override
-	public final void processLogic() {
+	public final void doLogic() {
 		if (!aBoolean1277 && !aBoolean951 && !aBoolean1201) {
 			Client.currentCycle++;
 			if (!loggedIn) {
@@ -2809,7 +2809,7 @@ public class Client extends GameShell
 				method106(null, -135);
 				anIntArray853 = new int[32768];
 				anIntArray854 = new int[32768];
-				renderLoadingText(10, "Connecting to fileserver");
+				drawLoadingText(10, "Connecting to fileserver");
 				if (aBoolean856) {
 					break;
 				}
@@ -3064,7 +3064,7 @@ public class Client extends GameShell
 					}
 				}
 				if (ondemandnode.type == 93 && onDemandRequester.landIndexExists(ondemandnode.id)) {
-					Region.method455((byte) -107, new Buffer(ondemandnode.buffer), onDemandRequester);
+					Region.passiveRequestGameObjectModels(new Buffer(ondemandnode.buffer), onDemandRequester);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -3587,13 +3587,13 @@ public class Client extends GameShell
 	}
 
 	@Override
-	public final void renderLoadingText(int i, String string) {
+	public final void drawLoadingText(int i, String string) {
 		do {
 			anInt1104 = i;
 			aString1074 = string;
 			method64();
 			if (anArchive1078 == null) {
-				super.renderLoadingText(i, string);
+				super.drawLoadingText(i, string);
 			} else {
 				aProducingGraphicsBuffer1134.createRasterizer();
 				int i_330_ = 360;
@@ -3740,7 +3740,7 @@ public class Client extends GameShell
 			int errors = 0;
 			while (archiveBuffer == null) {
 				String message = "Unknown error";
-				renderLoadingText(loadPercentage, "Requesting " + archiveAlias);
+				drawLoadingText(loadPercentage, "Requesting " + archiveAlias);
 				try {
 					int i_361_ = 0;
 					DataInputStream in = jaggrabRequest(archiveName + archiveCRC);
@@ -3767,7 +3767,7 @@ public class Client extends GameShell
 						i_364_ += i_367_;
 						int i_368_ = i_364_ * 100 / i_363_;
 						if (i_368_ != i_361_) {
-							renderLoadingText(loadPercentage, "Loading " + archiveAlias + " - " + i_368_ + "%");
+							drawLoadingText(loadPercentage, "Loading " + archiveAlias + " - " + i_368_ + "%");
 						}
 						i_361_ = i_368_;
 					}
@@ -3818,10 +3818,10 @@ public class Client extends GameShell
 				if (archiveBuffer == null) {
 					for (int waitTime = retryTime; waitTime > 0; waitTime--) {
 						if (errors >= 3) {
-							renderLoadingText(loadPercentage, "Game updated - please reload page");
+							drawLoadingText(loadPercentage, "Game updated - please reload page");
 							waitTime = 10;
 						} else {
-							renderLoadingText(loadPercentage, message + " - Retrying in " + waitTime);
+							drawLoadingText(loadPercentage, message + " - Retrying in " + waitTime);
 						}
 						try {
 							Thread.sleep(1000L);
@@ -6813,7 +6813,7 @@ public class Client extends GameShell
 
 	@Override
 	public final void startup() {
-		renderLoadingText(20, "Starting up");
+		drawLoadingText(20, "Starting up");
 		if (SignLink.mainCache != null) {
 			for (int i = 0; i < 5; i++) {
 				stores[i] = new Index(SignLink.mainCache, SignLink.cacheIndexes[i], i + 1);
@@ -6844,7 +6844,7 @@ public class Client extends GameShell
 			}
 			minimapImage = new ImageRGB(512, 512);
 			Archive archiveCRC = requestArchive(5, "update list", "versionlist", crcValues[5], 60);
-			renderLoadingText(60, "Connecting to update server");
+			drawLoadingText(60, "Connecting to update server");
 			onDemandRequester = new OnDemandRequester();
 			onDemandRequester.init(archiveCRC, this);
 			Animation.method148(onDemandRequester.animCount());
@@ -6871,7 +6871,7 @@ public class Client extends GameShell
 					}
 				}
 			}
-			renderLoadingText(65, "Requesting animations");
+			drawLoadingText(65, "Requesting animations");
 			int fileRequestCount = onDemandRequester.fileCount(1);
 			for (int id = 0; id < fileRequestCount; id++) {
 				onDemandRequester.request(1, id);
@@ -6879,7 +6879,7 @@ public class Client extends GameShell
 			while (onDemandRequester.immediateRequestCount() > 0) {
 				int remaining = fileRequestCount - onDemandRequester.immediateRequestCount();
 				if (remaining > 0) {
-					renderLoadingText(65, "Loading animations - " + remaining * 100 / fileRequestCount + "%");
+					drawLoadingText(65, "Loading animations - " + remaining * 100 / fileRequestCount + "%");
 				}
 				method57(false);
 				try {
@@ -6892,7 +6892,7 @@ public class Client extends GameShell
 					return;
 				}
 			}
-			renderLoadingText(70, "Requesting models");
+			drawLoadingText(70, "Requesting models");
 			fileRequestCount = onDemandRequester.fileCount(0);
 			for (int id = 0; id < fileRequestCount; id++) {
 				int modelIndex = onDemandRequester.modelIndex(id);
@@ -6904,7 +6904,7 @@ public class Client extends GameShell
 			while (onDemandRequester.immediateRequestCount() > 0) {
 				int remaining = fileRequestCount - onDemandRequester.immediateRequestCount();
 				if (remaining > 0) {
-					renderLoadingText(70, "Loading models - " + remaining * 100 / fileRequestCount + "%");
+					drawLoadingText(70, "Loading models - " + remaining * 100 / fileRequestCount + "%");
 				}
 				method57(false);
 				try {
@@ -6914,7 +6914,7 @@ public class Client extends GameShell
 				}
 			}
 			if (stores[0] != null) {
-				renderLoadingText(75, "Requesting maps");
+				drawLoadingText(75, "Requesting maps");
 				onDemandRequester.request(3, onDemandRequester.regIndex(0, 48, 47));
 				onDemandRequester.request(3, onDemandRequester.regIndex(1, 48, 47));
 				onDemandRequester.request(3, onDemandRequester.regIndex(0, 48, 48));
@@ -6931,7 +6931,7 @@ public class Client extends GameShell
 				while (onDemandRequester.immediateRequestCount() > 0) {
 					int remaining = fileRequestCount - onDemandRequester.immediateRequestCount();
 					if (remaining > 0) {
-						renderLoadingText(75, "Loading maps - " + remaining * 100 / fileRequestCount + "%");
+						drawLoadingText(75, "Loading maps - " + remaining * 100 / fileRequestCount + "%");
 					}
 					method57(false);
 					try {
@@ -6976,7 +6976,7 @@ public class Client extends GameShell
 					}
 				}
 			}
-			renderLoadingText(80, "Unpacking media");
+			drawLoadingText(80, "Unpacking media");
 			inventoryBackgroundImage = new IndexedImage(archiveMedia, "invback", 0);
 			chatboxBackgroundImage = new IndexedImage(archiveMedia, "chatback", 0);
 			minimapBackgroundImage = new IndexedImage(archiveMedia, "mapback", 0);
@@ -7090,11 +7090,11 @@ public class Client extends GameShell
 					anIndexedImageArray1085[i_566_].mixPalette(i_562_ + i_565_, i_563_ + i_565_, i_564_ + i_565_);
 				}
 			}
-			renderLoadingText(83, "Unpacking textures");
+			drawLoadingText(83, "Unpacking textures");
 			Rasterizer3D.loadIndexedImages(archiveTextures);
 			Rasterizer3D.method369(0.8);
 			Rasterizer3D.method364(20, true);
-			renderLoadingText(86, "Unpacking config");
+			drawLoadingText(86, "Unpacking config");
 			AnimationSequence.load(archiveConfig);
 			GameObjectDefinition.load(archiveConfig);
 			FloorDefinition.load(archiveConfig);
@@ -7106,15 +7106,15 @@ public class Client extends GameShell
 			VarBit.load(archiveConfig);
 			ItemDefinition.playerIsMember = Client.membersWorld;
 			if (!Client.lowMemory) {
-				renderLoadingText(90, "Unpacking sounds");
+				drawLoadingText(90, "Unpacking sounds");
 				byte[] bs = archiveAudio.getFile("sounds.dat");
 				Buffer buffer = new Buffer(bs);
 				SoundTrack.load(buffer);
 			}
-			renderLoadingText(95, "Unpacking interfaces");
+			drawLoadingText(95, "Unpacking interfaces");
 			TypeFace[] typefaces = { fontSmall, fontNormal, fontBold, fontFancy };
 			Widget.load(archiveInterface, typefaces, archiveMedia);
-			renderLoadingText(100, "Preparing game engine");
+			drawLoadingText(100, "Preparing game engine");
 			for (int i_567_ = 0; i_567_ < 33; i_567_++) {
 				int i_568_ = 999;
 				int i_569_ = 0;
@@ -8657,7 +8657,7 @@ public class Client extends GameShell
 	}
 
 	@Override
-	public final void renderGame() {
+	public final void repaintGame() {
 		if (aBoolean1277 || aBoolean951 || aBoolean1201) {
 			method94(-13873);
 		} else {
@@ -10075,7 +10075,7 @@ public class Client extends GameShell
 						if (i_899_ == 1) {
 							WallDecoration walldecoration = currentScene.method519(i_894_, 866, i_895_, currentSceneIndex);
 							if (walldecoration != null) {
-								walldecoration.aRenderable778 = new GameObject(walldecoration.anInt779 >> 14 & 0x7fff, 0, 4, i_902_, (byte) 7, i_903_, i_901_, i_904_, i_900_, false);
+								walldecoration.renderable = new GameObject(walldecoration.hash >> 14 & 0x7fff, 0, 4, i_902_, (byte) 7, i_903_, i_901_, i_904_, i_900_, false);
 							}
 						}
 						if (i_899_ == 2) {

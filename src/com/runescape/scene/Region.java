@@ -37,25 +37,22 @@ public class Region {
 	public static int lowestPlane = 99;
 	private int regionSizeX;
 	private int regionSizeY;
-	private byte[][][] aByteArrayArrayArray502;
+	private byte[][][] overlayRotations;
 	private byte[][][] renderRuleFlags;
 	private int anInt504 = -53;
 	public static boolean lowMemory = true;
 	private static final int[] anIntArray506 = { 1, 2, 4, 8 };
 
-	public Region(byte[][][] bs, int i, int i_0_, int i_1_, int[][][] is) {
-		try {
+	public Region(byte[][][] renderRuleFlags, int regionSizeY, int regionSizeX, int[][][] vertexHeights) {
 			Region.lowestPlane = 99;
-			regionSizeX = i_1_;
-			regionSizeY = i_0_;
-			while (i >= 0) {
-			}
-			vertexHeights = is;
-			renderRuleFlags = bs;
+			this.regionSizeX = regionSizeX;
+			this.regionSizeY = regionSizeY;
+			this.vertexHeights = vertexHeights;
+			this.renderRuleFlags = renderRuleFlags;
 			underlayFloorIds = new byte[4][regionSizeX][regionSizeY];
 			overlayFloorIds = new byte[4][regionSizeX][regionSizeY];
 			overlayClippingPaths = new byte[4][regionSizeX][regionSizeY];
-			aByteArrayArrayArray502 = new byte[4][regionSizeX][regionSizeY];
+			overlayRotations = new byte[4][regionSizeX][regionSizeY];
 			tileCullingBitsets = new int[4][regionSizeX + 1][regionSizeY + 1];
 			tileShadowIntensity = new byte[4][regionSizeX + 1][regionSizeY + 1];
 			tileLightingIntensity = new int[regionSizeX + 1][regionSizeY + 1];
@@ -64,18 +61,13 @@ public class Region {
 			blendedLightness = new int[regionSizeY];
 			blendedHueDivisor = new int[regionSizeY];
 			blendDirectionTracker = new int[regionSizeY];
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("40803, " + bs + ", " + i + ", " + i_0_ + ", " + i_1_ + ", " + is + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
-	private static final int method452(int i, int i_2_) {
-		int i_3_ = i + i_2_ * 57;
-		i_3_ = i_3_ << 13 ^ i_3_;
-		int i_4_ = i_3_ * (i_3_ * i_3_ * 15731 + 789221) + 1376312589 & 0x7fffffff;
-		return i_4_ >> 19 & 0xff;
+	private static final int calculateNoise(int x, int seed) {
+		int n = x + seed * 57;
+		n = n << 13 ^ n;
+		int noise = n * (n * n * 15731 + 789221) + 1376312589 & 0x7fffffff;
+		return noise >> 19 & 0xff;
 	}
 
 	public final void createRegionScene(CollisionMap[] collisionMaps, Scene scene) {
@@ -255,7 +247,7 @@ public class Region {
 											rgbBitsetRandomized, 0);
 								} else {
 									int clippingPath = overlayClippingPaths[plane][x][y] + 1;
-									byte clippingPathRotation = aByteArrayArrayArray502[plane][x][y];
+									byte clippingPathRotation = overlayRotations[plane][x][y];
 									FloorDefinition floor = FloorDefinition.cache[overlayFloorId - 1];
 									int textureid = floor.textureid;
 									int hslBitset;
@@ -460,138 +452,115 @@ public class Region {
 		return i_107_;
 	}
 
-	public static final void method455(byte b, Buffer buffer, OnDemandRequester ondemandrequester) {
-		try {
-			int i = -1;
-			if (b != -107) {
-				Region.aBoolean495 = !Region.aBoolean495;
-			}
-			for (;;) {
-				int i_108_ = buffer.getSmartB();
-				if (i_108_ == 0) {
+	public static final void passiveRequestGameObjectModels(Buffer buffer, OnDemandRequester onDemandRequester) {
+			int gameObjectId = -1;
+			while (true) {
+				int gameObjectIdOffset = buffer.getSmartB();
+				if (gameObjectIdOffset == 0) {
 					break;
 				}
-				i += i_108_;
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i);
-				gameobjectdefinition.passiveRequestModels(ondemandrequester);
-				for (;;) {
-					int i_109_ = buffer.getSmartB();
-					if (i_109_ == 0) {
+				gameObjectId += gameObjectIdOffset;
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(gameObjectId);
+				gameobjectdefinition.passiveRequestModels(onDemandRequester);
+				while (true) {
+					int terminate = buffer.getSmartB();
+					if (terminate == 0) {
 						break;
 					}
 					buffer.getUnsignedByte();
 				}
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("73405, " + b + ", " + buffer + ", " + ondemandrequester + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
-	public final void method456(int i, int i_110_, int i_111_, int i_112_, int i_113_) {
-		do {
-			try {
-				for (int i_114_ = i; i_114_ <= i + i_110_; i_114_++) {
-					for (int i_115_ = i_113_; i_115_ <= i_113_ + i_112_; i_115_++) {
-						if (i_115_ >= 0 && i_115_ < regionSizeX && i_114_ >= 0 && i_114_ < regionSizeY) {
-							tileShadowIntensity[0][i_115_][i_114_] = (byte) 127;
-							if (i_115_ == i_113_ && i_115_ > 0) {
-								vertexHeights[0][i_115_][i_114_] = vertexHeights[0][i_115_ - 1][i_114_];
+	public final void initiateVertexHeights(int xOffset, int xLength, int yOffset, int yLength) {
+				for (int y = yOffset; y <= yOffset + yLength; y++) {
+					for (int x = xOffset; x <= xOffset + xLength; x++) {
+						if (x >= 0 && x < regionSizeX && y >= 0 && y < regionSizeY) {
+							tileShadowIntensity[0][x][y] = (byte) 127;
+							if (x == xOffset && x > 0) {
+								vertexHeights[0][x][y] = vertexHeights[0][x - 1][y];
 							}
-							if (i_115_ == i_113_ + i_112_ && i_115_ < regionSizeX - 1) {
-								vertexHeights[0][i_115_][i_114_] = vertexHeights[0][i_115_ + 1][i_114_];
+							if (x == xOffset + xLength && x < regionSizeX - 1) {
+								vertexHeights[0][x][y] = vertexHeights[0][x + 1][y];
 							}
-							if (i_114_ == i && i_114_ > 0) {
-								vertexHeights[0][i_115_][i_114_] = vertexHeights[0][i_115_][i_114_ - 1];
+							if (y == yOffset && y > 0) {
+								vertexHeights[0][x][y] = vertexHeights[0][x][y - 1];
 							}
-							if (i_114_ == i + i_110_ && i_114_ < regionSizeY - 1) {
-								vertexHeights[0][i_115_][i_114_] = vertexHeights[0][i_115_][i_114_ + 1];
+							if (y == yOffset + yLength && y < regionSizeY - 1) {
+								vertexHeights[0][x][y] = vertexHeights[0][x][y + 1];
 							}
 						}
 					}
 				}
-				if (i_111_ == 0) {
-					break;
-				}
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("73091, " + i + ", " + i_110_ + ", " + i_111_ + ", " + i_112_ + ", " + i_113_
-						+ ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
 	}
 
-	private final void method457(int i, Scene scene, CollisionMap collisionmap, int i_116_, int i_117_, int i_118_,
-			int i_119_, boolean bool, int i_120_) {
-		try {
-			if (!Region.lowMemory || (renderRuleFlags[0][i_118_][i] & 0x2) != 0
-					|| (renderRuleFlags[i_117_][i_118_][i] & 0x10) == 0
-					&& getVisibilityPlaneFor(i, i_117_, i_118_, 0) == Region.onBuildTimePlane) {
-				if (i_117_ < Region.lowestPlane) {
-					Region.lowestPlane = i_117_;
+	private final void method457(int y, Scene scene, CollisionMap collisionMap, int type, int plane, int x,
+			int objectId, boolean bool, int face) {
+			if (!Region.lowMemory || (renderRuleFlags[0][x][y] & 0x2) != 0
+					|| (renderRuleFlags[plane][x][y] & 0x10) == 0
+					&& getVisibilityPlaneFor(y, plane, x, 0) == Region.onBuildTimePlane) {
+				if (plane < Region.lowestPlane) {
+					Region.lowestPlane = plane;
 				}
-				int i_121_ = vertexHeights[i_117_][i_118_][i];
-				int i_122_ = vertexHeights[i_117_][i_118_ + 1][i];
-				int i_123_ = vertexHeights[i_117_][i_118_ + 1][i + 1];
-				int i_124_ = vertexHeights[i_117_][i_118_][i + 1];
-				int i_125_ = i_121_ + i_122_ + i_123_ + i_124_ >> 2;
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_119_);
-				int i_126_ = i_118_ + (i << 7) + (i_119_ << 14) + 1073741824;
+				int vertexHeight = vertexHeights[plane][x][y];
+				int vertexHeightRight = vertexHeights[plane][x + 1][y];
+				int vertexHeightTopRight = vertexHeights[plane][x + 1][y + 1];
+				int vertexHeightTop = vertexHeights[plane][x][y + 1];
+				int vertexMix = vertexHeight + vertexHeightRight + vertexHeightTopRight + vertexHeightTop >> 2;
+				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(objectId);
+				int hash = x + (y << 7) + (objectId << 14) + 1073741824;
 				if (!gameobjectdefinition.actionsBoolean) {
-					i_126_ += -2147483648;
+					hash += -2147483648;
 				}
-				byte b = (byte) ((i_120_ << 6) + i_116_);
-				if (!bool) {
-					if (i_116_ == 22) {
+				byte objectConfig = (byte) ((face << 6) + type);
+					if (type == 22) {
 						if (!Region.lowMemory || gameobjectdefinition.actionsBoolean
 								|| gameobjectdefinition.aBoolean241) {
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(22, i_120_, i_121_, i_122_,
-										i_123_, i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(22, face, vertexHeight, vertexHeightRight,
+										vertexHeightTopRight, vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, i_120_, 22, i_122_, (byte) 7, i_123_, i_121_,
-										i_124_, gameobjectdefinition.animationId, true);
+								renderable = new GameObject(objectId, face, 22, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight,
+										vertexHeightTop, gameobjectdefinition.animationId, true);
 							}
-							scene.method502(i_117_, i_125_, i, 68, renderable, b, i_126_, i_118_);
+							scene.addGroundDecoration(plane, vertexMix, y, 68, renderable, objectConfig, hash, x);
 							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean
-									&& collisionmap != null) {
-								collisionmap.markBlocked(i_118_, i);
+									&& collisionMap != null) {
+								collisionMap.markBlocked(x, y);
 							}
 						}
-					} else if (i_116_ == 10 || i_116_ == 11) {
+					} else if (type == 10 || type == 11) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(10, i_120_, i_121_, i_122_, i_123_,
-									i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(10, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+									vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, 10, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+							renderable = new GameObject(objectId, face, 10, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 									gameobjectdefinition.animationId, true);
 						}
 						if (renderable != null) {
 							int i_127_ = 0;
-							if (i_116_ == 11) {
+							if (type == 11) {
 								i_127_ += 256;
 							}
 							int i_128_;
 							int i_129_;
-							if (i_120_ == 1 || i_120_ == 3) {
+							if (face == 1 || face == 3) {
 								i_128_ = gameobjectdefinition.height;
 								i_129_ = gameobjectdefinition.width;
 							} else {
 								i_128_ = gameobjectdefinition.width;
 								i_129_ = gameobjectdefinition.height;
 							}
-							if (scene.method506(i_126_, b, i_125_, i_129_, renderable, i_128_, i_117_, i_127_,
-									(byte) 110, i, i_118_) && gameobjectdefinition.aBoolean284) {
+							if (scene.method506(hash, objectConfig, vertexMix, i_129_, renderable, i_128_, plane, i_127_,
+									(byte) 110, y, x) && gameobjectdefinition.aBoolean284) {
 								Model model;
 								if (renderable instanceof Model) {
 									model = (Model) renderable;
 								} else {
-									model = gameobjectdefinition.getGameObjectModel(10, i_120_, i_121_, i_122_, i_123_,
-											i_124_, -1);
+									model = gameobjectdefinition.getGameObjectModel(10, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+											vertexHeightTop, -1);
 								}
 								if (model != null) {
 									for (int i_130_ = 0; i_130_ <= i_128_; i_130_++) {
@@ -600,277 +569,270 @@ public class Region {
 											if (i_132_ > 30) {
 												i_132_ = 30;
 											}
-											if (i_132_ > tileShadowIntensity[i_117_][i_118_ + i_130_][i + i_131_]) {
-												tileShadowIntensity[i_117_][i_118_ + i_130_][i + i_131_] = (byte) i_132_;
+											if (i_132_ > tileShadowIntensity[plane][x + i_130_][y + i_131_]) {
+												tileShadowIntensity[plane][x + i_130_][y + i_131_] = (byte) i_132_;
 											}
 										}
 									}
 								}
 							}
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
-									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width,
+									gameobjectdefinition.height, face, gameobjectdefinition.walkable);
 						}
-					} else if (i_116_ >= 12) {
+					} else if (type >= 12) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(i_116_, i_120_, i_121_, i_122_,
-									i_123_, i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(type, face, vertexHeight, vertexHeightRight,
+									vertexHeightTopRight, vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, i_116_, i_122_, (byte) 7, i_123_, i_121_,
-									i_124_, gameobjectdefinition.animationId, true);
+							renderable = new GameObject(objectId, face, type, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight,
+									vertexHeightTop, gameobjectdefinition.animationId, true);
 						}
-						scene.method506(i_126_, b, i_125_, 1, renderable, 1, i_117_, 0, (byte) 110, i, i_118_);
-						if (i_116_ >= 12 && i_116_ <= 17 && i_116_ != 13 && i_117_ > 0) {
-							tileCullingBitsets[i_117_][i_118_][i] |= 0x924;
+						scene.method506(hash, objectConfig, vertexMix, 1, renderable, 1, plane, 0, (byte) 110, y, x);
+						if (type >= 12 && type <= 17 && type != 13 && plane > 0) {
+							tileCullingBitsets[plane][x][y] |= 0x924;
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
-									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width,
+									gameobjectdefinition.height, face, gameobjectdefinition.walkable);
 						}
-					} else if (i_116_ == 0) {
+					} else if (type == 0) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(0, i_120_, i_121_, i_122_, i_123_,
-									i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(0, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+									vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, 0, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+							renderable = new GameObject(objectId, face, 0, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 									gameobjectdefinition.animationId, true);
 						}
-						scene.method504(Region.anIntArray506[i_120_], renderable, true, i_126_, i, b, i_118_, null,
-								i_125_, 0, i_117_);
-						if (i_120_ == 0) {
+						scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x, null,
+								vertexMix, 0, plane);
+						if (face == 0) {
 							if (gameobjectdefinition.aBoolean284) {
-								tileShadowIntensity[i_117_][i_118_][i] = (byte) 50;
-								tileShadowIntensity[i_117_][i_118_][i + 1] = (byte) 50;
+								tileShadowIntensity[plane][x][y] = (byte) 50;
+								tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 							}
 							if (gameobjectdefinition.aBoolean269) {
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x249;
+								tileCullingBitsets[plane][x][y] |= 0x249;
 							}
-						} else if (i_120_ == 1) {
+						} else if (face == 1) {
 							if (gameobjectdefinition.aBoolean284) {
-								tileShadowIntensity[i_117_][i_118_][i + 1] = (byte) 50;
-								tileShadowIntensity[i_117_][i_118_ + 1][i + 1] = (byte) 50;
+								tileShadowIntensity[plane][x][y + 1] = (byte) 50;
+								tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 							}
 							if (gameobjectdefinition.aBoolean269) {
-								tileCullingBitsets[i_117_][i_118_][i + 1] |= 0x492;
+								tileCullingBitsets[plane][x][y + 1] |= 0x492;
 							}
-						} else if (i_120_ == 2) {
+						} else if (face == 2) {
 							if (gameobjectdefinition.aBoolean284) {
-								tileShadowIntensity[i_117_][i_118_ + 1][i] = (byte) 50;
-								tileShadowIntensity[i_117_][i_118_ + 1][i + 1] = (byte) 50;
+								tileShadowIntensity[plane][x + 1][y] = (byte) 50;
+								tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 							}
 							if (gameobjectdefinition.aBoolean269) {
-								tileCullingBitsets[i_117_][i_118_ + 1][i] |= 0x249;
+								tileCullingBitsets[plane][x + 1][y] |= 0x249;
 							}
-						} else if (i_120_ == 3) {
+						} else if (face == 3) {
 							if (gameobjectdefinition.aBoolean284) {
-								tileShadowIntensity[i_117_][i_118_][i] = (byte) 50;
-								tileShadowIntensity[i_117_][i_118_ + 1][i] = (byte) 50;
+								tileShadowIntensity[plane][x][y] = (byte) 50;
+								tileShadowIntensity[plane][x + 1][y] = (byte) 50;
 							}
 							if (gameobjectdefinition.aBoolean269) {
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x492;
+								tileCullingBitsets[plane][x][y] |= 0x492;
 							}
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markWall(i_118_, i, i_116_, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markWall(x, y, type, face, gameobjectdefinition.walkable);
 						}
 						if (gameobjectdefinition.anInt280 != 16) {
-							scene.method512(i, 441, gameobjectdefinition.anInt280, i_118_, i_117_);
+							scene.method512(y, 441, gameobjectdefinition.anInt280, x, plane);
 						}
-					} else if (i_116_ == 1) {
+					} else if (type == 1) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(1, i_120_, i_121_, i_122_, i_123_,
-									i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(1, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+									vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, 1, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+							renderable = new GameObject(objectId, face, 1, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 									gameobjectdefinition.animationId, true);
 						}
-						scene.method504(Region.anIntArray494[i_120_], renderable, true, i_126_, i, b, i_118_, null,
-								i_125_, 0, i_117_);
+						scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
+								vertexMix, 0, plane);
 						if (gameobjectdefinition.aBoolean284) {
-							if (i_120_ == 0) {
-								tileShadowIntensity[i_117_][i_118_][i + 1] = (byte) 50;
-							} else if (i_120_ == 1) {
-								tileShadowIntensity[i_117_][i_118_ + 1][i + 1] = (byte) 50;
-							} else if (i_120_ == 2) {
-								tileShadowIntensity[i_117_][i_118_ + 1][i] = (byte) 50;
-							} else if (i_120_ == 3) {
-								tileShadowIntensity[i_117_][i_118_][i] = (byte) 50;
+							if (face == 0) {
+								tileShadowIntensity[plane][x][y + 1] = (byte) 50;
+							} else if (face == 1) {
+								tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
+							} else if (face == 2) {
+								tileShadowIntensity[plane][x + 1][y] = (byte) 50;
+							} else if (face == 3) {
+								tileShadowIntensity[plane][x][y] = (byte) 50;
 							}
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markWall(i_118_, i, i_116_, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markWall(x, y, type, face, gameobjectdefinition.walkable);
 						}
-					} else if (i_116_ == 2) {
-						int i_133_ = i_120_ + 1 & 0x3;
+					} else if (type == 2) {
+						int i_133_ = face + 1 & 0x3;
 						Renderable renderable;
 						Renderable renderable_134_;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(2, 4 + i_120_, i_121_, i_122_, i_123_,
-									i_124_, -1);
-							renderable_134_ = gameobjectdefinition.getGameObjectModel(2, i_133_, i_121_, i_122_,
-									i_123_, i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(2, 4 + face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+									vertexHeightTop, -1);
+							renderable_134_ = gameobjectdefinition.getGameObjectModel(2, i_133_, vertexHeight, vertexHeightRight,
+									vertexHeightTopRight, vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, 4 + i_120_, 2, i_122_, (byte) 7, i_123_, i_121_,
-									i_124_, gameobjectdefinition.animationId, true);
-							renderable_134_ = new GameObject(i_119_, i_133_, 2, i_122_, (byte) 7, i_123_, i_121_,
-									i_124_, gameobjectdefinition.animationId, true);
+							renderable = new GameObject(objectId, 4 + face, 2, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight,
+									vertexHeightTop, gameobjectdefinition.animationId, true);
+							renderable_134_ = new GameObject(objectId, i_133_, 2, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight,
+									vertexHeightTop, gameobjectdefinition.animationId, true);
 						}
-						scene.method504(Region.anIntArray506[i_120_], renderable, true, i_126_, i, b, i_118_,
-								renderable_134_, i_125_, Region.anIntArray506[i_133_], i_117_);
+						scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x,
+								renderable_134_, vertexMix, Region.anIntArray506[i_133_], plane);
 						if (gameobjectdefinition.aBoolean269) {
-							if (i_120_ == 0) {
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x249;
-								tileCullingBitsets[i_117_][i_118_][i + 1] |= 0x492;
-							} else if (i_120_ == 1) {
-								tileCullingBitsets[i_117_][i_118_][i + 1] |= 0x492;
-								tileCullingBitsets[i_117_][i_118_ + 1][i] |= 0x249;
-							} else if (i_120_ == 2) {
-								tileCullingBitsets[i_117_][i_118_ + 1][i] |= 0x249;
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x492;
-							} else if (i_120_ == 3) {
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x492;
-								tileCullingBitsets[i_117_][i_118_][i] |= 0x249;
+							if (face == 0) {
+								tileCullingBitsets[plane][x][y] |= 0x249;
+								tileCullingBitsets[plane][x][y + 1] |= 0x492;
+							} else if (face == 1) {
+								tileCullingBitsets[plane][x][y + 1] |= 0x492;
+								tileCullingBitsets[plane][x + 1][y] |= 0x249;
+							} else if (face == 2) {
+								tileCullingBitsets[plane][x + 1][y] |= 0x249;
+								tileCullingBitsets[plane][x][y] |= 0x492;
+							} else if (face == 3) {
+								tileCullingBitsets[plane][x][y] |= 0x492;
+								tileCullingBitsets[plane][x][y] |= 0x249;
 							}
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markWall(i_118_, i, i_116_, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markWall(x, y, type, face, gameobjectdefinition.walkable);
 						}
 						if (gameobjectdefinition.anInt280 != 16) {
-							scene.method512(i, 441, gameobjectdefinition.anInt280, i_118_, i_117_);
+							scene.method512(y, 441, gameobjectdefinition.anInt280, x, plane);
 						}
-					} else if (i_116_ == 3) {
+					} else if (type == 3) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(3, i_120_, i_121_, i_122_, i_123_,
-									i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(3, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+									vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, 3, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+							renderable = new GameObject(objectId, face, 3, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 									gameobjectdefinition.animationId, true);
 						}
-						scene.method504(Region.anIntArray494[i_120_], renderable, true, i_126_, i, b, i_118_, null,
-								i_125_, 0, i_117_);
+						scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
+								vertexMix, 0, plane);
 						if (gameobjectdefinition.aBoolean284) {
-							if (i_120_ == 0) {
-								tileShadowIntensity[i_117_][i_118_][i + 1] = (byte) 50;
-							} else if (i_120_ == 1) {
-								tileShadowIntensity[i_117_][i_118_ + 1][i + 1] = (byte) 50;
-							} else if (i_120_ == 2) {
-								tileShadowIntensity[i_117_][i_118_ + 1][i] = (byte) 50;
-							} else if (i_120_ == 3) {
-								tileShadowIntensity[i_117_][i_118_][i] = (byte) 50;
+							if (face == 0) {
+								tileShadowIntensity[plane][x][y + 1] = (byte) 50;
+							} else if (face == 1) {
+								tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
+							} else if (face == 2) {
+								tileShadowIntensity[plane][x + 1][y] = (byte) 50;
+							} else if (face == 3) {
+								tileShadowIntensity[plane][x][y] = (byte) 50;
 							}
 						}
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markWall(i_118_, i, i_116_, i_120_, gameobjectdefinition.walkable);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markWall(x, y, type, face, gameobjectdefinition.walkable);
 						}
-					} else if (i_116_ == 9) {
+					} else if (type == 9) {
 						Renderable renderable;
 						if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-							renderable = gameobjectdefinition.getGameObjectModel(i_116_, i_120_, i_121_, i_122_,
-									i_123_, i_124_, -1);
+							renderable = gameobjectdefinition.getGameObjectModel(type, face, vertexHeight, vertexHeightRight,
+									vertexHeightTopRight, vertexHeightTop, -1);
 						} else {
-							renderable = new GameObject(i_119_, i_120_, i_116_, i_122_, (byte) 7, i_123_, i_121_,
-									i_124_, gameobjectdefinition.animationId, true);
+							renderable = new GameObject(objectId, face, type, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight,
+									vertexHeightTop, gameobjectdefinition.animationId, true);
 						}
-						scene.method506(i_126_, b, i_125_, 1, renderable, 1, i_117_, 0, (byte) 110, i, i_118_);
-						if (gameobjectdefinition.solid && collisionmap != null) {
-							collisionmap.markSolidOccupant(i_118_, i, gameobjectdefinition.width,
-									gameobjectdefinition.height, i_120_, gameobjectdefinition.walkable);
+						scene.method506(hash, objectConfig, vertexMix, 1, renderable, 1, plane, 0, (byte) 110, y, x);
+						if (gameobjectdefinition.solid && collisionMap != null) {
+							collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width,
+									gameobjectdefinition.height, face, gameobjectdefinition.walkable);
 						}
 					} else {
 						if (gameobjectdefinition.adjustToTerrain) {
-							if (i_120_ == 1) {
-								int i_135_ = i_124_;
-								i_124_ = i_123_;
-								i_123_ = i_122_;
-								i_122_ = i_121_;
-								i_121_ = i_135_;
-							} else if (i_120_ == 2) {
-								int i_136_ = i_124_;
-								i_124_ = i_122_;
-								i_122_ = i_136_;
-								i_136_ = i_123_;
-								i_123_ = i_121_;
-								i_121_ = i_136_;
-							} else if (i_120_ == 3) {
-								int i_137_ = i_124_;
-								i_124_ = i_121_;
-								i_121_ = i_122_;
-								i_122_ = i_123_;
-								i_123_ = i_137_;
+							if (face == 1) {
+								int i_135_ = vertexHeightTop;
+								vertexHeightTop = vertexHeightTopRight;
+								vertexHeightTopRight = vertexHeightRight;
+								vertexHeightRight = vertexHeight;
+								vertexHeight = i_135_;
+							} else if (face == 2) {
+								int i_136_ = vertexHeightTop;
+								vertexHeightTop = vertexHeightRight;
+								vertexHeightRight = i_136_;
+								i_136_ = vertexHeightTopRight;
+								vertexHeightTopRight = vertexHeight;
+								vertexHeight = i_136_;
+							} else if (face == 3) {
+								int i_137_ = vertexHeightTop;
+								vertexHeightTop = vertexHeight;
+								vertexHeight = vertexHeightRight;
+								vertexHeightRight = vertexHeightTopRight;
+								vertexHeightTopRight = i_137_;
 							}
 						}
-						if (i_116_ == 4) {
+						if (type == 4) {
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_121_, i_122_, i_123_,
-										i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+										vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, 0, 4, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+								renderable = new GameObject(objectId, 0, 4, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 										gameobjectdefinition.animationId, true);
 							}
-							scene.method505(i_126_, i, i_120_ * 512, -460, i_117_, 0, i_125_, renderable, i_118_, b, 0,
-									Region.anIntArray506[i_120_]);
-						} else if (i_116_ == 5) {
-							int i_138_ = 16;
-							int i_139_ = scene.method522(i_117_, i_118_, i);
+							scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face * 512, Region.anIntArray506[face], objectConfig, hash, renderable);
+						} else if (type == 5) {
+							int offset = 16;
+							int i_139_ = scene.method522(plane, x, y);
 							if (i_139_ > 0) {
-								i_138_ = GameObjectDefinition.get(i_139_ >> 14 & 0x7fff).anInt280;
+								offset = GameObjectDefinition.get(i_139_ >> 14 & 0x7fff).anInt280;
 							}
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_121_, i_122_, i_123_,
-										i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+										vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, 0, 4, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+								renderable = new GameObject(objectId, 0, 4, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 										gameobjectdefinition.animationId, true);
 							}
-							scene.method505(i_126_, i, i_120_ * 512, -460, i_117_, Region.anIntArray491[i_120_]
-									* i_138_, i_125_, renderable, i_118_, b, Region.anIntArray498[i_120_] * i_138_,
-									Region.anIntArray506[i_120_]);
-						} else if (i_116_ == 6) {
+							scene.addWallDecoration(x, Region.anIntArray491[face]
+									* offset, y, Region.anIntArray498[face] * offset, vertexMix, plane, face * 512, Region.anIntArray506[face], objectConfig, hash, renderable);
+						} else if (type == 6) {
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_121_, i_122_, i_123_,
-										i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+										vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, 0, 4, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+								renderable = new GameObject(objectId, 0, 4, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 										gameobjectdefinition.animationId, true);
 							}
-							scene.method505(i_126_, i, i_120_, -460, i_117_, 0, i_125_, renderable, i_118_, b, 0, 256);
-						} else if (i_116_ == 7) {
+							scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face, 256, objectConfig, hash, renderable);
+						} else if (type == 7) {
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_121_, i_122_, i_123_,
-										i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+										vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, 0, 4, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+								renderable = new GameObject(objectId, 0, 4, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 										gameobjectdefinition.animationId, true);
 							}
-							scene.method505(i_126_, i, i_120_, -460, i_117_, 0, i_125_, renderable, i_118_, b, 0, 512);
-						} else if (i_116_ == 8) {
+							scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face, 512, objectConfig, hash, renderable);
+						} else if (type == 8) {
 							Renderable renderable;
 							if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
-								renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_121_, i_122_, i_123_,
-										i_124_, -1);
+								renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+										vertexHeightTop, -1);
 							} else {
-								renderable = new GameObject(i_119_, 0, 4, i_122_, (byte) 7, i_123_, i_121_, i_124_,
+								renderable = new GameObject(objectId, 0, 4, vertexHeightRight, (byte) 7, vertexHeightTopRight, vertexHeight, vertexHeightTop,
 										gameobjectdefinition.animationId, true);
 							}
-							scene.method505(i_126_, i, i_120_, -460, i_117_, 0, i_125_, renderable, i_118_, b, 0, 768);
+							scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face, 768, objectConfig, hash, renderable);
 						}
 					}
-				}
+				
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("16863, " + i + ", " + scene + ", " + collisionmap + ", " + i_116_ + ", " + i_117_
-					+ ", " + i_118_ + ", " + i_119_ + ", " + bool + ", " + i_120_ + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	private static final int method458(int i, int i_140_, int i_141_) {
@@ -1031,7 +993,7 @@ public class Region {
 					if (i_186_ <= 49) {
 						overlayFloorIds[i_182_][i_181_][i] = buffer.get();
 						overlayClippingPaths[i_182_][i_181_][i] = (byte) ((i_186_ - 2) / 4);
-						aByteArrayArrayArray502[i_182_][i_181_][i] = (byte) (i_186_ - 2 + i_183_ & 0x3);
+						overlayRotations[i_182_][i_181_][i] = (byte) (i_186_ - 2 + i_183_ & 0x3);
 					} else if (i_186_ <= 81) {
 						renderRuleFlags[i_182_][i_181_][i] = (byte) (i_186_ - 49);
 					} else {
@@ -1166,11 +1128,11 @@ public class Region {
 	}
 
 	private static final int method468(int i, int i_216_) {
-		int i_217_ = Region.method452(i - 1, i_216_ - 1) + Region.method452(i + 1, i_216_ - 1)
-				+ Region.method452(i - 1, i_216_ + 1) + Region.method452(i + 1, i_216_ + 1);
-		int i_218_ = Region.method452(i - 1, i_216_) + Region.method452(i + 1, i_216_)
-				+ Region.method452(i, i_216_ - 1) + Region.method452(i, i_216_ + 1);
-		int i_219_ = Region.method452(i, i_216_);
+		int i_217_ = Region.calculateNoise(i - 1, i_216_ - 1) + Region.calculateNoise(i + 1, i_216_ - 1)
+				+ Region.calculateNoise(i - 1, i_216_ + 1) + Region.calculateNoise(i + 1, i_216_ + 1);
+		int i_218_ = Region.calculateNoise(i - 1, i_216_) + Region.calculateNoise(i + 1, i_216_)
+				+ Region.calculateNoise(i, i_216_ - 1) + Region.calculateNoise(i, i_216_ + 1);
+		int i_219_ = Region.calculateNoise(i, i_216_);
 		return i_217_ / 16 + i_218_ / 8 + i_219_ / 4;
 	}
 
@@ -1211,7 +1173,7 @@ public class Region {
 					renderable = new GameObject(i_225_, i, 22, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 							gameobjectdefinition.animationId, true);
 				}
-				scene.method502(i_226_, i_231_, i_221_, 68, renderable, b_233_, i_232_, i_224_);
+				scene.addGroundDecoration(i_226_, i_231_, i_221_, 68, renderable, b_233_, i_232_, i_224_);
 				if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
 					collisionmap.markBlocked(i_224_, i_221_);
 				}
@@ -1359,8 +1321,7 @@ public class Region {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 								gameobjectdefinition.animationId, true);
 					}
-					scene.method505(i_232_, i_221_, i * 512, -460, i_226_, 0, i_231_, renderable, i_224_, b_233_, 0,
-							Region.anIntArray506[i]);
+					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i * 512, Region.anIntArray506[i], b_233_, i_232_, renderable);
 				} else if (i_222_ == 5) {
 					int i_242_ = 16;
 					int i_243_ = scene.method522(i_226_, i_224_, i_221_);
@@ -1374,8 +1335,8 @@ public class Region {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 								gameobjectdefinition.animationId, true);
 					}
-					scene.method505(i_232_, i_221_, i * 512, -460, i_226_, Region.anIntArray491[i] * i_242_, i_231_,
-							renderable, i_224_, b_233_, Region.anIntArray498[i] * i_242_, Region.anIntArray506[i]);
+					scene.addWallDecoration(i_224_, Region.anIntArray491[i] * i_242_, i_221_, Region.anIntArray498[i] * i_242_, i_231_, i_226_, i * 512,
+							Region.anIntArray506[i], b_233_, i_232_, renderable);
 				} else if (i_222_ == 6) {
 					Renderable renderable;
 					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
@@ -1384,7 +1345,7 @@ public class Region {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 								gameobjectdefinition.animationId, true);
 					}
-					scene.method505(i_232_, i_221_, i, -460, i_226_, 0, i_231_, renderable, i_224_, b_233_, 0, 256);
+					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i, 256, b_233_, i_232_, renderable);
 				} else if (i_222_ == 7) {
 					Renderable renderable;
 					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
@@ -1393,7 +1354,7 @@ public class Region {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 								gameobjectdefinition.animationId, true);
 					}
-					scene.method505(i_232_, i_221_, i, -460, i_226_, 0, i_231_, renderable, i_224_, b_233_, 0, 512);
+					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i, 512, b_233_, i_232_, renderable);
 				} else if (i_222_ == 8) {
 					Renderable renderable;
 					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
@@ -1402,7 +1363,7 @@ public class Region {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, (byte) 7, i_229_, i_227_, i_230_,
 								gameobjectdefinition.animationId, true);
 					}
-					scene.method505(i_232_, i_221_, i, -460, i_226_, 0, i_231_, renderable, i_224_, b_233_, 0, 768);
+					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i, 768, b_233_, i_232_, renderable);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
