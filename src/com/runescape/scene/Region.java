@@ -887,13 +887,13 @@ public class Region {
 		}
 	}
 
-	public final void method461(int i, int i_158_, CollisionMap[] collisionmaps, int i_159_, int i_160_, int i_161_,
-			byte[] bs, int i_162_, int i_163_, int i_164_) {
+	public final void method461(int i, int i_158_, CollisionMap[] collisionMaps, int i_159_, int i_160_, int i_161_,
+			byte[] bs, int i_162_, int plane, int i_164_) {
 		try {
 			for (int i_165_ = 0; i_165_ < 8; i_165_++) {
 				for (int i_166_ = 0; i_166_ < 8; i_166_++) {
 					if (i_160_ + i_165_ > 0 && i_160_ + i_165_ < 103 && i_164_ + i_166_ > 0 && i_164_ + i_166_ < 103) {
-						collisionmaps[i_163_].adjacency[i_160_ + i_165_][i_164_ + i_166_] &= ~0x1000000;
+						collisionMaps[plane].adjacency[i_160_ + i_165_][i_164_ + i_166_] &= ~0x1000000;
 					}
 				}
 			}
@@ -908,8 +908,8 @@ public class Region {
 					for (int i_170_ = 0; i_170_ < 64; i_170_++) {
 						if (i_168_ == i && i_169_ >= i_161_ && i_169_ < i_161_ + 8 && i_170_ >= i_162_
 								&& i_170_ < i_162_ + 8) {
-							method463(i_164_ + TiledUtils.method587(i_170_ & 0x7, i_158_, i_169_ & 0x7), 0, buffer,
-									i_160_ + TiledUtils.method586(i_158_, i_170_ & 0x7, i_169_ & 0x7, false), i_163_,
+							method463(i_164_ + TiledUtils.getRotatedMapChunkY(i_169_ & 0x7, i_170_ & 0x7, i_158_), 0, buffer,
+									i_160_ + TiledUtils.getRotatedMapChunkX(i_169_ & 0x7, i_170_ & 0x7, i_158_), plane,
 									i_158_, 942, 0);
 						} else {
 							method463(-1, 0, buffer, -1, 0, 0, 942, 0);
@@ -918,8 +918,8 @@ public class Region {
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("28153, " + i + ", " + i_158_ + ", " + collisionmaps + ", " + i_159_ + ", " + i_160_
-					+ ", " + i_161_ + ", " + bs + ", " + i_162_ + ", " + i_163_ + ", " + i_164_ + ", "
+			SignLink.reportError("28153, " + i + ", " + i_158_ + ", " + collisionMaps + ", " + i_159_ + ", " + i_160_
+					+ ", " + i_161_ + ", " + bs + ", " + i_162_ + ", " + plane + ", " + i_164_ + ", "
 					+ runtimeexception.toString());
 			throw new RuntimeException();
 		}
@@ -1072,10 +1072,10 @@ public class Region {
 							&& i_202_ < i_193_ + 8) {
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(i_198_);
 						int i_208_ = i_192_
-								+ TiledUtils.method588(i_196_, gameobjectdefinition.height, i_203_ & 0x7, i_202_ & 0x7,
+								+ TiledUtils.getRotatedLandscapeChunkX(i_196_, gameobjectdefinition.height, i_203_ & 0x7, i_202_ & 0x7,
 										gameobjectdefinition.width);
 						int i_209_ = i_197_
-								+ TiledUtils.method589(i_202_ & 0x7, gameobjectdefinition.height, i_196_,
+								+ TiledUtils.getRotatedLandscapeChunkY(i_202_ & 0x7, gameobjectdefinition.height, i_196_,
 										gameobjectdefinition.width, i_203_ & 0x7);
 						if (i_208_ > 0 && i_209_ > 0 && i_208_ < 103 && i_209_ < 103) {
 							int i_210_ = i_204_;
