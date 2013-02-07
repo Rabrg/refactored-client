@@ -18,7 +18,7 @@ public class Player extends Actor {
 	public ActorDefinition npcDefinition;
 	public boolean aBoolean1719 = false;
 	public int[] appearanceColors = new int[5];
-	public int teamId;
+	public int teamIndex;
 	public int gender;
 	public String playerName;
 	public static Cache modelCache = new Cache(260);
@@ -115,7 +115,7 @@ public class Player extends Actor {
 		gender = buffer.getUnsignedByte();
 		headIcon = buffer.getUnsignedByte();
 		npcDefinition = null;
-		teamId = 0;
+		teamIndex = 0;
 		for (int index = 0; index < 12; index++) {
 			int i_4_ = buffer.getUnsignedByte();
 			if (i_4_ == 0) {
@@ -130,7 +130,7 @@ public class Player extends Actor {
 				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
 					int teamId = ItemDefinition.get(appearance[index] - 512).teamIndex;
 					if (teamId != 0) {
-						this.teamId = teamId;
+						this.teamIndex = teamId;
 					}
 				}
 			}

@@ -80,7 +80,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		if (gameFrame != null) {
 			gameFrame.addWindowListener(this);
 		}
-		drawLoadingText(0, "Loading...");
+		renderLoadingText(0, "Loading...");
 		startup();
 		int opos = 0;
 		int ratio = 256;
@@ -138,14 +138,14 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 				clickY = eventClickY;
 				clickTime = lastClick;
 				eventMouseButtonPressed = 0;
-				doLogic();
+				processLogic();
 				readIndex = writeIndex;
 			}
 			count &= 0xff;
 			if (deltime > 0) {
 				fps = 1000 * ratio / (deltime * 256);
 			}
-			repaintGame();
+			renderGame();
 			if (dumpRequested) {
 				System.out.println("ntime:" + currentTime);
 				for (int i = 0; i < 10; i++) {
@@ -464,13 +464,13 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public void startup() {
 	}
 
-	public void doLogic() {
+	public void processLogic() {
 	}
 
 	public void shutdown() {
 	}
 
-	public void repaintGame() {
+	public void renderGame() {
 	}
 
 	public Component getComponent() {
@@ -486,7 +486,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		thread.setPriority(priority);
 	}
 
-	public void drawLoadingText(int percentage, String string) {
+	public void renderLoadingText(int percentage, String string) {
 		while (gameGraphics == null) {
 			gameGraphics = getComponent().getGraphics();
 			try {

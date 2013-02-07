@@ -70,7 +70,7 @@ public class TypeFace extends Rasterizer {
 		}
 	}
 
-	public void drawStringRA(String string, int x, int y, int color) {
+	public void drawStringAlignRight(String string, int x, int y, int color) {
 		drawRegularString(string, x - getStringWidth(string), y, color);
 	}
 
