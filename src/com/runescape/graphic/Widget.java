@@ -306,13 +306,13 @@ public class Widget {
 			model = Model.getModel(modelId);
 		}
 		if (modelType == 2) {
-			model = ActorDefinition.get(modelId).getHeadModel();
+			model = ActorDefinition.getDefinition(modelId).getHeadModel();
 		}
 		if (modelType == 3) {
 			model = Client.localPlayer.getHeadModel();
 		}
 		if (modelType == 4) {
-			model = ItemDefinition.get(modelId).getInventoryModel(50);
+			model = ItemDefinition.getDefinition(modelId).getInventoryModel(50);
 		}
 		if (modelType == 5) {
 			model = null;

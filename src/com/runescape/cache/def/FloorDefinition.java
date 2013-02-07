@@ -9,7 +9,7 @@ public class FloorDefinition {
 	public static FloorDefinition[] cache;
 	public String name;
 	public int rgbColor;
-	public int textureid = -1;
+	public int textureId = -1;
 	public boolean aBoolean227 = false;
 	public boolean occlude = true;
 	public int hue2;
@@ -43,7 +43,7 @@ public class FloorDefinition {
 				rgbColor = buffer.get24BitInt();
 				shiftRGBColors(rgbColor);
 			} else if (attributeId == 2) {
-				textureid = buffer.getUnsignedByte();
+				textureId = buffer.getUnsignedByte();
 			} else if (attributeId == 3) {
 				aBoolean227 = true;
 			} else if (attributeId == 5) {

@@ -4,10 +4,6 @@ import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
-/* Varp - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
-
 public class Varp {
 	private static boolean aBoolean743 = true;
 	public static int anInt745;

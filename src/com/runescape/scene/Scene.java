@@ -8,11 +8,8 @@ import com.runescape.node.LinkedList;
 import com.runescape.renderable.Renderable;
 import com.runescape.util.SignLink;
 
-/* Scene - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
-
 public class Scene {
+
 	private boolean aBoolean509 = true;
 	private int anInt510;
 	private boolean aBoolean514 = true;
@@ -270,7 +267,8 @@ public class Scene {
 		}
 	}
 
-	public void addGroundDecoration(int i, int i_51_, int i_52_, int i_53_, Renderable renderable, byte b, int i_54_, int i_55_) {
+	public void addGroundDecoration(int i, int i_51_, int i_52_, int i_53_, Renderable renderable, byte b, int i_54_,
+			int i_55_) {
 		try {
 			if (renderable != null) {
 				FloorDecoration floordecoration = new FloorDecoration();
@@ -365,25 +363,25 @@ public class Scene {
 		}
 	}
 
-	void addWallDecoration(int x, int xOffset, int y, int yOffset, int z, int plane, int face,
-			int faceUnknown, byte config, int hash, Renderable renderable) {
-			if (renderable != null) {
-				WallDecoration wallDecoration = new WallDecoration();
-				wallDecoration.hash = hash;
-				wallDecoration.config = config;
-				wallDecoration.y = x * 128 + 64 + xOffset;
-				wallDecoration.x = y * 128 + 64 + yOffset;
-				wallDecoration.z = z;
-				wallDecoration.renderable = renderable;
-				wallDecoration.faceUnknown = faceUnknown;
-				wallDecoration.face = face;
-				for (int planeCounter = plane; planeCounter >= 0; planeCounter--) {
-					if (tiles[planeCounter][x][y] == null) {
-						tiles[planeCounter][x][y] = new SceneTile(planeCounter, x, y);
-					}
+	void addWallDecoration(int x, int xOffset, int y, int yOffset, int z, int plane, int face, int faceUnknown,
+			byte config, int hash, Renderable renderable) {
+		if (renderable != null) {
+			WallDecoration wallDecoration = new WallDecoration();
+			wallDecoration.hash = hash;
+			wallDecoration.config = config;
+			wallDecoration.y = x * 128 + 64 + xOffset;
+			wallDecoration.x = y * 128 + 64 + yOffset;
+			wallDecoration.z = z;
+			wallDecoration.renderable = renderable;
+			wallDecoration.faceUnknown = faceUnknown;
+			wallDecoration.face = face;
+			for (int planeCounter = plane; planeCounter >= 0; planeCounter--) {
+				if (tiles[planeCounter][x][y] == null) {
+					tiles[planeCounter][x][y] = new SceneTile(planeCounter, x, y);
 				}
-				tiles[plane][x][y].wallDecoration = wallDecoration;
 			}
+			tiles[plane][x][y].wallDecoration = wallDecoration;
+		}
 	}
 
 	public boolean method506(int i, byte b, int i_83_, int i_84_, Renderable renderable, int i_85_, int i_86_,
@@ -1538,13 +1536,12 @@ public class Scene {
 									wall.anInt766 - Scene.anInt537, wall.anInt771);
 						}
 					}
-					if (walldecoration != null
-							&& !method544(i_293_, i, i_291_, walldecoration.renderable.modelHeight)) {
+					if (walldecoration != null && !method544(i_293_, i, i_291_, walldecoration.renderable.modelHeight)) {
 						if ((walldecoration.faceUnknown & i_303_) != 0) {
 							walldecoration.renderable.renderAtPoint(walldecoration.face, Scene.anInt538,
-									Scene.anInt539, Scene.anInt540, Scene.anInt541, walldecoration.y
-											- Scene.anInt535, walldecoration.z - Scene.anInt536,
-									walldecoration.x - Scene.anInt537, walldecoration.hash);
+									Scene.anInt539, Scene.anInt540, Scene.anInt541, walldecoration.y - Scene.anInt535,
+									walldecoration.z - Scene.anInt536, walldecoration.x - Scene.anInt537,
+									walldecoration.hash);
 						} else if ((walldecoration.faceUnknown & 0x300) != 0) {
 							int i_304_ = walldecoration.y - Scene.anInt535;
 							int i_305_ = walldecoration.z - Scene.anInt536;
@@ -1572,9 +1569,9 @@ public class Scene {
 							if ((walldecoration.faceUnknown & 0x200) != 0 && i_309_ > i_308_) {
 								int i_312_ = i_304_ + Scene.anIntArray545[i_307_];
 								int i_313_ = i_306_ + Scene.anIntArray546[i_307_];
-								walldecoration.renderable.renderAtPoint(i_307_ * 512 + 1280 & 0x7ff,
-										Scene.anInt538, Scene.anInt539, Scene.anInt540, Scene.anInt541, i_312_, i_305_,
-										i_313_, walldecoration.hash);
+								walldecoration.renderable.renderAtPoint(i_307_ * 512 + 1280 & 0x7ff, Scene.anInt538,
+										Scene.anInt539, Scene.anInt540, Scene.anInt541, i_312_, i_305_, i_313_,
+										walldecoration.hash);
 							}
 						}
 					}
@@ -1812,8 +1809,8 @@ public class Scene {
 							if ((walldecoration.faceUnknown & scenetile_290_.anInt1339) != 0) {
 								walldecoration.renderable.renderAtPoint(walldecoration.face, Scene.anInt538,
 										Scene.anInt539, Scene.anInt540, Scene.anInt541, walldecoration.y
-												- Scene.anInt535, walldecoration.z - Scene.anInt536,
-										walldecoration.x - Scene.anInt537, walldecoration.hash);
+												- Scene.anInt535, walldecoration.z - Scene.anInt536, walldecoration.x
+												- Scene.anInt537, walldecoration.hash);
 							} else if ((walldecoration.faceUnknown & 0x300) != 0) {
 								int i_346_ = walldecoration.y - Scene.anInt535;
 								int i_347_ = walldecoration.z - Scene.anInt536;

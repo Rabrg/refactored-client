@@ -44,7 +44,7 @@ public class ActorDefinition {
 	private int[] modelIds;
 	public static Cache modelCache = new Cache(30);
 
-	public static final ActorDefinition get(int id) {
+	public static final ActorDefinition getDefinition(int id) {
 		for (int i = 0; i < 20; i++) {
 			if (ActorDefinition.cache[i].id == id) {
 				return ActorDefinition.cache[i];
@@ -111,7 +111,7 @@ public class ActorDefinition {
 		if (childId < 0 || childId >= childrenIndexes.length || childrenIndexes[childId] == -1) {
 			return null;
 		}
-		return ActorDefinition.get(childrenIndexes[childId]);
+		return ActorDefinition.getDefinition(childrenIndexes[childId]);
 	}
 
 	public static final void load(Archive archive) {

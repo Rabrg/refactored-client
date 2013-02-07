@@ -34,15 +34,15 @@ public class GameObject extends Renderable {
 		int i_0_ = -1;
 		if (anAnimationSequence1598 != null) {
 			int i_1_ = Client.currentCycle - anInt1599;
-			if (i_1_ > 100 && anAnimationSequence1598.anInt54 > 0) {
+			if (i_1_ > 100 && anAnimationSequence1598.frameStep > 0) {
 				i_1_ = 100;
 			}
 			while (i_1_ > anAnimationSequence1598.getFrameLength(anInt1590)) {
 				i_1_ -= anAnimationSequence1598.getFrameLength(anInt1590);
 				anInt1590++;
-				if (anInt1590 >= anAnimationSequence1598.anInt50) {
-					anInt1590 -= anAnimationSequence1598.anInt54;
-					if (anInt1590 < 0 || anInt1590 >= anAnimationSequence1598.anInt50) {
+				if (anInt1590 >= anAnimationSequence1598.frameCount) {
+					anInt1590 -= anAnimationSequence1598.frameStep;
+					if (anInt1590 < 0 || anInt1590 >= anAnimationSequence1598.frameCount) {
 						anAnimationSequence1598 = null;
 						break;
 					}
@@ -50,14 +50,14 @@ public class GameObject extends Renderable {
 			}
 			anInt1599 = Client.currentCycle - i_1_;
 			if (anAnimationSequence1598 != null) {
-				i_0_ = anAnimationSequence1598.animationForFrame[anInt1590];
+				i_0_ = anAnimationSequence1598.frame2Ids[anInt1590];
 			}
 		}
 		GameObjectDefinition gameobjectdefinition;
 		if (anIntArray1591 != null) {
 			gameobjectdefinition = method405(true);
 		} else {
-			gameobjectdefinition = GameObjectDefinition.get(anInt1601);
+			gameobjectdefinition = GameObjectDefinition.getDefinition(anInt1601);
 		}
 		if (gameobjectdefinition == null) {
 			return null;
@@ -88,7 +88,7 @@ public class GameObject extends Renderable {
 			if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
 				return null;
 			}
-			return GameObjectDefinition.get(anIntArray1591[i]);
+			return GameObjectDefinition.getDefinition(anIntArray1591[i]);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("17301, " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -114,12 +114,12 @@ public class GameObject extends Renderable {
 				anAnimationSequence1598 = AnimationSequence.cache[i_13_];
 				anInt1590 = 0;
 				anInt1599 = Client.currentCycle;
-				if (bool && anAnimationSequence1598.anInt54 != -1) {
-					anInt1590 = (int) (Math.random() * anAnimationSequence1598.anInt50);
+				if (bool && anAnimationSequence1598.frameStep != -1) {
+					anInt1590 = (int) (Math.random() * anAnimationSequence1598.frameCount);
 					anInt1599 -= (int) (Math.random() * anAnimationSequence1598.getFrameLength(anInt1590));
 				}
 			}
-			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.get(anInt1601);
+			GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(anInt1601);
 			anInt1592 = gameobjectdefinition.anInt279;
 			anInt1593 = gameobjectdefinition.anInt254;
 			anIntArray1591 = gameobjectdefinition.anIntArray264;

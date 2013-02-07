@@ -3,17 +3,17 @@ package com.runescape.scene;
 public class TiledUtils {
 
 	public static int getRotatedMapChunkX(int x, int y, int rotation) {
-			rotation &= 0x3;
-			if (rotation == 0) {
-				return x;
-			}
-			if (rotation == 1) {
-				return y;
-			}
-			if (rotation == 2) {
-				return 7 - x;
-			}
-			return 7 - y;
+		rotation &= 0x3;
+		if (rotation == 0) {
+			return x;
+		}
+		if (rotation == 1) {
+			return y;
+		}
+		if (rotation == 2) {
+			return 7 - x;
+		}
+		return 7 - y;
 	}
 
 	public static int getRotatedMapChunkY(int x, int y, int rotation) {

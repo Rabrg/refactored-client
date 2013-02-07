@@ -8,11 +8,11 @@ public class IdentityKit {
 
 	public static int count;
 	public static IdentityKit[] cache;
-	public int partIndex = -1;
-	public int[] modelIndexes;
+	public int partId = -1;
+	public int[] modelId;
 	public int[] originalModelColors = new int[6];
 	public int[] modifiedModelColors = new int[6];
-	public int[] headModelIndexes = { -1, -1, -1, -1, -1 };
+	public int[] headModelId = { -1, -1, -1, -1, -1 };
 	public boolean widgetDisplayed = false;
 
 	public static void load(Archive archive) {
@@ -36,12 +36,12 @@ public class IdentityKit {
 				break;
 			}
 			if (attributeId == 1) {
-				partIndex = buffer.getUnsignedByte();
+				partId = buffer.getUnsignedByte();
 			} else if (attributeId == 2) {
 				int modelCount = buffer.getUnsignedByte();
-				modelIndexes = new int[modelCount];
+				modelId = new int[modelCount];
 				for (int model = 0; model < modelCount; model++) {
-					modelIndexes[model] = buffer.getUnsignedLEShort();
+					modelId[model] = buffer.getUnsignedLEShort();
 				}
 			} else if (attributeId == 3) {
 				widgetDisplayed = true;
@@ -50,7 +50,7 @@ public class IdentityKit {
 			} else if (attributeId >= 50 && attributeId < 60) {
 				modifiedModelColors[attributeId - 50] = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 60 && attributeId < 70) {
-				headModelIndexes[attributeId - 60] = buffer.getUnsignedLEShort();
+				headModelId[attributeId - 60] = buffer.getUnsignedLEShort();
 			} else {
 				System.out.println("Error unrecognised config code: " + attributeId);
 			}
@@ -58,12 +58,12 @@ public class IdentityKit {
 	}
 
 	public boolean isBodyModelCached() {
-		if (modelIndexes == null) {
+		if (modelId == null) {
 			return true;
 		}
 		boolean isCached = true;
-		for (int i = 0; i < modelIndexes.length; i++) {
-			if (!Model.isCached(modelIndexes[i])) {
+		for (int i = 0; i < modelId.length; i++) {
+			if (!Model.isCached(modelId[i])) {
 				isCached = false;
 			}
 		}
@@ -71,12 +71,12 @@ public class IdentityKit {
 	}
 
 	public Model getBodyModel() {
-		if (modelIndexes == null) {
+		if (modelId == null) {
 			return null;
 		}
-		Model[] models = new Model[modelIndexes.length];
-		for (int i = 0; i < modelIndexes.length; i++) {
-			models[i] = Model.getModel(modelIndexes[i]);
+		Model[] models = new Model[modelId.length];
+		for (int model = 0; model < modelId.length; model++) {
+			models[model] = Model.getModel(modelId[model]);
 		}
 		Model model;
 		if (models.length == 1) {
@@ -84,19 +84,19 @@ public class IdentityKit {
 		} else {
 			model = new Model(models.length, models);
 		}
-		for (int i = 0; i < 6; i++) {
-			if (originalModelColors[i] == 0) {
+		for (int color = 0; color < 6; color++) {
+			if (originalModelColors[color] == 0) {
 				break;
 			}
-			model.recolor(originalModelColors[i], modifiedModelColors[i]);
+			model.recolor(originalModelColors[color], modifiedModelColors[color]);
 		}
 		return model;
 	}
 
 	public boolean isHeadModelCached() {
 		boolean cached = true;
-		for (int i = 0; i < 5; i++) {
-			if (headModelIndexes[i] != -1 && !Model.isCached(headModelIndexes[i])) {
+		for (int model = 0; model < 5; model++) {
+			if (headModelId[model] != -1 && !Model.isCached(headModelId[model])) {
 				cached = false;
 			}
 		}
@@ -107,16 +107,16 @@ public class IdentityKit {
 		Model[] models = new Model[5];
 		int count = 0;
 		for (int model = 0; model < 5; model++) {
-			if (headModelIndexes[model] != -1) {
-				models[count++] = Model.getModel(headModelIndexes[model]);
+			if (headModelId[model] != -1) {
+				models[count++] = Model.getModel(headModelId[model]);
 			}
 		}
 		Model model = new Model(count, models);
-		for (int i = 0; i < 6; i++) {
-			if (originalModelColors[i] == 0) {
+		for (int color = 0; color < 6; color++) {
+			if (originalModelColors[color] == 0) {
 				break;
 			}
-			model.recolor(originalModelColors[i], modifiedModelColors[i]);
+			model.recolor(originalModelColors[color], modifiedModelColors[color]);
 		}
 		return model;
 	}

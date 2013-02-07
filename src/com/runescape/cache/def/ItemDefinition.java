@@ -221,7 +221,7 @@ public class ItemDefinition {
 		teamIndex = 0;
 	}
 
-	public static final ItemDefinition get(int itemId) {
+	public static final ItemDefinition getDefinition(int itemId) {
 		for (int i = 0; i < 10; i++) {
 			if (ItemDefinition.cache[i].index == itemId) {
 				return ItemDefinition.cache[i];
@@ -247,7 +247,7 @@ public class ItemDefinition {
 	}
 
 	public void toNote() {
-		ItemDefinition noteTemplateDefinition = ItemDefinition.get(noteTemplateIndex);
+		ItemDefinition noteTemplateDefinition = ItemDefinition.getDefinition(noteTemplateIndex);
 		modelIndex = noteTemplateDefinition.modelIndex;
 		modelZoom = noteTemplateDefinition.modelZoom;
 		modelRotation1 = noteTemplateDefinition.modelRotation1;
@@ -257,7 +257,7 @@ public class ItemDefinition {
 		sine = noteTemplateDefinition.sine;
 		originalModelColors = noteTemplateDefinition.originalModelColors;
 		modifiedModelColors = noteTemplateDefinition.modifiedModelColors;
-		ItemDefinition noteDefinition = ItemDefinition.get(noteIndex);
+		ItemDefinition noteDefinition = ItemDefinition.getDefinition(noteIndex);
 		name = noteDefinition.name;
 		membersOnly = noteDefinition.membersOnly;
 		value = noteDefinition.value;
@@ -282,7 +282,7 @@ public class ItemDefinition {
 				return cachedSprite;
 			}
 		}
-		ItemDefinition itemDefinition = ItemDefinition.get(itemId);
+		ItemDefinition itemDefinition = ItemDefinition.getDefinition(itemId);
 		if (itemDefinition.stackableIds == null) {
 			itemAmount = -1;
 		}
@@ -295,7 +295,7 @@ public class ItemDefinition {
 				}
 			}
 			if (stackedId != -1) {
-				itemDefinition = ItemDefinition.get(stackedId);
+				itemDefinition = ItemDefinition.getDefinition(stackedId);
 			}
 		}
 		Model model = itemDefinition.getAmountModel(1);
@@ -413,7 +413,7 @@ public class ItemDefinition {
 				}
 			}
 			if (stackedItemId != -1) {
-				return ItemDefinition.get(stackedItemId).getAmountModel(1);
+				return ItemDefinition.getDefinition(stackedItemId).getAmountModel(1);
 			}
 		}
 		Model stackedModel = (Model) ItemDefinition.modelCache.get(index);
@@ -447,7 +447,7 @@ public class ItemDefinition {
 				}
 			}
 			if (amountItemId != -1) {
-				return ItemDefinition.get(amountItemId).getInventoryModel(1);
+				return ItemDefinition.getDefinition(amountItemId).getInventoryModel(1);
 			}
 		}
 		Model inventoryModel = Model.getModel(modelIndex);

@@ -62,7 +62,7 @@ public class Player extends Actor {
 						spotAnimationModel);
 				spotAnimationModel2.translate(0, -spotAnimationDelay, 0);
 				spotAnimationModel2.createBones();
-				spotAnimationModel2.applyTransform(spotAnimation.sequences.animationForFrame[currentAnimationFrame]);
+				spotAnimationModel2.applyTransform(spotAnimation.sequences.frame2Ids[currentAnimationFrame]);
 				spotAnimationModel2.triangleSkin = null;
 				spotAnimationModel2.vectorSkin = null;
 				if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
@@ -124,11 +124,11 @@ public class Player extends Actor {
 				int i_5_ = buffer.getUnsignedByte();
 				appearance[index] = (i_4_ << 8) + i_5_;
 				if (index == 0 && appearance[0] == 65535) {
-					npcDefinition = ActorDefinition.get(buffer.getUnsignedLEShort());
+					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedLEShort());
 					break;
 				}
 				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
-					int teamId = ItemDefinition.get(appearance[index] - 512).teamIndex;
+					int teamId = ItemDefinition.getDefinition(appearance[index] - 512).teamIndex;
 					if (teamId != 0) {
 						this.teamIndex = teamId;
 					}
@@ -199,9 +199,9 @@ public class Player extends Actor {
 		if (npcDefinition != null) {
 			int i_11_ = -1;
 			if (animation >= 0 && aniomationDelay == 0) {
-				i_11_ = AnimationSequence.cache[animation].animationForFrame[anInt1547];
+				i_11_ = AnimationSequence.cache[animation].frame2Ids[anInt1547];
 			} else if (anInt1537 >= 0) {
-				i_11_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
+				i_11_ = AnimationSequence.cache[anInt1537].frame2Ids[anInt1538];
 			}
 			Model model = npcDefinition.getChildModel(-1, i_11_, null);
 			return model;
@@ -213,9 +213,9 @@ public class Player extends Actor {
 		int i_15_ = -1;
 		if (animation >= 0 && aniomationDelay == 0) {
 			AnimationSequence animationsequence = AnimationSequence.cache[animation];
-			i_12_ = animationsequence.animationForFrame[anInt1547];
+			i_12_ = animationsequence.frame2Ids[anInt1547];
 			if (anInt1537 >= 0 && anInt1537 != standAnimationId) {
-				i_13_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
+				i_13_ = AnimationSequence.cache[anInt1537].frame2Ids[anInt1538];
 			}
 			if (animationsequence.anInt58 >= 0) {
 				i_14_ = animationsequence.anInt58;
@@ -226,7 +226,7 @@ public class Player extends Actor {
 				l += i_15_ - appearance[3] << 16;
 			}
 		} else if (anInt1537 >= 0) {
-			i_12_ = AnimationSequence.cache[anInt1537].animationForFrame[anInt1538];
+			i_12_ = AnimationSequence.cache[anInt1537].frame2Ids[anInt1538];
 		}
 		Model model = (Model) Player.modelCache.get(l);
 		if (model == null) {
@@ -242,7 +242,7 @@ public class Player extends Actor {
 				if (i_18_ >= 256 && i_18_ < 512 && !IdentityKit.cache[i_18_ - 256].isBodyModelCached()) {
 					bool = true;
 				}
-				if (i_18_ >= 512 && !ItemDefinition.get(i_18_ - 512).isEquipModelCached(gender)) {
+				if (i_18_ >= 512 && !ItemDefinition.getDefinition(i_18_ - 512).isEquipModelCached(gender)) {
 					bool = true;
 				}
 			}
@@ -273,7 +273,7 @@ public class Player extends Actor {
 					}
 				}
 				if (i_21_ >= 512) {
-					Model model_23_ = ItemDefinition.get(i_21_ - 512).getEquipModel(gender);
+					Model model_23_ = ItemDefinition.getDefinition(i_21_ - 512).getEquipModel(gender);
 					if (model_23_ != null) {
 						models[i_19_++] = model_23_;
 					}
@@ -300,7 +300,7 @@ public class Player extends Actor {
 		Model model_25_ = Model.aModel1614;
 		model_25_.method412(7, model, Animation.exists(i_12_) & Animation.exists(i_13_));
 		if (i_12_ != -1 && i_13_ != -1) {
-			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].anIntArray55, i_13_, i_12_);
+			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].flowControl, i_13_, i_12_);
 		} else if (i_12_ != -1) {
 			model_25_.applyTransform(i_12_);
 		}
@@ -331,7 +331,7 @@ public class Player extends Actor {
 			if (appearanceId >= 256 && appearanceId < 512 && !IdentityKit.cache[appearanceId - 256].isHeadModelCached()) {
 				cached = true;
 			}
-			if (appearanceId >= 512 && !ItemDefinition.get(appearanceId - 512).isDialogueCached(gender)) {
+			if (appearanceId >= 512 && !ItemDefinition.getDefinition(appearanceId - 512).isDialogueCached(gender)) {
 				cached = true;
 			}
 		}
@@ -349,7 +349,7 @@ public class Player extends Actor {
 				}
 			}
 			if (appearanceId >= 512) {
-				Model subModel = ItemDefinition.get(appearanceId - 512).getDialogueModel(gender);
+				Model subModel = ItemDefinition.getDefinition(appearanceId - 512).getDialogueModel(gender);
 				if (subModel != null) {
 					headModels[headModelsOffset++] = subModel;
 				}
