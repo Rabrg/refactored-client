@@ -7362,7 +7362,7 @@ public class Client extends GameShell {
 			ChatCensor.load(archiveCensor);
 			mouseCapturer = new MouseCapturer(this);
 			startRunnable(mouseCapturer, 10);
-			GameObject.aClient1600 = this;
+			GameObject.client = this;
 			GameObjectDefinition.client = this;
 			ActorDefinition.client = this;
 		} catch (Exception exception) {
@@ -10368,13 +10368,13 @@ public class Client extends GameShell {
 							if (wall != null) {
 								int i_905_ = wall.anInt771 >> 14 & 0x7fff;
 								if (i_897_ == 2) {
-									wall.aRenderable769 = new GameObject(i_905_, 4 + i_898_, 2, i_902_, (byte) 7,
-											i_903_, i_901_, i_904_, i_900_, false);
-									wall.aRenderable770 = new GameObject(i_905_, i_898_ + 1 & 0x3, 2, i_902_, (byte) 7,
-											i_903_, i_901_, i_904_, i_900_, false);
+									wall.aRenderable769 = new GameObject(i_905_, 4 + i_898_, 2, i_902_, i_903_,
+											i_901_, i_904_, i_900_, false);
+									wall.aRenderable770 = new GameObject(i_905_, i_898_ + 1 & 0x3, 2, i_902_, i_903_,
+											i_901_, i_904_, i_900_, false);
 								} else {
-									wall.aRenderable769 = new GameObject(i_905_, i_898_, i_897_, i_902_, (byte) 7,
-											i_903_, i_901_, i_904_, i_900_, false);
+									wall.aRenderable769 = new GameObject(i_905_, i_898_, i_897_, i_902_, i_903_,
+											i_901_, i_904_, i_900_, false);
 								}
 							}
 						}
@@ -10383,7 +10383,7 @@ public class Client extends GameShell {
 									currentSceneIndex);
 							if (walldecoration != null) {
 								walldecoration.renderable = new GameObject(walldecoration.hash >> 14 & 0x7fff, 0, 4,
-										i_902_, (byte) 7, i_903_, i_901_, i_904_, i_900_, false);
+										i_902_, i_903_, i_901_, i_904_, i_900_, false);
 							}
 						}
 						if (i_899_ == 2) {
@@ -10394,8 +10394,8 @@ public class Client extends GameShell {
 							}
 							if (scenespawnrequest != null) {
 								scenespawnrequest.aRenderable601 = new GameObject(
-										scenespawnrequest.anInt609 >> 14 & 0x7fff, i_898_, i_897_, i_902_, (byte) 7,
-										i_903_, i_901_, i_904_, i_900_, false);
+										scenespawnrequest.anInt609 >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
+										i_901_, i_904_, i_900_, false);
 							}
 						}
 						if (i_899_ == 3) {
@@ -10403,7 +10403,7 @@ public class Client extends GameShell {
 									0);
 							if (floordecoration != null) {
 								floordecoration.renderable = new GameObject(floordecoration.hash >> 14 & 0x7fff,
-										i_898_, 22, i_902_, (byte) 7, i_903_, i_901_, i_904_, i_900_, false);
+										i_898_, 22, i_902_, i_903_, i_901_, i_904_, i_900_, false);
 							}
 						}
 					}
