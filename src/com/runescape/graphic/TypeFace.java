@@ -70,15 +70,15 @@ public class TypeFace extends Rasterizer {
 		}
 	}
 
-	public void drawStringAlignRight(String string, int x, int y, int color) {
-		drawRegularString(string, x - getStringWidth(string), y, color);
+	public void drawStringRight(String string, int x, int y, int color) {
+		drawString(string, x - getStringWidth(string), y, color);
 	}
 
-	public void drawString(String string, int x, int y, int color) {
-		drawRegularString(string, x - getStringWidth(string) / 2, y, color);
+	public void drawStringLeft(String string, int x, int y, int color) {
+		drawString(string, x - getStringWidth(string) / 2, y, color);
 	}
 
-	public void drawString(String string, int x, int y, int color, boolean shadowed) {
+	public void drawStringCenter(String string, int x, int y, int color, boolean shadowed) {
 		drawShadowedString(string, x - getStringEffectWidth(string) / 2, y, shadowed, color);
 	}
 
@@ -109,7 +109,7 @@ public class TypeFace extends Rasterizer {
 		return width;
 	}
 
-	public void drawRegularString(String string, int x, int y, int color) {
+	public void drawString(String string, int x, int y, int color) {
 		if (string != null) {
 			y -= characterDefaultHeight;
 			for (int index = 0; index < string.length(); index++) {

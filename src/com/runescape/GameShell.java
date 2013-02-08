@@ -212,7 +212,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			gameGraphics = graphics;
 		}
 		clearScreen = true;
-		onRepaint();
+		redraw();
 	}
 
 	@Override
@@ -221,10 +221,10 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 			gameGraphics = graphics;
 		}
 		clearScreen = true;
-		onRepaint();
+		redraw();
 	}
 
-	protected void onRepaint() {
+	protected void redraw() {
 		// This was used for repainting the canvas n stuff, plz dun remov.
 	}
 
@@ -415,7 +415,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public final void focusGained(FocusEvent focusevent) {
 		awtFocus = true;
 		clearScreen = true;
-		onRepaint();
+		redraw();
 	}
 
 	@Override
