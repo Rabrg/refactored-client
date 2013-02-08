@@ -1,8 +1,8 @@
 package com.runescape.renderable;
 
+import com.runescape.collection.CacheableNode;
 import com.runescape.graphic.Model;
 import com.runescape.graphic.VertexNormal;
-import com.runescape.node.CacheableNode;
 
 public class Renderable extends CacheableNode {
 

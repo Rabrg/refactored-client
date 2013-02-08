@@ -4,9 +4,9 @@ import com.runescape.Client;
 import com.runescape.anim.Animation;
 import com.runescape.cache.Archive;
 import com.runescape.cache.requester.OnDemandRequester;
+import com.runescape.collection.Cache;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 
 public class GameObjectDefinition {
 

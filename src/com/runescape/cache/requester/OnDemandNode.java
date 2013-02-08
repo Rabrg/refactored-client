@@ -1,6 +1,6 @@
 package com.runescape.cache.requester;
 
-import com.runescape.node.CacheableNode;
+import com.runescape.collection.CacheableNode;
 
 public class OnDemandNode extends CacheableNode {
 

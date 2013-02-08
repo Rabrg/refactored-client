@@ -7,9 +7,9 @@ import com.runescape.anim.SpotAnimation;
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.IdentityKit;
 import com.runescape.cache.def.ItemDefinition;
+import com.runescape.collection.Cache;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 import com.runescape.util.TextUtils;
 
 public class Player extends Actor {

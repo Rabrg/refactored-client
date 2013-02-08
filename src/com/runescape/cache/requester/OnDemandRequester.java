@@ -10,9 +10,9 @@ import java.util.zip.GZIPInputStream;
 
 import com.runescape.Client;
 import com.runescape.cache.Archive;
+import com.runescape.collection.LinkedList;
+import com.runescape.collection.Queue;
 import com.runescape.net.Buffer;
-import com.runescape.node.LinkedList;
-import com.runescape.node.Queue;
 import com.runescape.util.SignLink;
 
 public class OnDemandRequester extends Requester implements Runnable {

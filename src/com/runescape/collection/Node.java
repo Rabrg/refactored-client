@@ -1,4 +1,4 @@
-package com.runescape.node;
+package com.runescape.collection;
 
 /* Node - Decompiled by JODE
  * Visit http://jode.sourceforge.net/

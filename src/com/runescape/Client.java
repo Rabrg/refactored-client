@@ -30,6 +30,7 @@ import com.runescape.cache.def.VarBit;
 import com.runescape.cache.def.Varp;
 import com.runescape.cache.requester.OnDemandNode;
 import com.runescape.cache.requester.OnDemandRequester;
+import com.runescape.collection.LinkedList;
 import com.runescape.graphic.ImageRGB;
 import com.runescape.graphic.IndexedImage;
 import com.runescape.graphic.Model;
@@ -41,7 +42,6 @@ import com.runescape.graphic.Widget;
 import com.runescape.net.Buffer;
 import com.runescape.net.BufferedConnection;
 import com.runescape.net.ISAACCipher;
-import com.runescape.node.LinkedList;
 import com.runescape.renderable.Actor;
 import com.runescape.renderable.Item;
 import com.runescape.renderable.Npc;
@@ -7435,7 +7435,7 @@ public class Client extends GameShell {
 				Graphics graphics = getComponent().getGraphics();
 				graphics.setColor(Color.black);
 				graphics.fillRect(0, 0, 765, 503);
-				this.method4(1);
+				this.setFrameRate(1);
 				if (aBoolean951) {
 					aBoolean856 = false;
 					graphics.setFont(new Font("Helvetica", 1, 16));
@@ -9065,7 +9065,7 @@ public class Client extends GameShell {
 					}
 					if (node.anInt1344 == 0) {
 						if (node.id < 0 || Region.method460(node.id, node.anInt1351, 8)) {
-							method142(node.y, node.plane, node.face, node.anInt1351, node.x, node.type, node.id, 4);
+							method142(node.y, node.plane, node.face, node.anInt1351, node.x, node.type, node.id);
 							node.remove();
 						}
 					} else {
@@ -9075,7 +9075,7 @@ public class Client extends GameShell {
 						if (node.anInt1352 == 0 && node.x >= 1 && node.y >= 1 && node.x <= 102 && node.y <= 102
 								&& (node.anInt1341 < 0 || Region.method460(node.anInt1341, node.anInt1343, 8))) {
 							method142(node.y, node.plane, node.anInt1342, node.anInt1343, node.x, node.type,
-									node.anInt1341, 4);
+									node.anInt1341);
 							node.anInt1352 = -1;
 							if (node.anInt1341 == node.id && node.id == -1) {
 								node.remove();
@@ -10687,81 +10687,72 @@ public class Client extends GameShell {
 		}
 	}
 
-	private final void method142(int y, int i_994_, int i_995_, int i_996_, int x, int i_998_, int i_999_, int i_1000_) {
+	private final void method142(int y, int plane, int i_995_, int i_996_, int x, int type, int i_999_) {
 		do {
-			try {
-				if (i_1000_ < 4 || i_1000_ > 4) {
-					opcode = inBuffer.getUnsignedByte();
-				}
 				if (x < 1 || y < 1 || x > 102 || y > 102) {
 					break;
 				}
-				if (!Client.lowMemory || i_994_ == currentSceneIndex) {
+				if (!Client.lowMemory || plane == currentSceneIndex) {
 					int i_1001_ = 0;
 					int i_1002_ = -1;
-					if (i_998_ == 0) {
-						i_1001_ = currentScene.method522(i_994_, x, y);
+					if (type == 0) {
+						i_1001_ = currentScene.method522(plane, x, y);
 					}
-					if (i_998_ == 1) {
-						i_1001_ = currentScene.getWallDecorationHash(i_994_, x, y);
+					if (type == 1) {
+						i_1001_ = currentScene.getWallDecorationHash(plane, x, y);
 					}
-					if (i_998_ == 2) {
-						i_1001_ = currentScene.method524(i_994_, x, y);
+					if (type == 2) {
+						i_1001_ = currentScene.method524(plane, x, y);
 					}
-					if (i_998_ == 3) {
-						i_1001_ = currentScene.getFloorDecorationHash(i_994_, x, y);
+					if (type == 3) {
+						i_1001_ = currentScene.getFloorDecorationHash(plane, x, y);
 					}
 					if (i_1001_ != 0) {
-						int i_1004_ = currentScene.getConfig(i_994_, x, y, i_1001_);
+						int config = currentScene.getConfig(plane, x, y, i_1001_);
 						i_1002_ = i_1001_ >> 14 & 0x7fff;
-						int position = i_1004_ & 0x1f;
-						int orientation = i_1004_ >> 6;
-						if (i_998_ == 0) {
-							currentScene.method513(x, i_994_, y, (byte) -119);
+						int position = config & 0x1f;
+						int orientation = config >> 6;
+						if (type == 0) {
+							currentScene.method513(x, plane, y, (byte) -119);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].unmarkWall(orientation, x, y, position,
+								currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
 										gameobjectdefinition.walkable);
 							}
 						}
-						if (i_998_ == 1) {
-							currentScene.method514(0, y, i_994_, x);
+						if (type == 1) {
+							currentScene.method514(0, y, plane, x);
 						}
-						if (i_998_ == 2) {
-							currentScene.method515(i_994_, -978, x, y);
+						if (type == 2) {
+							currentScene.method515(plane, -978, x, y);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 							if (x + gameobjectdefinition.width > 103 || y + gameobjectdefinition.width > 103
 									|| x + gameobjectdefinition.height > 103 || y + gameobjectdefinition.height > 103) {
 								break;
 							}
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[i_994_].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
+								currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
 										gameobjectdefinition.height, orientation, gameobjectdefinition.walkable);
 							}
 						}
-						if (i_998_ == 3) {
-							currentScene.method516((byte) 9, i_994_, y, x);
+						if (type == 3) {
+							currentScene.method516((byte) 9, plane, y, x);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
-								currentCollisionMap[i_994_].unmarkConcealed(x, y);
+								currentCollisionMap[plane].unmarkConcealed(x, y);
 							}
 						}
 					}
 					if (i_999_ < 0) {
 						break;
 					}
-					int i_1007_ = i_994_;
+					int i_1007_ = plane;
 					if (i_1007_ < 3 && (currentSceneTileFlags[1][x][y] & 0x2) == 2) {
 						i_1007_++;
 					}
-					Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[i_994_],
-							anIntArrayArrayArray1239, x, i_999_, i_994_, (byte) 93);
+					Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[plane],
+							anIntArrayArrayArray1239, x, i_999_, plane, (byte) 93);
 				}
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("56911, " + y + ", " + i_994_ + ", " + i_995_ + ", " + i_996_ + ", " + x + ", "
-						+ i_998_ + ", " + i_999_ + ", " + i_1000_ + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
 			break;
 		} while (false);
 	}

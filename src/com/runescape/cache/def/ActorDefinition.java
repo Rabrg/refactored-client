@@ -3,9 +3,9 @@ package com.runescape.cache.def;
 import com.runescape.Client;
 import com.runescape.anim.Animation;
 import com.runescape.cache.Archive;
+import com.runescape.collection.Cache;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 
 public class ActorDefinition {
 

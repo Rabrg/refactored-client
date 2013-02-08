@@ -1,6 +1,6 @@
 package com.runescape.scene;
 
-import com.runescape.node.Node;
+import com.runescape.collection.Node;
 
 public class SpawnObjectNode extends Node {
 

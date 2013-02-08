@@ -5,8 +5,8 @@ import com.runescape.anim.Animation;
 import com.runescape.cache.Archive;
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.ItemDefinition;
+import com.runescape.collection.Cache;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 import com.runescape.util.TextUtils;
 
 public class Widget {

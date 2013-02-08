@@ -176,7 +176,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 		}
 	}
 
-	public final void method4(int frameRate) {
+	public final void setFrameRate(int frameRate) {
 		deltime = 1000 / frameRate;
 	}
 
@@ -225,7 +225,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	protected void redraw() {
-		// This was used for repainting the canvas n stuff, plz dun remov.
+		
 	}
 
 	@Override

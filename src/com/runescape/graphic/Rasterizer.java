@@ -1,6 +1,6 @@
 package com.runescape.graphic;
 
-import com.runescape.node.CacheableNode;
+import com.runescape.collection.CacheableNode;
 
 public class Rasterizer extends CacheableNode {
 

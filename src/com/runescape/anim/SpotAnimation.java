@@ -1,9 +1,9 @@
 package com.runescape.anim;
 
 import com.runescape.cache.Archive;
+import com.runescape.collection.Cache;
 import com.runescape.graphic.Model;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 
 // actually is graphical effects
 public class SpotAnimation {

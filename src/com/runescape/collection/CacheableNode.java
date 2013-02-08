@@ -1,4 +1,4 @@
-package com.runescape.node;
+package com.runescape.collection;
 
 public class CacheableNode extends Node {
 

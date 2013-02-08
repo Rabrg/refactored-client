@@ -3,8 +3,8 @@ package com.runescape.net;
 import java.math.BigInteger;
 
 import com.runescape.Client;
-import com.runescape.node.CacheableNode;
-import com.runescape.node.LinkedList;
+import com.runescape.collection.CacheableNode;
+import com.runescape.collection.LinkedList;
 
 public class Buffer extends CacheableNode {
 

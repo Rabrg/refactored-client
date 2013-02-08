@@ -1,12 +1,12 @@
 package com.runescape.cache.def;
 
 import com.runescape.cache.Archive;
+import com.runescape.collection.Cache;
 import com.runescape.graphic.ImageRGB;
 import com.runescape.graphic.Model;
 import com.runescape.graphic.Rasterizer;
 import com.runescape.graphic.Rasterizer3D;
 import com.runescape.net.Buffer;
-import com.runescape.node.Cache;
 
 public class ItemDefinition {
 
