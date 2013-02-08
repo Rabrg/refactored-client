@@ -8,7 +8,7 @@ import com.runescape.graphic.Model;
 import com.runescape.renderable.Renderable;
 
 public class GameObject extends Renderable {
-	
+
 	private int animationFrame;
 	protected int[] anIntArray1591;
 	protected int anInt1592;
@@ -63,43 +63,44 @@ public class GameObject extends Renderable {
 	}
 
 	public final GameObjectDefinition method405() {
-			int i = -1;
-			if (anInt1592 != -1) {
-				VarBit varbit = VarBit.cache[anInt1592];
-				int configId = varbit.configId;
-				int leastSignificantBit = varbit.leastSignificantBit;
-				int mostSignificantBit = varbit.mostSignificantBit;
-				int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-				i = GameObject.client.settings[configId] >> leastSignificantBit & bit;
-			} else if (anInt1593 != -1) {
-				i = GameObject.client.settings[anInt1593];
-			}
-			if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
-				return null;
-			}
-			return GameObjectDefinition.getDefinition(anIntArray1591[i]);
+		int i = -1;
+		if (anInt1592 != -1) {
+			VarBit varbit = VarBit.cache[anInt1592];
+			int configId = varbit.configId;
+			int leastSignificantBit = varbit.leastSignificantBit;
+			int mostSignificantBit = varbit.mostSignificantBit;
+			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
+			i = GameObject.client.settings[configId] >> leastSignificantBit & bit;
+		} else if (anInt1593 != -1) {
+			i = GameObject.client.settings[anInt1593];
+		}
+		if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
+			return null;
+		}
+		return GameObjectDefinition.getDefinition(anIntArray1591[i]);
 	}
 
-	public GameObject(int i, int i_7_, int i_8_, int i_9_, int i_10_, int i_11_, int i_12_, int animationId, boolean bool) {
-			anInt1601 = i;
-			anInt1602 = i_8_;
-			anInt1603 = i_7_;
-			anInt1594 = i_11_;
-			anInt1595 = i_9_;
-			anInt1596 = i_10_;
-			anInt1597 = i_12_;
-			if (animationId != -1) {
-				animationSequence = AnimationSequence.cache[animationId];
-				animationFrame = 0;
-				animationCycleDelay = Client.currentCycle;
-				if (bool && animationSequence.frameStep != -1) {
-					animationFrame = (int) (Math.random() * animationSequence.frameCount);
-					animationCycleDelay -= (int) (Math.random() * animationSequence.getFrameLength(animationFrame));
-				}
+	public GameObject(int i, int i_7_, int i_8_, int i_9_, int i_10_, int i_11_, int i_12_, int animationId,
+			boolean bool) {
+		anInt1601 = i;
+		anInt1602 = i_8_;
+		anInt1603 = i_7_;
+		anInt1594 = i_11_;
+		anInt1595 = i_9_;
+		anInt1596 = i_10_;
+		anInt1597 = i_12_;
+		if (animationId != -1) {
+			animationSequence = AnimationSequence.cache[animationId];
+			animationFrame = 0;
+			animationCycleDelay = Client.currentCycle;
+			if (bool && animationSequence.frameStep != -1) {
+				animationFrame = (int) (Math.random() * animationSequence.frameCount);
+				animationCycleDelay -= (int) (Math.random() * animationSequence.getFrameLength(animationFrame));
 			}
-			GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(anInt1601);
-			anInt1592 = gameObjectDefinition.anInt279;
-			anInt1593 = gameObjectDefinition.anInt254;
-			anIntArray1591 = gameObjectDefinition.anIntArray264;
+		}
+		GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(anInt1601);
+		anInt1592 = gameObjectDefinition.anInt279;
+		anInt1593 = gameObjectDefinition.anInt254;
+		anIntArray1591 = gameObjectDefinition.anIntArray264;
 	}
 }

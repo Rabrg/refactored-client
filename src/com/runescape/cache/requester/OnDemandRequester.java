@@ -263,7 +263,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 					return;
 				}
 				lastSocketOpen = currentTime;
-				socket = client.createSocket(43594 + Client.portOffset);
+				socket = client.openSocket(43594 + Client.portOffset);
 				inputStream = socket.getInputStream();
 				outputStream = socket.getOutputStream();
 				outputStream.write(15);

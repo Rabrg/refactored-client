@@ -171,7 +171,7 @@ public class SignLink implements Runnable {
 		}
 	}
 
-	public static final synchronized Socket openPort(int port) throws IOException {
+	public static final synchronized Socket openSocket(int port) throws IOException {
 		SignLink.nextPort = port;
 		while (SignLink.nextPort != 0) {
 			try {
