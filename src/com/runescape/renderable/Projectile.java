@@ -72,7 +72,8 @@ public class Projectile extends Renderable {
 			projectileModel.scaleT(animation.resizeXY, animation.resizeXY, animation.resizeZ);
 		}
 		projectileModel.rotateX(modelRotationX, 1);
-		projectileModel.applyLighting(64 + animation.modelBrightness, 850 + animation.modelShadow, -30, -50, -30, true);
+		projectileModel.applyLighting(64 + animation.modelLightFalloff, 850 + animation.modelLightAmbient, -30, -50,
+				-30, true);
 		return projectileModel;
 	}
 

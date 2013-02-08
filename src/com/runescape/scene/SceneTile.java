@@ -7,8 +7,8 @@ public class SceneTile extends Node {
 	protected int anInt1319;
 	protected int anInt1320;
 	protected int anInt1321;
-	public GenericTile aGenericTile1322;
-	public ComplexTile aComplexTile1323;
+	public GenericTile genericTile;
+	public ComplexTile complexTile;
 	protected Wall wall;
 	protected WallDecoration wallDecoration;
 	protected FloorDecoration floorDecoration;
@@ -25,7 +25,7 @@ public class SceneTile extends Node {
 	protected int anInt1337;
 	protected int anInt1338;
 	protected int anInt1339;
-	protected SceneTile aSceneTile1340;
+	protected SceneTile sceneTile;
 
 	public SceneTile(int i, int i_0_, int i_1_) {
 		anInt1321 = anInt1318 = i;

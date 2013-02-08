@@ -58,7 +58,8 @@ public class AnimableObject extends Renderable {
 				animatedModel.rotate90Degrees(360);
 			}
 		}
-		animatedModel.applyLighting(64 + animation.modelBrightness, 850 + animation.modelShadow, -30, -50, -30, true);
+		animatedModel.applyLighting(64 + animation.modelLightFalloff, 850 + animation.modelLightAmbient, -30, -50, -30,
+				true);
 		return animatedModel;
 	}
 

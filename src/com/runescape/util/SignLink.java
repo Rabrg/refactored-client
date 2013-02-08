@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.net.URL;
 
 public class SignLink implements Runnable {
-	
+
 	public static int uid;
 	public static int storeId = 32;
 	public static RandomAccessFile cacheDat = null;
@@ -255,8 +255,8 @@ public class SignLink implements Runnable {
 				error = error.replace('@', '_');
 				error = error.replace('&', '_');
 				error = error.replace('#', '_');
-				DataInputStream in = SignLink.openURL("reporterror" + 317 + ".cgi?error=" + SignLink.errorName
-						+ " " + error);
+				DataInputStream in = SignLink.openURL("reporterror" + 317 + ".cgi?error=" + SignLink.errorName + " "
+						+ error);
 				in.readUTF();
 				in.close();
 			} catch (IOException ioexception) {

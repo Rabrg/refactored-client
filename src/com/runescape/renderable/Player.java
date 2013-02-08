@@ -68,8 +68,8 @@ public class Player extends Actor {
 				if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
 					spotAnimationModel2.scaleT(spotAnimation.resizeXY, spotAnimation.resizeXY, spotAnimation.resizeZ);
 				}
-				spotAnimationModel2.applyLighting(64 + spotAnimation.modelBrightness, 850 + spotAnimation.modelShadow,
-						-30, -50, -30, true);
+				spotAnimationModel2.applyLighting(64 + spotAnimation.modelLightFalloff,
+						850 + spotAnimation.modelLightAmbient, -30, -50, -30, true);
 				Model[] models = { model, spotAnimationModel2 };
 				model = new Model(2, -819, true, models);
 			}

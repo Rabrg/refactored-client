@@ -49,8 +49,8 @@ public class Npc extends Actor {
 				if (spotanimation.resizeXY != 128 || spotanimation.resizeZ != 128) {
 					animationModel.scaleT(spotanimation.resizeXY, spotanimation.resizeXY, spotanimation.resizeZ);
 				}
-				animationModel.applyLighting(64 + spotanimation.modelBrightness, 850 + spotanimation.modelShadow, -30,
-						-50, -30, true);
+				animationModel.applyLighting(64 + spotanimation.modelLightFalloff,
+						850 + spotanimation.modelLightAmbient, -30, -50, -30, true);
 				Model[] models = { model, animationModel };
 				model = new Model(2, -819, true, models);
 			}

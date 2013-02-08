@@ -19,8 +19,8 @@ public class SpotAnimation {
 	public int resizeXY = 128;
 	public int resizeZ = 128;
 	public int rotation;
-	public int modelBrightness;
-	public int modelShadow;
+	public int modelLightFalloff;
+	public int modelLightAmbient;
 	public static Cache modelCache = new Cache(30);
 
 	public static void load(Archive archive) {
@@ -58,9 +58,9 @@ public class SpotAnimation {
 			} else if (attributeId == 6) {
 				rotation = buffer.getUnsignedLEShort();
 			} else if (attributeId == 7) {
-				modelBrightness = buffer.getUnsignedByte();
+				modelLightFalloff = buffer.getUnsignedByte();
 			} else if (attributeId == 8) {
-				modelShadow = buffer.getUnsignedByte();
+				modelLightAmbient = buffer.getUnsignedByte();
 			} else if (attributeId >= 40 && attributeId < 50) {
 				originalModelColors[attributeId - 40] = buffer.getUnsignedLEShort();
 			} else if (attributeId >= 50 && attributeId < 60) {
