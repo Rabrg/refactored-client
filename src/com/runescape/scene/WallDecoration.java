@@ -4,7 +4,7 @@ import com.runescape.renderable.Renderable;
 
 public class WallDecoration {
 
-	protected int z;
+	protected int plane;
 	protected int y;
 	protected int x;
 	protected int faceUnknown;

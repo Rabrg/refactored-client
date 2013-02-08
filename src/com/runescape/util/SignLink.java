@@ -13,35 +13,36 @@ import java.net.Socket;
 import java.net.URL;
 
 public class SignLink implements Runnable {
+	
 	public static int uid;
-	public static int storeIndex = 32;
-	public static RandomAccessFile mainCache = null;
-	public static RandomAccessFile[] cacheIndexes = new RandomAccessFile[5];
+	public static int storeId = 32;
+	public static RandomAccessFile cacheDat = null;
+	public static RandomAccessFile[] cacheIdx = new RandomAccessFile[5];
 	public static Applet applet = null;
 	private static boolean active;
-	private static InetAddress nextInetAddress;
-	private static int nextPort;
+	private static InetAddress inetAddress;
+	private static int socketRequest;
 	private static Socket socket = null;
-	private static int nextRunnablePriority = 1;
-	private static Runnable nextRunnable = null;
-	private static String lastIP = null;
-	public static String lastHostname = null;
-	private static String nextURL = null;
+	private static int threadRequestPriority = 1;
+	private static Runnable threadRequest = null;
+	private static String dnsRequest = null;
+	public static String dns = null;
+	private static String urlRequest = null;
 	private static DataInputStream nextURLStream = null;
-	private static int nextWriteLength;
-	private static String nextWriteName = null;
-	private static byte[] nextWriteData = null;
-	private static boolean writeMusic;
-	private static int nextMidiIndex;
-	public static String nextSongName = null;
+	private static int saveLength;
+	private static String saveRequest = null;
+	private static byte[] saveBuffer = null;
+	private static boolean midiPlay;
+	private static int midiPosition;
+	public static String midi = null;
 	public static int midiVolume;
 	public static int midiFade;
-	private static boolean writeSoundEffect;
-	private static int nextWaveIndex;
-	public static String nextEffectName = null;
+	private static boolean wavePlay;
+	private static int wavePosition;
+	public static String wave = null;
 	public static int waveVolume;
-	public static boolean accessible = true;
-	public static String lastUsername = "";
+	public static boolean reportError = true;
+	public static String errorName = "";
 
 	public static final void initialize(InetAddress inetAddress) {
 		if (SignLink.active) {
@@ -52,12 +53,12 @@ public class SignLink implements Runnable {
 			}
 			SignLink.active = false;
 		}
-		SignLink.nextPort = 0;
-		SignLink.nextRunnable = null;
-		SignLink.lastIP = null;
-		SignLink.nextWriteName = null;
-		SignLink.nextURL = null;
-		SignLink.nextInetAddress = inetAddress;
+		SignLink.socketRequest = 0;
+		SignLink.threadRequest = null;
+		SignLink.dnsRequest = null;
+		SignLink.saveRequest = null;
+		SignLink.urlRequest = null;
+		SignLink.inetAddress = inetAddress;
 		Thread thread = new Thread(new SignLink());
 		thread.setDaemon(true);
 		thread.start();
@@ -81,62 +82,62 @@ public class SignLink implements Runnable {
 			if (file.exists() && file.length() > 0x3200000) {
 				file.delete();
 			}
-			SignLink.mainCache = new RandomAccessFile(directory + "main_file_cache.dat", "rw");
-			for (int i = 0; i < 5; i++) {
-				SignLink.cacheIndexes[i] = new RandomAccessFile(directory + "main_file_cache.idx" + i, "rw");
+			SignLink.cacheDat = new RandomAccessFile(directory + "main_file_cache.dat", "rw");
+			for (int idx = 0; idx < 5; idx++) {
+				SignLink.cacheIdx[idx] = new RandomAccessFile(directory + "main_file_cache.idx" + idx, "rw");
 			}
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
 
 		while (true) {
-			if (SignLink.nextPort != 0) {
+			if (SignLink.socketRequest != 0) {
 				try {
-					SignLink.socket = new Socket(SignLink.nextInetAddress, SignLink.nextPort);
+					SignLink.socket = new Socket(SignLink.inetAddress, SignLink.socketRequest);
 				} catch (Exception exception) {
 					SignLink.socket = null;
 				}
-				SignLink.nextPort = 0;
-			} else if (SignLink.nextRunnable != null) {
-				Thread thread = new Thread(SignLink.nextRunnable);
+				SignLink.socketRequest = 0;
+			} else if (SignLink.threadRequest != null) {
+				Thread thread = new Thread(SignLink.threadRequest);
 				thread.setDaemon(true);
 				thread.start();
-				thread.setPriority(SignLink.nextRunnablePriority);
-				SignLink.nextRunnable = null;
-			} else if (SignLink.lastIP != null) {
+				thread.setPriority(SignLink.threadRequestPriority);
+				SignLink.threadRequest = null;
+			} else if (SignLink.dnsRequest != null) {
 				try {
-					SignLink.lastHostname = InetAddress.getByName(SignLink.lastIP).getHostName();
+					SignLink.dns = InetAddress.getByName(SignLink.dnsRequest).getHostName();
 				} catch (Exception exception) {
-					SignLink.lastHostname = "unknown";
+					SignLink.dns = "unknown";
 				}
-				SignLink.lastIP = null;
-			} else if (SignLink.nextWriteName != null) {
-				if (SignLink.nextWriteData != null) {
+				SignLink.dnsRequest = null;
+			} else if (SignLink.saveRequest != null) {
+				if (SignLink.saveBuffer != null) {
 					try {
-						FileOutputStream out = new FileOutputStream(directory + SignLink.nextWriteName);
-						out.write(SignLink.nextWriteData, 0, SignLink.nextWriteLength);
+						FileOutputStream out = new FileOutputStream(directory + SignLink.saveRequest);
+						out.write(SignLink.saveBuffer, 0, SignLink.saveLength);
 						out.close();
 					} catch (Exception exception) {
 						/* empty */
 					}
 				}
-				if (SignLink.writeSoundEffect) {
-					SignLink.nextEffectName = directory + SignLink.nextWriteName;
-					SignLink.writeSoundEffect = false;
+				if (SignLink.wavePlay) {
+					SignLink.wave = directory + SignLink.saveRequest;
+					SignLink.wavePlay = false;
 				}
-				if (SignLink.writeMusic) {
-					SignLink.nextSongName = directory + SignLink.nextWriteName;
-					SignLink.writeMusic = false;
+				if (SignLink.midiPlay) {
+					SignLink.midi = directory + SignLink.saveRequest;
+					SignLink.midiPlay = false;
 				}
-				SignLink.nextWriteName = null;
-			} else if (SignLink.nextURL != null) {
+				SignLink.saveRequest = null;
+			} else if (SignLink.urlRequest != null) {
 				try {
 					SignLink.nextURLStream = new DataInputStream(new URL(SignLink.applet.getCodeBase(),
-							SignLink.nextURL).openStream());
+							SignLink.urlRequest).openStream());
 				} catch (Exception exception) {
 					SignLink.nextURLStream = null;
 				}
-				SignLink.nextURL = null;
+				SignLink.urlRequest = null;
 			}
 			try {
 				Thread.sleep(50L);
@@ -172,8 +173,8 @@ public class SignLink implements Runnable {
 	}
 
 	public static final synchronized Socket openSocket(int port) throws IOException {
-		SignLink.nextPort = port;
-		while (SignLink.nextPort != 0) {
+		SignLink.socketRequest = port;
+		while (SignLink.socketRequest != 0) {
 			try {
 				Thread.sleep(50L);
 			} catch (Exception exception) {
@@ -186,9 +187,9 @@ public class SignLink implements Runnable {
 		return SignLink.socket;
 	}
 
-	public static final synchronized DataInputStream getURLStream(String url) throws IOException {
-		SignLink.nextURL = url;
-		while (SignLink.nextURL != null) {
+	public static final synchronized DataInputStream openURL(String url) throws IOException {
+		SignLink.urlRequest = url;
+		while (SignLink.urlRequest != null) {
 			try {
 				Thread.sleep(50L);
 			} catch (Exception exception) {
@@ -201,60 +202,60 @@ public class SignLink implements Runnable {
 		return SignLink.nextURLStream;
 	}
 
-	public static final synchronized void setLastIP(String string) {
-		SignLink.lastHostname = string;
-		SignLink.lastIP = string;
+	public static final synchronized void dnsLookup(String dns) {
+		SignLink.dns = dns;
+		SignLink.dnsRequest = dns;
 	}
 
 	public static final synchronized void startRunnable(Runnable runnable, int priority) {
-		SignLink.nextRunnablePriority = priority;
-		SignLink.nextRunnable = runnable;
+		SignLink.threadRequestPriority = priority;
+		SignLink.threadRequest = runnable;
 	}
 
-	public static final synchronized boolean writeWave(byte[] data, int length) {
+	public static final synchronized boolean waveSave(byte[] buffer, int length) {
 		if (length > 0x1E8480) {
 			return false;
 		}
-		if (SignLink.nextWriteName != null) {
+		if (SignLink.saveRequest != null) {
 			return false;
 		}
-		SignLink.nextWaveIndex = (SignLink.nextWaveIndex + 1) % 5;
-		SignLink.nextWriteLength = length;
-		SignLink.nextWriteData = data;
-		SignLink.writeSoundEffect = true;
-		SignLink.nextWriteName = "sound" + SignLink.nextWaveIndex + ".wav";
+		SignLink.wavePosition = (SignLink.wavePosition + 1) % 5;
+		SignLink.saveLength = length;
+		SignLink.saveBuffer = buffer;
+		SignLink.wavePlay = true;
+		SignLink.saveRequest = "sound" + SignLink.wavePosition + ".wav";
 		return true;
 	}
 
-	public static final synchronized boolean rewriteWave() {
-		if (SignLink.nextWriteName != null) {
+	public static final synchronized boolean waveReplay() {
+		if (SignLink.saveRequest != null) {
 			return false;
 		}
-		SignLink.nextWriteData = null;
-		SignLink.writeSoundEffect = true;
-		SignLink.nextWriteName = "sound" + SignLink.nextWaveIndex + ".wav";
+		SignLink.saveBuffer = null;
+		SignLink.wavePlay = true;
+		SignLink.saveRequest = "sound" + SignLink.wavePosition + ".wav";
 		return true;
 	}
 
-	public static final synchronized void writeMidi(byte[] data, int i) {
-		if (i <= 0x1E8480 && SignLink.nextWriteName == null) {
-			SignLink.nextMidiIndex = (SignLink.nextMidiIndex + 1) % 5;
-			SignLink.nextWriteLength = i;
-			SignLink.nextWriteData = data;
-			SignLink.writeMusic = true;
-			SignLink.nextWriteName = "jingle" + SignLink.nextMidiIndex + ".mid";
+	public static final synchronized void midiSave(byte[] buffer, int length) {
+		if (length <= 0x1E8480 && SignLink.saveRequest == null) {
+			SignLink.midiPosition = (SignLink.midiPosition + 1) % 5;
+			SignLink.saveLength = length;
+			SignLink.saveBuffer = buffer;
+			SignLink.midiPlay = true;
+			SignLink.saveRequest = "jingle" + SignLink.midiPosition + ".mid";
 		}
 	}
 
 	public static final void reportError(String error) {
-		if (SignLink.accessible && SignLink.active) {
+		if (SignLink.reportError && SignLink.active) {
 			System.out.println("Error: " + error);
 			try {
 				error = error.replace(':', '_');
 				error = error.replace('@', '_');
 				error = error.replace('&', '_');
 				error = error.replace('#', '_');
-				DataInputStream in = SignLink.getURLStream("reporterror" + 317 + ".cgi?error=" + SignLink.lastUsername
+				DataInputStream in = SignLink.openURL("reporterror" + 317 + ".cgi?error=" + SignLink.errorName
 						+ " " + error);
 				in.readUTF();
 				in.close();

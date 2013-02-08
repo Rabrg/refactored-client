@@ -277,9 +277,9 @@ public class Region {
 					}
 				}
 			}
-			for (int i_62_ = 1; i_62_ < regionSizeY - 1; i_62_++) {
-				for (int i_63_ = 1; i_63_ < regionSizeX - 1; i_63_++) {
-					scene.method500(plane, i_63_, i_62_, getVisibilityPlaneFor(i_62_, plane, i_63_, 0));
+			for (int y = 1; y < regionSizeY - 1; y++) {
+				for (int x = 1; x < regionSizeX - 1; x++) {
+					scene.method500(plane, x, y, getVisibilityPlaneFor(y, plane, x, 0));
 				}
 			}
 		}

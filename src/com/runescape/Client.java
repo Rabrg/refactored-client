@@ -398,13 +398,13 @@ public class Client extends GameShell {
 	private int anInt1195;
 	private int anInt1196 = 1;
 	private long aLong1197;
-	private String aString1198 = "";
-	private String aString1199 = "";
+	private String username = "";
+	private String password = "";
 	private static int anInt1200;
 	private boolean aBoolean1201 = false;
 	private final int[] anIntArray1202 = { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
 	private int anInt1203 = -1;
-	private LinkedList aLinkedList1204 = new LinkedList();
+	private LinkedList spawnObjectNodeList = new LinkedList();
 	private int[] lineOffsets;
 	private int[] anIntArray1206;
 	private int[] anIntArray1207;
@@ -473,7 +473,7 @@ public class Client extends GameShell {
 	private boolean aBoolean1277 = false;
 	private int anInt1278;
 	private int anInt1279;
-	private boolean redrawGameframe = false;
+	private boolean redraw = false;
 	private boolean aBoolean1281 = false;
 	private int anInt1282;
 	private byte[][][] currentSceneTileFlags;
@@ -521,7 +521,7 @@ public class Client extends GameShell {
 
 	public final void stopMidi() {
 		SignLink.midiFade = 0;
-		SignLink.nextSongName = "stop";
+		SignLink.midi = "stop";
 	}
 
 	public final void verifyArchives() {
@@ -557,7 +557,7 @@ public class Client extends GameShell {
 				} catch (Exception exception) {
 					problem = "logic problem";
 					crcValues[8] = 0;
-					if (!SignLink.accessible) {
+					if (!SignLink.reportError) {
 						break;
 					}
 				}
@@ -723,7 +723,7 @@ public class Client extends GameShell {
 				if (Client.localPlayer != null && Client.localPlayer.playerName != null) {
 					string = Client.localPlayer.playerName;
 				} else {
-					string = TextUtils.formatName(aString1198);
+					string = TextUtils.formatName(username);
 				}
 				typeFace.drawString(string + ":", 4, 90, 0);
 				typeFace.drawString(chatboxInput + "*", 6 + typeFace.getStringEffectWidth(string + ": "), 90, 255);
@@ -895,7 +895,7 @@ public class Client extends GameShell {
 
 	public final void saveMidi(boolean midiFade, byte[] midiBuffer) {
 		SignLink.midiFade = midiFade ? 1 : 0;
-		SignLink.writeMidi(midiBuffer, midiBuffer.length);
+		SignLink.midiSave(midiBuffer, midiBuffer.length);
 	}
 
 	public final void method22() {
@@ -1045,7 +1045,7 @@ public class Client extends GameShell {
 				outBuffer.putOpcode(210);
 				outBuffer.putInt(1057001181);
 			}
-			if (Client.lowMemory && SignLink.mainCache != null) {
+			if (Client.lowMemory && SignLink.cacheDat != null) {
 				int i = onDemandRequester.fileCount(0);
 				for (int i_70_ = 0; i_70_ < i; i_70_++) {
 					int i_71_ = onDemandRequester.modelIndex(i_70_);
@@ -1516,13 +1516,13 @@ public class Client extends GameShell {
 				}
 			}
 			if (buffer.offset != actorIndex) {
-				SignLink.reportError(aString1198 + " size mismatch in getnpcpos - pos:" + buffer.offset + " psize:"
+				SignLink.reportError(username + " size mismatch in getnpcpos - pos:" + buffer.offset + " psize:"
 						+ actorIndex);
 				throw new RuntimeException("eek");
 			}
 			for (int i_139_ = 0; i_139_ < actorCount; i_139_++) {
 				if (actors[anIntArray862[i_139_]] == null) {
-					SignLink.reportError(aString1198 + " null entry in npc list - pos:" + i_139_ + " size:"
+					SignLink.reportError(username + " null entry in npc list - pos:" + i_139_ + " size:"
 							+ actorCount);
 					throw new RuntimeException("eek");
 				}
@@ -1601,7 +1601,7 @@ public class Client extends GameShell {
 						Rasterizer3D.method369(0.6);
 					}
 					ItemDefinition.rgbImageCache.removeAll();
-					redrawGameframe = true;
+					redraw = true;
 				}
 				if (i_140_ == 3) {
 					if (i_141_ == 0) {
@@ -2302,7 +2302,6 @@ public class Client extends GameShell {
 	}
 
 	public final void logout() {
-		try {
 			try {
 				if (bufferedConnection != null) {
 					bufferedConnection.close();
@@ -2313,22 +2312,18 @@ public class Client extends GameShell {
 			bufferedConnection = null;
 			loggedIn = false;
 			loginScreenState = 0;
-			aString1198 = "";
-			aString1199 = "";
+			username = "";
+			password = "";
 			resetModelCaches();
 			currentScene.method496(619);
-			for (int i = 0; i < 4; i++) {
-				currentCollisionMap[i].reset();
+			for (int plane = 0; plane < 4; plane++) {
+				currentCollisionMap[plane].reset();
 			}
 			System.gc();
 			stopMidi();
 			songIndex = -1;
 			onDemandRequesterId = -1;
 			songFadeCycle = 0;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("91154, " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final void method45(int i) {
@@ -2859,7 +2854,7 @@ public class Client extends GameShell {
 			// setLowMemory((byte) 77);
 			Client.setHighMemory();
 			Client.membersWorld = true;
-			SignLink.storeIndex = 32;
+			SignLink.storeId = 32;
 			SignLink.initialize(InetAddress.getLocalHost());
 			Client client = new Client();
 			client.initializeApplication(765, 503);
@@ -2881,7 +2876,7 @@ public class Client extends GameShell {
 			if (anInt1048 == 1) {
 				int i_276_ = method54();
 				if (i_276_ != 0 && System.currentTimeMillis() - aLong849 > 360000L) {
-					SignLink.reportError(aString1198 + " glcfb " + aLong1240 + "," + i_276_ + "," + Client.lowMemory
+					SignLink.reportError(username + " glcfb " + aLong1240 + "," + i_276_ + "," + Client.lowMemory
 							+ "," + stores[0] + "," + onDemandRequester.immediateRequestCount() + ","
 							+ currentSceneIndex + "," + anInt1094 + "," + anInt1095);
 					aLong849 = System.currentTimeMillis();
@@ -3562,13 +3557,13 @@ public class Client extends GameShell {
 
 	private final void method63(int i) {
 		try {
-			SpawnObjectNode spawnobjectnode = (SpawnObjectNode) aLinkedList1204.getBack();
+			SpawnObjectNode spawnobjectnode = (SpawnObjectNode) spawnObjectNodeList.getBack();
 			while (i >= 0) {
 				for (int i_329_ = 1; i_329_ > 0; i_329_++) {
 					/* empty */
 				}
 			}
-			for (/**/; spawnobjectnode != null; spawnobjectnode = (SpawnObjectNode) aLinkedList1204.getPrevious()) {
+			for (/**/; spawnobjectnode != null; spawnobjectnode = (SpawnObjectNode) spawnObjectNodeList.getPrevious()) {
 				if (spawnobjectnode.anInt1344 == -1) {
 					spawnobjectnode.anInt1352 = 0;
 					method89(spawnobjectnode);
@@ -3615,7 +3610,7 @@ public class Client extends GameShell {
 					prepareTitleBackground();
 					prepareTitle();
 				}
-				redrawGameframe = true;
+				redraw = true;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("33128,  " + runtimeexception.toString());
@@ -3645,10 +3640,10 @@ public class Client extends GameShell {
 				Rasterizer.drawFilledRectangle(i_330_ / 2 - 150 + i * 3, i_333_ + 2, 300 - i * 3, 30, 0);
 				fontBold.drawStringLeft(string, i_330_ / 2, i_331_ / 2 + 5 - i_332_, 0xFFFFFF);
 				aProducingGraphicsBuffer1134.drawGraphics(202, 171, gameGraphics);
-				if (!redrawGameframe) {
+				if (!redraw) {
 					break;
 				}
-				redrawGameframe = false;
+				redraw = false;
 				if (!aBoolean856) {
 					flameLeftBackground.drawGraphics(0, 0, gameGraphics);
 					flameRightBackground.drawGraphics(637, 0, gameGraphics);
@@ -3845,19 +3840,19 @@ public class Client extends GameShell {
 				} catch (NullPointerException nullpointerexception) {
 					message = "Null error";
 					archiveBuffer = null;
-					if (!SignLink.accessible) {
+					if (!SignLink.reportError) {
 						return null;
 					}
 				} catch (ArrayIndexOutOfBoundsException arrayindexoutofboundsexception) {
 					message = "Bounds error";
 					archiveBuffer = null;
-					if (!SignLink.accessible) {
+					if (!SignLink.reportError) {
 						return null;
 					}
 				} catch (Exception exception) {
 					message = "Unexpected error";
 					archiveBuffer = null;
-					if (!SignLink.accessible) {
+					if (!SignLink.reportError) {
 						return null;
 					}
 				}
@@ -3909,7 +3904,7 @@ public class Client extends GameShell {
 				BufferedConnection bufferedconnection = bufferedConnection;
 				loggedIn = false;
 				anInt1063 = 0;
-				method84(aString1198, aString1199, true);
+				method84(username, password, true);
 				if (!loggedIn) {
 					logout();
 				}
@@ -5021,7 +5016,7 @@ public class Client extends GameShell {
 
 	@Override
 	public final void shutdown() {
-		SignLink.accessible = false;
+		SignLink.reportError = false;
 		try {
 			if (bufferedConnection != null) {
 				bufferedConnection.close();
@@ -5108,7 +5103,7 @@ public class Client extends GameShell {
 		actors = null;
 		anIntArray862 = null;
 		groundItemNodes = null;
-		aLinkedList1204 = null;
+		spawnObjectNodeList = null;
 		projectileList = null;
 		aLinkedList1081 = null;
 		menuActionIndex2 = null;
@@ -5686,7 +5681,7 @@ public class Client extends GameShell {
 							} else {
 								string = String.valueOf(lastLogin) + " days ago";
 							}
-							widget.disabledText = "You last logged in " + string + " from: " + SignLink.lastHostname;
+							widget.disabledText = "You last logged in " + string + " from: " + SignLink.dns;
 						} else {
 							widget.disabledText = "";
 						}
@@ -5956,7 +5951,7 @@ public class Client extends GameShell {
 				}
 				aProducingGraphicsBuffer1149 = new ProducingGraphicsBuffer(269, 37, getComponent());
 				aProducingGraphicsBuffer1150 = new ProducingGraphicsBuffer(249, 45, getComponent());
-				redrawGameframe = true;
+				redraw = true;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("35544, " + i + ", " + runtimeexception.toString());
@@ -6097,7 +6092,7 @@ public class Client extends GameShell {
 	}
 
 	public final void method84(String username, String password, boolean loginType) {
-		SignLink.lastUsername = username;
+		SignLink.errorName = username;
 		try {
 			if (!loginType) {
 				loginMessage1 = "";
@@ -6223,7 +6218,7 @@ public class Client extends GameShell {
 						}
 					}
 				}
-				aLinkedList1204 = new LinkedList();
+				spawnObjectNodeList = new LinkedList();
 				friendListStatus = 0;
 				friendsListCount = 0;
 				anInt1067 = -1;
@@ -6894,7 +6889,7 @@ public class Client extends GameShell {
 					boolean flag = false;
 					try {
 						if (trackIndexes[track] == anInt899 && trackLoop[track] == anInt1314) {
-							if (!SignLink.rewriteWave()) {
+							if (!SignLink.waveReplay()) {
 								flag = true;
 							}
 						} else {
@@ -6902,7 +6897,7 @@ public class Client extends GameShell {
 							if (System.currentTimeMillis() + buffer.offset / 22 > aLong1197 + anInt1282 / 22) {
 								anInt1282 = buffer.offset;
 								aLong1197 = System.currentTimeMillis();
-								if (SignLink.writeWave(buffer.payload, buffer.offset)) {
+								if (SignLink.waveSave(buffer.payload, buffer.offset)) {
 									anInt899 = trackIndexes[track];
 									anInt1314 = trackLoop[track];
 								} else {
@@ -6950,9 +6945,9 @@ public class Client extends GameShell {
 	@Override
 	public final void startup() {
 		drawLoadingText(20, "Starting up");
-		if (SignLink.mainCache != null) {
+		if (SignLink.cacheDat != null) {
 			for (int i = 0; i < 5; i++) {
-				stores[i] = new Index(SignLink.mainCache, SignLink.cacheIndexes[i], i + 1);
+				stores[i] = new Index(SignLink.cacheDat, SignLink.cacheIdx[i], i + 1);
 			}
 		}
 		try {
@@ -7909,8 +7904,8 @@ public class Client extends GameShell {
 	}
 
 	public final void processDrawing() {
-		if (redrawGameframe) {
-			redrawGameframe = false;
+		if (redraw) {
+			redraw = false;
 			aProducingGraphicsBuffer928.drawGraphics(0, 4, gameGraphics);
 			aProducingGraphicsBuffer929.drawGraphics(0, 357, gameGraphics);
 			aProducingGraphicsBuffer930.drawGraphics(722, 4, gameGraphics);
@@ -9068,7 +9063,7 @@ public class Client extends GameShell {
 				if (anInt1048 != 2) {
 					break;
 				}
-				for (SpawnObjectNode node = (SpawnObjectNode) aLinkedList1204.getBack(); node != null; node = (SpawnObjectNode) aLinkedList1204
+				for (SpawnObjectNode node = (SpawnObjectNode) spawnObjectNodeList.getBack(); node != null; node = (SpawnObjectNode) spawnObjectNodeList
 						.getPrevious()) {
 					if (node.anInt1344 > 0) {
 						node.anInt1344--;
@@ -9450,7 +9445,7 @@ public class Client extends GameShell {
 				if (!bool) {
 					break;
 				}
-				SignLink.nextSongName = "voladjust";
+				SignLink.midi = "voladjust";
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("30156, " + bool + ", " + volume + ", " + runtimeexception.toString());
 				throw new RuntimeException();
@@ -9846,60 +9841,52 @@ public class Client extends GameShell {
 		}
 	}
 
-	private final void method130(int i, int i_809_, int i_810_, int i_811_, int i_812_, int i_813_, int i_814_,
-			int i_815_, int i_816_, int i_817_) {
-		try {
-			SpawnObjectNode spawnobjectnode = null;
-			for (SpawnObjectNode spawnobjectnode_818_ = (SpawnObjectNode) aLinkedList1204.getBack(); spawnobjectnode_818_ != null; spawnobjectnode_818_ = (SpawnObjectNode) aLinkedList1204
+	private final void method130(int i, int i_809_, int i_810_, int i_811_, int type, int y, int i_814_,
+			int plane, int x, int i_817_) {
+			SpawnObjectNode spawnObjectNode = null;
+			for (SpawnObjectNode spawnobjectnode_818_ = (SpawnObjectNode) spawnObjectNodeList.getBack(); spawnobjectnode_818_ != null; spawnobjectnode_818_ = (SpawnObjectNode) spawnObjectNodeList
 					.getPrevious()) {
-				if (spawnobjectnode_818_.plane == i_815_ && spawnobjectnode_818_.x == i_816_
-						&& spawnobjectnode_818_.y == i_813_ && spawnobjectnode_818_.type == i_812_) {
-					spawnobjectnode = spawnobjectnode_818_;
+				if (spawnobjectnode_818_.plane == plane && spawnobjectnode_818_.x == x
+						&& spawnobjectnode_818_.y == y && spawnobjectnode_818_.type == type) {
+					spawnObjectNode = spawnobjectnode_818_;
 					break;
 				}
 			}
-			if (spawnobjectnode == null) {
-				spawnobjectnode = new SpawnObjectNode();
-				spawnobjectnode.plane = i_815_;
-				spawnobjectnode.type = i_812_;
-				spawnobjectnode.x = i_816_;
-				spawnobjectnode.y = i_813_;
-				method89(spawnobjectnode);
-				aLinkedList1204.insertBack(spawnobjectnode);
+			if (spawnObjectNode == null) {
+				spawnObjectNode = new SpawnObjectNode();
+				spawnObjectNode.plane = plane;
+				spawnObjectNode.type = type;
+				spawnObjectNode.x = x;
+				spawnObjectNode.y = y;
+				method89(spawnObjectNode);
+				spawnObjectNodeList.insertBack(spawnObjectNode);
 			}
-			spawnobjectnode.anInt1341 = i_810_;
-			spawnobjectnode.anInt1343 = i_814_;
-			spawnobjectnode.anInt1342 = i_811_;
-			spawnobjectnode.anInt1352 = i_817_;
-			spawnobjectnode.anInt1344 = i_809_;
+			spawnObjectNode.anInt1341 = i_810_;
+			spawnObjectNode.anInt1343 = i_814_;
+			spawnObjectNode.anInt1342 = i_811_;
+			spawnObjectNode.anInt1352 = i_817_;
+			spawnObjectNode.anInt1344 = i_809_;
 			if (i <= 0) {
 				return;
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("83646, " + i + ", " + i_809_ + ", " + i_810_ + ", " + i_811_ + ", " + i_812_ + ", "
-					+ i_813_ + ", " + i_814_ + ", " + i_815_ + ", " + i_816_ + ", " + i_817_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final boolean method131(Widget widget) {
-		try {
 			if (widget.conditionTypes == null) {
 				return false;
 			}
-			for (int i = 0; i < widget.conditionTypes.length; i++) {
-				int opcode = parseWidgetOpcode(widget, i);
-				int condition = widget.conditionValues[i];
-				if (widget.conditionTypes[i] == 2) {
+			for (int type = 0; type < widget.conditionTypes.length; type++) {
+				int opcode = parseWidgetOpcode(widget, type);
+				int condition = widget.conditionValues[type];
+				if (widget.conditionTypes[type] == 2) {
 					if (opcode >= condition) {
 						return false;
 					}
-				} else if (widget.conditionTypes[i] == 3) {
+				} else if (widget.conditionTypes[type] == 3) {
 					if (opcode <= condition) {
 						return false;
 					}
-				} else if (widget.conditionTypes[i] == 4) {
+				} else if (widget.conditionTypes[type] == 4) {
 					if (opcode == condition) {
 						return false;
 					}
@@ -9908,25 +9895,17 @@ public class Client extends GameShell {
 				}
 			}
 			return true;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("43472, " + widget + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final DataInputStream jaggrabRequest(String file) throws IOException {
 		if (!aBoolean897) {
 			if (SignLink.applet != null) {
-				return SignLink.getURLStream(file);
+				return SignLink.openURL(file);
 			}
 			return new DataInputStream(new URL(getCodeBase(), file).openStream());
 		}
 		if (jaggrabSocket != null) {
-			try {
-				jaggrabSocket.close();
-			} catch (Exception exception) {
-				/* empty */
-			}
+			jaggrabSocket.close();
 			jaggrabSocket = null;
 		}
 		jaggrabSocket = openSocket(43595);
@@ -10043,7 +10022,7 @@ public class Client extends GameShell {
 				}
 			}
 			if (i_844_ > playerCount) {
-				SignLink.reportError(aString1198 + " Too many players");
+				SignLink.reportError(username + " Too many players");
 				throw new RuntimeException("eek");
 			}
 			playerCount = 0;
@@ -10103,13 +10082,13 @@ public class Client extends GameShell {
 					i_857_ = i_856_ / 2 - 20;
 					fontBold.drawStringCenter("Welcome to RuneScape", i / 2, i_857_, 0xFFFF00, true);
 					i_857_ += 30;
-					int i_858_ = i / 2 - 80;
-					int i_859_ = i_856_ / 2 + 20;
-					titleboxButtonImage.drawImage(i_858_ - 73, i_859_ - 20);
-					fontBold.drawStringCenter("New User", i_858_, i_859_ + 5, 0xFFFFFF, true);
-					i_858_ = i / 2 + 80;
-					titleboxButtonImage.drawImage(i_858_ - 73, i_859_ - 20);
-					fontBold.drawStringCenter("Existing User", i_858_, i_859_ + 5, 0xFFFFFF, true);
+					int x = i / 2 - 80;
+					int y = i_856_ / 2 + 20;
+					titleboxButtonImage.drawImage(x - 73, y - 20);
+					fontBold.drawStringCenter("New User", x, y + 5, 0xFFFFFF, true);
+					x = i / 2 + 80;
+					titleboxButtonImage.drawImage(x - 73, y - 20);
+					fontBold.drawStringCenter("Existing User", x, y + 5, 0xFFFFFF, true);
 				}
 				if (loginScreenState == 2) {
 					int i_860_ = i_856_ / 2 - 40;
@@ -10121,11 +10100,11 @@ public class Client extends GameShell {
 						fontBold.drawStringCenter(loginMessage2, i / 2, i_860_ - 7, 0xFFFF00, true);
 						i_860_ += 30;
 					}
-					fontBold.drawShadowedString("Username: " + aString1198
+					fontBold.drawShadowedString("Username: " + username
 							+ (anInt1241 == 0 & Client.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 90, i_860_,
 							true, 0xFFFFFF);
 					i_860_ += 15;
-					fontBold.drawShadowedString("Password: " + TextUtils.censorPassword(aString1199)
+					fontBold.drawShadowedString("Password: " + TextUtils.censorPassword(password)
 							+ (anInt1241 == 1 & Client.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 88, i_860_,
 							true, 0xFFFFFF);
 					i_860_ += 15;
@@ -10156,10 +10135,10 @@ public class Client extends GameShell {
 					fontBold.drawStringCenter("Cancel", i_864_, i_865_ + 5, 0xFFFFFF, true);
 				}
 				aProducingGraphicsBuffer1134.drawGraphics(202, 171, gameGraphics);
-				if (!redrawGameframe) {
+				if (!redraw) {
 					break;
 				}
-				redrawGameframe = false;
+				redraw = false;
 				aProducingGraphicsBuffer1132.drawGraphics(128, 0, gameGraphics);
 				aProducingGraphicsBuffer1133.drawGraphics(202, 371, gameGraphics);
 				aProducingGraphicsBuffer1137.drawGraphics(0, 265, gameGraphics);
@@ -10314,7 +10293,7 @@ public class Client extends GameShell {
 						if (i_899_ == 0) {
 							Wall wall = currentScene.getWall(currentSceneIndex, i_894_, i_895_);
 							if (wall != null) {
-								int i_905_ = wall.anInt771 >> 14 & 0x7fff;
+								int i_905_ = wall.hash >> 14 & 0x7fff;
 								if (i_897_ == 2) {
 									wall.aRenderable769 = new GameObject(i_905_, 4 + i_898_, 2, i_902_, i_903_, i_901_,
 											i_904_, i_900_, false);
@@ -10534,7 +10513,7 @@ public class Client extends GameShell {
 				}
 			}
 			if (i_969_ > actorCount) {
-				SignLink.reportError(aString1198 + " Too many npcs");
+				SignLink.reportError(username + " Too many npcs");
 				throw new RuntimeException("eek");
 			}
 			actorCount = 0;
@@ -10620,7 +10599,7 @@ public class Client extends GameShell {
 					if (clickType == 1 && clickX >= i_981_ - 75 && clickX <= i_981_ + 75 && clickY >= i_982_ - 20
 							&& clickY <= i_982_ + 20) {
 						anInt1063 = 0;
-						method84(aString1198, aString1199, false);
+						method84(username, password, false);
 						if (loggedIn) {
 							break;
 						}
@@ -10629,8 +10608,8 @@ public class Client extends GameShell {
 					if (clickType == 1 && clickX >= i_981_ - 75 && clickX <= i_981_ + 75 && clickY >= i_982_ - 20
 							&& clickY <= i_982_ + 20) {
 						loginScreenState = 0;
-						aString1198 = "";
-						aString1199 = "";
+						username = "";
+						password = "";
 					}
 					for (;;) {
 						int character = this.readCharacter();
@@ -10645,30 +10624,30 @@ public class Client extends GameShell {
 							}
 						}
 						if (anInt1241 == 0) {
-							if (character == 8 && aString1198.length() > 0) {
-								aString1198 = aString1198.substring(0, aString1198.length() - 1);
+							if (character == 8 && username.length() > 0) {
+								username = username.substring(0, username.length() - 1);
 							}
 							if (character == 9 || character == 10 || character == 13) {
 								anInt1241 = 1;
 							}
 							if (validCharacter) {
-								aString1198 += (char) character;
+								username += (char) character;
 							}
-							if (aString1198.length() > 12) {
-								aString1198 = aString1198.substring(0, 12);
+							if (username.length() > 12) {
+								username = username.substring(0, 12);
 							}
 						} else if (anInt1241 == 1) {
-							if (character == 8 && aString1199.length() > 0) {
-								aString1199 = aString1199.substring(0, aString1199.length() - 1);
+							if (character == 8 && password.length() > 0) {
+								password = password.substring(0, password.length() - 1);
 							}
 							if (character == 9 || character == 10 || character == 13) {
 								anInt1241 = 0;
 							}
 							if (validCharacter) {
-								aString1199 += (char) character;
+								password += (char) character;
 							}
-							if (aString1199.length() > 20) {
-								aString1199 = aString1199.substring(0, 20);
+							if (password.length() > 20) {
+								password = password.substring(0, 20);
 							}
 						}
 					}
@@ -10817,7 +10796,7 @@ public class Client extends GameShell {
 			}
 			for (int i_ = 0; i_ < playerCount; i_++) {
 				if (players[anIntArray917[i_]] == null) {
-					SignLink.reportError(aString1198 + " null entry in pl list - pos:" + i_ + " size:" + playerCount);
+					SignLink.reportError(username + " null entry in pl list - pos:" + i_ + " size:" + playerCount);
 					throw new RuntimeException("eek");
 				}
 			}
@@ -10930,7 +10909,7 @@ public class Client extends GameShell {
 					lastAddress = inBuffer.getInt1();
 					lastLogin = inBuffer.getUnsignedLEShort();
 					if (lastAddress != 0 && openWidgetIndex == -1) {
-						SignLink.setLastIP(TextUtils.decodeAddress(lastAddress));
+						SignLink.dnsLookup(TextUtils.decodeAddress(lastAddress));
 						closeWidgets();
 						int contentType = 650;
 						if (lastRecoveryChange != 201 || membershipAdviser == 1) {
@@ -10961,7 +10940,7 @@ public class Client extends GameShell {
 							}
 						}
 					}
-					for (SpawnObjectNode node = (SpawnObjectNode) aLinkedList1204.getBack(); node != null; node = (SpawnObjectNode) aLinkedList1204
+					for (SpawnObjectNode node = (SpawnObjectNode) spawnObjectNodeList.getBack(); node != null; node = (SpawnObjectNode) spawnObjectNodeList
 							.getPrevious()) {
 						if (node.x >= playerPositionX && node.x < playerPositionX + 8 && node.y >= playerPositionY
 								&& node.y < playerPositionY + 8 && node.plane == currentSceneIndex) {
@@ -11312,7 +11291,7 @@ public class Client extends GameShell {
 							}
 						}
 					}
-					for (SpawnObjectNode spawnobjectnode = (SpawnObjectNode) aLinkedList1204.getBack(); spawnobjectnode != null; spawnobjectnode = (SpawnObjectNode) aLinkedList1204
+					for (SpawnObjectNode spawnobjectnode = (SpawnObjectNode) spawnObjectNodeList.getBack(); spawnobjectnode != null; spawnobjectnode = (SpawnObjectNode) spawnObjectNodeList
 							.getPrevious()) {
 						spawnobjectnode.x -= i_1078_;
 						spawnobjectnode.y -= i_1079_;
@@ -12198,8 +12177,6 @@ public class Client extends GameShell {
 	}
 
 	public final void closeWidgets() {
-		do {
-			try {
 				outBuffer.putOpcode(130);
 				if (anInt1214 != -1) {
 					anInt1214 = -1;
@@ -12213,17 +12190,11 @@ public class Client extends GameShell {
 					aBoolean1174 = false;
 				}
 				openWidgetIndex = -1;
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("33125, " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
 	}
 
 	@Override
 	public void redraw() {
-		redrawGameframe = true;
+		redraw = true;
 	}
 
 	static {
@@ -12241,8 +12212,8 @@ public class Client extends GameShell {
 				16565, 34991, 25486 };
 		Client.BITFIELD_MAX_VALUE = new int[32];
 		i = 2;
-		for (int i_1192_ = 0; i_1192_ < 32; i_1192_++) {
-			Client.BITFIELD_MAX_VALUE[i_1192_] = i - 1;
+		for (int index = 0; index < 32; index++) {
+			Client.BITFIELD_MAX_VALUE[index] = i - 1;
 			i += i;
 		}
 	}

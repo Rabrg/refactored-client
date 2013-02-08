@@ -339,15 +339,15 @@ public class Scene {
 			}
 			if (renderable != null || renderable_68_ != null) {
 				Wall wall = new Wall();
-				wall.anInt771 = i_65_;
+				wall.hash = i_65_;
 				wall.config = b;
-				wall.anInt765 = i_67_ * 128 + 64;
-				wall.anInt766 = i_66_ * 128 + 64;
-				wall.anInt764 = i_69_;
+				wall.x = i_67_ * 128 + 64;
+				wall.y = i_66_ * 128 + 64;
+				wall.plane = i_69_;
 				wall.aRenderable769 = renderable;
 				wall.aRenderable770 = renderable_68_;
-				wall.anInt767 = i;
-				wall.anInt768 = i_70_;
+				wall.faceUnknown = i;
+				wall.face = i_70_;
 				for (int i_72_ = i_71_; i_72_ >= 0; i_72_--) {
 					if (tiles[i_72_][i_67_][i_66_] == null) {
 						tiles[i_72_][i_67_][i_66_] = new SceneTile(i_72_, i_67_, i_66_);
@@ -371,7 +371,7 @@ public class Scene {
 			wallDecoration.config = config;
 			wallDecoration.y = x * 128 + 64 + xOffset;
 			wallDecoration.x = y * 128 + 64 + yOffset;
-			wallDecoration.z = z;
+			wallDecoration.plane = z;
 			wallDecoration.renderable = renderable;
 			wallDecoration.faceUnknown = faceUnknown;
 			wallDecoration.face = face;
@@ -721,7 +721,7 @@ public class Scene {
 		if (scenetile == null || scenetile.wall == null) {
 			return 0;
 		}
-		return scenetile.wall.anInt771;
+		return scenetile.wall.hash;
 	}
 
 	public int getWallDecorationHash(int plane, int x, int y) {
@@ -760,7 +760,7 @@ public class Scene {
 		if (sceneTile == null) {
 			return -1;
 		}
-		if (sceneTile.wall != null && sceneTile.wall.anInt771 == i_178_) {
+		if (sceneTile.wall != null && sceneTile.wall.hash == i_178_) {
 			return sceneTile.wall.config & 0xff;
 		}
 		if (sceneTile.wallDecoration != null && sceneTile.wallDecoration.hash == i_178_) {
@@ -1412,8 +1412,8 @@ public class Scene {
 						Wall wall = scenetile_299_.wall;
 						if (wall != null) {
 							wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-									wall.anInt766 - Scene.anInt537, wall.anInt771);
+									Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+									wall.y - Scene.anInt537, wall.hash);
 						}
 						for (int i_300_ = 0; i_300_ < scenetile_299_.sceneSpawnRequestCount; i_300_++) {
 							SceneSpawnRequest scenespawnrequest = scenetile_299_.sceneSpawnRequests[i_300_];
@@ -1457,16 +1457,16 @@ public class Scene {
 						scenetile_290_.anInt1339 = Scene.anIntArray560[i_302_];
 					}
 					if (wall != null) {
-						if ((wall.anInt767 & Scene.anIntArray559[i_302_]) != 0) {
-							if (wall.anInt767 == 16) {
+						if ((wall.faceUnknown & Scene.anIntArray559[i_302_]) != 0) {
+							if (wall.faceUnknown == 16) {
 								scenetile_290_.anInt1336 = 3;
 								scenetile_290_.anInt1337 = Scene.anIntArray561[i_302_];
 								scenetile_290_.anInt1338 = 3 - scenetile_290_.anInt1337;
-							} else if (wall.anInt767 == 32) {
+							} else if (wall.faceUnknown == 32) {
 								scenetile_290_.anInt1336 = 6;
 								scenetile_290_.anInt1337 = Scene.anIntArray562[i_302_];
 								scenetile_290_.anInt1338 = 6 - scenetile_290_.anInt1337;
-							} else if (wall.anInt767 == 64) {
+							} else if (wall.faceUnknown == 64) {
 								scenetile_290_.anInt1336 = 12;
 								scenetile_290_.anInt1337 = Scene.anIntArray563[i_302_];
 								scenetile_290_.anInt1338 = 12 - scenetile_290_.anInt1337;
@@ -1478,26 +1478,26 @@ public class Scene {
 						} else {
 							scenetile_290_.anInt1336 = 0;
 						}
-						if ((wall.anInt767 & i_303_) != 0 && !method543(i_293_, i, i_291_, wall.anInt767)) {
+						if ((wall.faceUnknown & i_303_) != 0 && !method543(i_293_, i, i_291_, wall.faceUnknown)) {
 							wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-									wall.anInt766 - Scene.anInt537, wall.anInt771);
+									Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+									wall.y - Scene.anInt537, wall.hash);
 						}
-						if ((wall.anInt768 & i_303_) != 0 && !method543(i_293_, i, i_291_, wall.anInt768)) {
+						if ((wall.face & i_303_) != 0 && !method543(i_293_, i, i_291_, wall.face)) {
 							wall.aRenderable770.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-									wall.anInt766 - Scene.anInt537, wall.anInt771);
+									Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+									wall.y - Scene.anInt537, wall.hash);
 						}
 					}
 					if (walldecoration != null && !method544(i_293_, i, i_291_, walldecoration.renderable.modelHeight)) {
 						if ((walldecoration.faceUnknown & i_303_) != 0) {
 							walldecoration.renderable.renderAtPoint(walldecoration.face, Scene.anInt538,
 									Scene.anInt539, Scene.anInt540, Scene.anInt541, walldecoration.y - Scene.anInt535,
-									walldecoration.z - Scene.anInt536, walldecoration.x - Scene.anInt537,
+									walldecoration.plane - Scene.anInt536, walldecoration.x - Scene.anInt537,
 									walldecoration.hash);
 						} else if ((walldecoration.faceUnknown & 0x300) != 0) {
 							int i_304_ = walldecoration.y - Scene.anInt535;
-							int i_305_ = walldecoration.z - Scene.anInt536;
+							int i_305_ = walldecoration.plane - Scene.anInt536;
 							int i_306_ = walldecoration.x - Scene.anInt537;
 							int i_307_ = walldecoration.face;
 							int i_308_;
@@ -1596,10 +1596,10 @@ public class Scene {
 					}
 					if (bool_319_) {
 						Wall wall = scenetile_290_.wall;
-						if (!method543(i_293_, i, i_291_, wall.anInt767)) {
+						if (!method543(i_293_, i, i_291_, wall.faceUnknown)) {
 							wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-									wall.anInt766 - Scene.anInt537, wall.anInt771);
+									Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+									wall.y - Scene.anInt537, wall.hash);
 						}
 						scenetile_290_.anInt1336 = 0;
 					}
@@ -1762,11 +1762,11 @@ public class Scene {
 							if ((walldecoration.faceUnknown & scenetile_290_.anInt1339) != 0) {
 								walldecoration.renderable.renderAtPoint(walldecoration.face, Scene.anInt538,
 										Scene.anInt539, Scene.anInt540, Scene.anInt541, walldecoration.y
-												- Scene.anInt535, walldecoration.z - Scene.anInt536, walldecoration.x
+												- Scene.anInt535, walldecoration.plane - Scene.anInt536, walldecoration.x
 												- Scene.anInt537, walldecoration.hash);
 							} else if ((walldecoration.faceUnknown & 0x300) != 0) {
 								int i_346_ = walldecoration.y - Scene.anInt535;
-								int i_347_ = walldecoration.z - Scene.anInt536;
+								int i_347_ = walldecoration.plane - Scene.anInt536;
 								int i_348_ = walldecoration.x - Scene.anInt537;
 								int i_349_ = walldecoration.face;
 								int i_350_;
@@ -1799,17 +1799,17 @@ public class Scene {
 						}
 						Wall wall = scenetile_290_.wall;
 						if (wall != null) {
-							if ((wall.anInt768 & scenetile_290_.anInt1339) != 0
-									&& !method543(i_293_, i, i_291_, wall.anInt768)) {
+							if ((wall.face & scenetile_290_.anInt1339) != 0
+									&& !method543(i_293_, i, i_291_, wall.face)) {
 								wall.aRenderable770.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-										Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-										wall.anInt766 - Scene.anInt537, wall.anInt771);
+										Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+										wall.y - Scene.anInt537, wall.hash);
 							}
-							if ((wall.anInt767 & scenetile_290_.anInt1339) != 0
-									&& !method543(i_293_, i, i_291_, wall.anInt767)) {
+							if ((wall.faceUnknown & scenetile_290_.anInt1339) != 0
+									&& !method543(i_293_, i, i_291_, wall.faceUnknown)) {
 								wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-										Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
-										wall.anInt766 - Scene.anInt537, wall.anInt771);
+										Scene.anInt541, wall.x - Scene.anInt535, wall.plane - Scene.anInt536,
+										wall.y - Scene.anInt537, wall.hash);
 							}
 						}
 					}
