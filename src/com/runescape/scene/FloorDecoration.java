@@ -8,5 +8,5 @@ public class FloorDecoration {
 	public int z;
 	public Renderable renderable;
 	public int hash;
-	public byte objectConfig;
+	public byte config;
 }

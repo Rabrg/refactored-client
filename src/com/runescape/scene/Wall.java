@@ -11,5 +11,5 @@ public class Wall {
 	public Renderable aRenderable769;
 	public Renderable aRenderable770;
 	public int anInt771;
-	protected byte aByte772;
+	protected byte config;
 }

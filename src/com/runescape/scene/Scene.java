@@ -178,10 +178,10 @@ public class Scene {
 				SceneTile scenetile_15_ = tiles[i_14_][i_12_][i] = tiles[i_14_ + 1][i_12_][i];
 				if (scenetile_15_ != null) {
 					scenetile_15_.anInt1318--;
-					for (int i_16_ = 0; i_16_ < scenetile_15_.anInt1328; i_16_++) {
-						SceneSpawnRequest scenespawnrequest = scenetile_15_.aSceneSpawnRequestArray1329[i_16_];
-						if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.anInt603 == i_12_
-								&& scenespawnrequest.anInt605 == i) {
+					for (int i_16_ = 0; i_16_ < scenetile_15_.sceneSpawnRequestCount; i_16_++) {
+						SceneSpawnRequest scenespawnrequest = scenetile_15_.sceneSpawnRequests[i_16_];
+						if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.x == i_12_
+								&& scenespawnrequest.y == i) {
 							scenespawnrequest.anInt597--;
 						}
 					}
@@ -280,11 +280,11 @@ public class Scene {
 				}
 				floordecoration.x = i_51_;
 				floordecoration.hash = i_54_;
-				floordecoration.objectConfig = b;
+				floordecoration.config = b;
 				if (tiles[i][i_55_][i_52_] == null) {
 					tiles[i][i_55_][i_52_] = new SceneTile(i, i_55_, i_52_);
 				}
-				tiles[i][i_55_][i_52_].floor = floordecoration;
+				tiles[i][i_55_][i_52_].floorDecoration = floordecoration;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("11891, " + i + ", " + i_51_ + ", " + i_52_ + ", " + i_53_ + ", " + renderable + ", "
@@ -308,9 +308,9 @@ public class Scene {
 				int i_62_ = 0;
 				SceneTile scenetile = tiles[i_60_][i][i_61_];
 				if (scenetile != null) {
-					for (int i_63_ = 0; i_63_ < scenetile.anInt1328; i_63_++) {
-						if (scenetile.aSceneSpawnRequestArray1329[i_63_].aRenderable601 instanceof Model) {
-							int i_64_ = ((Model) scenetile.aSceneSpawnRequestArray1329[i_63_].aRenderable601).anInt1647;
+					for (int i_63_ = 0; i_63_ < scenetile.sceneSpawnRequestCount; i_63_++) {
+						if (scenetile.sceneSpawnRequests[i_63_].aRenderable601 instanceof Model) {
+							int i_64_ = ((Model) scenetile.sceneSpawnRequests[i_63_].aRenderable601).anInt1647;
 							if (i_64_ > i_62_) {
 								i_62_ = i_64_;
 							}
@@ -321,7 +321,7 @@ public class Scene {
 				if (tiles[i_60_][i][i_61_] == null) {
 					tiles[i_60_][i][i_61_] = new SceneTile(i_60_, i, i_61_);
 				}
-				tiles[i_60_][i][i_61_].aCameraAngle1327 = cameraangle;
+				tiles[i_60_][i][i_61_].cameraAngle = cameraangle;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("4061, " + b + ", " + i + ", " + i_56_ + ", " + renderable + ", " + i_57_ + ", "
@@ -340,7 +340,7 @@ public class Scene {
 			if (renderable != null || renderable_68_ != null) {
 				Wall wall = new Wall();
 				wall.anInt771 = i_65_;
-				wall.aByte772 = b;
+				wall.config = b;
 				wall.anInt765 = i_67_ * 128 + 64;
 				wall.anInt766 = i_66_ * 128 + 64;
 				wall.anInt764 = i_69_;
@@ -353,7 +353,7 @@ public class Scene {
 						tiles[i_72_][i_67_][i_66_] = new SceneTile(i_72_, i_67_, i_66_);
 					}
 				}
-				tiles[i_71_][i_67_][i_66_].aWall1324 = wall;
+				tiles[i_71_][i_67_][i_66_].wall = wall;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("65870, " + i + ", " + renderable + ", " + bool + ", " + i_65_ + ", " + i_66_ + ", "
@@ -475,22 +475,22 @@ public class Scene {
 					return false;
 				}
 				SceneTile scenetile = tiles[i][i_123_][i_124_];
-				if (scenetile != null && scenetile.anInt1328 >= 5) {
+				if (scenetile != null && scenetile.sceneSpawnRequestCount >= 5) {
 					return false;
 				}
 			}
 		}
 		SceneSpawnRequest scenespawnrequest = new SceneSpawnRequest();
 		scenespawnrequest.anInt609 = i_122_;
-		scenespawnrequest.aByte610 = b;
+		scenespawnrequest.config = b;
 		scenespawnrequest.anInt597 = i;
 		scenespawnrequest.anInt599 = i_118_;
 		scenespawnrequest.anInt600 = i_119_;
 		scenespawnrequest.anInt598 = i_120_;
 		scenespawnrequest.aRenderable601 = renderable;
 		scenespawnrequest.anInt602 = i_121_;
-		scenespawnrequest.anInt603 = i_114_;
-		scenespawnrequest.anInt605 = i_115_;
+		scenespawnrequest.x = i_114_;
+		scenespawnrequest.y = i_115_;
 		scenespawnrequest.anInt604 = i_114_ + i_116_ - 1;
 		scenespawnrequest.anInt606 = i_115_ + i_117_ - 1;
 		for (int i_125_ = i_114_; i_125_ < i_114_ + i_116_; i_125_++) {
@@ -514,10 +514,10 @@ public class Scene {
 					}
 				}
 				SceneTile scenetile = tiles[i][i_125_][i_126_];
-				scenetile.aSceneSpawnRequestArray1329[scenetile.anInt1328] = scenespawnrequest;
-				scenetile.anIntArray1330[scenetile.anInt1328] = i_127_;
+				scenetile.sceneSpawnRequests[scenetile.sceneSpawnRequestCount] = scenespawnrequest;
+				scenetile.anIntArray1330[scenetile.sceneSpawnRequestCount] = i_127_;
 				scenetile.anInt1331 |= i_127_;
-				scenetile.anInt1328++;
+				scenetile.sceneSpawnRequestCount++;
 			}
 		}
 		if (bool) {
@@ -546,23 +546,23 @@ public class Scene {
 	private void method511(int i, SceneSpawnRequest scenespawnrequest) {
 		try {
 			if (i < 0) {
-				for (int i_129_ = scenespawnrequest.anInt603; i_129_ <= scenespawnrequest.anInt604; i_129_++) {
-					for (int i_130_ = scenespawnrequest.anInt605; i_130_ <= scenespawnrequest.anInt606; i_130_++) {
+				for (int i_129_ = scenespawnrequest.x; i_129_ <= scenespawnrequest.anInt604; i_129_++) {
+					for (int i_130_ = scenespawnrequest.y; i_130_ <= scenespawnrequest.anInt606; i_130_++) {
 						SceneTile scenetile = tiles[scenespawnrequest.anInt597][i_129_][i_130_];
 						if (scenetile != null) {
-							for (int i_131_ = 0; i_131_ < scenetile.anInt1328; i_131_++) {
-								if (scenetile.aSceneSpawnRequestArray1329[i_131_] == scenespawnrequest) {
-									scenetile.anInt1328--;
-									for (int i_132_ = i_131_; i_132_ < scenetile.anInt1328; i_132_++) {
-										scenetile.aSceneSpawnRequestArray1329[i_132_] = scenetile.aSceneSpawnRequestArray1329[i_132_ + 1];
+							for (int i_131_ = 0; i_131_ < scenetile.sceneSpawnRequestCount; i_131_++) {
+								if (scenetile.sceneSpawnRequests[i_131_] == scenespawnrequest) {
+									scenetile.sceneSpawnRequestCount--;
+									for (int i_132_ = i_131_; i_132_ < scenetile.sceneSpawnRequestCount; i_132_++) {
+										scenetile.sceneSpawnRequests[i_132_] = scenetile.sceneSpawnRequests[i_132_ + 1];
 										scenetile.anIntArray1330[i_132_] = scenetile.anIntArray1330[i_132_ + 1];
 									}
-									scenetile.aSceneSpawnRequestArray1329[scenetile.anInt1328] = null;
+									scenetile.sceneSpawnRequests[scenetile.sceneSpawnRequestCount] = null;
 									break;
 								}
 							}
 							scenetile.anInt1331 = 0;
-							for (int i_133_ = 0; i_133_ < scenetile.anInt1328; i_133_++) {
+							for (int i_133_ = 0; i_133_ < scenetile.sceneSpawnRequestCount; i_133_++) {
 								scenetile.anInt1331 |= scenetile.anIntArray1330[i_133_];
 							}
 						}
@@ -604,7 +604,7 @@ public class Scene {
 				aBoolean514 = !aBoolean514;
 			}
 			if (scenetile != null) {
-				scenetile.aWall1324 = null;
+				scenetile.wall = null;
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("67055, " + i + ", " + i_140_ + ", " + i_141_ + ", " + b + ", "
@@ -638,10 +638,10 @@ public class Scene {
 			}
 			SceneTile scenetile = tiles[i][i_146_][i_147_];
 			if (scenetile != null) {
-				for (int i_149_ = 0; i_149_ < scenetile.anInt1328; i_149_++) {
-					SceneSpawnRequest scenespawnrequest = scenetile.aSceneSpawnRequestArray1329[i_149_];
-					if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.anInt603 == i_146_
-							&& scenespawnrequest.anInt605 == i_147_) {
+				for (int i_149_ = 0; i_149_ < scenetile.sceneSpawnRequestCount; i_149_++) {
+					SceneSpawnRequest scenespawnrequest = scenetile.sceneSpawnRequests[i_149_];
+					if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.x == i_146_
+							&& scenespawnrequest.y == i_147_) {
 						method511(-997, scenespawnrequest);
 						break;
 					}
@@ -658,7 +658,7 @@ public class Scene {
 		try {
 			SceneTile scenetile = tiles[i][i_151_][i_150_];
 			if (scenetile != null) {
-				scenetile.floor = null;
+				scenetile.floorDecoration = null;
 				if (b == 9) {
 					b = (byte) 0;
 				}
@@ -670,113 +670,66 @@ public class Scene {
 		}
 	}
 
-	public void method517(int i, int i_152_, int i_153_) {
-		SceneTile scenetile = tiles[i][i_152_][i_153_];
-		if (scenetile != null) {
-			scenetile.aCameraAngle1327 = null;
+	public void resetCameraAngle(int plane, int x, int y) {
+		SceneTile sceneTile = tiles[plane][x][y];
+		if (sceneTile != null) {
+			sceneTile.cameraAngle = null;
 		}
 	}
 
-	public Wall method518(int i, int i_154_, int i_155_, boolean bool) {
-		try {
-			if (bool) {
-			}
-			SceneTile scenetile = tiles[i][i_154_][i_155_];
-			if (scenetile == null) {
+	public Wall getWall(int plane, int x, int y) {
+			SceneTile sceneTile = tiles[plane][x][y];
+			if (sceneTile == null) {
 				return null;
 			}
-			return scenetile.aWall1324;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("18783, " + i + ", " + i_154_ + ", " + i_155_ + ", " + bool + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
+			return sceneTile.wall;
 	}
 
-	public WallDecoration method519(int i, int i_156_, int i_157_, int i_158_) {
-		try {
-			if (i_156_ <= 0) {
-				throw new NullPointerException();
-			}
-			SceneTile scenetile = tiles[i_158_][i][i_157_];
+	public WallDecoration getWallDecoration(int plane, int x, int y) {
+			SceneTile scenetile = tiles[plane][x][y];
 			if (scenetile == null) {
 				return null;
 			}
 			return scenetile.wallDecoration;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("62763, " + i + ", " + i_156_ + ", " + i_157_ + ", " + i_158_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
-	public SceneSpawnRequest method520(int i, int i_159_, byte b, int i_160_) {
-		try {
-			SceneTile scenetile = tiles[i_160_][i][i_159_];
-			if (scenetile == null) {
+	public SceneSpawnRequest processSceneSpawnRequests(int plane, int x, int y) {
+			SceneTile sceneTile = tiles[plane][x][y];
+			if (sceneTile == null) {
 				return null;
 			}
-			for (int i_161_ = 0; i_161_ < scenetile.anInt1328; i_161_++) {
-				SceneSpawnRequest scenespawnrequest = scenetile.aSceneSpawnRequestArray1329[i_161_];
-				if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.anInt603 == i
-						&& scenespawnrequest.anInt605 == i_159_) {
-					return scenespawnrequest;
+			for (int sceneSpawnRequestId = 0; sceneSpawnRequestId < sceneTile.sceneSpawnRequestCount; sceneSpawnRequestId++) {
+				SceneSpawnRequest sceneSpawnRequest = sceneTile.sceneSpawnRequests[sceneSpawnRequestId];
+				if ((sceneSpawnRequest.anInt609 >> 29 & 0x3) == 2 && sceneSpawnRequest.x == x
+						&& sceneSpawnRequest.y == y) {
+					return sceneSpawnRequest;
 				}
-			}
-			if (b == 4) {
-				b = (byte) 0;
-			} else {
 			}
 			return null;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("5110, " + i + ", " + i_159_ + ", " + b + ", " + i_160_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
-	public FloorDecoration method521(int i, int i_162_, int i_163_, int i_164_) {
-		try {
-			SceneTile scenetile = tiles[i_163_][i_162_][i];
-			if (i_164_ != 0) {
-				for (int i_165_ = 1; i_165_ > 0; i_165_++) {
-					/* empty */
-				}
-			}
-			if (scenetile == null || scenetile.floor == null) {
+	public FloorDecoration getFloorDecoration(int plane, int x, int y) {
+			SceneTile sceneTile = tiles[plane][x][y];
+			if (sceneTile == null || sceneTile.floorDecoration == null) {
 				return null;
 			}
-			return scenetile.floor;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("50413, " + i + ", " + i_162_ + ", " + i_163_ + ", " + i_164_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
+			return sceneTile.floorDecoration;
 	}
 
 	public int method522(int i, int i_166_, int i_167_) {
 		SceneTile scenetile = tiles[i][i_166_][i_167_];
-		if (scenetile == null || scenetile.aWall1324 == null) {
+		if (scenetile == null || scenetile.wall == null) {
 			return 0;
 		}
-		return scenetile.aWall1324.anInt771;
+		return scenetile.wall.anInt771;
 	}
 
-	public int method523(int i, int i_168_, int i_169_, int i_170_) {
-		try {
-			SceneTile scenetile = tiles[i][i_168_][i_170_];
-			if (i_169_ != 0) {
-				return anInt510;
-			}
-			if (scenetile == null || scenetile.wallDecoration == null) {
+	public int getWallDecorationHash(int plane, int x, int y) {
+			SceneTile sceneTile = tiles[plane][x][y];
+			if (sceneTile == null || sceneTile.wallDecoration == null) {
 				return 0;
 			}
-			return scenetile.wallDecoration.hash;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("18367, " + i + ", " + i_168_ + ", " + i_169_ + ", " + i_170_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
+			return sceneTile.wallDecoration.hash;
 	}
 
 	public int method524(int i, int i_171_, int i_172_) {
@@ -784,41 +737,41 @@ public class Scene {
 		if (scenetile == null) {
 			return 0;
 		}
-		for (int i_173_ = 0; i_173_ < scenetile.anInt1328; i_173_++) {
-			SceneSpawnRequest scenespawnrequest = scenetile.aSceneSpawnRequestArray1329[i_173_];
-			if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.anInt603 == i_171_
-					&& scenespawnrequest.anInt605 == i_172_) {
+		for (int i_173_ = 0; i_173_ < scenetile.sceneSpawnRequestCount; i_173_++) {
+			SceneSpawnRequest scenespawnrequest = scenetile.sceneSpawnRequests[i_173_];
+			if ((scenespawnrequest.anInt609 >> 29 & 0x3) == 2 && scenespawnrequest.x == i_171_
+					&& scenespawnrequest.y == i_172_) {
 				return scenespawnrequest.anInt609;
 			}
 		}
 		return 0;
 	}
 
-	public int getFloorHash(int i, int i_174_, int i_175_) {
-		SceneTile scenetile = tiles[i][i_174_][i_175_];
-		if (scenetile == null || scenetile.floor == null) {
+	public int getFloorDecorationHash(int plane, int x, int y) {
+		SceneTile scenetile = tiles[plane][x][y];
+		if (scenetile == null || scenetile.floorDecoration == null) {
 			return 0;
 		}
-		return scenetile.floor.hash;
+		return scenetile.floorDecoration.hash;
 	}
 
-	public int method526(int i, int i_176_, int i_177_, int i_178_) {
-		SceneTile scenetile = tiles[i][i_176_][i_177_];
-		if (scenetile == null) {
+	public int getConfig(int plane, int x, int y, int i_178_) {
+		SceneTile sceneTile = tiles[plane][x][y];
+		if (sceneTile == null) {
 			return -1;
 		}
-		if (scenetile.aWall1324 != null && scenetile.aWall1324.anInt771 == i_178_) {
-			return scenetile.aWall1324.aByte772 & 0xff;
+		if (sceneTile.wall != null && sceneTile.wall.anInt771 == i_178_) {
+			return sceneTile.wall.config & 0xff;
 		}
-		if (scenetile.wallDecoration != null && scenetile.wallDecoration.hash == i_178_) {
-			return scenetile.wallDecoration.config & 0xff;
+		if (sceneTile.wallDecoration != null && sceneTile.wallDecoration.hash == i_178_) {
+			return sceneTile.wallDecoration.config & 0xff;
 		}
-		if (scenetile.floor != null && scenetile.floor.hash == i_178_) {
-			return scenetile.floor.objectConfig & 0xff;
+		if (sceneTile.floorDecoration != null && sceneTile.floorDecoration.hash == i_178_) {
+			return sceneTile.floorDecoration.config & 0xff;
 		}
-		for (int i_179_ = 0; i_179_ < scenetile.anInt1328; i_179_++) {
-			if (scenetile.aSceneSpawnRequestArray1329[i_179_].anInt609 == i_178_) {
-				return scenetile.aSceneSpawnRequestArray1329[i_179_].aByte610 & 0xff;
+		for (int sceneSpawnRequest = 0; sceneSpawnRequest < sceneTile.sceneSpawnRequestCount; sceneSpawnRequest++) {
+			if (sceneTile.sceneSpawnRequests[sceneSpawnRequest].anInt609 == i_178_) {
+				return sceneTile.sceneSpawnRequests[sceneSpawnRequest].config & 0xff;
 			}
 		}
 		return -1;
@@ -836,7 +789,7 @@ public class Scene {
 					for (int i_188_ = 0; i_188_ < anInt519; i_188_++) {
 						SceneTile scenetile = tiles[i_186_][i_187_][i_188_];
 						if (scenetile != null) {
-							Wall wall = scenetile.aWall1324;
+							Wall wall = scenetile.wall;
 							if (wall != null && wall.aRenderable769 != null
 									&& wall.aRenderable769.verticesNormal != null) {
 								method529(i_186_, 1, 1, i_187_, (byte) 115, i_188_, (Model) wall.aRenderable769);
@@ -847,18 +800,18 @@ public class Scene {
 								}
 								((Model) wall.aRenderable769).method428(i_180_, i_185_, i_181_, i, i_183_);
 							}
-							for (int i_189_ = 0; i_189_ < scenetile.anInt1328; i_189_++) {
-								SceneSpawnRequest scenespawnrequest = scenetile.aSceneSpawnRequestArray1329[i_189_];
+							for (int i_189_ = 0; i_189_ < scenetile.sceneSpawnRequestCount; i_189_++) {
+								SceneSpawnRequest scenespawnrequest = scenetile.sceneSpawnRequests[i_189_];
 								if (scenespawnrequest != null && scenespawnrequest.aRenderable601 != null
 										&& scenespawnrequest.aRenderable601.verticesNormal != null) {
-									method529(i_186_, scenespawnrequest.anInt604 - scenespawnrequest.anInt603 + 1,
-											scenespawnrequest.anInt606 - scenespawnrequest.anInt605 + 1, i_187_,
+									method529(i_186_, scenespawnrequest.anInt604 - scenespawnrequest.x + 1,
+											scenespawnrequest.anInt606 - scenespawnrequest.y + 1, i_187_,
 											(byte) 115, i_188_, (Model) scenespawnrequest.aRenderable601);
 									((Model) scenespawnrequest.aRenderable601).method428(i_180_, i_185_, i_181_, i,
 											i_183_);
 								}
 							}
-							FloorDecoration floordecoration = scenetile.floor;
+							FloorDecoration floordecoration = scenetile.floorDecoration;
 							if (floordecoration != null && floordecoration.renderable.verticesNormal != null) {
 								method528(i_187_, i_186_, (Model) floordecoration.renderable, (byte) 37, i_188_);
 								((Model) floordecoration.renderable).method428(i_180_, i_185_, i_181_, i, i_183_);
@@ -884,33 +837,33 @@ public class Scene {
 				}
 				if (i < anInt518) {
 					SceneTile scenetile = tiles[i_190_][i + 1][i_191_];
-					if (scenetile != null && scenetile.floor != null
-							&& scenetile.floor.renderable.verticesNormal != null) {
-						method530(model, (Model) scenetile.floor.renderable, 128, 0, 0, true);
+					if (scenetile != null && scenetile.floorDecoration != null
+							&& scenetile.floorDecoration.renderable.verticesNormal != null) {
+						method530(model, (Model) scenetile.floorDecoration.renderable, 128, 0, 0, true);
 					}
 				}
 				if (i_191_ < anInt518) {
 					SceneTile scenetile = tiles[i_190_][i][i_191_ + 1];
-					if (scenetile != null && scenetile.floor != null
-							&& scenetile.floor.renderable.verticesNormal != null) {
-						method530(model, (Model) scenetile.floor.renderable, 0, 0, 128, true);
+					if (scenetile != null && scenetile.floorDecoration != null
+							&& scenetile.floorDecoration.renderable.verticesNormal != null) {
+						method530(model, (Model) scenetile.floorDecoration.renderable, 0, 0, 128, true);
 					}
 				}
 				if (i < anInt518 && i_191_ < anInt519) {
 					SceneTile scenetile = tiles[i_190_][i + 1][i_191_ + 1];
-					if (scenetile != null && scenetile.floor != null
-							&& scenetile.floor.renderable.verticesNormal != null) {
-						method530(model, (Model) scenetile.floor.renderable, 128, 0, 128, true);
+					if (scenetile != null && scenetile.floorDecoration != null
+							&& scenetile.floorDecoration.renderable.verticesNormal != null) {
+						method530(model, (Model) scenetile.floorDecoration.renderable, 128, 0, 128, true);
 					}
 				}
 				if (i >= anInt518 || i_191_ <= 0) {
 					break;
 				}
 				SceneTile scenetile = tiles[i_190_][i + 1][i_191_ - 1];
-				if (scenetile == null || scenetile.floor == null || scenetile.floor.renderable.verticesNormal == null) {
+				if (scenetile == null || scenetile.floorDecoration == null || scenetile.floorDecoration.renderable.verticesNormal == null) {
 					break;
 				}
-				method530(model, (Model) scenetile.floor.renderable, 128, 0, -128, true);
+				method530(model, (Model) scenetile.floorDecoration.renderable, 128, 0, -128, true);
 			} catch (RuntimeException runtimeexception) {
 				SignLink.reportError("40901, " + i + ", " + i_190_ + ", " + model + ", " + b + ", " + i_191_ + ", "
 						+ runtimeexception.toString());
@@ -948,7 +901,7 @@ public class Scene {
 														+ anIntArrayArrayArray520[i][i_195_ + 1][i_196_]
 														+ anIntArrayArrayArray520[i][i_195_][i_196_ + 1] + anIntArrayArrayArray520[i][i_195_ + 1][i_196_ + 1])
 												/ 4;
-										Wall wall = scenetile.aWall1324;
+										Wall wall = scenetile.wall;
 										if (wall != null && wall.aRenderable769 != null
 												&& wall.aRenderable769.verticesNormal != null) {
 											method530(model, (Model) wall.aRenderable769, (i_202_ - i_195_) * 128
@@ -961,17 +914,17 @@ public class Scene {
 													+ (1 - i_193_) * 64, i_204_, (i_203_ - i_196_) * 128 + (1 - i_194_)
 													* 64, bool);
 										}
-										for (int i_205_ = 0; i_205_ < scenetile.anInt1328; i_205_++) {
-											SceneSpawnRequest scenespawnrequest = scenetile.aSceneSpawnRequestArray1329[i_205_];
+										for (int i_205_ = 0; i_205_ < scenetile.sceneSpawnRequestCount; i_205_++) {
+											SceneSpawnRequest scenespawnrequest = scenetile.sceneSpawnRequests[i_205_];
 											if (scenespawnrequest != null && scenespawnrequest.aRenderable601 != null
 													&& scenespawnrequest.aRenderable601.verticesNormal != null) {
-												int i_206_ = scenespawnrequest.anInt604 - scenespawnrequest.anInt603
+												int i_206_ = scenespawnrequest.anInt604 - scenespawnrequest.x
 														+ 1;
-												int i_207_ = scenespawnrequest.anInt606 - scenespawnrequest.anInt605
+												int i_207_ = scenespawnrequest.anInt606 - scenespawnrequest.y
 														+ 1;
 												method530(model, (Model) scenespawnrequest.aRenderable601,
-														(scenespawnrequest.anInt603 - i_195_) * 128 + (i_206_ - i_193_)
-																* 64, i_204_, (scenespawnrequest.anInt605 - i_196_)
+														(scenespawnrequest.x - i_195_) * 128 + (i_206_ - i_193_)
+																* 64, i_204_, (scenespawnrequest.y - i_196_)
 																* 128 + (i_207_ - i_194_) * 64, bool);
 											}
 										}
@@ -1282,7 +1235,7 @@ public class Scene {
 								} else {
 									scenetile.aBoolean1333 = true;
 									scenetile.aBoolean1334 = true;
-									if (scenetile.anInt1328 > 0) {
+									if (scenetile.sceneSpawnRequestCount > 0) {
 										scenetile.aBoolean1335 = true;
 									} else {
 										scenetile.aBoolean1335 = false;
@@ -1456,14 +1409,14 @@ public class Scene {
 							method538(i, (byte) 99, Scene.anInt538, Scene.anInt540, scenetile_299_.aComplexTile1323,
 									Scene.anInt539, i_291_, Scene.anInt541);
 						}
-						Wall wall = scenetile_299_.aWall1324;
+						Wall wall = scenetile_299_.wall;
 						if (wall != null) {
 							wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
 									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
 									wall.anInt766 - Scene.anInt537, wall.anInt771);
 						}
-						for (int i_300_ = 0; i_300_ < scenetile_299_.anInt1328; i_300_++) {
-							SceneSpawnRequest scenespawnrequest = scenetile_299_.aSceneSpawnRequestArray1329[i_300_];
+						for (int i_300_ = 0; i_300_ < scenetile_299_.sceneSpawnRequestCount; i_300_++) {
+							SceneSpawnRequest scenespawnrequest = scenetile_299_.sceneSpawnRequests[i_300_];
 							if (scenespawnrequest != null) {
 								scenespawnrequest.aRenderable601.renderAtPoint(scenespawnrequest.anInt602,
 										Scene.anInt538, Scene.anInt539, Scene.anInt540, Scene.anInt541,
@@ -1487,7 +1440,7 @@ public class Scene {
 					}
 					int i_302_ = 0;
 					int i_303_ = 0;
-					Wall wall = scenetile_290_.aWall1324;
+					Wall wall = scenetile_290_.wall;
 					WallDecoration walldecoration = scenetile_290_.wallDecoration;
 					if (wall != null || walldecoration != null) {
 						if (Scene.anInt533 == i) {
@@ -1576,13 +1529,13 @@ public class Scene {
 						}
 					}
 					if (bool_301_) {
-						FloorDecoration floordecoration = scenetile_290_.floor;
+						FloorDecoration floordecoration = scenetile_290_.floorDecoration;
 						if (floordecoration != null) {
 							floordecoration.renderable.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
 									Scene.anInt541, floordecoration.y - Scene.anInt535, floordecoration.x
 											- Scene.anInt536, floordecoration.z - Scene.anInt537, floordecoration.hash);
 						}
-						CameraAngle cameraangle = scenetile_290_.aCameraAngle1327;
+						CameraAngle cameraangle = scenetile_290_.cameraAngle;
 						if (cameraangle != null && cameraangle.anInt154 == 0) {
 							if (cameraangle.aRenderable151 != null) {
 								cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
@@ -1634,15 +1587,15 @@ public class Scene {
 				}
 				if (scenetile_290_.anInt1336 != 0) {
 					boolean bool_319_ = true;
-					for (int i_320_ = 0; i_320_ < scenetile_290_.anInt1328; i_320_++) {
-						if (scenetile_290_.aSceneSpawnRequestArray1329[i_320_].anInt608 != Scene.anInt528
+					for (int i_320_ = 0; i_320_ < scenetile_290_.sceneSpawnRequestCount; i_320_++) {
+						if (scenetile_290_.sceneSpawnRequests[i_320_].anInt608 != Scene.anInt528
 								&& (scenetile_290_.anIntArray1330[i_320_] & scenetile_290_.anInt1336) == scenetile_290_.anInt1337) {
 							bool_319_ = false;
 							break;
 						}
 					}
 					if (bool_319_) {
-						Wall wall = scenetile_290_.aWall1324;
+						Wall wall = scenetile_290_.wall;
 						if (!method543(i_293_, i, i_291_, wall.anInt767)) {
 							wall.aRenderable769.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
 									Scene.anInt541, wall.anInt765 - Scene.anInt535, wall.anInt764 - Scene.anInt536,
@@ -1653,14 +1606,14 @@ public class Scene {
 				}
 				if (scenetile_290_.aBoolean1335) {
 					try {
-						int i_321_ = scenetile_290_.anInt1328;
+						int i_321_ = scenetile_290_.sceneSpawnRequestCount;
 						scenetile_290_.aBoolean1335 = false;
 						int i_322_ = 0;
 						while_10_: for (int i_323_ = 0; i_323_ < i_321_; i_323_++) {
-							SceneSpawnRequest scenespawnrequest = scenetile_290_.aSceneSpawnRequestArray1329[i_323_];
+							SceneSpawnRequest scenespawnrequest = scenetile_290_.sceneSpawnRequests[i_323_];
 							if (scenespawnrequest.anInt608 != Scene.anInt528) {
-								for (int i_324_ = scenespawnrequest.anInt603; i_324_ <= scenespawnrequest.anInt604; i_324_++) {
-									for (int i_325_ = scenespawnrequest.anInt605; i_325_ <= scenespawnrequest.anInt606; i_325_++) {
+								for (int i_324_ = scenespawnrequest.x; i_324_ <= scenespawnrequest.anInt604; i_324_++) {
+									for (int i_325_ = scenespawnrequest.y; i_325_ <= scenespawnrequest.anInt606; i_325_++) {
 										SceneTile scenetile_326_ = scenetiles[i_324_][i_325_];
 										if (scenetile_326_.aBoolean1333) {
 											scenetile_290_.aBoolean1335 = true;
@@ -1668,13 +1621,13 @@ public class Scene {
 										}
 										if (scenetile_326_.anInt1336 != 0) {
 											int i_327_ = 0;
-											if (i_324_ > scenespawnrequest.anInt603) {
+											if (i_324_ > scenespawnrequest.x) {
 												i_327_++;
 											}
 											if (i_324_ < scenespawnrequest.anInt604) {
 												i_327_ += 4;
 											}
-											if (i_325_ > scenespawnrequest.anInt605) {
+											if (i_325_ > scenespawnrequest.y) {
 												i_327_ += 8;
 											}
 											if (i_325_ < scenespawnrequest.anInt606) {
@@ -1688,12 +1641,12 @@ public class Scene {
 									}
 								}
 								Scene.aSceneSpawnRequestArray542[i_322_++] = scenespawnrequest;
-								int i_328_ = Scene.anInt533 - scenespawnrequest.anInt603;
+								int i_328_ = Scene.anInt533 - scenespawnrequest.x;
 								int i_329_ = scenespawnrequest.anInt604 - Scene.anInt533;
 								if (i_329_ > i_328_) {
 									i_328_ = i_329_;
 								}
-								int i_330_ = Scene.anInt534 - scenespawnrequest.anInt605;
+								int i_330_ = Scene.anInt534 - scenespawnrequest.y;
 								int i_331_ = scenespawnrequest.anInt606 - Scene.anInt534;
 								if (i_331_ > i_330_) {
 									scenespawnrequest.anInt607 = i_328_ + i_331_;
@@ -1727,8 +1680,8 @@ public class Scene {
 							}
 							SceneSpawnRequest scenespawnrequest = Scene.aSceneSpawnRequestArray542[i_333_];
 							scenespawnrequest.anInt608 = Scene.anInt528;
-							if (!method545(i_293_, scenespawnrequest.anInt603, scenespawnrequest.anInt604,
-									scenespawnrequest.anInt605, scenespawnrequest.anInt606,
+							if (!method545(i_293_, scenespawnrequest.x, scenespawnrequest.anInt604,
+									scenespawnrequest.y, scenespawnrequest.anInt606,
 									scenespawnrequest.aRenderable601.modelHeight)) {
 								scenespawnrequest.aRenderable601.renderAtPoint(scenespawnrequest.anInt602,
 										Scene.anInt538, Scene.anInt539, Scene.anInt540, Scene.anInt541,
@@ -1736,8 +1689,8 @@ public class Scene {
 												- Scene.anInt536, scenespawnrequest.anInt600 - Scene.anInt537,
 										scenespawnrequest.anInt609);
 							}
-							for (int i_339_ = scenespawnrequest.anInt603; i_339_ <= scenespawnrequest.anInt604; i_339_++) {
-								for (int i_340_ = scenespawnrequest.anInt605; i_340_ <= scenespawnrequest.anInt606; i_340_++) {
+							for (int i_339_ = scenespawnrequest.x; i_339_ <= scenespawnrequest.anInt604; i_339_++) {
+								for (int i_340_ = scenespawnrequest.y; i_340_ <= scenespawnrequest.anInt606; i_340_++) {
 									SceneTile scenetile_341_ = scenetiles[i_339_][i_340_];
 									if (scenetile_341_.anInt1336 != 0) {
 										Scene.aLinkedList557.insertBack(scenetile_341_);
@@ -1781,7 +1734,7 @@ public class Scene {
 					}
 					scenetile_290_.aBoolean1334 = false;
 					Scene.anInt526--;
-					CameraAngle cameraangle = scenetile_290_.aCameraAngle1327;
+					CameraAngle cameraangle = scenetile_290_.cameraAngle;
 					if (cameraangle != null && cameraangle.anInt154 != 0) {
 						if (cameraangle.aRenderable151 != null) {
 							cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
@@ -1844,7 +1797,7 @@ public class Scene {
 								}
 							}
 						}
-						Wall wall = scenetile_290_.aWall1324;
+						Wall wall = scenetile_290_.wall;
 						if (wall != null) {
 							if ((wall.anInt768 & scenetile_290_.anInt1339) != 0
 									&& !method543(i_293_, i, i_291_, wall.anInt768)) {

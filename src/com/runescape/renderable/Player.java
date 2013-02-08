@@ -14,7 +14,7 @@ import com.runescape.util.TextUtils;
 
 public class Player extends Actor {
 
-	public long aLong1717 = -1L;
+	public long cachedModel = -1L;
 	public ActorDefinition npcDefinition;
 	public boolean aBoolean1719 = false;
 	public int[] appearanceColors = new int[5];
@@ -31,7 +31,7 @@ public class Player extends Actor {
 	public int anInt1731;
 	public int anInt1732;
 	public int anInt1733;
-	public Model aModel1734;
+	public Model playerModel;
 	public int[] appearance = new int[12];
 	public long appearanceOffset;
 	public int anInt1739;
@@ -74,12 +74,12 @@ public class Player extends Actor {
 				model = new Model(2, -819, true, models);
 			}
 		}
-		if (aModel1734 != null) {
+		if (playerModel != null) {
 			if (Client.currentCycle >= anInt1728) {
-				aModel1734 = null;
+				playerModel = null;
 			}
 			if (Client.currentCycle >= anInt1727 && Client.currentCycle < anInt1728) {
-				Model model_2_ = aModel1734;
+				Model model_2_ = playerModel;
 				model_2_.translate(anInt1731 - xWithBoundary, anInt1732 - anInt1729, anInt1733 - yWithBoundary);
 				if (anInt1530 == 512) {
 					model_2_.rotate90Degrees(360);
@@ -247,8 +247,8 @@ public class Player extends Actor {
 				}
 			}
 			if (bool) {
-				if (aLong1717 != -1L) {
-					model = (Model) Player.modelCache.get(aLong1717);
+				if (cachedModel != -1L) {
+					model = (Model) Player.modelCache.get(cachedModel);
 				}
 				if (model == null) {
 					return null;
@@ -292,7 +292,7 @@ public class Player extends Actor {
 			model.createBones();
 			model.applyLighting(64, 850, -30, -50, -30, true);
 			Player.modelCache.put(model, l);
-			aLong1717 = l;
+			cachedModel = l;
 		}
 		if (aBoolean1719) {
 			return model;

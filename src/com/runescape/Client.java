@@ -1134,7 +1134,7 @@ public class Client extends GameShell {
 			minimapHintCount = 0;
 			for (int viewportX = 0; viewportX < 104; viewportX++) {
 				for (int viewportY = 0; viewportY < 104; viewportY++) {
-					int floorHash = currentScene.getFloorHash(currentSceneIndex, viewportX, viewportY);
+					int floorHash = currentScene.getFloorDecorationHash(currentSceneIndex, viewportX, viewportY);
 					if (floorHash != 0) {
 						floorHash = floorHash >> 14 & 0x7fff;
 						int icon = GameObjectDefinition.getDefinition(floorHash).icon;
@@ -1179,7 +1179,7 @@ public class Client extends GameShell {
 	public final void method25(int i, int i_99_) {
 		LinkedList linkedlist = groundItemNodes[currentSceneIndex][i][i_99_];
 		if (linkedlist == null) {
-			currentScene.method517(currentSceneIndex, i, i_99_);
+			currentScene.resetCameraAngle(currentSceneIndex, i, i_99_);
 		} else {
 			int i_100_ = -99999999;
 			Item item = null;
@@ -1503,7 +1503,6 @@ public class Client extends GameShell {
 	}
 
 	private final void updateActors(Buffer buffer, int actorIndex) {
-		try {
 			anInt864 = 0;
 			anInt918 = 0;
 			method139(buffer, -45, actorIndex);
@@ -1528,10 +1527,6 @@ public class Client extends GameShell {
 					throw new RuntimeException("eek");
 				}
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("78640, " + buffer + ", " + actorIndex + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final void processClickingChatSettings() {
@@ -2450,7 +2445,7 @@ public class Client extends GameShell {
 					int i_220_ = player.xWithBoundary >> 7;
 					int i_221_ = player.yWithBoundary >> 7;
 					if (i_220_ >= 0 && i_220_ < 104 && i_221_ >= 0 && i_221_ < 104) {
-						if (player.aModel1734 != null && Client.currentCycle >= player.anInt1727
+						if (player.playerModel != null && Client.currentCycle >= player.anInt1727
 								&& Client.currentCycle < player.anInt1728) {
 							player.aBoolean1719 = false;
 							player.anInt1729 = method42(currentSceneIndex, player.yWithBoundary, true,
@@ -2613,7 +2608,7 @@ public class Client extends GameShell {
 				int i_239_ = currentScene.method522(i_238_, i_236_, i);
 				if (i_234_ < 0) {
 					if (i_239_ != 0) {
-						int i_240_ = currentScene.method526(i_238_, i_236_, i, i_239_);
+						int i_240_ = currentScene.getConfig(i_238_, i_236_, i, i_239_);
 						int i_241_ = i_240_ >> 6 & 0x3;
 						int i_242_ = i_240_ & 0x1f;
 						int i_243_ = i_235_;
@@ -2694,7 +2689,7 @@ public class Client extends GameShell {
 					}
 					i_239_ = currentScene.method524(i_238_, i_236_, i);
 					if (i_239_ != 0) {
-						int i_248_ = currentScene.method526(i_238_, i_236_, i, i_239_);
+						int i_248_ = currentScene.getConfig(i_238_, i_236_, i, i_239_);
 						int i_249_ = i_248_ >> 6 & 0x3;
 						int i_250_ = i_248_ & 0x1f;
 						int i_251_ = i_239_ >> 14 & 0x7fff;
@@ -2727,7 +2722,7 @@ public class Client extends GameShell {
 							}
 						}
 					}
-					i_239_ = currentScene.getFloorHash(i_238_, i_236_, i);
+					i_239_ = currentScene.getFloorDecorationHash(i_238_, i_236_, i);
 					if (i_239_ == 0) {
 						break;
 					}
@@ -3720,7 +3715,7 @@ public class Client extends GameShell {
 	public final boolean method66(int i, int i_344_, int i_345_, int i_346_) {
 		try {
 			int i_347_ = i >> 14 & 0x7fff;
-			int i_348_ = currentScene.method526(currentSceneIndex, i_345_, i_344_, i);
+			int i_348_ = currentScene.getConfig(currentSceneIndex, i_345_, i_344_, i);
 			if (i_346_ >= 0) {
 				throw new NullPointerException();
 			}
@@ -4840,7 +4835,7 @@ public class Client extends GameShell {
 					int i_405_ = i_401_ >> 14 & 0x7fff;
 					if (i_401_ != i_399_) {
 						i_399_ = i_401_;
-						if (i_404_ == 2 && currentScene.method526(currentSceneIndex, i_402_, i_403_, i_401_) >= 0) {
+						if (i_404_ == 2 && currentScene.getConfig(currentSceneIndex, i_402_, i_403_, i_401_) >= 0) {
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_405_);
 							if (gameobjectdefinition.anIntArray264 != null) {
 								gameobjectdefinition = gameobjectdefinition.unknown2();
@@ -6873,16 +6868,16 @@ public class Client extends GameShell {
 			uid = currentScene.method522(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (spawnOjectNode.type == 1) {
-			uid = currentScene.method523(spawnOjectNode.plane, spawnOjectNode.x, 0, spawnOjectNode.y);
+			uid = currentScene.getWallDecorationHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (spawnOjectNode.type == 2) {
 			uid = currentScene.method524(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (spawnOjectNode.type == 3) {
-			uid = currentScene.getFloorHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
+			uid = currentScene.getFloorDecorationHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (uid != 0) {
-			int tag = currentScene.method526(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y, uid);
+			int tag = currentScene.getConfig(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y, uid);
 			id = uid >> 14 & 0x7fff;
 			type = tag & 0x1f;
 			face = tag >> 6;
@@ -10317,7 +10312,7 @@ public class Client extends GameShell {
 						int i_903_ = anIntArrayArrayArray1239[currentSceneIndex][i_894_ + 1][i_895_ + 1];
 						int i_904_ = anIntArrayArrayArray1239[currentSceneIndex][i_894_][i_895_ + 1];
 						if (i_899_ == 0) {
-							Wall wall = currentScene.method518(currentSceneIndex, i_894_, i_895_, false);
+							Wall wall = currentScene.getWall(currentSceneIndex, i_894_, i_895_);
 							if (wall != null) {
 								int i_905_ = wall.anInt771 >> 14 & 0x7fff;
 								if (i_897_ == 2) {
@@ -10332,16 +10327,14 @@ public class Client extends GameShell {
 							}
 						}
 						if (i_899_ == 1) {
-							WallDecoration walldecoration = currentScene.method519(i_894_, 866, i_895_,
-									currentSceneIndex);
+							WallDecoration walldecoration = currentScene.getWallDecoration(currentSceneIndex, i_894_, i_895_);
 							if (walldecoration != null) {
 								walldecoration.renderable = new GameObject(walldecoration.hash >> 14 & 0x7fff, 0, 4,
 										i_902_, i_903_, i_901_, i_904_, i_900_, false);
 							}
 						}
 						if (i_899_ == 2) {
-							SceneSpawnRequest scenespawnrequest = currentScene.method520(i_894_, i_895_, (byte) 4,
-									currentSceneIndex);
+							SceneSpawnRequest scenespawnrequest = currentScene.processSceneSpawnRequests(currentSceneIndex, i_894_, i_895_);
 							if (i_897_ == 11) {
 								i_897_ = 10;
 							}
@@ -10352,8 +10345,7 @@ public class Client extends GameShell {
 							}
 						}
 						if (i_899_ == 3) {
-							FloorDecoration floordecoration = currentScene.method521(i_895_, i_894_, currentSceneIndex,
-									0);
+							FloorDecoration floordecoration = currentScene.getFloorDecoration(currentSceneIndex, i_894_, i_895_);
 							if (floordecoration != null) {
 								floordecoration.renderable = new GameObject(floordecoration.hash >> 14 & 0x7fff,
 										i_898_, 22, i_902_, i_903_, i_901_, i_904_, i_900_, false);
@@ -10396,7 +10388,7 @@ public class Client extends GameShell {
 										i_911_ + 1);
 								player.anInt1727 = i_911_ + Client.currentCycle;
 								player.anInt1728 = i_913_ + Client.currentCycle;
-								player.aModel1734 = model;
+								player.playerModel = model;
 								int i_925_ = gameobjectdefinition.width;
 								int i_926_ = gameobjectdefinition.height;
 								if (i_916_ == 1 || i_916_ == 3) {
@@ -10742,16 +10734,16 @@ public class Client extends GameShell {
 						i_1001_ = currentScene.method522(i_994_, x, y);
 					}
 					if (i_998_ == 1) {
-						i_1001_ = currentScene.method523(i_994_, x, 0, y);
+						i_1001_ = currentScene.getWallDecorationHash(i_994_, x, y);
 					}
 					if (i_998_ == 2) {
 						i_1001_ = currentScene.method524(i_994_, x, y);
 					}
 					if (i_998_ == 3) {
-						i_1001_ = currentScene.getFloorHash(i_994_, x, y);
+						i_1001_ = currentScene.getFloorDecorationHash(i_994_, x, y);
 					}
 					if (i_1001_ != 0) {
-						int i_1004_ = currentScene.method526(i_994_, x, y, i_1001_);
+						int i_1004_ = currentScene.getConfig(i_994_, x, y, i_1001_);
 						i_1002_ = i_1001_ >> 14 & 0x7fff;
 						int position = i_1004_ & 0x1f;
 						int orientation = i_1004_ >> 6;

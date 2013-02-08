@@ -9,12 +9,12 @@ public class SceneTile extends Node {
 	protected int anInt1321;
 	public GenericTile aGenericTile1322;
 	public ComplexTile aComplexTile1323;
-	protected Wall aWall1324;
+	protected Wall wall;
 	protected WallDecoration wallDecoration;
-	protected FloorDecoration floor;
-	protected CameraAngle aCameraAngle1327;
-	protected int anInt1328;
-	protected SceneSpawnRequest[] aSceneSpawnRequestArray1329 = new SceneSpawnRequest[5];
+	protected FloorDecoration floorDecoration;
+	protected CameraAngle cameraAngle;
+	protected int sceneSpawnRequestCount;
+	protected SceneSpawnRequest[] sceneSpawnRequests = new SceneSpawnRequest[5];
 	protected int[] anIntArray1330 = new int[5];
 	protected int anInt1331;
 	protected int anInt1332;

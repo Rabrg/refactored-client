@@ -9,12 +9,12 @@ public class SceneSpawnRequest {
 	protected int anInt600;
 	public Renderable aRenderable601;
 	public int anInt602;
-	protected int anInt603;
+	protected int x;
 	protected int anInt604;
-	protected int anInt605;
+	protected int y;
 	protected int anInt606;
 	protected int anInt607;
 	protected int anInt608;
 	public int anInt609;
-	protected byte aByte610;
+	protected byte config;
 }
