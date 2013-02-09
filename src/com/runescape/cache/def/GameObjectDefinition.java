@@ -44,7 +44,7 @@ public class GameObjectDefinition {
 	private static int cacheIndex;
 	private int modelSizeY;
 	private int[] modelIds;
-	public int varbitid;
+	public int varbitId;
 	public int unknown4;
 	private int[] modelTypes;
 	public byte[] description;
@@ -107,7 +107,7 @@ public class GameObjectDefinition {
 		unknown = false;
 		unwalkableSolid = false;
 		solidInt = -1;
-		varbitid = -1;
+		varbitId = -1;
 		configId = -1;
 		childrenIds = null;
 	}
@@ -202,8 +202,8 @@ public class GameObjectDefinition {
 
 	public final GameObjectDefinition getChildDefinition() {
 		int child = -1;
-		if (varbitid != -1) {
-			VarBit varbit = VarBit.cache[varbitid];
+		if (varbitId != -1) {
+			VarBit varbit = VarBit.cache[varbitId];
 			int configId = varbit.configId;
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
@@ -446,9 +446,9 @@ public class GameObjectDefinition {
 			} else if (attributeId == 75) {
 				solidInt = buffer.getUnsignedByte();
 			} else if (attributeId == 77) {
-				varbitid = buffer.getUnsignedLEShort();
-				if (varbitid == 65535) {
-					varbitid = -1;
+				varbitId = buffer.getUnsignedLEShort();
+				if (varbitId == 65535) {
+					varbitId = -1;
 				}
 				configId = buffer.getUnsignedLEShort();
 				if (configId == 65535) {

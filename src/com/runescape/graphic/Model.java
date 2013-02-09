@@ -39,7 +39,7 @@ public class Model extends Renderable {
 	public int anInt1640;
 	public int anInt1641;
 	public int anInt1642;
-	public int anInt1643;
+	public int shadowIntensity;
 	public int anInt1644;
 	public int anInt1645;
 	public int anInt1646;
@@ -739,7 +739,7 @@ public class Model extends Renderable {
 			if (i >= 0) {
 				throw new NullPointerException();
 			}
-			anInt1643 = model.anInt1643;
+			shadowIntensity = model.shadowIntensity;
 			anInt1646 = model.anInt1646;
 			anInt1645 = model.anInt1645;
 			anInt1639 = model.anInt1639;
@@ -840,7 +840,7 @@ public class Model extends Renderable {
 	public void calculateDiagonals(boolean bool) {
 		try {
 			modelHeight = 0;
-			anInt1643 = 0;
+			shadowIntensity = 0;
 			anInt1644 = 0;
 			for (int i = 0; i < vertexCount; i++) {
 				int i_91_ = verticesX[i];
@@ -853,15 +853,15 @@ public class Model extends Renderable {
 					anInt1644 = i_92_;
 				}
 				int i_94_ = i_91_ * i_91_ + i_93_ * i_93_;
-				if (i_94_ > anInt1643) {
-					anInt1643 = i_94_;
+				if (i_94_ > shadowIntensity) {
+					shadowIntensity = i_94_;
 				}
 			}
 			if (bool) {
 			}
-			anInt1643 = (int) (Math.sqrt(anInt1643) + 0.99);
-			anInt1646 = (int) (Math.sqrt(anInt1643 * anInt1643 + modelHeight * modelHeight) + 0.99);
-			anInt1645 = anInt1646 + (int) (Math.sqrt(anInt1643 * anInt1643 + anInt1644 * anInt1644) + 0.99);
+			shadowIntensity = (int) (Math.sqrt(shadowIntensity) + 0.99);
+			anInt1646 = (int) (Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight) + 0.99);
+			anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644) + 0.99);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("41353, " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -884,8 +884,8 @@ public class Model extends Renderable {
 					anInt1644 = i_95_;
 				}
 			}
-			anInt1646 = (int) (Math.sqrt(anInt1643 * anInt1643 + modelHeight * modelHeight) + 0.99);
-			anInt1645 = anInt1646 + (int) (Math.sqrt(anInt1643 * anInt1643 + anInt1644 * anInt1644) + 0.99);
+			anInt1646 = (int) (Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight) + 0.99);
+			anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644) + 0.99);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("87212, " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -895,7 +895,7 @@ public class Model extends Renderable {
 	public void method416(int i) {
 		try {
 			modelHeight = 0;
-			anInt1643 = 0;
+			shadowIntensity = 0;
 			anInt1644 = 0;
 			anInt1639 = 999999;
 			anInt1640 = -999999;
@@ -924,14 +924,14 @@ public class Model extends Renderable {
 					anInt1644 = i_98_;
 				}
 				int i_100_ = i_97_ * i_97_ + i_99_ * i_99_;
-				if (i_100_ > anInt1643) {
-					anInt1643 = i_100_;
+				if (i_100_ > shadowIntensity) {
+					shadowIntensity = i_100_;
 				}
 			}
-			anInt1643 = (int) Math.sqrt(anInt1643);
-			anInt1646 = (int) Math.sqrt(anInt1643 * anInt1643 + modelHeight * modelHeight);
+			shadowIntensity = (int) Math.sqrt(shadowIntensity);
+			anInt1646 = (int) Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight);
 			if (i == 21073) {
-				anInt1645 = anInt1646 + (int) Math.sqrt(anInt1643 * anInt1643 + anInt1644 * anInt1644);
+				anInt1645 = anInt1646 + (int) Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644);
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("2042, " + i + ", " + runtimeexception.toString());
@@ -1480,16 +1480,16 @@ public class Model extends Renderable {
 			int i_256_, int i_257_) {
 		int i_258_ = i_256_ * i_253_ - i_254_ * i_252_ >> 16;
 		int i_259_ = i_255_ * i_250_ + i_258_ * i_251_ >> 16;
-		int i_260_ = anInt1643 * i_251_ >> 16;
+		int i_260_ = shadowIntensity * i_251_ >> 16;
 		int i_261_ = i_259_ + i_260_;
 		if (i_261_ > 50 && i_259_ < 3500) {
 			int i_262_ = i_256_ * i_252_ + i_254_ * i_253_ >> 16;
-			int i_263_ = i_262_ - anInt1643 << 9;
+			int i_263_ = i_262_ - shadowIntensity << 9;
 			if (i_263_ / i_261_ < Rasterizer.centerX) {
-				int i_264_ = i_262_ + anInt1643 << 9;
+				int i_264_ = i_262_ + shadowIntensity << 9;
 				if (i_264_ / i_261_ > -Rasterizer.centerX) {
 					int i_265_ = i_255_ * i_251_ - i_258_ * i_250_ >> 16;
-					int i_266_ = anInt1643 * i_250_ >> 16;
+					int i_266_ = shadowIntensity * i_250_ >> 16;
 					int i_267_ = i_265_ + i_266_ << 9;
 					if (i_267_ / i_261_ > -Rasterizer.centerY) {
 						int i_268_ = i_266_ + (modelHeight * i_251_ >> 16);

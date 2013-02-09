@@ -10,19 +10,19 @@ import com.runescape.renderable.Renderable;
 public class GameObject extends Renderable {
 
 	private int animationFrame;
-	protected int[] anIntArray1591;
-	protected int anInt1592;
-	protected int anInt1593;
-	private int anInt1594;
-	private int anInt1595;
-	private int anInt1596;
-	private int anInt1597;
+	protected int[] childrenIds;
+	protected int varbitId;
+	protected int configId;
+	private int vertexHeight;
+	private int vertexHeightRight;
+	private int vertexHeightTopRight;
+	private int vertexHeightTop;
 	private AnimationSequence animationSequence;
 	private int animationCycleDelay;
 	public static Client client;
-	private int anInt1601;
-	private int anInt1602;
-	private int anInt1603;
+	private int id;
+	private int clickType;
+	private int face;
 
 	@Override
 	public final Model getRotatedModel() {
@@ -49,46 +49,46 @@ public class GameObject extends Renderable {
 			}
 		}
 		GameObjectDefinition gameObjectDefinition;
-		if (anIntArray1591 != null) {
-			gameObjectDefinition = method405();
+		if (childrenIds != null) {
+			gameObjectDefinition = getChildDefinition();
 		} else {
-			gameObjectDefinition = GameObjectDefinition.getDefinition(anInt1601);
+			gameObjectDefinition = GameObjectDefinition.getDefinition(id);
 		}
 		if (gameObjectDefinition == null) {
 			return null;
 		}
-		Model model = gameObjectDefinition.getGameObjectModel(anInt1602, anInt1603, anInt1594, anInt1595, anInt1596,
-				anInt1597, animation);
+		Model model = gameObjectDefinition.getGameObjectModel(clickType, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
+				vertexHeightTop, animation);
 		return model;
 	}
 
-	public final GameObjectDefinition method405() {
-		int i = -1;
-		if (anInt1592 != -1) {
-			VarBit varbit = VarBit.cache[anInt1592];
+	public final GameObjectDefinition getChildDefinition() {
+		int child = -1;
+		if (varbitId != -1) {
+			VarBit varbit = VarBit.cache[varbitId];
 			int configId = varbit.configId;
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
 			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-			i = GameObject.client.settings[configId] >> leastSignificantBit & bit;
-		} else if (anInt1593 != -1) {
-			i = GameObject.client.settings[anInt1593];
+			child = GameObject.client.settings[configId] >> leastSignificantBit & bit;
+		} else if (configId != -1) {
+			child = GameObject.client.settings[configId];
 		}
-		if (i < 0 || i >= anIntArray1591.length || anIntArray1591[i] == -1) {
+		if (child < 0 || child >= childrenIds.length || childrenIds[child] == -1) {
 			return null;
 		}
-		return GameObjectDefinition.getDefinition(anIntArray1591[i]);
+		return GameObjectDefinition.getDefinition(childrenIds[child]);
 	}
 
-	public GameObject(int i, int i_7_, int i_8_, int i_9_, int i_10_, int i_11_, int i_12_, int animationId,
+	public GameObject(int id, int face, int clickType, int vertexHeightRight, int vertexHeightTopRight, int vertexHeight, int vertexHeightTop, int animationId,
 			boolean bool) {
-		anInt1601 = i;
-		anInt1602 = i_8_;
-		anInt1603 = i_7_;
-		anInt1594 = i_11_;
-		anInt1595 = i_9_;
-		anInt1596 = i_10_;
-		anInt1597 = i_12_;
+		this.id = id;
+		this.clickType = clickType;
+		this.face = face;
+		this.vertexHeight = vertexHeight;
+		this.vertexHeightRight = vertexHeightRight;
+		this.vertexHeightTopRight = vertexHeightTopRight;
+		this.vertexHeightTop = vertexHeightTop;
 		if (animationId != -1) {
 			animationSequence = AnimationSequence.cache[animationId];
 			animationFrame = 0;
@@ -98,9 +98,9 @@ public class GameObject extends Renderable {
 				animationCycleDelay -= (int) (Math.random() * animationSequence.getFrameLength(animationFrame));
 			}
 		}
-		GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(anInt1601);
-		anInt1592 = gameObjectDefinition.varbitid;
-		anInt1593 = gameObjectDefinition.configId;
-		anIntArray1591 = gameObjectDefinition.childrenIds;
+		GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(id);
+		varbitId = gameObjectDefinition.varbitId;
+		configId = gameObjectDefinition.configId;
+		childrenIds = gameObjectDefinition.childrenIds;
 	}
 }
