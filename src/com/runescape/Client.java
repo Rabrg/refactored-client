@@ -1584,7 +1584,7 @@ public class Client extends GameShell {
 
 	public final void method33(int i) {
 		do {
-			int i_140_ = Varp.aVarpArray746[i].anInt754;
+			int i_140_ = Varp.cache[i].anInt754;
 			if (i_140_ != 0) {
 				int i_141_ = settings[i];
 				if (i_140_ == 1) {
@@ -5124,7 +5124,7 @@ public class Client extends GameShell {
 		AnimationSequence.cache = null;
 		SpotAnimation.cache = null;
 		SpotAnimation.modelCache = null;
-		Varp.aVarpArray746 = null;
+		Varp.cache = null;
 		producingGraphicsBuffer = null;
 		Player.modelCache = null;
 		Rasterizer3D.reset();
@@ -7218,7 +7218,7 @@ public class Client extends GameShell {
 			ActorDefinition.load(archiveConfig);
 			IdentityKit.load(archiveConfig);
 			SpotAnimation.load(archiveConfig);
-			Varp.method592(0, archiveConfig);
+			Varp.load(archiveConfig);
 			VarBit.load(archiveConfig);
 			ItemDefinition.playerIsMember = Client.membersWorld;
 			if (!Client.lowMemory) {

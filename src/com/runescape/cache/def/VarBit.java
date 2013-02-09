@@ -24,7 +24,7 @@ public class VarBit {
 			}
 			VarBit.cache[index].loadDefinition(buffer);
 			if (VarBit.cache[index].aBoolean740) {
-				Varp.aVarpArray746[VarBit.cache[index].configId].aBoolean758 = true;
+				Varp.cache[VarBit.cache[index].configId].aBoolean758 = true;
 			}
 		}
 		if (buffer.offset == buffer.payload.length) {

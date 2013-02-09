@@ -6,9 +6,9 @@ import com.runescape.util.SignLink;
 
 public class Varp {
 	private static boolean aBoolean743 = true;
-	public static int anInt745;
-	public static Varp[] aVarpArray746;
-	public static int anInt747;
+	public static int varpCount;
+	public static Varp[] cache;
+	public static int currentIndex;
 	public static int[] anIntArray748;
 	public String aString749;
 	public int anInt750;
@@ -22,81 +22,63 @@ public class Varp {
 	public boolean aBoolean758 = false;
 	public int anInt759 = -1;
 
-	public static void method592(int i, Archive archive) {
-		do {
-			try {
+	public static void load(Archive archive) {
 				Buffer buffer = new Buffer(archive.getFile("varp.dat"));
-				Varp.anInt747 = 0;
-				Varp.anInt745 = buffer.getUnsignedLEShort();
-				if (Varp.aVarpArray746 == null) {
-					Varp.aVarpArray746 = new Varp[Varp.anInt745];
+				Varp.currentIndex = 0;
+				Varp.varpCount = buffer.getUnsignedLEShort();
+				if (Varp.cache == null) {
+					Varp.cache = new Varp[Varp.varpCount];
 				}
 				if (Varp.anIntArray748 == null) {
-					Varp.anIntArray748 = new int[Varp.anInt745];
+					Varp.anIntArray748 = new int[Varp.varpCount];
 				}
-				for (int i_0_ = 0; i_0_ < Varp.anInt745; i_0_++) {
-					if (Varp.aVarpArray746[i_0_] == null) {
-						Varp.aVarpArray746[i_0_] = new Varp();
+				for (int index = 0; index < Varp.varpCount; index++) {
+					if (Varp.cache[index] == null) {
+						Varp.cache[index] = new Varp();
 					}
-					Varp.aVarpArray746[i_0_].method593(buffer, false, i_0_);
-				}
-				if (i != 0) {
-					Varp.aBoolean743 = !Varp.aBoolean743;
+					Varp.cache[index].loadDefinition(buffer, index);
 				}
 				if (buffer.offset == buffer.payload.length) {
-					break;
+					return;
 				}
 				System.out.println("varptype load mismatch");
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("14989, " + i + ", " + archive + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
 	}
 
-	public void method593(Buffer buffer, boolean bool, int i) {
-		try {
-			if (bool) {
-			}
-			for (;;) {
-				int i_1_ = buffer.getUnsignedByte();
-				if (i_1_ == 0) {
+	public void loadDefinition(Buffer buffer, int index) {
+			while (true) {
+				int attributeId = buffer.getUnsignedByte();
+				if (attributeId == 0) {
 					break;
 				}
-				if (i_1_ == 1) {
+				if (attributeId == 1) {
 					anInt750 = buffer.getUnsignedByte();
-				} else if (i_1_ == 2) {
+				} else if (attributeId == 2) {
 					anInt751 = buffer.getUnsignedByte();
-				} else if (i_1_ == 3) {
+				} else if (attributeId == 3) {
 					aBoolean752 = true;
-					Varp.anIntArray748[Varp.anInt747++] = i;
-				} else if (i_1_ == 4) {
+					Varp.anIntArray748[Varp.currentIndex++] = index;
+				} else if (attributeId == 4) {
 					aBoolean753 = false;
-				} else if (i_1_ == 5) {
+				} else if (attributeId == 5) {
 					anInt754 = buffer.getUnsignedLEShort();
-				} else if (i_1_ == 6) {
+				} else if (attributeId == 6) {
 					aBoolean755 = true;
-				} else if (i_1_ == 7) {
+				} else if (attributeId == 7) {
 					anInt756 = buffer.getInt();
-				} else if (i_1_ == 8) {
+				} else if (attributeId == 8) {
 					anInt757 = 1;
 					aBoolean758 = true;
-				} else if (i_1_ == 10) {
+				} else if (attributeId == 10) {
 					aString749 = buffer.getString();
-				} else if (i_1_ == 11) {
+				} else if (attributeId == 11) {
 					aBoolean758 = true;
-				} else if (i_1_ == 12) {
+				} else if (attributeId == 12) {
 					anInt759 = buffer.getInt();
-				} else if (i_1_ == 13) {
+				} else if (attributeId == 13) {
 					anInt757 = 2;
 				} else {
-					System.out.println("Error unrecognised config code: " + i_1_);
+					System.out.println("Error unrecognised config code: " + attributeId);
 				}
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("43224, " + buffer + ", " + bool + ", " + i + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 }

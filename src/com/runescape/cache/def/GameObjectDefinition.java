@@ -45,7 +45,7 @@ public class GameObjectDefinition {
 	private int modelSizeY;
 	private int[] modelIds;
 	public int varbitid;
-	public int anInt280;
+	public int unknown4;
 	private int[] modelTypes;
 	public byte[] description;
 	public boolean actionsBoolean;
@@ -89,7 +89,7 @@ public class GameObjectDefinition {
 		nonFlatShading = false;
 		aBoolean269 = false;
 		animationId = -1;
-		anInt280 = 16;
+		unknown4 = 16;
 		modelLightFalloff = (byte) 0;
 		modelLightAmbient = (byte) 0;
 		actions = null;
@@ -396,7 +396,7 @@ public class GameObjectDefinition {
 					animationId = -1;
 				}
 			} else if (attributeId == 28) {
-				anInt280 = buffer.getUnsignedByte();
+				unknown4 = buffer.getUnsignedByte();
 			} else if (attributeId == 29) {
 				modelLightFalloff = buffer.get();
 			} else if (attributeId == 39) {
