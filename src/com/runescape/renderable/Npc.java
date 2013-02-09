@@ -9,7 +9,7 @@ import com.runescape.graphic.Model;
 public class Npc extends Actor {
 	public ActorDefinition npcDefinition;
 
-	private final Model method400() {
+	private final Model getChildModel() {
 		if (animation >= 0 && aniomationDelay == 0) {
 			int frameId = AnimationSequence.cache[animation].frame2Ids[anInt1547];
 			int frameId2 = -1;
@@ -30,7 +30,7 @@ public class Npc extends Actor {
 		if (npcDefinition == null) {
 			return null;
 		}
-		Model model = method400();
+		Model model = getChildModel();
 		if (model == null) {
 			return null;
 		}

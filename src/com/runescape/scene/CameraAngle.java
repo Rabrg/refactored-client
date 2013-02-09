@@ -3,9 +3,9 @@ package com.runescape.scene;
 import com.runescape.renderable.Renderable;
 
 public class CameraAngle {
-	public int anInt147;
-	public int anInt148;
-	public int anInt149;
+	public int x;
+	public int y;
+	public int z;
 	public Renderable aRenderable150;
 	public Renderable aRenderable151;
 	public Renderable aRenderable152;

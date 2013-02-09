@@ -99,8 +99,8 @@ public class GameObject extends Renderable {
 			}
 		}
 		GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(anInt1601);
-		anInt1592 = gameObjectDefinition.anInt279;
-		anInt1593 = gameObjectDefinition.anInt254;
-		anIntArray1591 = gameObjectDefinition.anIntArray264;
+		anInt1592 = gameObjectDefinition.varbitid;
+		anInt1593 = gameObjectDefinition.configId;
+		anIntArray1591 = gameObjectDefinition.childrenIds;
 	}
 }

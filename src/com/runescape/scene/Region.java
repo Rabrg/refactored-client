@@ -512,9 +512,9 @@ public class Region {
 			}
 			byte objectConfig = (byte) ((face << 6) + type);
 			if (type == 22) {
-				if (!Region.lowMemory || gameobjectdefinition.actionsBoolean || gameobjectdefinition.aBoolean241) {
+				if (!Region.lowMemory || gameobjectdefinition.actionsBoolean || gameobjectdefinition.unknown) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(22, face, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -528,7 +528,7 @@ public class Region {
 				}
 			} else if (type == 10 || type == 11) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(10, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -543,14 +543,14 @@ public class Region {
 					int i_128_;
 					int i_129_;
 					if (face == 1 || face == 3) {
-						i_128_ = gameobjectdefinition.height;
-						i_129_ = gameobjectdefinition.width;
+						i_128_ = gameobjectdefinition.sizeY;
+						i_129_ = gameobjectdefinition.sizeX;
 					} else {
-						i_128_ = gameobjectdefinition.width;
-						i_129_ = gameobjectdefinition.height;
+						i_128_ = gameobjectdefinition.sizeX;
+						i_129_ = gameobjectdefinition.sizeY;
 					}
 					if (scene.method506(hash, objectConfig, vertexMix, i_129_, renderable, i_128_, plane, i_127_,
-							(byte) 110, y, x) && gameobjectdefinition.aBoolean284) {
+							(byte) 110, y, x) && gameobjectdefinition.unknown2) {
 						Model model;
 						if (renderable instanceof Model) {
 							model = (Model) renderable;
@@ -574,12 +574,12 @@ public class Region {
 					}
 				}
 				if (gameobjectdefinition.solid && collisionMap != null) {
-					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width, gameobjectdefinition.height, face,
+					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.sizeX, gameobjectdefinition.sizeY, face,
 							gameobjectdefinition.walkable);
 				}
 			} else if (type >= 12) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(type, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -591,12 +591,12 @@ public class Region {
 					tileCullingBitsets[plane][x][y] |= 0x924;
 				}
 				if (gameobjectdefinition.solid && collisionMap != null) {
-					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width, gameobjectdefinition.height, face,
+					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.sizeX, gameobjectdefinition.sizeY, face,
 							gameobjectdefinition.walkable);
 				}
 			} else if (type == 0) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(0, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -606,7 +606,7 @@ public class Region {
 				scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
 				if (face == 0) {
-					if (gameobjectdefinition.aBoolean284) {
+					if (gameobjectdefinition.unknown2) {
 						tileShadowIntensity[plane][x][y] = (byte) 50;
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					}
@@ -614,7 +614,7 @@ public class Region {
 						tileCullingBitsets[plane][x][y] |= 0x249;
 					}
 				} else if (face == 1) {
-					if (gameobjectdefinition.aBoolean284) {
+					if (gameobjectdefinition.unknown2) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 					}
@@ -622,7 +622,7 @@ public class Region {
 						tileCullingBitsets[plane][x][y + 1] |= 0x492;
 					}
 				} else if (face == 2) {
-					if (gameobjectdefinition.aBoolean284) {
+					if (gameobjectdefinition.unknown2) {
 						tileShadowIntensity[plane][x + 1][y] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 					}
@@ -630,7 +630,7 @@ public class Region {
 						tileCullingBitsets[plane][x + 1][y] |= 0x249;
 					}
 				} else if (face == 3) {
-					if (gameobjectdefinition.aBoolean284) {
+					if (gameobjectdefinition.unknown2) {
 						tileShadowIntensity[plane][x][y] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y] = (byte) 50;
 					}
@@ -646,7 +646,7 @@ public class Region {
 				}
 			} else if (type == 1) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(1, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -655,7 +655,7 @@ public class Region {
 				}
 				scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
-				if (gameobjectdefinition.aBoolean284) {
+				if (gameobjectdefinition.unknown2) {
 					if (face == 0) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					} else if (face == 1) {
@@ -673,7 +673,7 @@ public class Region {
 				int i_133_ = face + 1 & 0x3;
 				Renderable renderable;
 				Renderable renderable_134_;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(2, 4 + face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 					renderable_134_ = gameobjectdefinition.getGameObjectModel(2, i_133_, vertexHeight,
@@ -709,7 +709,7 @@ public class Region {
 				}
 			} else if (type == 3) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(3, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -718,7 +718,7 @@ public class Region {
 				}
 				scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
-				if (gameobjectdefinition.aBoolean284) {
+				if (gameobjectdefinition.unknown2) {
 					if (face == 0) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					} else if (face == 1) {
@@ -734,7 +734,7 @@ public class Region {
 				}
 			} else if (type == 9) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(type, face, vertexHeight, vertexHeightRight,
 							vertexHeightTopRight, vertexHeightTop, -1);
 				} else {
@@ -743,7 +743,7 @@ public class Region {
 				}
 				scene.method506(hash, objectConfig, vertexMix, 1, renderable, 1, plane, 0, (byte) 110, y, x);
 				if (gameobjectdefinition.solid && collisionMap != null) {
-					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.width, gameobjectdefinition.height, face,
+					collisionMap.markSolidOccupant(x, y, gameobjectdefinition.sizeX, gameobjectdefinition.sizeY, face,
 							gameobjectdefinition.walkable);
 				}
 			} else {
@@ -771,7 +771,7 @@ public class Region {
 				}
 				if (type == 4) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -787,7 +787,7 @@ public class Region {
 						offset = GameObjectDefinition.getDefinition(i_139_ >> 14 & 0x7fff).anInt280;
 					}
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -799,7 +799,7 @@ public class Region {
 							renderable);
 				} else if (type == 6) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -809,7 +809,7 @@ public class Region {
 					scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face, 256, objectConfig, hash, renderable);
 				} else if (type == 7) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -819,7 +819,7 @@ public class Region {
 					scene.addWallDecoration(x, 0, y, 0, vertexMix, plane, face, 512, objectConfig, hash, renderable);
 				} else if (type == 8) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, vertexHeight, vertexHeightRight,
 								vertexHeightTopRight, vertexHeightTop, -1);
 					} else {
@@ -878,7 +878,7 @@ public class Region {
 			if (i_155_ >= 5 && i_155_ <= 8) {
 				i_155_ = 4;
 			}
-			return gameobjectdefinition.unknown(i_155_);
+			return gameobjectdefinition.hasModelType(i_155_);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("51637, " + i + ", " + i_155_ + ", " + i_156_ + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -1071,11 +1071,11 @@ public class Region {
 							&& i_202_ < i_193_ + 8) {
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_198_);
 						int i_208_ = i_192_
-								+ TiledUtils.getRotatedLandscapeChunkX(i_196_, gameobjectdefinition.height,
-										i_203_ & 0x7, i_202_ & 0x7, gameobjectdefinition.width);
+								+ TiledUtils.getRotatedLandscapeChunkX(i_196_, gameobjectdefinition.sizeY,
+										i_203_ & 0x7, i_202_ & 0x7, gameobjectdefinition.sizeX);
 						int i_209_ = i_197_
-								+ TiledUtils.getRotatedLandscapeChunkY(i_202_ & 0x7, gameobjectdefinition.height,
-										i_196_, gameobjectdefinition.width, i_203_ & 0x7);
+								+ TiledUtils.getRotatedLandscapeChunkY(i_202_ & 0x7, gameobjectdefinition.sizeY,
+										i_196_, gameobjectdefinition.sizeX, i_203_ & 0x7);
 						if (i_208_ > 0 && i_209_ > 0 && i_208_ < 103 && i_209_ < 103) {
 							int i_210_ = i_204_;
 							if ((renderRuleFlags[1][i_208_][i_209_] & 0x2) == 2) {
@@ -1166,7 +1166,7 @@ public class Region {
 			byte b_233_ = (byte) ((i << 6) + i_222_);
 			if (i_222_ == 22) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(22, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, 22, i_228_, i_229_, i_227_, i_230_,
@@ -1178,7 +1178,7 @@ public class Region {
 				}
 			} else if (i_222_ == 10 || i_222_ == 11) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(10, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, 10, i_228_, i_229_, i_227_, i_230_,
@@ -1192,22 +1192,22 @@ public class Region {
 					int i_235_;
 					int i_236_;
 					if (i == 1 || i == 3) {
-						i_235_ = gameobjectdefinition.height;
-						i_236_ = gameobjectdefinition.width;
+						i_235_ = gameobjectdefinition.sizeY;
+						i_236_ = gameobjectdefinition.sizeX;
 					} else {
-						i_235_ = gameobjectdefinition.width;
-						i_236_ = gameobjectdefinition.height;
+						i_235_ = gameobjectdefinition.sizeX;
+						i_236_ = gameobjectdefinition.sizeY;
 					}
 					scene.method506(i_232_, b_233_, i_231_, i_236_, renderable, i_235_, i_226_, i_234_, (byte) 110,
 							i_221_, i_224_);
 				}
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
-							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
+							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
 				}
 			} else if (i_222_ >= 12) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(i_222_, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, i_222_, i_228_, i_229_, i_227_, i_230_,
@@ -1215,12 +1215,12 @@ public class Region {
 				}
 				scene.method506(i_232_, b_233_, i_231_, 1, renderable, 1, i_226_, 0, (byte) 110, i_221_, i_224_);
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
-							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
+							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
 				}
 			} else if (i_222_ == 0) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(0, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, 0, i_228_, i_229_, i_227_, i_230_,
@@ -1233,7 +1233,7 @@ public class Region {
 				}
 			} else if (i_222_ == 1) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(1, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, 1, i_228_, i_229_, i_227_, i_230_,
@@ -1248,7 +1248,7 @@ public class Region {
 				int i_237_ = i + 1 & 0x3;
 				Renderable renderable;
 				Renderable renderable_238_;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(2, 4 + i, i_227_, i_228_, i_229_, i_230_, -1);
 					renderable_238_ = gameobjectdefinition.getGameObjectModel(2, i_237_, i_227_, i_228_, i_229_,
 							i_230_, -1);
@@ -1265,7 +1265,7 @@ public class Region {
 				}
 			} else if (i_222_ == 3) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(3, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, 3, i_228_, i_229_, i_227_, i_230_,
@@ -1278,7 +1278,7 @@ public class Region {
 				}
 			} else if (i_222_ == 9) {
 				Renderable renderable;
-				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+				if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 					renderable = gameobjectdefinition.getGameObjectModel(i_222_, i, i_227_, i_228_, i_229_, i_230_, -1);
 				} else {
 					renderable = new GameObject(i_225_, i, i_222_, i_228_, i_229_, i_227_, i_230_,
@@ -1286,8 +1286,8 @@ public class Region {
 				}
 				scene.method506(i_232_, b_233_, i_231_, 1, renderable, 1, i_226_, 0, (byte) 110, i_221_, i_224_);
 				if (gameobjectdefinition.solid) {
-					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.width,
-							gameobjectdefinition.height, i, gameobjectdefinition.walkable);
+					collisionmap.markSolidOccupant(i_224_, i_221_, gameobjectdefinition.sizeX,
+							gameobjectdefinition.sizeY, i, gameobjectdefinition.walkable);
 				}
 			} else {
 				if (gameobjectdefinition.adjustToTerrain) {
@@ -1314,7 +1314,7 @@ public class Region {
 				}
 				if (i_222_ == 4) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_227_, i_228_, i_229_, i_230_, -1);
 					} else {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, i_229_, i_227_, i_230_,
@@ -1329,7 +1329,7 @@ public class Region {
 						i_242_ = GameObjectDefinition.getDefinition(i_243_ >> 14 & 0x7fff).anInt280;
 					}
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_227_, i_228_, i_229_, i_230_, -1);
 					} else {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, i_229_, i_227_, i_230_,
@@ -1339,7 +1339,7 @@ public class Region {
 							* i_242_, i_231_, i_226_, i * 512, Region.anIntArray506[i], b_233_, i_232_, renderable);
 				} else if (i_222_ == 6) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_227_, i_228_, i_229_, i_230_, -1);
 					} else {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, i_229_, i_227_, i_230_,
@@ -1348,7 +1348,7 @@ public class Region {
 					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i, 256, b_233_, i_232_, renderable);
 				} else if (i_222_ == 7) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_227_, i_228_, i_229_, i_230_, -1);
 					} else {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, i_229_, i_227_, i_230_,
@@ -1357,7 +1357,7 @@ public class Region {
 					scene.addWallDecoration(i_224_, 0, i_221_, 0, i_231_, i_226_, i, 512, b_233_, i_232_, renderable);
 				} else if (i_222_ == 8) {
 					Renderable renderable;
-					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.anIntArray264 == null) {
+					if (gameobjectdefinition.animationId == -1 && gameobjectdefinition.childrenIds == null) {
 						renderable = gameobjectdefinition.getGameObjectModel(4, 0, i_227_, i_228_, i_229_, i_230_, -1);
 					} else {
 						renderable = new GameObject(i_225_, 0, 4, i_228_, i_229_, i_227_, i_230_,
@@ -1411,7 +1411,7 @@ public class Region {
 						if (i_255_ > 0 && i_256_ > 0 && i_255_ < 103 && i_256_ < 103) {
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_246_);
 							if (i_254_ != 22 || !Region.lowMemory || gameobjectdefinition.actionsBoolean
-									|| gameobjectdefinition.aBoolean241) {
+									|| gameobjectdefinition.unknown) {
 								bool &= gameobjectdefinition.isModelCached();
 								bool_249_ = true;
 							}

@@ -293,71 +293,71 @@ public class Scene {
 		}
 	}
 
-	public void method503(byte b, int i, int i_56_, Renderable renderable, int i_57_, Renderable renderable_58_,
-			Renderable renderable_59_, int i_60_, int i_61_) {
+	public void method503(byte b, int x, int i_56_, Renderable renderable, int i_57_, Renderable renderable_58_,
+			Renderable renderable_59_, int plane, int y) {
 		try {
-			CameraAngle cameraangle = new CameraAngle();
-			cameraangle.aRenderable150 = renderable_59_;
-			cameraangle.anInt148 = i * 128 + 64;
-			cameraangle.anInt149 = i_61_ * 128 + 64;
+			CameraAngle cameraAngle = new CameraAngle();
+			cameraAngle.aRenderable150 = renderable_59_;
+			cameraAngle.y = x * 128 + 64;
+			cameraAngle.z = y * 128 + 64;
 			if (b == 7) {
-				cameraangle.anInt147 = i_57_;
-				cameraangle.anInt153 = i_56_;
-				cameraangle.aRenderable151 = renderable;
-				cameraangle.aRenderable152 = renderable_58_;
+				cameraAngle.x = i_57_;
+				cameraAngle.anInt153 = i_56_;
+				cameraAngle.aRenderable151 = renderable;
+				cameraAngle.aRenderable152 = renderable_58_;
 				int i_62_ = 0;
-				SceneTile scenetile = tiles[i_60_][i][i_61_];
+				SceneTile scenetile = tiles[plane][x][y];
 				if (scenetile != null) {
-					for (int i_63_ = 0; i_63_ < scenetile.sceneSpawnRequestCount; i_63_++) {
-						if (scenetile.sceneSpawnRequests[i_63_].aRenderable601 instanceof Model) {
-							int i_64_ = ((Model) scenetile.sceneSpawnRequests[i_63_].aRenderable601).anInt1647;
+					for (int sceneSpawnRequest = 0; sceneSpawnRequest < scenetile.sceneSpawnRequestCount; sceneSpawnRequest++) {
+						if (scenetile.sceneSpawnRequests[sceneSpawnRequest].aRenderable601 instanceof Model) {
+							int i_64_ = ((Model) scenetile.sceneSpawnRequests[sceneSpawnRequest].aRenderable601).anInt1647;
 							if (i_64_ > i_62_) {
 								i_62_ = i_64_;
 							}
 						}
 					}
 				}
-				cameraangle.anInt154 = i_62_;
-				if (tiles[i_60_][i][i_61_] == null) {
-					tiles[i_60_][i][i_61_] = new SceneTile(i_60_, i, i_61_);
+				cameraAngle.anInt154 = i_62_;
+				if (tiles[plane][x][y] == null) {
+					tiles[plane][x][y] = new SceneTile(plane, x, y);
 				}
-				tiles[i_60_][i][i_61_].cameraAngle = cameraangle;
+				tiles[plane][x][y].cameraAngle = cameraAngle;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("4061, " + b + ", " + i + ", " + i_56_ + ", " + renderable + ", " + i_57_ + ", "
-					+ renderable_58_ + ", " + renderable_59_ + ", " + i_60_ + ", " + i_61_ + ", "
+			SignLink.reportError("4061, " + b + ", " + x + ", " + i_56_ + ", " + renderable + ", " + i_57_ + ", "
+					+ renderable_58_ + ", " + renderable_59_ + ", " + plane + ", " + y + ", "
 					+ runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
 
-	public void method504(int i, Renderable renderable, boolean bool, int i_65_, int i_66_, byte b, int i_67_,
-			Renderable renderable_68_, int i_69_, int i_70_, int i_71_) {
+	public void method504(int faceUnknown, Renderable renderable, boolean bool, int hash, int y, byte config, int x,
+			Renderable renderable_68_, int plane, int face, int i_71_) {
 		try {
 			if (!bool) {
 				aBoolean514 = !aBoolean514;
 			}
 			if (renderable != null || renderable_68_ != null) {
 				Wall wall = new Wall();
-				wall.hash = i_65_;
-				wall.config = b;
-				wall.x = i_67_ * 128 + 64;
-				wall.y = i_66_ * 128 + 64;
-				wall.plane = i_69_;
+				wall.hash = hash;
+				wall.config = config;
+				wall.x = x * 128 + 64;
+				wall.y = y * 128 + 64;
+				wall.plane = plane;
 				wall.aRenderable769 = renderable;
 				wall.aRenderable770 = renderable_68_;
-				wall.faceUnknown = i;
-				wall.face = i_70_;
+				wall.faceUnknown = faceUnknown;
+				wall.face = face;
 				for (int i_72_ = i_71_; i_72_ >= 0; i_72_--) {
-					if (tiles[i_72_][i_67_][i_66_] == null) {
-						tiles[i_72_][i_67_][i_66_] = new SceneTile(i_72_, i_67_, i_66_);
+					if (tiles[i_72_][x][y] == null) {
+						tiles[i_72_][x][y] = new SceneTile(i_72_, x, y);
 					}
 				}
-				tiles[i_71_][i_67_][i_66_].wall = wall;
+				tiles[i_71_][x][y].wall = wall;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("65870, " + i + ", " + renderable + ", " + bool + ", " + i_65_ + ", " + i_66_ + ", "
-					+ b + ", " + i_67_ + ", " + renderable_68_ + ", " + i_69_ + ", " + i_70_ + ", " + i_71_ + ", "
+			SignLink.reportError("65870, " + faceUnknown + ", " + renderable + ", " + bool + ", " + hash + ", " + y + ", "
+					+ config + ", " + x + ", " + renderable_68_ + ", " + plane + ", " + face + ", " + i_71_ + ", "
 					+ runtimeexception.toString());
 			throw new RuntimeException();
 		}
@@ -1537,20 +1537,20 @@ public class Scene {
 						if (cameraangle != null && cameraangle.anInt154 == 0) {
 							if (cameraangle.aRenderable151 != null) {
 								cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.anInt148 - Scene.anInt535,
-										cameraangle.anInt147 - Scene.anInt536, cameraangle.anInt149 - Scene.anInt537,
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
+										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
 										cameraangle.anInt153);
 							}
 							if (cameraangle.aRenderable152 != null) {
 								cameraangle.aRenderable152.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.anInt148 - Scene.anInt535,
-										cameraangle.anInt147 - Scene.anInt536, cameraangle.anInt149 - Scene.anInt537,
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
+										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
 										cameraangle.anInt153);
 							}
 							if (cameraangle.aRenderable150 != null) {
 								cameraangle.aRenderable150.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.anInt148 - Scene.anInt535,
-										cameraangle.anInt147 - Scene.anInt536, cameraangle.anInt149 - Scene.anInt537,
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
+										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
 										cameraangle.anInt153);
 							}
 						}
@@ -1736,20 +1736,20 @@ public class Scene {
 					if (cameraangle != null && cameraangle.anInt154 != 0) {
 						if (cameraangle.aRenderable151 != null) {
 							cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.anInt148 - Scene.anInt535, cameraangle.anInt147
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.anInt149
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
 											- Scene.anInt537, cameraangle.anInt153);
 						}
 						if (cameraangle.aRenderable152 != null) {
 							cameraangle.aRenderable152.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.anInt148 - Scene.anInt535, cameraangle.anInt147
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.anInt149
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
 											- Scene.anInt537, cameraangle.anInt153);
 						}
 						if (cameraangle.aRenderable150 != null) {
 							cameraangle.aRenderable150.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.anInt148 - Scene.anInt535, cameraangle.anInt147
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.anInt149
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
 											- Scene.anInt537, cameraangle.anInt153);
 						}
 					}

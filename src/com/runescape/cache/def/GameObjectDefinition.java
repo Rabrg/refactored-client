@@ -10,50 +10,50 @@ import com.runescape.net.Buffer;
 
 public class GameObjectDefinition {
 
-	public boolean aBoolean241;
-	private byte brightness;
-	private int anInt243;
+	public boolean unknown;
+	private byte modelLightFalloff;
+	private int translateX;
 	public String name;
 	private int modelSizeZ;
 	private static Model[] models = new Model[4];
-	private byte contrast;
-	public int width;
-	private int anInt250;
+	private byte modelLightAmbient;
+	public int sizeX;
+	private int translateY;
 	public int icon;
 	private int[] originalModelColors;
 	private int modelSizeX;
-	public int anInt254;
-	private boolean aBoolean256;
+	public int configId;
+	private boolean unknown3;
 	public static boolean lowMemory;
 	private static Buffer buffer;
 	public int id = -1;
 	private static int[] bufferOffsets;
 	private static int definitionCount;
 	public boolean walkable;
-	public int anInt263;
-	public int[] anIntArray264;
+	public int mapScene;
+	public int[] childrenIds;
 	public int solidInt;
-	public int height;
+	public int sizeY;
 	public boolean adjustToTerrain;
 	public boolean aBoolean269;
 	public static Client client;
-	public boolean aBoolean271;
+	public boolean unwalkableSolid;
 	public boolean solid;
-	public int anInt273;
+	public int face;
 	private boolean nonFlatShading;
 	private static int cacheIndex;
 	private int modelSizeY;
 	private int[] modelIds;
-	public int anInt279;
+	public int varbitid;
 	public int anInt280;
 	private int[] modelTypes;
 	public byte[] description;
 	public boolean actionsBoolean;
-	public boolean aBoolean284;
-	public static Cache modelCache2 = new Cache(30);
+	public boolean unknown2;
+	public static Cache animatedModelCache = new Cache(30);
 	public int animationId;
 	private static GameObjectDefinition[] cache;
-	private int anInt288;
+	private int translateZ;
 	private int[] modifiedModelColors;
 	public static Cache modelCache = new Cache(500);
 	public String[] actions;
@@ -80,8 +80,8 @@ public class GameObjectDefinition {
 		description = null;
 		modifiedModelColors = null;
 		originalModelColors = null;
-		width = 1;
-		height = 1;
+		sizeX = 1;
+		sizeY = 1;
 		solid = true;
 		walkable = true;
 		actionsBoolean = false;
@@ -90,26 +90,26 @@ public class GameObjectDefinition {
 		aBoolean269 = false;
 		animationId = -1;
 		anInt280 = 16;
-		brightness = (byte) 0;
-		contrast = (byte) 0;
+		modelLightFalloff = (byte) 0;
+		modelLightAmbient = (byte) 0;
 		actions = null;
 		icon = -1;
-		anInt263 = -1;
-		aBoolean256 = false;
-		aBoolean284 = true;
+		mapScene = -1;
+		unknown3 = false;
+		unknown2 = true;
 		modelSizeX = 128;
 		modelSizeY = 128;
 		modelSizeZ = 128;
-		anInt273 = 0;
-		anInt243 = 0;
-		anInt250 = 0;
-		anInt288 = 0;
-		aBoolean241 = false;
-		aBoolean271 = false;
+		face = 0;
+		translateX = 0;
+		translateY = 0;
+		translateZ = 0;
+		unknown = false;
+		unwalkableSolid = false;
 		solidInt = -1;
-		anInt279 = -1;
-		anInt254 = -1;
-		anIntArray264 = null;
+		varbitid = -1;
+		configId = -1;
+		childrenIds = null;
 	}
 
 	public final void passiveRequestModels(OnDemandRequester onDemandRequester) {
@@ -122,7 +122,7 @@ public class GameObjectDefinition {
 
 	public static final void reset() {
 		GameObjectDefinition.modelCache = null;
-		GameObjectDefinition.modelCache2 = null;
+		GameObjectDefinition.animatedModelCache = null;
 		GameObjectDefinition.bufferOffsets = null;
 		GameObjectDefinition.cache = null;
 		GameObjectDefinition.buffer = null;
@@ -144,23 +144,23 @@ public class GameObjectDefinition {
 		}
 	}
 
-	public final boolean unknown(int model) {
+	public final boolean hasModelType(int modelType) {
 		if (modelTypes == null) {
 			if (modelIds == null) {
 				return true;
 			}
-			if (model != 10) {
+			if (modelType != 10) {
 				return true;
 			}
-			boolean isCached = true;
-			for (int index = 0; index < modelIds.length; index++) {
-				isCached &= Model.isCached(modelIds[index] & 0xffff);
+			boolean cached = true;
+			for (int model = 0; model < modelIds.length; model++) {
+				cached &= Model.isCached(modelIds[model] & 0xffff);
 			}
-			return isCached;
+			return cached;
 		}
-		for (int index = 0; index < modelTypes.length; index++) {
-			if (modelTypes[index] == model) {
-				return Model.isCached(modelIds[index] & 0xffff);
+		for (int model = 0; model < modelTypes.length; model++) {
+			if (modelTypes[model] == modelType) {
+				return Model.isCached(modelIds[model] & 0xffff);
 			}
 		}
 		return true;
@@ -200,22 +200,22 @@ public class GameObjectDefinition {
 		return cached;
 	}
 
-	public final GameObjectDefinition unknown2() {
-		int i = -1;
-		if (anInt279 != -1) {
-			VarBit varbit = VarBit.cache[anInt279];
-			int i_21_ = varbit.configId;
-			int i_22_ = varbit.leastSignificantBit;
-			int i_23_ = varbit.mostSignificantBit;
-			int i_24_ = Client.BITFIELD_MAX_VALUE[i_23_ - i_22_];
-			i = GameObjectDefinition.client.settings[i_21_] >> i_22_ & i_24_;
-		} else if (anInt254 != -1) {
-			i = GameObjectDefinition.client.settings[anInt254];
+	public final GameObjectDefinition getChildDefinition() {
+		int child = -1;
+		if (varbitid != -1) {
+			VarBit varbit = VarBit.cache[varbitid];
+			int configId = varbit.configId;
+			int leastSignificantBit = varbit.leastSignificantBit;
+			int mostSignificantBit = varbit.mostSignificantBit;
+			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
+			child = GameObjectDefinition.client.settings[configId] >> leastSignificantBit & bit;
+		} else if (configId != -1) {
+			child = GameObjectDefinition.client.settings[configId];
 		}
-		if (i < 0 || i >= anIntArray264.length || anIntArray264[i] == -1) {
+		if (child < 0 || child >= childrenIds.length || childrenIds[child] == -1) {
 			return null;
 		}
-		return GameObjectDefinition.getDefinition(anIntArray264[i]);
+		return GameObjectDefinition.getDefinition(childrenIds[child]);
 	}
 
 	private final Model getGameObjectAnimatedModel(int type, int animationId, int face) {
@@ -226,14 +226,14 @@ public class GameObjectDefinition {
 				return null;
 			}
 			hash = (id << 6) + face + ((long) (animationId + 1) << 32);
-			Model cachedModel = (Model) GameObjectDefinition.modelCache2.get(hash);
+			Model cachedModel = (Model) GameObjectDefinition.animatedModelCache.get(hash);
 			if (cachedModel != null) {
 				return cachedModel;
 			}
 			if (modelIds == null) {
 				return null;
 			}
-			boolean mirror = aBoolean256 ^ face > 3;
+			boolean mirror = unknown3 ^ face > 3;
 			int modelCount = modelIds.length;
 			for (int modelId = 0; modelId < modelCount; modelId++) {
 				int subModelId = modelIds[modelId];
@@ -270,12 +270,12 @@ public class GameObjectDefinition {
 				return null;
 			}
 			hash = (id << 6) + (modelType << 3) + face + ((long) (animationId + 1) << 32);
-			Model model = (Model) GameObjectDefinition.modelCache2.get(hash);
+			Model model = (Model) GameObjectDefinition.animatedModelCache.get(hash);
 			if (model != null) {
 				return model;
 			}
 			int modelId = modelIds[modelType];
-			boolean mirror = aBoolean256 ^ face > 3;
+			boolean mirror = unknown3 ^ face > 3;
 			if (mirror) {
 				modelId += 65536;
 			}
@@ -297,40 +297,40 @@ public class GameObjectDefinition {
 		} else {
 			scale = false;
 		}
-		boolean bool_36_;
-		if (anInt243 != 0 || anInt250 != 0 || anInt288 != 0) {
-			bool_36_ = true;
+		boolean needsTranslation;
+		if (translateX != 0 || translateY != 0 || translateZ != 0) {
+			needsTranslation = true;
 		} else {
-			bool_36_ = false;
+			needsTranslation = false;
 		}
-		Model model_37_ = new Model(modifiedModelColors == null, Animation.exists(animationId), face == 0
-				&& animationId == -1 && !scale && !bool_36_, subModel);
+		Model animtedModel = new Model(modifiedModelColors == null, Animation.exists(animationId), face == 0
+				&& animationId == -1 && !scale && !needsTranslation, subModel);
 		if (animationId != -1) {
-			model_37_.createBones();
-			model_37_.applyTransform(animationId);
-			model_37_.triangleSkin = null;
-			model_37_.vectorSkin = null;
+			animtedModel.createBones();
+			animtedModel.applyTransform(animationId);
+			animtedModel.triangleSkin = null;
+			animtedModel.vectorSkin = null;
 		}
 		while (face-- > 0) {
-			model_37_.rotate90Degrees(360);
+			animtedModel.rotate90Degrees(360);
 		}
 		if (modifiedModelColors != null) {
 			for (int i_38_ = 0; i_38_ < modifiedModelColors.length; i_38_++) {
-				model_37_.recolor(modifiedModelColors[i_38_], originalModelColors[i_38_]);
+				animtedModel.recolor(modifiedModelColors[i_38_], originalModelColors[i_38_]);
 			}
 		}
 		if (scale) {
-			model_37_.scaleT(modelSizeX, modelSizeZ, modelSizeY);
+			animtedModel.scaleT(modelSizeX, modelSizeZ, modelSizeY);
 		}
-		if (bool_36_) {
-			model_37_.translate(anInt243, anInt250, anInt288);
+		if (needsTranslation) {
+			animtedModel.translate(translateX, translateY, translateZ);
 		}
-		model_37_.applyLighting(64 + brightness, 768 + contrast * 5, -50, -10, -50, !nonFlatShading);
+		animtedModel.applyLighting(64 + modelLightFalloff, 768 + modelLightAmbient * 5, -50, -10, -50, !nonFlatShading);
 		if (solidInt == 1) {
-			model_37_.anInt1647 = model_37_.modelHeight;
+			animtedModel.anInt1647 = animtedModel.modelHeight;
 		}
-		GameObjectDefinition.modelCache2.put(model_37_, hash);
-		return model_37_;
+		GameObjectDefinition.animatedModelCache.put(animtedModel, hash);
+		return animtedModel;
 	}
 
 	private final void load(Buffer buffer) {
@@ -372,9 +372,9 @@ public class GameObjectDefinition {
 					}
 				}
 			} else if (attributeId == 14) {
-				width = buffer.getUnsignedByte();
+				sizeX = buffer.getUnsignedByte();
 			} else if (attributeId == 15) {
-				height = buffer.getUnsignedByte();
+				sizeY = buffer.getUnsignedByte();
 			} else if (attributeId == 17) {
 				solid = false;
 			} else if (attributeId == 18) {
@@ -398,9 +398,9 @@ public class GameObjectDefinition {
 			} else if (attributeId == 28) {
 				anInt280 = buffer.getUnsignedByte();
 			} else if (attributeId == 29) {
-				brightness = buffer.get();
+				modelLightFalloff = buffer.get();
 			} else if (attributeId == 39) {
-				contrast = buffer.get();
+				modelLightAmbient = buffer.get();
 			} else if (attributeId >= 30 && attributeId < 39) {
 				if (actions == null) {
 					actions = new String[5];
@@ -420,9 +420,9 @@ public class GameObjectDefinition {
 			} else if (attributeId == 60) {
 				icon = buffer.getUnsignedLEShort();
 			} else if (attributeId == 62) {
-				aBoolean256 = true;
+				unknown3 = true;
 			} else if (attributeId == 64) {
-				aBoolean284 = false;
+				unknown2 = false;
 			} else if (attributeId == 65) {
 				modelSizeX = buffer.getUnsignedLEShort();
 			} else if (attributeId == 66) {
@@ -430,36 +430,36 @@ public class GameObjectDefinition {
 			} else if (attributeId == 67) {
 				modelSizeZ = buffer.getUnsignedLEShort();
 			} else if (attributeId == 68) {
-				anInt263 = buffer.getUnsignedLEShort();
+				mapScene = buffer.getUnsignedLEShort();
 			} else if (attributeId == 69) {
-				anInt273 = buffer.getUnsignedByte();
+				face = buffer.getUnsignedByte();
 			} else if (attributeId == 70) {
-				anInt243 = buffer.getShort();
+				translateX = buffer.getShort();
 			} else if (attributeId == 71) {
-				anInt250 = buffer.getShort();
+				translateY = buffer.getShort();
 			} else if (attributeId == 72) {
-				anInt288 = buffer.getShort();
+				translateZ = buffer.getShort();
 			} else if (attributeId == 73) {
-				aBoolean241 = true;
+				unknown = true;
 			} else if (attributeId == 74) {
-				aBoolean271 = true;
+				unwalkableSolid = true;
 			} else if (attributeId == 75) {
 				solidInt = buffer.getUnsignedByte();
 			} else if (attributeId == 77) {
-				anInt279 = buffer.getUnsignedLEShort();
-				if (anInt279 == 65535) {
-					anInt279 = -1;
+				varbitid = buffer.getUnsignedLEShort();
+				if (varbitid == 65535) {
+					varbitid = -1;
 				}
-				anInt254 = buffer.getUnsignedLEShort();
-				if (anInt254 == 65535) {
-					anInt254 = -1;
+				configId = buffer.getUnsignedLEShort();
+				if (configId == 65535) {
+					configId = -1;
 				}
-				int i_46_ = buffer.getUnsignedByte();
-				anIntArray264 = new int[i_46_ + 1];
-				for (int i_47_ = 0; i_47_ <= i_46_; i_47_++) {
-					anIntArray264[i_47_] = buffer.getUnsignedLEShort();
-					if (anIntArray264[i_47_] == 65535) {
-						anIntArray264[i_47_] = -1;
+				int childrenCount = buffer.getUnsignedByte();
+				childrenIds = new int[childrenCount + 1];
+				for (int child = 0; child <= childrenCount; child++) {
+					childrenIds[child] = buffer.getUnsignedLEShort();
+					if (childrenIds[child] == 65535) {
+						childrenIds[child] = -1;
 					}
 				}
 			}
@@ -473,7 +473,7 @@ public class GameObjectDefinition {
 				actionsBoolean = true;
 			}
 		}
-		if (aBoolean271) {
+		if (unwalkableSolid) {
 			solid = false;
 			walkable = false;
 		}

@@ -156,10 +156,10 @@ public class Client extends GameShell {
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer936;
 	private byte[] aByteArray937 = new byte[16384];
 	private int anInt938;
-	private int anInt939;
-	private int anInt940;
+	private int lastClickX;
+	private int lastClickY;
 	private int anInt941;
-	private int anInt942;
+	private int lastClickType;
 	private int currentSceneIndex;
 	private static boolean aBoolean944 = true;
 	private int[] skillLevel = new int[SkillConstants.SKILL_COUNT];
@@ -1029,7 +1029,7 @@ public class Client extends GameShell {
 				}
 				for (int i_68_ = 0; i_68_ < 104; i_68_++) {
 					for (int i_69_ = 0; i_69_ < 104; i_69_++) {
-						method25(i_68_, i_69_);
+						sortGroundItems(i_68_, i_69_);
 					}
 				}
 				Client.anInt1076++;
@@ -1090,7 +1090,7 @@ public class Client extends GameShell {
 
 	public final void resetModelCaches() {
 		GameObjectDefinition.modelCache.removeAll();
-		GameObjectDefinition.modelCache2.removeAll();
+		GameObjectDefinition.animatedModelCache.removeAll();
 		ActorDefinition.modelCache.removeAll();
 		ItemDefinition.modelCache.removeAll();
 		ItemDefinition.rgbImageCache.removeAll();
@@ -1177,41 +1177,41 @@ public class Client extends GameShell {
 		}
 	}
 
-	public final void method25(int i, int i_99_) {
-		LinkedList linkedlist = groundItemNodes[currentSceneIndex][i][i_99_];
-		if (linkedlist == null) {
-			currentScene.resetCameraAngle(currentSceneIndex, i, i_99_);
+	public final void sortGroundItems(int x, int y) {
+		LinkedList groundItems = groundItemNodes[currentSceneIndex][x][y];
+		if (groundItems == null) {
+			currentScene.resetCameraAngle(currentSceneIndex, x, y);
 		} else {
-			int i_100_ = -99999999;
+			int mostValue = -99999999;
 			Item item = null;
-			for (Item item_101_ = (Item) linkedlist.getBack(); item_101_ != null; item_101_ = (Item) linkedlist
+			for (Item groundItem = (Item) groundItems.getBack(); groundItem != null; groundItem = (Item) groundItems
 					.getPrevious()) {
-				ItemDefinition itemdefinition = ItemDefinition.getDefinition(item_101_.itemId);
-				int i_102_ = itemdefinition.value;
-				if (itemdefinition.stackable) {
-					i_102_ *= item_101_.itemCount + 1;
+				ItemDefinition itemDefinition = ItemDefinition.getDefinition(groundItem.itemId);
+				int value = itemDefinition.value;
+				if (itemDefinition.stackable) {
+					value *= groundItem.itemCount + 1;
 				}
-				if (i_102_ > i_100_) {
-					i_100_ = i_102_;
-					item = item_101_;
+				if (value > mostValue) {
+					mostValue = value;
+					item = groundItem;
 				}
 			}
-			linkedlist.insertFront(item);
-			Item item_103_ = null;
-			Item item_104_ = null;
-			for (Item item_105_ = (Item) linkedlist.getBack(); item_105_ != null; item_105_ = (Item) linkedlist
+			groundItems.insertFront(item);
+			Item groundItemOne = null;
+			Item groundItemTwo = null;
+			for (Item groundItem = (Item) groundItems.getBack(); groundItem != null; groundItem = (Item) groundItems
 					.getPrevious()) {
-				if (item_105_.itemId != item.itemId && item_103_ == null) {
-					item_103_ = item_105_;
+				if (groundItem.itemId != item.itemId && groundItemOne == null) {
+					groundItemOne = groundItem;
 				}
-				if (item_105_.itemId != item.itemId && item_105_.itemId != item_103_.itemId && item_104_ == null) {
-					item_104_ = item_105_;
+				if (groundItem.itemId != item.itemId && groundItem.itemId != groundItemOne.itemId && groundItemTwo == null) {
+					groundItemTwo = groundItem;
 				}
 			}
-			int i_106_ = i + (i_99_ << 7) + 1610612736;
-			currentScene.method503((byte) 7, i, i_106_, item_103_,
-					method42(currentSceneIndex, i_99_ * 128 + 64, true, i * 128 + 64), item_104_, item,
-					currentSceneIndex, i_99_);
+			int position = x + (y << 7) + 1610612736;
+			currentScene.method503((byte) 7, x, position, groundItemOne,
+					method42(currentSceneIndex, y * 128 + 64, true, x * 128 + 64), groundItemTwo, item,
+					currentSceneIndex, y);
 		}
 	}
 
@@ -1247,10 +1247,10 @@ public class Client extends GameShell {
 		}
 	}
 
-	private final void printLoadError(String string) {
-		System.out.println(string);
+	private final void printLoadError(String loadError) {
+		System.out.println(loadError);
 		try {
-			getAppletContext().showDocument(new URL(getCodeBase(), "loaderror_" + string + ".html"));
+			getAppletContext().showDocument(new URL(getCodeBase(), "loaderror_" + loadError + ".html"));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -2609,13 +2609,13 @@ public class Client extends GameShell {
 						int i_244_ = 24624 + i_236_ * 4 + (103 - i) * 512 * 4;
 						int i_245_ = i_239_ >> 14 & 0x7fff;
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_245_);
-						if (gameobjectdefinition.anInt263 != -1) {
-							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
+						if (gameobjectdefinition.mapScene != -1) {
+							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.mapScene];
 							if (indexedimage != null) {
-								int i_246_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
-								int i_247_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
+								int i_246_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
+								int i_247_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
 								indexedimage.drawImage(48 + i_236_ * 4 + i_246_, 48
-										+ (104 - i - gameobjectdefinition.height) * 4 + i_247_);
+										+ (104 - i - gameobjectdefinition.sizeY) * 4 + i_247_);
 							}
 						} else {
 							if (i_242_ == 0 || i_242_ == 2) {
@@ -2684,13 +2684,13 @@ public class Client extends GameShell {
 						int i_250_ = i_248_ & 0x1f;
 						int i_251_ = i_239_ >> 14 & 0x7fff;
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_251_);
-						if (gameobjectdefinition.anInt263 != -1) {
-							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
+						if (gameobjectdefinition.mapScene != -1) {
+							IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.mapScene];
 							if (indexedimage != null) {
-								int i_252_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
-								int i_253_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
+								int i_252_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
+								int i_253_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
 								indexedimage.drawImage(48 + i_236_ * 4 + i_252_, 48
-										+ (104 - i - gameobjectdefinition.height) * 4 + i_253_);
+										+ (104 - i - gameobjectdefinition.sizeY) * 4 + i_253_);
 							}
 						} else if (i_250_ == 9) {
 							int i_254_ = 15658734;
@@ -2718,16 +2718,16 @@ public class Client extends GameShell {
 					}
 					int i_256_ = i_239_ >> 14 & 0x7fff;
 					GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_256_);
-					if (gameobjectdefinition.anInt263 == -1) {
+					if (gameobjectdefinition.mapScene == -1) {
 						break;
 					}
-					IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.anInt263];
+					IndexedImage indexedimage = anIndexedImageArray1085[gameobjectdefinition.mapScene];
 					if (indexedimage == null) {
 						break;
 					}
-					int i_257_ = (gameobjectdefinition.width * 4 - indexedimage.width) / 2;
-					int i_258_ = (gameobjectdefinition.height * 4 - indexedimage.height) / 2;
-					indexedimage.drawImage(48 + i_236_ * 4 + i_257_, 48 + (104 - i - gameobjectdefinition.height) * 4
+					int i_257_ = (gameobjectdefinition.sizeX * 4 - indexedimage.width) / 2;
+					int i_258_ = (gameobjectdefinition.sizeY * 4 - indexedimage.height) / 2;
+					indexedimage.drawImage(48 + i_236_ * 4 + i_257_, 48 + (104 - i - gameobjectdefinition.sizeY) * 4
 							+ i_258_);
 				}
 			} catch (RuntimeException runtimeexception) {
@@ -3347,10 +3347,10 @@ public class Client extends GameShell {
 					method95();
 					method38();
 					anInt970++;
-					if (anInt942 != 0) {
+					if (lastClickType != 0) {
 						anInt941 += 20;
 						if (anInt941 >= 400) {
-							anInt942 = 0;
+							lastClickType = 0;
 						}
 					}
 					if (anInt1271 != 0) {
@@ -3435,9 +3435,9 @@ public class Client extends GameShell {
 								Client.localPlayer.pathX[0], true, i_324_);
 						Scene.anInt550 = -1;
 						if (bool) {
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 1;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 1;
 							anInt941 = 0;
 						}
 					}
@@ -3702,49 +3702,40 @@ public class Client extends GameShell {
 		} while (false);
 	}
 
-	public final boolean method66(int i, int i_344_, int i_345_, int i_346_) {
-		try {
-			int i_347_ = i >> 14 & 0x7fff;
-			int i_348_ = currentScene.getConfig(currentSceneIndex, i_345_, i_344_, i);
-			if (i_346_ >= 0) {
-				throw new NullPointerException();
-			}
-			if (i_348_ == -1) {
+	public final boolean method66(int toLocalX, int toLocalY, int hash) {
+			int objectHash = hash >> 14 & 0x7fff;
+			int sceneConfig = currentScene.getConfig(currentSceneIndex, toLocalX, toLocalY, hash);
+			if (sceneConfig == -1) {
 				return false;
 			}
-			int i_349_ = i_348_ & 0x1f;
-			int i_350_ = i_348_ >> 6 & 0x3;
-			if (i_349_ == 10 || i_349_ == 11 || i_349_ == 22) {
-				GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_347_);
-				int i_351_;
-				int i_352_;
-				if (i_350_ == 0 || i_350_ == 2) {
-					i_351_ = gameobjectdefinition.width;
-					i_352_ = gameobjectdefinition.height;
+			int type = sceneConfig & 0x1f;
+			int rotation = sceneConfig >> 6 & 0x3;
+			if (type == 10 || type == 11 || type == 22) {
+				GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(objectHash);
+				int sizeX;
+				int sizeY;
+				if (rotation == 0 || rotation == 2) {
+					sizeX = gameObjectDefinition.sizeX;
+					sizeY = gameObjectDefinition.sizeY;
 				} else {
-					i_351_ = gameobjectdefinition.height;
-					i_352_ = gameobjectdefinition.width;
+					sizeX = gameObjectDefinition.sizeY;
+					sizeY = gameObjectDefinition.sizeX;
 				}
-				int i_353_ = gameobjectdefinition.anInt273;
-				if (i_350_ != 0) {
-					i_353_ = (i_353_ << i_350_ & 0xf) + (i_353_ >> 4 - i_350_);
+				int face = gameObjectDefinition.face;
+				if (rotation != 0) {
+					face = (face << rotation & 0xf) + (face >> 4 - rotation);
 				}
-				calculatePath(2, 0, i_352_, 0, Client.localPlayer.pathY[0], i_351_, i_353_, i_344_,
-						Client.localPlayer.pathX[0], false, i_345_);
+				calculatePath(2, 0, sizeY, 0, Client.localPlayer.pathY[0], sizeX, face, toLocalY,
+						Client.localPlayer.pathX[0], false, toLocalX);
 			} else {
-				calculatePath(2, i_350_, 0, i_349_ + 1, Client.localPlayer.pathY[0], 0, 0, i_344_,
-						Client.localPlayer.pathX[0], false, i_345_);
+				calculatePath(2, rotation, 0, type + 1, Client.localPlayer.pathY[0], 0, 0, toLocalY,
+						Client.localPlayer.pathX[0], false, toLocalX);
 			}
-			anInt939 = clickX;
-			anInt940 = clickY;
-			anInt942 = 2;
+			lastClickX = clickX;
+			lastClickY = clickY;
+			lastClickType = 2;
 			anInt941 = 0;
 			return true;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("61218, " + i + ", " + i_344_ + ", " + i_345_ + ", " + i_346_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
 	public final Archive requestArchive(int index, String archiveAlias, String archiveName, int archiveCRC,
@@ -3934,9 +3925,9 @@ public class Client extends GameShell {
 					if (npc != null) {
 						calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 								Client.localPlayer.pathX[0], false, npc.pathX[0]);
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(57);
 						outBuffer.putShortA(anInt1310);
@@ -3952,16 +3943,16 @@ public class Client extends GameShell {
 						bool_375_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 								Client.localPlayer.pathX[0], false, actionIndex1);
 					}
-					anInt939 = clickX;
-					anInt940 = clickY;
-					anInt942 = 2;
+					lastClickX = clickX;
+					lastClickY = clickY;
+					lastClickType = 2;
 					anInt941 = 0;
 					outBuffer.putOpcode(236);
 					outBuffer.putLEShort(actionIndex2 + regionAbsoluteBaseY);
 					outBuffer.putShort(actionIndex3);
 					outBuffer.putLEShort(actionIndex1 + regionAbsoluteBaseX);
 				}
-				if (menuActionIndex == 62 && method66(actionIndex3, actionIndex2, actionIndex1, -770)) {
+				if (menuActionIndex == 62 && method66(actionIndex1, actionIndex2, actionIndex3)) {
 					outBuffer.putOpcode(192);
 					outBuffer.putShort(anInt1309);
 					outBuffer.putLEShort(actionIndex3 >> 14 & 0x7fff);
@@ -3977,9 +3968,9 @@ public class Client extends GameShell {
 						bool_376_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 								Client.localPlayer.pathX[0], false, actionIndex1);
 					}
-					anInt939 = clickX;
-					anInt940 = clickY;
-					anInt942 = 2;
+					lastClickX = clickX;
+					lastClickY = clickY;
+					lastClickType = 2;
 					anInt941 = 0;
 					outBuffer.putOpcode(25);
 					outBuffer.putLEShort(anInt1309);
@@ -4021,9 +4012,9 @@ public class Client extends GameShell {
 					if (player != null) {
 						calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 								Client.localPlayer.pathX[0], false, player.pathX[0]);
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						Client.anInt1213 += actionIndex3;
 						if (Client.anInt1213 >= 90) {
@@ -4039,9 +4030,9 @@ public class Client extends GameShell {
 					if (npc != null) {
 						calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 								Client.localPlayer.pathX[0], false, npc.pathX[0]);
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(155);
 						outBuffer.putLEShort(actionIndex3);
@@ -4052,9 +4043,9 @@ public class Client extends GameShell {
 					if (player != null) {
 						calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 								Client.localPlayer.pathX[0], false, player.pathX[0]);
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(153);
 						outBuffer.putLEShort(actionIndex3);
@@ -4074,7 +4065,7 @@ public class Client extends GameShell {
 						outBuffer.put24BitInt(15086193);
 						Client.anInt949 = 0;
 					}
-					method66(actionIndex3, actionIndex2, actionIndex1, -770);
+					method66(actionIndex1, actionIndex2, actionIndex3);
 					outBuffer.putOpcode(228);
 					outBuffer.putShortA(actionIndex3 >> 14 & 0x7fff);
 					outBuffer.putShortA(actionIndex2 + regionAbsoluteBaseY);
@@ -4110,7 +4101,7 @@ public class Client extends GameShell {
 							method41((byte) 68, l);
 						}
 						if (menuActionIndex == 42) {
-							method113(l, 4);
+							addIgnore(l, 4);
 						}
 						if (menuActionIndex == 792) {
 							method35(false, l);
@@ -4265,9 +4256,9 @@ public class Client extends GameShell {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.localPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							Client.anInt1011 += actionIndex3;
 							if (Client.anInt1011 >= 54) {
@@ -4286,9 +4277,9 @@ public class Client extends GameShell {
 							bool_384_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 									Client.localPlayer.pathX[0], false, actionIndex1);
 						}
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(79);
 						outBuffer.putLEShort(actionIndex2 + regionAbsoluteBaseY);
@@ -4334,9 +4325,9 @@ public class Client extends GameShell {
 							bool_385_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 									Client.localPlayer.pathX[0], false, actionIndex1);
 						}
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(156);
 						outBuffer.putShortA(actionIndex1 + regionAbsoluteBaseX);
@@ -4350,9 +4341,9 @@ public class Client extends GameShell {
 							bool_386_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 									Client.localPlayer.pathX[0], false, actionIndex1);
 						}
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(181);
 						outBuffer.putLEShort(actionIndex2 + regionAbsoluteBaseY);
@@ -4378,9 +4369,9 @@ public class Client extends GameShell {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.localPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							Client.anInt1251 += actionIndex3;
 							if (Client.anInt1251 >= 85) {
@@ -4397,9 +4388,9 @@ public class Client extends GameShell {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.localPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							Client.anInt1159++;
 							if (Client.anInt1159 >= 96) {
@@ -4416,9 +4407,9 @@ public class Client extends GameShell {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.localPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(131);
 							outBuffer.putLEShortA(actionIndex3);
@@ -4447,7 +4438,7 @@ public class Client extends GameShell {
 						}
 					}
 					if (menuActionIndex == 900) {
-						method66(actionIndex3, actionIndex2, actionIndex1, -770);
+						method66(actionIndex1, actionIndex2, actionIndex3);
 						outBuffer.putOpcode(252);
 						outBuffer.putLEShortA(actionIndex3 >> 14 & 0x7fff);
 						outBuffer.putLEShort(actionIndex2 + regionAbsoluteBaseY);
@@ -4458,9 +4449,9 @@ public class Client extends GameShell {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.localPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(72);
 							outBuffer.putShortA(actionIndex3);
@@ -4471,9 +4462,9 @@ public class Client extends GameShell {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.localPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(249);
 							outBuffer.putShortA(actionIndex3);
@@ -4485,9 +4476,9 @@ public class Client extends GameShell {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.localPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(39);
 							outBuffer.putLEShort(actionIndex3);
@@ -4498,15 +4489,15 @@ public class Client extends GameShell {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.localPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(139);
 							outBuffer.putLEShort(actionIndex3);
 						}
 					}
-					if (menuActionIndex == 956 && method66(actionIndex3, actionIndex2, actionIndex1, -770)) {
+					if (menuActionIndex == 956 && method66(actionIndex1, actionIndex2, actionIndex3)) {
 						outBuffer.putOpcode(35);
 						outBuffer.putLEShort(actionIndex1 + regionAbsoluteBaseX);
 						outBuffer.putShortA(spellId);
@@ -4520,9 +4511,9 @@ public class Client extends GameShell {
 							bool_388_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 									Client.localPlayer.pathX[0], false, actionIndex1);
 						}
-						anInt939 = clickX;
-						anInt940 = clickY;
-						anInt942 = 2;
+						lastClickX = clickX;
+						lastClickY = clickY;
+						lastClickType = 2;
 						anInt941 = 0;
 						outBuffer.putOpcode(23);
 						outBuffer.putLEShort(actionIndex2 + regionAbsoluteBaseY);
@@ -4595,9 +4586,9 @@ public class Client extends GameShell {
 						if (player != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, player.pathY[0],
 									Client.localPlayer.pathX[0], false, player.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(14);
 							outBuffer.putShortA(anInt1309);
@@ -4650,9 +4641,9 @@ public class Client extends GameShell {
 						if (npc != null) {
 							calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, npc.pathY[0],
 									Client.localPlayer.pathX[0], false, npc.pathX[0]);
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							if ((actionIndex3 & 0x3) == 0) {
 								Client.anInt1180++;
@@ -4667,21 +4658,21 @@ public class Client extends GameShell {
 						}
 					}
 					if (menuActionIndex == 113) {
-						method66(actionIndex3, actionIndex2, actionIndex1, -770);
+						method66(actionIndex1, actionIndex2, actionIndex3);
 						outBuffer.putOpcode(70);
 						outBuffer.putLEShort(actionIndex1 + regionAbsoluteBaseX);
 						outBuffer.putShort(actionIndex2 + regionAbsoluteBaseY);
 						outBuffer.putLEShortA(actionIndex3 >> 14 & 0x7fff);
 					}
 					if (menuActionIndex == 872) {
-						method66(actionIndex3, actionIndex2, actionIndex1, -770);
+						method66(actionIndex1, actionIndex2, actionIndex3);
 						outBuffer.putOpcode(234);
 						outBuffer.putLEShortA(actionIndex1 + regionAbsoluteBaseX);
 						outBuffer.putShortA(actionIndex3 >> 14 & 0x7fff);
 						outBuffer.putLEShortA(actionIndex2 + regionAbsoluteBaseY);
 					}
 					if (menuActionIndex == 502) {
-						method66(actionIndex3, actionIndex2, actionIndex1, -770);
+						method66(actionIndex1, actionIndex2, actionIndex3);
 						outBuffer.putOpcode(132);
 						outBuffer.putLEShortA(actionIndex1 + regionAbsoluteBaseX);
 						outBuffer.putShort(actionIndex3 >> 14 & 0x7fff);
@@ -4738,9 +4729,9 @@ public class Client extends GameShell {
 								bool_396_ = calculatePath(2, 0, 1, 0, Client.localPlayer.pathY[0], 1, 0, actionIndex2,
 										Client.localPlayer.pathX[0], false, actionIndex1);
 							}
-							anInt939 = clickX;
-							anInt940 = clickY;
-							anInt942 = 2;
+							lastClickX = clickX;
+							lastClickY = clickY;
+							lastClickType = 2;
 							anInt941 = 0;
 							outBuffer.putOpcode(253);
 							outBuffer.putLEShort(actionIndex1 + regionAbsoluteBaseX);
@@ -4827,8 +4818,8 @@ public class Client extends GameShell {
 						i_399_ = i_401_;
 						if (i_404_ == 2 && currentScene.getConfig(currentSceneIndex, i_402_, i_403_, i_401_) >= 0) {
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_405_);
-							if (gameobjectdefinition.anIntArray264 != null) {
-								gameobjectdefinition = gameobjectdefinition.unknown2();
+							if (gameobjectdefinition.childrenIds != null) {
+								gameobjectdefinition = gameobjectdefinition.getChildDefinition();
 							}
 							if (gameobjectdefinition == null) {
 								continue;
@@ -5227,7 +5218,7 @@ public class Client extends GameShell {
 						}
 						if (friendsListAction == 4 && ignoreListCount < 100) {
 							long l = TextUtils.nameToLong(chatMessage);
-							method113(l, 4);
+							addIgnore(l, 4);
 						}
 						if (friendsListAction == 5 && ignoreListCount > 0) {
 							long l = TextUtils.nameToLong(chatMessage);
@@ -8933,8 +8924,8 @@ public class Client extends GameShell {
 	public final void method112() {
 		method76();
 
-		if (anInt942 == 1) {
-			cursorCross[anInt941 / 100].drawImage(anInt939 - 8 - 4, anInt940 - 8 - 4);
+		if (lastClickType == 1) {
+			cursorCross[anInt941 / 100].drawImage(lastClickX - 8 - 4, lastClickY - 8 - 4);
 			Client.anInt1167++;
 			if (Client.anInt1167 > 67) {
 				Client.anInt1167 = 0;
@@ -8942,8 +8933,8 @@ public class Client extends GameShell {
 			}
 		}
 
-		if (anInt942 == 2) {
-			cursorCross[4 + anInt941 / 100].drawImage(anInt939 - 8 - 4, anInt940 - 8 - 4);
+		if (lastClickType == 2) {
+			cursorCross[4 + anInt941 / 100].drawImage(lastClickX - 8 - 4, lastClickY - 8 - 4);
 		}
 
 		if (walkablewidgetIndex != -1) {
@@ -8999,35 +8990,35 @@ public class Client extends GameShell {
 		}
 	}
 
-	public final void method113(long l, int i) {
+	public final void addIgnore(long ignore, int i) {
 		try {
-			if (l != 0L) {
+			if (ignore != 0L) {
 				if (ignoreListCount >= 100) {
 					sendMessage("Your ignore list is full. Max of 100 hit", 0, "");
 				} else {
-					String string = TextUtils.formatName(TextUtils.longToName(l));
-					for (int i_718_ = 0; i_718_ < ignoreListCount; i_718_++) {
-						if (ignoreList[i_718_] == l) {
-							sendMessage(string + " is already on your ignore list", 0, "");
+					String ignoreName = TextUtils.formatName(TextUtils.longToName(ignore));
+					for (int index = 0; index < ignoreListCount; index++) {
+						if (ignoreList[index] == ignore) {
+							sendMessage(ignoreName + " is already on your ignore list", 0, "");
 							return;
 						}
 					}
 					if (i >= 4 && i <= 4) {
-						for (int i_719_ = 0; i_719_ < friendsListCount; i_719_++) {
-							if (friendsListLongs[i_719_] == l) {
-								sendMessage("Please remove " + string + " from your friend list first", 0, "");
+						for (int index = 0; index < friendsListCount; index++) {
+							if (friendsListLongs[index] == ignore) {
+								sendMessage("Please remove " + ignoreName + " from your friend list first", 0, "");
 								return;
 							}
 						}
-						ignoreList[ignoreListCount++] = l;
+						ignoreList[ignoreListCount++] = ignore;
 						redrawTab = true;
 						outBuffer.putOpcode(133);
-						outBuffer.putLong(l);
+						outBuffer.putLong(ignore);
 					}
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("45688, " + l + ", " + i + ", " + runtimeexception.toString());
+			SignLink.reportError("45688, " + ignore + ", " + i + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -10207,7 +10198,7 @@ public class Client extends GameShell {
 								break;
 							}
 						}
-						method25(i_871_, i_872_);
+						sortGroundItems(i_871_, i_872_);
 					}
 				}
 			} else {
@@ -10245,7 +10236,7 @@ public class Client extends GameShell {
 							groundItemNodes[currentSceneIndex][i_885_][i_886_] = new LinkedList();
 						}
 						groundItemNodes[currentSceneIndex][i_885_][i_886_].insertBack(item);
-						method25(i_885_, i_886_);
+						sortGroundItems(i_885_, i_886_);
 					}
 				} else if (opcode == 156) {
 					int i_889_ = buffer.getUnsignedByteA();
@@ -10265,7 +10256,7 @@ public class Client extends GameShell {
 							if (linkedlist.getBack() == null) {
 								groundItemNodes[currentSceneIndex][i_890_][i_891_] = null;
 							}
-							method25(i_890_, i_891_);
+							sortGroundItems(i_890_, i_891_);
 						}
 					}
 				} else if (opcode == 160) {
@@ -10363,11 +10354,11 @@ public class Client extends GameShell {
 								player.anInt1727 = i_911_ + Client.currentCycle;
 								player.anInt1728 = i_913_ + Client.currentCycle;
 								player.playerModel = model;
-								int i_925_ = gameobjectdefinition.width;
-								int i_926_ = gameobjectdefinition.height;
+								int i_925_ = gameobjectdefinition.sizeX;
+								int i_926_ = gameobjectdefinition.sizeY;
 								if (i_916_ == 1 || i_916_ == 3) {
-									i_925_ = gameobjectdefinition.height;
-									i_926_ = gameobjectdefinition.width;
+									i_925_ = gameobjectdefinition.sizeY;
+									i_926_ = gameobjectdefinition.sizeX;
 								}
 								player.anInt1731 = i_907_ * 128 + i_925_ * 64;
 								player.anInt1733 = i_908_ * 128 + i_926_ * 64;
@@ -10430,7 +10421,7 @@ public class Client extends GameShell {
 								groundItemNodes[currentSceneIndex][i_946_][i_947_] = new LinkedList();
 							}
 							groundItemNodes[currentSceneIndex][i_946_][i_947_].insertBack(item);
-							method25(i_946_, i_947_);
+							sortGroundItems(i_946_, i_947_);
 						}
 					} else if (opcode == 101) {
 						int i_948_ = buffer.getUnsignedByteC();
@@ -10726,13 +10717,13 @@ public class Client extends GameShell {
 						if (type == 2) {
 							currentScene.method515(plane, -978, x, y);
 							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
-							if (x + gameobjectdefinition.width > 103 || y + gameobjectdefinition.width > 103
-									|| x + gameobjectdefinition.height > 103 || y + gameobjectdefinition.height > 103) {
+							if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
+									|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
 								break;
 							}
 							if (gameobjectdefinition.solid) {
-								currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.width,
-										gameobjectdefinition.height, orientation, gameobjectdefinition.walkable);
+								currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.sizeX,
+										gameobjectdefinition.sizeY, orientation, gameobjectdefinition.walkable);
 							}
 						}
 						if (type == 3) {
@@ -10832,8 +10823,8 @@ public class Client extends GameShell {
 				return false;
 			}
 			try {
-				int i = bufferedConnection.getAvailable();
-				if (i == 0) {
+				int available = bufferedConnection.getAvailable();
+				if (available == 0) {
 					return false;
 				}
 				if (opcode == -1) {
@@ -10843,28 +10834,28 @@ public class Client extends GameShell {
 						opcode = opcode - isaacCipher.nextInt() & 0xff;
 					}
 					packetSize = PacketConstants.PACKET_SIZES[opcode];
-					i--;
+					available--;
 				}
 				if (packetSize == -1) {
-					if (i > 0) {
+					if (available > 0) {
 						bufferedConnection.read(inBuffer.payload, 0, 1);
 						packetSize = inBuffer.payload[0] & 0xff;
-						i--;
+						available--;
 					} else {
 						return false;
 					}
 				}
 				if (packetSize == -2) {
-					if (i > 1) {
+					if (available > 1) {
 						bufferedConnection.read(inBuffer.payload, 0, 2);
 						inBuffer.offset = 0;
 						packetSize = inBuffer.getUnsignedLEShort();
-						i -= 2;
+						available -= 2;
 					} else {
 						return false;
 					}
 				}
-				if (i < packetSize) {
+				if (available < packetSize) {
 					return false;
 				}
 				inBuffer.offset = 0;
@@ -10917,15 +10908,15 @@ public class Client extends GameShell {
 						for (int y = playerPositionY; y < playerPositionY + 8; y++) {
 							if (groundItemNodes[currentSceneIndex][x][y] != null) {
 								groundItemNodes[currentSceneIndex][x][y] = null;
-								method25(x, y);
+								sortGroundItems(x, y);
 							}
 						}
 					}
-					for (SpawnObjectNode node = (SpawnObjectNode) spawnObjectNodeList.getBack(); node != null; node = (SpawnObjectNode) spawnObjectNodeList
+					for (SpawnObjectNode spawnObjectNodeListed = (SpawnObjectNode) spawnObjectNodeList.getBack(); spawnObjectNodeListed != null; spawnObjectNodeListed = (SpawnObjectNode) spawnObjectNodeList
 							.getPrevious()) {
-						if (node.x >= playerPositionX && node.x < playerPositionX + 8 && node.y >= playerPositionY
-								&& node.y < playerPositionY + 8 && node.plane == currentSceneIndex) {
-							node.anInt1344 = 0;
+						if (spawnObjectNodeListed.x >= playerPositionX && spawnObjectNodeListed.x < playerPositionX + 8 && spawnObjectNodeListed.y >= playerPositionY
+								&& spawnObjectNodeListed.y < playerPositionY + 8 && spawnObjectNodeListed.plane == currentSceneIndex) {
+							spawnObjectNodeListed.anInt1344 = 0;
 						}
 					}
 					opcode = -1;
