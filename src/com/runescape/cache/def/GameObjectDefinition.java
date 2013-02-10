@@ -1,12 +1,12 @@
 package com.runescape.cache.def;
 
-import com.runescape.Client;
-import com.runescape.anim.Animation;
+import com.runescape.Game;
 import com.runescape.cache.Archive;
-import com.runescape.cache.requester.OnDemandRequester;
 import com.runescape.collection.Cache;
-import com.runescape.graphic.Model;
+import com.runescape.media.Animation;
+import com.runescape.media.Model;
 import com.runescape.net.Buffer;
+import com.runescape.net.requester.OnDemandRequester;
 
 public class GameObjectDefinition {
 
@@ -36,7 +36,7 @@ public class GameObjectDefinition {
 	public int sizeY;
 	public boolean adjustToTerrain;
 	public boolean aBoolean269;
-	public static Client client;
+	public static Game client;
 	public boolean unwalkableSolid;
 	public boolean solid;
 	public int face;
@@ -207,7 +207,7 @@ public class GameObjectDefinition {
 			int configId = varbit.configId;
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
-			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
+			int bit = Game.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
 			child = GameObjectDefinition.client.settings[configId] >> leastSignificantBit & bit;
 		} else if (configId != -1) {
 			child = GameObjectDefinition.client.settings[configId];

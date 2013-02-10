@@ -1,10 +1,10 @@
 package com.runescape.cache.def;
 
-import com.runescape.Client;
-import com.runescape.anim.Animation;
+import com.runescape.Game;
 import com.runescape.cache.Archive;
 import com.runescape.collection.Cache;
-import com.runescape.graphic.Model;
+import com.runescape.media.Animation;
+import com.runescape.media.Model;
 import com.runescape.net.Buffer;
 
 public class ActorDefinition {
@@ -30,7 +30,7 @@ public class ActorDefinition {
 	public long id = -1;
 	public int degreesToTurn = 32;
 	private static ActorDefinition[] cache;
-	public static Client client;
+	public static Game client;
 	public int turnRightAnimationId = -1;
 	public boolean clickable = true;
 	private int brightness;
@@ -103,7 +103,7 @@ public class ActorDefinition {
 			int configId = varbit.configId;
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
-			int bit = Client.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
+			int bit = Game.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
 			childId = ActorDefinition.client.settings[configId] >> leastSignificantBit & bit;
 		} else if (settingId != -1) {
 			childId = ActorDefinition.client.settings[settingId];

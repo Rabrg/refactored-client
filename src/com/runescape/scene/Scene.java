@@ -1,11 +1,11 @@
 package com.runescape.scene;
 
 import com.runescape.collection.LinkedList;
-import com.runescape.graphic.Model;
-import com.runescape.graphic.Rasterizer;
-import com.runescape.graphic.Rasterizer3D;
-import com.runescape.graphic.VertexNormal;
-import com.runescape.renderable.Renderable;
+import com.runescape.media.Model;
+import com.runescape.media.VertexNormal;
+import com.runescape.media.rasterizer.Rasterizer;
+import com.runescape.media.rasterizer.Rasterizer3D;
+import com.runescape.media.renderable.Renderable;
 import com.runescape.util.SignLink;
 
 public class Scene {

@@ -2,7 +2,6 @@ package com.runescape.net;
 
 import java.math.BigInteger;
 
-import com.runescape.Client;
 import com.runescape.collection.CacheableNode;
 import com.runescape.collection.LinkedList;
 
@@ -240,11 +239,8 @@ public class Buffer extends CacheableNode {
 		getBytes(decodedBuffer, 0, originalOffset);
 		BigInteger decodedBigInteger = new BigInteger(decodedBuffer);
 		BigInteger encodedBigInteger = null;
-		if (Client.RSA) {
-			encodedBigInteger = decodedBigInteger.modPow(exponent, modulus);
-		} else {
+			// encodedBigInteger = decodedBigInteger.modPow(exponent, modulus);
 			encodedBigInteger = decodedBigInteger;
-		}
 		byte[] encodedBuffer = encodedBigInteger.toByteArray();
 		offset = 0;
 		put(encodedBuffer.length);

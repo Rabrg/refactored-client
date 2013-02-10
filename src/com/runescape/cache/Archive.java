@@ -1,6 +1,6 @@
 package com.runescape.cache;
 
-import com.runescape.cache.util.BZip2Decompressor;
+import com.runescape.cache.bzip.BZip2Decompressor;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 

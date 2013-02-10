@@ -1,10 +1,10 @@
 package com.runescape.util;
 
-import com.runescape.Client;
+import com.runescape.Game;
 
 public class MouseCapturer implements Runnable {
 
-	public Client client;
+	public Game client;
 	public Object objectLock = new Object();
 	public int[] coordsY = new int[500];
 	public boolean capturing = true;
@@ -28,7 +28,7 @@ public class MouseCapturer implements Runnable {
 		}
 	}
 
-	public MouseCapturer(Client client) {
+	public MouseCapturer(Game client) {
 		this.client = client;
 	}
 }

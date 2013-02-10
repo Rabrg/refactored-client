@@ -1,6 +1,6 @@
 package com.runescape.scene;
 
-import com.runescape.renderable.Renderable;
+import com.runescape.media.renderable.Renderable;
 
 public class CameraAngle {
 	public int x;

@@ -2,11 +2,12 @@ package com.runescape.scene;
 
 import com.runescape.cache.def.FloorDefinition;
 import com.runescape.cache.def.GameObjectDefinition;
-import com.runescape.cache.requester.OnDemandRequester;
-import com.runescape.graphic.Model;
-import com.runescape.graphic.Rasterizer3D;
+import com.runescape.media.Model;
+import com.runescape.media.rasterizer.Rasterizer3D;
+import com.runescape.media.renderable.GameObject;
+import com.runescape.media.renderable.Renderable;
 import com.runescape.net.Buffer;
-import com.runescape.renderable.Renderable;
+import com.runescape.net.requester.OnDemandRequester;
 import com.runescape.util.SignLink;
 
 /* Region - Decompiled by JODE

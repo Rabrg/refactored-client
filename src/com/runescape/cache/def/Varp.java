@@ -2,7 +2,6 @@ package com.runescape.cache.def;
 
 import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
-import com.runescape.util.SignLink;
 
 public class Varp {
 	private static boolean aBoolean743 = true;
