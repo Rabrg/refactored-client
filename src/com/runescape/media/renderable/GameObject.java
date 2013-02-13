@@ -1,10 +1,9 @@
 package com.runescape.media.renderable;
 
 import com.runescape.Game;
-import com.runescape.cache.def.AnimationSequence;
+import com.runescape.cache.cfg.VarBit;
 import com.runescape.cache.def.GameObjectDefinition;
-import com.runescape.cache.def.VarBit;
-import com.runescape.media.Model;
+import com.runescape.cache.media.AnimationSequence;
 
 public class GameObject extends Renderable {
 
@@ -56,8 +55,8 @@ public class GameObject extends Renderable {
 		if (gameObjectDefinition == null) {
 			return null;
 		}
-		Model model = gameObjectDefinition.getGameObjectModel(clickType, face, vertexHeight, vertexHeightRight, vertexHeightTopRight,
-				vertexHeightTop, animation);
+		Model model = gameObjectDefinition.getGameObjectModel(clickType, face, vertexHeight, vertexHeightRight,
+				vertexHeightTopRight, vertexHeightTop, animation);
 		return model;
 	}
 
@@ -79,8 +78,8 @@ public class GameObject extends Renderable {
 		return GameObjectDefinition.getDefinition(childrenIds[child]);
 	}
 
-	public GameObject(int id, int face, int clickType, int vertexHeightRight, int vertexHeightTopRight, int vertexHeight, int vertexHeightTop, int animationId,
-			boolean bool) {
+	public GameObject(int id, int face, int clickType, int vertexHeightRight, int vertexHeightTopRight,
+			int vertexHeight, int vertexHeightTop, int animationId, boolean bool) {
 		this.id = id;
 		this.clickType = clickType;
 		this.face = face;

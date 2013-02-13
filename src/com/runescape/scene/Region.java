@@ -2,12 +2,14 @@ package com.runescape.scene;
 
 import com.runescape.cache.def.FloorDefinition;
 import com.runescape.cache.def.GameObjectDefinition;
-import com.runescape.media.Model;
-import com.runescape.media.rasterizer.Rasterizer3D;
+import com.runescape.media.Rasterizer3D;
 import com.runescape.media.renderable.GameObject;
+import com.runescape.media.renderable.Model;
 import com.runescape.media.renderable.Renderable;
 import com.runescape.net.Buffer;
 import com.runescape.net.requester.OnDemandRequester;
+import com.runescape.scene.util.CollisionMap;
+import com.runescape.scene.util.TiledUtils;
 import com.runescape.util.SignLink;
 
 /* Region - Decompiled by JODE
@@ -969,8 +971,8 @@ public class Region {
 					int i_186_ = buffer.getUnsignedByte();
 					if (i_186_ == 0) {
 						if (i_182_ == 0) {
-							vertexHeights[0][i_181_][i] = -Region.calculateVertexHeight(932731 + i_181_ + i_185_, 556238 + i
-									+ i_180_) * 8;
+							vertexHeights[0][i_181_][i] = -Region.calculateVertexHeight(932731 + i_181_ + i_185_,
+									556238 + i + i_180_) * 8;
 						} else {
 							vertexHeights[i_182_][i_181_][i] = vertexHeights[i_182_ - 1][i_181_][i] - 240;
 							break;

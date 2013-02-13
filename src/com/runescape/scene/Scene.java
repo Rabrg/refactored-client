@@ -1,11 +1,17 @@
 package com.runescape.scene;
 
 import com.runescape.collection.LinkedList;
-import com.runescape.media.Model;
+import com.runescape.media.Rasterizer;
+import com.runescape.media.Rasterizer3D;
 import com.runescape.media.VertexNormal;
-import com.runescape.media.rasterizer.Rasterizer;
-import com.runescape.media.rasterizer.Rasterizer3D;
+import com.runescape.media.renderable.Model;
 import com.runescape.media.renderable.Renderable;
+import com.runescape.scene.tile.ComplexTile;
+import com.runescape.scene.tile.FloorDecoration;
+import com.runescape.scene.tile.GenericTile;
+import com.runescape.scene.tile.SceneTile;
+import com.runescape.scene.tile.Wall;
+import com.runescape.scene.tile.WallDecoration;
 import com.runescape.util.SignLink;
 
 public class Scene {
@@ -356,9 +362,9 @@ public class Scene {
 				tiles[i_71_][x][y].wall = wall;
 			}
 		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("65870, " + faceUnknown + ", " + renderable + ", " + bool + ", " + hash + ", " + y + ", "
-					+ config + ", " + x + ", " + renderable_68_ + ", " + plane + ", " + face + ", " + i_71_ + ", "
-					+ runtimeexception.toString());
+			SignLink.reportError("65870, " + faceUnknown + ", " + renderable + ", " + bool + ", " + hash + ", " + y
+					+ ", " + config + ", " + x + ", " + renderable_68_ + ", " + plane + ", " + face + ", " + i_71_
+					+ ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
@@ -952,7 +958,7 @@ public class Scene {
 			VertexNormal vertexnormal_214_ = model.aVertexNormalArray1653[i_213_];
 			if (vertexnormal_214_.magnitude != 0) {
 				int i_215_ = model.verticesY[i_213_] - i_209_;
-				if (i_215_ <= model_208_.anInt1644) {
+				if (i_215_ <= model_208_.maxY) {
 					int i_216_ = model.verticesX[i_213_] - i;
 					if (i_216_ >= model_208_.anInt1639 && i_216_ <= model_208_.anInt1640) {
 						int i_217_ = model.verticesZ[i_213_] - i_210_;
@@ -1066,10 +1072,10 @@ public class Scene {
 			}
 			for (int i_241_ = 128; i_241_ <= 384; i_241_ += 32) {
 				for (int i_242_ = 0; i_242_ < 2048; i_242_ += 64) {
-					Scene.anInt538 = Model.anIntArray1682[i_241_];
-					Scene.anInt539 = Model.anIntArray1683[i_241_];
-					Scene.anInt540 = Model.anIntArray1682[i_242_];
-					Scene.anInt541 = Model.anIntArray1683[i_242_];
+					Scene.anInt538 = Model.SINE[i_241_];
+					Scene.anInt539 = Model.COSINE[i_241_];
+					Scene.anInt540 = Model.SINE[i_242_];
+					Scene.anInt541 = Model.COSINE[i_242_];
 					int i_243_ = (i_241_ - 128) / 32;
 					int i_244_ = i_242_ / 64;
 					for (int i_245_ = -26; i_245_ <= 26; i_245_++) {
@@ -1187,11 +1193,11 @@ public class Scene {
 				i_268_ = anInt519 * 128 - 1;
 			}
 			Scene.anInt528++;
-			Scene.anInt538 = Model.anIntArray1682[i_272_];
-			Scene.anInt539 = Model.anIntArray1683[i_272_];
+			Scene.anInt538 = Model.SINE[i_272_];
+			Scene.anInt539 = Model.COSINE[i_272_];
 			if (!bool) {
-				Scene.anInt540 = Model.anIntArray1682[i_269_];
-				Scene.anInt541 = Model.anIntArray1683[i_269_];
+				Scene.anInt540 = Model.SINE[i_269_];
+				Scene.anInt541 = Model.COSINE[i_269_];
 				Scene.aBooleanArrayArray572 = Scene.aBooleanArrayArrayArrayArray571[(i_272_ - 128) / 32][i_269_ / 64];
 				Scene.anInt535 = i;
 				Scene.anInt536 = i_270_;
@@ -1537,21 +1543,18 @@ public class Scene {
 						if (cameraangle != null && cameraangle.anInt154 == 0) {
 							if (cameraangle.aRenderable151 != null) {
 								cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
-										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
-										cameraangle.anInt153);
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+												- Scene.anInt536, cameraangle.z - Scene.anInt537, cameraangle.anInt153);
 							}
 							if (cameraangle.aRenderable152 != null) {
 								cameraangle.aRenderable152.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
-										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
-										cameraangle.anInt153);
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+												- Scene.anInt536, cameraangle.z - Scene.anInt537, cameraangle.anInt153);
 							}
 							if (cameraangle.aRenderable150 != null) {
 								cameraangle.aRenderable150.renderAtPoint(0, Scene.anInt538, Scene.anInt539,
-										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535,
-										cameraangle.x - Scene.anInt536, cameraangle.z - Scene.anInt537,
-										cameraangle.anInt153);
+										Scene.anInt540, Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
+												- Scene.anInt536, cameraangle.z - Scene.anInt537, cameraangle.anInt153);
 							}
 						}
 					}
@@ -1736,21 +1739,21 @@ public class Scene {
 					if (cameraangle != null && cameraangle.anInt154 != 0) {
 						if (cameraangle.aRenderable151 != null) {
 							cameraangle.aRenderable151.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
-											- Scene.anInt537, cameraangle.anInt153);
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x - Scene.anInt536
+											- cameraangle.anInt154, cameraangle.z - Scene.anInt537,
+									cameraangle.anInt153);
 						}
 						if (cameraangle.aRenderable152 != null) {
 							cameraangle.aRenderable152.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
-											- Scene.anInt537, cameraangle.anInt153);
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x - Scene.anInt536
+											- cameraangle.anInt154, cameraangle.z - Scene.anInt537,
+									cameraangle.anInt153);
 						}
 						if (cameraangle.aRenderable150 != null) {
 							cameraangle.aRenderable150.renderAtPoint(0, Scene.anInt538, Scene.anInt539, Scene.anInt540,
-									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x
-											- Scene.anInt536 - cameraangle.anInt154, cameraangle.z
-											- Scene.anInt537, cameraangle.anInt153);
+									Scene.anInt541, cameraangle.y - Scene.anInt535, cameraangle.x - Scene.anInt536
+											- cameraangle.anInt154, cameraangle.z - Scene.anInt537,
+									cameraangle.anInt153);
 						}
 					}
 					if (scenetile_290_.anInt1339 != 0) {

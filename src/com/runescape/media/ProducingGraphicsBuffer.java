@@ -9,8 +9,6 @@ import java.awt.image.ImageConsumer;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 
-import com.runescape.media.rasterizer.Rasterizer;
-
 public class ProducingGraphicsBuffer implements ImageProducer, ImageObserver {
 
 	public int[] pixels;

@@ -1,4 +1,4 @@
-package com.runescape.media.rasterizer;
+package com.runescape.media;
 
 import com.runescape.collection.CacheableNode;
 

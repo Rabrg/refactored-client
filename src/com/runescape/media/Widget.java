@@ -4,9 +4,10 @@ import com.runescape.Game;
 import com.runescape.cache.Archive;
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.ItemDefinition;
+import com.runescape.cache.media.ImageRGB;
+import com.runescape.cache.media.TypeFace;
 import com.runescape.collection.Cache;
-import com.runescape.media.rasterizer.ImageRGB;
-import com.runescape.media.rasterizer.TypeFace;
+import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 

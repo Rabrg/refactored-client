@@ -1,8 +1,7 @@
 package com.runescape.media.renderable;
 
-import com.runescape.cache.def.SpotAnimation;
+import com.runescape.cache.media.SpotAnimation;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
 
 public class Projectile extends Renderable {
 

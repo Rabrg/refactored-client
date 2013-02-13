@@ -1,4 +1,4 @@
-package com.runescape.cache.def;
+package com.runescape.cache.cfg;
 
 import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;

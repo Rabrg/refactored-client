@@ -1,4 +1,4 @@
-package com.runescape.cache.def;
+package com.runescape.cache.media;
 
 import com.runescape.cache.Archive;
 import com.runescape.media.Animation;

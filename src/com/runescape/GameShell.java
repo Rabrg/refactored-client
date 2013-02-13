@@ -16,8 +16,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import com.runescape.cache.media.ImageRGB;
 import com.runescape.media.ProducingGraphicsBuffer;
-import com.runescape.media.rasterizer.ImageRGB;
 
 @SuppressWarnings("serial")
 public class GameShell extends Applet implements Runnable, MouseListener, MouseMotionListener, KeyListener,
@@ -225,7 +225,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	}
 
 	protected void redraw() {
-		
+
 	}
 
 	@Override

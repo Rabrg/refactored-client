@@ -2,9 +2,10 @@ package com.runescape.cache.def;
 
 import com.runescape.Game;
 import com.runescape.cache.Archive;
+import com.runescape.cache.cfg.VarBit;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
+import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 
 public class ActorDefinition {
@@ -175,7 +176,7 @@ public class ActorDefinition {
 			ActorDefinition.modelCache.put(childIdModel, id);
 		}
 		Model childModel = Model.aModel1614;
-		childModel.method412(7, childIdModel, Animation.exists(frameId) & Animation.exists(frameId2));
+		childModel.replaceWithModel(childIdModel, Animation.exists(frameId) & Animation.exists(frameId2));
 		if (frameId != -1 && frameId2 != -1) {
 			childModel.mixAnimationFrames(-20491, framesFrom2, frameId2, frameId);
 		} else if (frameId != -1) {
@@ -184,7 +185,7 @@ public class ActorDefinition {
 		if (sizeXZ != 128 || sizeY != 128) {
 			childModel.scaleT(sizeXZ, sizeXZ, sizeY);
 		}
-		childModel.calculateDiagonals(false);
+		childModel.calculateDiagonals();
 		childModel.triangleSkin = null;
 		childModel.vectorSkin = null;
 		if (boundaryDimension == 1) {

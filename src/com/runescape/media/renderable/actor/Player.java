@@ -2,13 +2,13 @@ package com.runescape.media.renderable.actor;
 
 import com.runescape.Game;
 import com.runescape.cache.def.ActorDefinition;
-import com.runescape.cache.def.AnimationSequence;
-import com.runescape.cache.def.IdentityKit;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.def.SpotAnimation;
+import com.runescape.cache.media.AnimationSequence;
+import com.runescape.cache.media.IdentityKit;
+import com.runescape.cache.media.SpotAnimation;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
+import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 
@@ -298,13 +298,13 @@ public class Player extends Actor {
 			return model;
 		}
 		Model model_25_ = Model.aModel1614;
-		model_25_.method412(7, model, Animation.exists(i_12_) & Animation.exists(i_13_));
+		model_25_.replaceWithModel(model, Animation.exists(i_12_) & Animation.exists(i_13_));
 		if (i_12_ != -1 && i_13_ != -1) {
 			model_25_.mixAnimationFrames(-20491, AnimationSequence.cache[animation].flowControl, i_13_, i_12_);
 		} else if (i_12_ != -1) {
 			model_25_.applyTransform(i_12_);
 		}
-		model_25_.calculateDiagonals(false);
+		model_25_.calculateDiagonals();
 		model_25_.triangleSkin = null;
 		model_25_.vectorSkin = null;
 		return model_25_;

@@ -1,17 +1,19 @@
-package com.runescape.media;
+package com.runescape.media.renderable;
 
-import com.runescape.media.rasterizer.Rasterizer;
-import com.runescape.media.rasterizer.Rasterizer3D;
-import com.runescape.media.renderable.Renderable;
+import com.runescape.media.Animation;
+import com.runescape.media.Rasterizer;
+import com.runescape.media.Rasterizer3D;
+import com.runescape.media.Skins;
+import com.runescape.media.VertexNormal;
 import com.runescape.net.Buffer;
 import com.runescape.net.requester.Requester;
 import com.runescape.util.SignLink;
 
 public class Model extends Renderable {
+
 	private boolean aBoolean1608 = false;
 	private int anInt1610 = 1;
-	private boolean aBoolean1611 = true;
-	public static Model aModel1614 = new Model(true);
+	public static Model aModel1614 = new Model();
 	private static int[] anIntArray1615 = new int[2000];
 	private static int[] anIntArray1616 = new int[2000];
 	private static int[] anIntArray1617 = new int[2000];
@@ -41,7 +43,7 @@ public class Model extends Renderable {
 	public int anInt1641;
 	public int anInt1642;
 	public int shadowIntensity;
-	public int anInt1644;
+	public int maxY;
 	public int anInt1645;
 	public int anInt1646;
 	public int anInt1647;
@@ -79,8 +81,8 @@ public class Model extends Renderable {
 	public static int anInt1679;
 	public static int anInt1680;
 	public static int[] anIntArray1681 = new int[1000];
-	public static int[] anIntArray1682 = Rasterizer3D.SINE;
-	public static int[] anIntArray1683 = Rasterizer3D.COSINE;
+	public static int[] SINE = Rasterizer3D.SINE;
+	public static int[] COSINE = Rasterizer3D.COSINE;
 	static int[] anIntArray1684 = Rasterizer3D.getRgbLookupTableId;
 	static int[] anIntArray1685 = Rasterizer3D.anIntArray1489;
 
@@ -101,8 +103,8 @@ public class Model extends Renderable {
 		Model.anIntArray1668 = null;
 		Model.anIntArray1669 = null;
 		Model.anIntArray1670 = null;
-		Model.anIntArray1682 = null;
-		Model.anIntArray1683 = null;
+		Model.SINE = null;
+		Model.COSINE = null;
 		Model.anIntArray1684 = null;
 		Model.anIntArray1685 = null;
 	}
@@ -185,31 +187,20 @@ public class Model extends Renderable {
 		}
 	}
 
-	public static void method409(int i, int i_11_) {
-		do {
-			try {
-				Model.modelHeaders[i_11_] = null;
-				if (i > 0) {
-					break;
-				}
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("72035, " + i + ", " + i_11_ + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
+	public static void resetModel(int model) {
+		Model.modelHeaders[model] = null;
 	}
 
-	public static Model getModel(int i_12_) {
+	public static Model getModel(int model) {
 		if (Model.modelHeaders == null) {
 			return null;
 		}
-		ModelHeader modelheader = Model.modelHeaders[i_12_];
+		ModelHeader modelheader = Model.modelHeaders[model];
 		if (modelheader == null) {
-			Model.requester.request(i_12_);
+			Model.requester.request(model);
 			return null;
 		}
-		return new Model(i_12_);
+		return new Model(model);
 	}
 
 	public static boolean isCached(int i) {
@@ -222,21 +213,6 @@ public class Model extends Renderable {
 			return false;
 		}
 		return true;
-	}
-
-	private Model(boolean bool) {
-		do {
-			try {
-				if (bool) {
-					break;
-				}
-				aBoolean1611 = !aBoolean1611;
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("59290, " + bool + ", " + runtimeexception.toString());
-				throw new RuntimeException();
-			}
-			break;
-		} while (false);
 	}
 
 	private Model(int modelId) {
@@ -472,17 +448,20 @@ public class Model extends Renderable {
 						triangleSkinValues[triangleCount] = model_44_.triangleSkinValues[i_45_];
 					}
 					triangleColorValues[triangleCount] = model_44_.triangleColorValues[i_45_];
-					trianglePointsX[triangleCount] = method413(model_44_, model_44_.trianglePointsX[i_45_]);
-					trianglePointsY[triangleCount] = method413(model_44_, model_44_.trianglePointsY[i_45_]);
-					trianglePointsZ[triangleCount] = method413(model_44_, model_44_.trianglePointsZ[i_45_]);
+					trianglePointsX[triangleCount] = getFirstIdenticalVertexIndex(model_44_,
+							model_44_.trianglePointsX[i_45_]);
+					trianglePointsY[triangleCount] = getFirstIdenticalVertexIndex(model_44_,
+							model_44_.trianglePointsY[i_45_]);
+					trianglePointsZ[triangleCount] = getFirstIdenticalVertexIndex(model_44_,
+							model_44_.trianglePointsZ[i_45_]);
 					triangleCount++;
 				}
 				for (int i_47_ = 0; i_47_ < model_44_.texturedTriangleCount; i_47_++) {
-					texturedTrianglePointsX[texturedTriangleCount] = method413(model_44_,
+					texturedTrianglePointsX[texturedTriangleCount] = getFirstIdenticalVertexIndex(model_44_,
 							model_44_.texturedTrianglePointsX[i_47_]);
-					texturedTrianglePointsY[texturedTriangleCount] = method413(model_44_,
+					texturedTrianglePointsY[texturedTriangleCount] = getFirstIdenticalVertexIndex(model_44_,
 							model_44_.texturedTrianglePointsY[i_47_]);
-					texturedTrianglePointsZ[texturedTriangleCount] = method413(model_44_,
+					texturedTrianglePointsZ[texturedTriangleCount] = getFirstIdenticalVertexIndex(model_44_,
 							model_44_.texturedTrianglePointsZ[i_47_]);
 					texturedTriangleCount++;
 				}
@@ -614,7 +593,7 @@ public class Model extends Renderable {
 					i_56_ += model_58_.texturedTriangleCount;
 				}
 			}
-			calculateDiagonals(false);
+			calculateDiagonals();
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("65900, " + i + ", " + i_48_ + ", " + bool + ", " + models + ", "
 					+ runtimeexception.toString());
@@ -736,7 +715,7 @@ public class Model extends Renderable {
 			texturedTrianglePointsY = model.texturedTrianglePointsY;
 			texturedTrianglePointsZ = model.texturedTrianglePointsZ;
 			modelHeight = model.modelHeight;
-			anInt1644 = model.anInt1644;
+			maxY = model.maxY;
 			if (i >= 0) {
 				throw new NullPointerException();
 			}
@@ -754,125 +733,112 @@ public class Model extends Renderable {
 		}
 	}
 
-	public void method412(int i, Model model_80_, boolean bool) {
-		try {
-			vertexCount = model_80_.vertexCount;
-			if (i != 7) {
-				for (int i_81_ = 1; i_81_ > 0; i_81_++) {
-					/* empty */
-				}
-			}
-			triangleCount = model_80_.triangleCount;
-			texturedTriangleCount = model_80_.texturedTriangleCount;
-			if (Model.anIntArray1615.length < vertexCount) {
-				Model.anIntArray1615 = new int[vertexCount + 100];
-				Model.anIntArray1616 = new int[vertexCount + 100];
-				Model.anIntArray1617 = new int[vertexCount + 100];
-			}
-			verticesX = Model.anIntArray1615;
-			verticesY = Model.anIntArray1616;
-			verticesZ = Model.anIntArray1617;
-			for (int i_82_ = 0; i_82_ < vertexCount; i_82_++) {
-				verticesX[i_82_] = model_80_.verticesX[i_82_];
-				verticesY[i_82_] = model_80_.verticesY[i_82_];
-				verticesZ[i_82_] = model_80_.verticesZ[i_82_];
-			}
-			if (bool) {
-				triangleAlphaValues = model_80_.triangleAlphaValues;
-			} else {
-				if (Model.anIntArray1618.length < triangleCount) {
-					Model.anIntArray1618 = new int[triangleCount + 100];
-				}
-				triangleAlphaValues = Model.anIntArray1618;
-				if (model_80_.triangleAlphaValues == null) {
-					for (int i_83_ = 0; i_83_ < triangleCount; i_83_++) {
-						triangleAlphaValues[i_83_] = 0;
-					}
-				} else {
-					for (int i_84_ = 0; i_84_ < triangleCount; i_84_++) {
-						triangleAlphaValues[i_84_] = model_80_.triangleAlphaValues[i_84_];
-					}
-				}
-			}
-			texturePoints = model_80_.texturePoints;
-			triangleColorValues = model_80_.triangleColorValues;
-			trianglePriorities = model_80_.trianglePriorities;
-			anInt1634 = model_80_.anInt1634;
-			triangleSkin = model_80_.triangleSkin;
-			vectorSkin = model_80_.vectorSkin;
-			trianglePointsX = model_80_.trianglePointsX;
-			trianglePointsY = model_80_.trianglePointsY;
-			trianglePointsZ = model_80_.trianglePointsZ;
-			anIntArray1627 = model_80_.anIntArray1627;
-			anIntArray1628 = model_80_.anIntArray1628;
-			anIntArray1629 = model_80_.anIntArray1629;
-			texturedTrianglePointsX = model_80_.texturedTrianglePointsX;
-			texturedTrianglePointsY = model_80_.texturedTrianglePointsY;
-			texturedTrianglePointsZ = model_80_.texturedTrianglePointsZ;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("18331, " + i + ", " + model_80_ + ", " + bool + ", " + runtimeexception.toString());
-			throw new RuntimeException();
-		}
+	public Model() {
+		// TODO Auto-generated constructor stub
 	}
 
-	private final int method413(Model model_85_, int i) {
-		int i_86_ = -1;
-		int i_87_ = model_85_.verticesX[i];
-		int i_88_ = model_85_.verticesY[i];
-		int i_89_ = model_85_.verticesZ[i];
-		for (int i_90_ = 0; i_90_ < vertexCount; i_90_++) {
-			if (i_87_ == verticesX[i_90_] && i_88_ == verticesY[i_90_] && i_89_ == verticesZ[i_90_]) {
-				i_86_ = i_90_;
+	public void replaceWithModel(Model model, boolean replaceAlphaValues) {
+		vertexCount = model.vertexCount;
+		triangleCount = model.triangleCount;
+		texturedTriangleCount = model.texturedTriangleCount;
+		if (Model.anIntArray1615.length < vertexCount) {
+			Model.anIntArray1615 = new int[vertexCount + 100];
+			Model.anIntArray1616 = new int[vertexCount + 100];
+			Model.anIntArray1617 = new int[vertexCount + 100];
+		}
+		verticesX = Model.anIntArray1615;
+		verticesY = Model.anIntArray1616;
+		verticesZ = Model.anIntArray1617;
+		for (int vertex = 0; vertex < vertexCount; vertex++) {
+			verticesX[vertex] = model.verticesX[vertex];
+			verticesY[vertex] = model.verticesY[vertex];
+			verticesZ[vertex] = model.verticesZ[vertex];
+		}
+		if (replaceAlphaValues) {
+			triangleAlphaValues = model.triangleAlphaValues;
+		} else {
+			if (Model.anIntArray1618.length < triangleCount) {
+				Model.anIntArray1618 = new int[triangleCount + 100];
+			}
+			triangleAlphaValues = Model.anIntArray1618;
+			if (model.triangleAlphaValues == null) {
+				for (int triangle = 0; triangle < triangleCount; triangle++) {
+					triangleAlphaValues[triangle] = 0;
+				}
+			} else {
+				for (int triangle = 0; triangle < triangleCount; triangle++) {
+					triangleAlphaValues[triangle] = model.triangleAlphaValues[triangle];
+				}
+			}
+		}
+		texturePoints = model.texturePoints;
+		triangleColorValues = model.triangleColorValues;
+		trianglePriorities = model.trianglePriorities;
+		anInt1634 = model.anInt1634;
+		triangleSkin = model.triangleSkin;
+		vectorSkin = model.vectorSkin;
+		trianglePointsX = model.trianglePointsX;
+		trianglePointsY = model.trianglePointsY;
+		trianglePointsZ = model.trianglePointsZ;
+		anIntArray1627 = model.anIntArray1627;
+		anIntArray1628 = model.anIntArray1628;
+		anIntArray1629 = model.anIntArray1629;
+		texturedTrianglePointsX = model.texturedTrianglePointsX;
+		texturedTrianglePointsY = model.texturedTrianglePointsY;
+		texturedTrianglePointsZ = model.texturedTrianglePointsZ;
+	}
+
+	private final int getFirstIdenticalVertexIndex(Model model, int vertex) {
+		int identicalVertexIndex = -1;
+		int vertexX = model.verticesX[vertex];
+		int vertexY = model.verticesY[vertex];
+		int vertexZ = model.verticesZ[vertex];
+		for (int index = 0; index < vertexCount; index++) {
+			if (vertexX == verticesX[index] && vertexY == verticesY[index] && vertexZ == verticesZ[index]) {
+				identicalVertexIndex = index;
 				break;
 			}
 		}
-		if (i_86_ == -1) {
-			verticesX[vertexCount] = i_87_;
-			verticesY[vertexCount] = i_88_;
-			verticesZ[vertexCount] = i_89_;
-			if (model_85_.vertexSkins != null) {
-				vertexSkins[vertexCount] = model_85_.vertexSkins[i];
+		if (identicalVertexIndex == -1) {
+			verticesX[vertexCount] = vertexX;
+			verticesY[vertexCount] = vertexY;
+			verticesZ[vertexCount] = vertexZ;
+			if (model.vertexSkins != null) {
+				vertexSkins[vertexCount] = model.vertexSkins[vertex];
 			}
-			i_86_ = vertexCount++;
+			identicalVertexIndex = vertexCount++;
 		}
-		return i_86_;
+		return identicalVertexIndex;
 	}
 
-	public void calculateDiagonals(boolean bool) {
-		try {
-			modelHeight = 0;
-			shadowIntensity = 0;
-			anInt1644 = 0;
-			for (int i = 0; i < vertexCount; i++) {
-				int i_91_ = verticesX[i];
-				int i_92_ = verticesY[i];
-				int i_93_ = verticesZ[i];
-				if (-i_92_ > modelHeight) {
-					modelHeight = -i_92_;
-				}
-				if (i_92_ > anInt1644) {
-					anInt1644 = i_92_;
-				}
-				int i_94_ = i_91_ * i_91_ + i_93_ * i_93_;
-				if (i_94_ > shadowIntensity) {
-					shadowIntensity = i_94_;
-				}
+	public void calculateDiagonals() {
+		modelHeight = 0;
+		shadowIntensity = 0;
+		maxY = 0;
+		for (int vertex = 0; vertex < vertexCount; vertex++) {
+			int vertexX = verticesX[vertex];
+			int vertexY = verticesY[vertex];
+			int vertexZ = verticesZ[vertex];
+			if (-vertexY > modelHeight) {
+				modelHeight = -vertexY;
 			}
-			if (bool) {
+			if (vertexY > maxY) {
+				maxY = vertexY;
 			}
-			shadowIntensity = (int) (Math.sqrt(shadowIntensity) + 0.99);
-			anInt1646 = (int) (Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight) + 0.99);
-			anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644) + 0.99);
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("41353, " + bool + ", " + runtimeexception.toString());
-			throw new RuntimeException();
+			int i_94_ = vertexX * vertexX + vertexZ * vertexZ;
+			if (i_94_ > shadowIntensity) {
+				shadowIntensity = i_94_;
+			}
 		}
+		shadowIntensity = (int) (Math.sqrt(shadowIntensity) + 0.99);
+		anInt1646 = (int) (Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight) + 0.99);
+		anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + maxY * maxY) + 0.99);
 	}
 
 	public void normalise(boolean bool) {
 		try {
 			modelHeight = 0;
-			anInt1644 = 0;
+			maxY = 0;
 			if (bool) {
 				aBoolean1608 = !aBoolean1608;
 			}
@@ -881,12 +847,12 @@ public class Model extends Renderable {
 				if (-i_95_ > modelHeight) {
 					modelHeight = -i_95_;
 				}
-				if (i_95_ > anInt1644) {
-					anInt1644 = i_95_;
+				if (i_95_ > maxY) {
+					maxY = i_95_;
 				}
 			}
 			anInt1646 = (int) (Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight) + 0.99);
-			anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644) + 0.99);
+			anInt1645 = anInt1646 + (int) (Math.sqrt(shadowIntensity * shadowIntensity + maxY * maxY) + 0.99);
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("87212, " + bool + ", " + runtimeexception.toString());
 			throw new RuntimeException();
@@ -897,7 +863,7 @@ public class Model extends Renderable {
 		try {
 			modelHeight = 0;
 			shadowIntensity = 0;
-			anInt1644 = 0;
+			maxY = 0;
 			anInt1639 = 999999;
 			anInt1640 = -999999;
 			anInt1641 = -99999;
@@ -921,8 +887,8 @@ public class Model extends Renderable {
 				if (-i_98_ > modelHeight) {
 					modelHeight = -i_98_;
 				}
-				if (i_98_ > anInt1644) {
-					anInt1644 = i_98_;
+				if (i_98_ > maxY) {
+					maxY = i_98_;
 				}
 				int i_100_ = i_97_ * i_97_ + i_99_ * i_99_;
 				if (i_100_ > shadowIntensity) {
@@ -932,7 +898,7 @@ public class Model extends Renderable {
 			shadowIntensity = (int) Math.sqrt(shadowIntensity);
 			anInt1646 = (int) Math.sqrt(shadowIntensity * shadowIntensity + modelHeight * modelHeight);
 			if (i == 21073) {
-				anInt1645 = anInt1646 + (int) Math.sqrt(shadowIntensity * shadowIntensity + anInt1644 * anInt1644);
+				anInt1645 = anInt1646 + (int) Math.sqrt(shadowIntensity * shadowIntensity + maxY * maxY);
 			}
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("2042, " + i + ", " + runtimeexception.toString());
@@ -1117,22 +1083,22 @@ public class Model extends Renderable {
 						int i_144_ = (i_124_ & 0xff) * 8;
 						int i_145_ = (i_125_ & 0xff) * 8;
 						if (i_145_ != 0) {
-							int i_146_ = Model.anIntArray1682[i_145_];
-							int i_147_ = Model.anIntArray1683[i_145_];
+							int i_146_ = Model.SINE[i_145_];
+							int i_147_ = Model.COSINE[i_145_];
 							int i_148_ = verticesY[i_142_] * i_146_ + verticesX[i_142_] * i_147_ >> 16;
 							verticesY[i_142_] = verticesY[i_142_] * i_147_ - verticesX[i_142_] * i_146_ >> 16;
 							verticesX[i_142_] = i_148_;
 						}
 						if (i_143_ != 0) {
-							int i_149_ = Model.anIntArray1682[i_143_];
-							int i_150_ = Model.anIntArray1683[i_143_];
+							int i_149_ = Model.SINE[i_143_];
+							int i_150_ = Model.COSINE[i_143_];
 							int i_151_ = verticesY[i_142_] * i_150_ - verticesZ[i_142_] * i_149_ >> 16;
 							verticesZ[i_142_] = verticesY[i_142_] * i_149_ + verticesZ[i_142_] * i_150_ >> 16;
 							verticesY[i_142_] = i_151_;
 						}
 						if (i_144_ != 0) {
-							int i_152_ = Model.anIntArray1682[i_144_];
-							int i_153_ = Model.anIntArray1683[i_144_];
+							int i_152_ = Model.SINE[i_144_];
+							int i_153_ = Model.COSINE[i_144_];
 							int i_154_ = verticesZ[i_142_] * i_152_ + verticesX[i_142_] * i_153_ >> 16;
 							verticesZ[i_142_] = verticesZ[i_142_] * i_153_ - verticesX[i_142_] * i_152_ >> 16;
 							verticesX[i_142_] = i_154_;
@@ -1199,8 +1165,8 @@ public class Model extends Renderable {
 
 	public void rotateX(int i, int i_167_) {
 		try {
-			int i_168_ = Model.anIntArray1682[i];
-			int i_169_ = Model.anIntArray1683[i];
+			int i_168_ = Model.SINE[i];
+			int i_169_ = Model.COSINE[i];
 			for (int i_170_ = 0; i_170_ < vertexCount; i_170_++) {
 				int i_171_ = verticesY[i_170_] * i_169_ - verticesZ[i_170_] * i_168_ >> 16;
 				verticesZ[i_170_] = verticesY[i_170_] * i_168_ + verticesZ[i_170_] * i_169_ >> 16;
@@ -1348,7 +1314,7 @@ public class Model extends Renderable {
 			}
 		}
 		if (bool) {
-			calculateDiagonals(false);
+			calculateDiagonals();
 		} else {
 			method416(21073);
 		}
@@ -1426,14 +1392,14 @@ public class Model extends Renderable {
 	public final void method430(int i, int i_225_, int i_226_, int i_227_, int i_228_, int i_229_, int i_230_) {
 		int i_231_ = Rasterizer3D.centerX;
 		int i_232_ = Rasterizer3D.centerY;
-		int i_233_ = Model.anIntArray1682[i];
-		int i_234_ = Model.anIntArray1683[i];
-		int i_235_ = Model.anIntArray1682[i_225_];
-		int i_236_ = Model.anIntArray1683[i_225_];
-		int i_237_ = Model.anIntArray1682[i_226_];
-		int i_238_ = Model.anIntArray1683[i_226_];
-		int i_239_ = Model.anIntArray1682[i_227_];
-		int i_240_ = Model.anIntArray1683[i_227_];
+		int i_233_ = Model.SINE[i];
+		int i_234_ = Model.COSINE[i];
+		int i_235_ = Model.SINE[i_225_];
+		int i_236_ = Model.COSINE[i_225_];
+		int i_237_ = Model.SINE[i_226_];
+		int i_238_ = Model.COSINE[i_226_];
+		int i_239_ = Model.SINE[i_227_];
+		int i_240_ = Model.COSINE[i_227_];
 		int i_241_ = i_229_ * i_239_ + i_230_ * i_240_ >> 16;
 		for (int i_242_ = 0; i_242_ < vertexCount; i_242_++) {
 			int i_243_ = verticesX[i_242_];
@@ -1536,8 +1502,8 @@ public class Model extends Renderable {
 							int i_277_ = 0;
 							int i_278_ = 0;
 							if (i != 0) {
-								i_277_ = Model.anIntArray1682[i];
-								i_278_ = Model.anIntArray1683[i];
+								i_277_ = Model.SINE[i];
+								i_278_ = Model.COSINE[i];
 							}
 							for (int i_279_ = 0; i_279_ < vertexCount; i_279_++) {
 								int i_280_ = verticesX[i_279_];

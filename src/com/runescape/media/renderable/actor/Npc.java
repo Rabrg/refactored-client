@@ -1,10 +1,10 @@
 package com.runescape.media.renderable.actor;
 
 import com.runescape.cache.def.ActorDefinition;
-import com.runescape.cache.def.AnimationSequence;
-import com.runescape.cache.def.SpotAnimation;
+import com.runescape.cache.media.AnimationSequence;
+import com.runescape.cache.media.SpotAnimation;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
+import com.runescape.media.renderable.Model;
 
 public class Npc extends Actor {
 	public ActorDefinition npcDefinition;

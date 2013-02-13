@@ -1,7 +1,8 @@
-package com.runescape.util;
+package com.runescape.cache.cfg;
 
 import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
+import com.runescape.util.SignLink;
 
 /* ChatCensor - Decompiled by JODE
  * Visit http://jode.sourceforge.net/

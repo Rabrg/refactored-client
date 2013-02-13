@@ -1,4 +1,4 @@
-package com.runescape.media.rasterizer;
+package com.runescape.cache.media;
 
 import java.awt.Component;
 import java.awt.Image;
@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.awt.image.PixelGrabber;
 
 import com.runescape.cache.Archive;
+import com.runescape.media.Rasterizer;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 

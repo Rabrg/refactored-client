@@ -1,7 +1,6 @@
 package com.runescape.media.renderable;
 
 import com.runescape.collection.CacheableNode;
-import com.runescape.media.Model;
 import com.runescape.media.VertexNormal;
 
 public class Renderable extends CacheableNode {

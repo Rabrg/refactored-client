@@ -18,28 +18,29 @@ import java.util.zip.CRC32;
 
 import com.runescape.cache.Archive;
 import com.runescape.cache.Index;
+import com.runescape.cache.cfg.ChatCensor;
+import com.runescape.cache.cfg.VarBit;
+import com.runescape.cache.cfg.Varp;
 import com.runescape.cache.def.ActorDefinition;
-import com.runescape.cache.def.AnimationSequence;
 import com.runescape.cache.def.FloorDefinition;
 import com.runescape.cache.def.GameObjectDefinition;
-import com.runescape.cache.def.IdentityKit;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.def.SpotAnimation;
-import com.runescape.cache.def.VarBit;
-import com.runescape.cache.def.Varp;
+import com.runescape.cache.media.AnimationSequence;
+import com.runescape.cache.media.IdentityKit;
+import com.runescape.cache.media.ImageRGB;
+import com.runescape.cache.media.IndexedImage;
+import com.runescape.cache.media.SpotAnimation;
+import com.runescape.cache.media.TypeFace;
 import com.runescape.collection.LinkedList;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
 import com.runescape.media.ProducingGraphicsBuffer;
+import com.runescape.media.Rasterizer;
+import com.runescape.media.Rasterizer3D;
 import com.runescape.media.Widget;
-import com.runescape.media.rasterizer.ImageRGB;
-import com.runescape.media.rasterizer.IndexedImage;
-import com.runescape.media.rasterizer.Rasterizer;
-import com.runescape.media.rasterizer.Rasterizer3D;
-import com.runescape.media.rasterizer.TypeFace;
 import com.runescape.media.renderable.GameAnimableObject;
 import com.runescape.media.renderable.GameObject;
 import com.runescape.media.renderable.Item;
+import com.runescape.media.renderable.Model;
 import com.runescape.media.renderable.Projectile;
 import com.runescape.media.renderable.actor.Actor;
 import com.runescape.media.renderable.actor.Npc;
@@ -49,16 +50,15 @@ import com.runescape.net.BufferedConnection;
 import com.runescape.net.ISAACCipher;
 import com.runescape.net.requester.OnDemandNode;
 import com.runescape.net.requester.OnDemandRequester;
-import com.runescape.scene.CollisionMap;
-import com.runescape.scene.FloorDecoration;
 import com.runescape.scene.Region;
 import com.runescape.scene.Scene;
 import com.runescape.scene.SceneSpawnRequest;
 import com.runescape.scene.SpawnObjectNode;
-import com.runescape.scene.Wall;
-import com.runescape.scene.WallDecoration;
+import com.runescape.scene.tile.FloorDecoration;
+import com.runescape.scene.tile.Wall;
+import com.runescape.scene.tile.WallDecoration;
+import com.runescape.scene.util.CollisionMap;
 import com.runescape.sound.SoundTrack;
-import com.runescape.util.ChatCensor;
 import com.runescape.util.ChatEncoder;
 import com.runescape.util.MouseCapturer;
 import com.runescape.util.PacketConstants;
@@ -1049,7 +1049,7 @@ public class Game extends GameShell {
 				for (int i_70_ = 0; i_70_ < i; i_70_++) {
 					int i_71_ = onDemandRequester.modelIndex(i_70_);
 					if ((i_71_ & 0x79) == 0) {
-						Model.method409(116, i_70_);
+						Model.resetModel(i_70_);
 					}
 				}
 			}
@@ -1202,7 +1202,8 @@ public class Game extends GameShell {
 				if (groundItem.itemId != item.itemId && groundItemOne == null) {
 					groundItemOne = groundItem;
 				}
-				if (groundItem.itemId != item.itemId && groundItem.itemId != groundItemOne.itemId && groundItemTwo == null) {
+				if (groundItem.itemId != item.itemId && groundItem.itemId != groundItemOne.itemId
+						&& groundItemTwo == null) {
 					groundItemTwo = groundItem;
 				}
 			}
@@ -3701,39 +3702,39 @@ public class Game extends GameShell {
 	}
 
 	public final boolean method66(int toLocalX, int toLocalY, int hash) {
-			int objectHash = hash >> 14 & 0x7fff;
-			int sceneConfig = currentScene.getConfig(currentSceneIndex, toLocalX, toLocalY, hash);
-			if (sceneConfig == -1) {
-				return false;
-			}
-			int type = sceneConfig & 0x1f;
-			int rotation = sceneConfig >> 6 & 0x3;
-			if (type == 10 || type == 11 || type == 22) {
-				GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(objectHash);
-				int sizeX;
-				int sizeY;
-				if (rotation == 0 || rotation == 2) {
-					sizeX = gameObjectDefinition.sizeX;
-					sizeY = gameObjectDefinition.sizeY;
-				} else {
-					sizeX = gameObjectDefinition.sizeY;
-					sizeY = gameObjectDefinition.sizeX;
-				}
-				int face = gameObjectDefinition.face;
-				if (rotation != 0) {
-					face = (face << rotation & 0xf) + (face >> 4 - rotation);
-				}
-				calculatePath(2, 0, sizeY, 0, Game.localPlayer.pathY[0], sizeX, face, toLocalY,
-						Game.localPlayer.pathX[0], false, toLocalX);
+		int objectHash = hash >> 14 & 0x7fff;
+		int sceneConfig = currentScene.getConfig(currentSceneIndex, toLocalX, toLocalY, hash);
+		if (sceneConfig == -1) {
+			return false;
+		}
+		int type = sceneConfig & 0x1f;
+		int rotation = sceneConfig >> 6 & 0x3;
+		if (type == 10 || type == 11 || type == 22) {
+			GameObjectDefinition gameObjectDefinition = GameObjectDefinition.getDefinition(objectHash);
+			int sizeX;
+			int sizeY;
+			if (rotation == 0 || rotation == 2) {
+				sizeX = gameObjectDefinition.sizeX;
+				sizeY = gameObjectDefinition.sizeY;
 			} else {
-				calculatePath(2, rotation, 0, type + 1, Game.localPlayer.pathY[0], 0, 0, toLocalY,
-						Game.localPlayer.pathX[0], false, toLocalX);
+				sizeX = gameObjectDefinition.sizeY;
+				sizeY = gameObjectDefinition.sizeX;
 			}
-			lastClickX = clickX;
-			lastClickY = clickY;
-			lastClickType = 2;
-			anInt941 = 0;
-			return true;
+			int face = gameObjectDefinition.face;
+			if (rotation != 0) {
+				face = (face << rotation & 0xf) + (face >> 4 - rotation);
+			}
+			calculatePath(2, 0, sizeY, 0, Game.localPlayer.pathY[0], sizeX, face, toLocalY, Game.localPlayer.pathX[0],
+					false, toLocalX);
+		} else {
+			calculatePath(2, rotation, 0, type + 1, Game.localPlayer.pathY[0], 0, 0, toLocalY,
+					Game.localPlayer.pathX[0], false, toLocalX);
+		}
+		lastClickX = clickX;
+		lastClickY = clickY;
+		lastClickType = 2;
+		anInt941 = 0;
+		return true;
 	}
 
 	public final Archive requestArchive(int index, String archiveAlias, String archiveName, int archiveCRC,
@@ -3748,14 +3749,14 @@ public class Game extends GameShell {
 			} catch (Exception exception) {
 				/* empty */
 			}
-				if (archiveBuffer != null) {
-					crc32.reset();
-					crc32.update(archiveBuffer);
-					int crc = (int) crc32.getValue();
-					if (crc != archiveCRC) {
-						archiveBuffer = null;
-					}
+			if (archiveBuffer != null) {
+				crc32.reset();
+				crc32.update(archiveBuffer);
+				int crc = (int) crc32.getValue();
+				if (crc != archiveCRC) {
+					archiveBuffer = null;
 				}
+			}
 			if (archiveBuffer != null) {
 				Archive archive = new Archive(archiveBuffer);
 				return archive;
@@ -3802,16 +3803,16 @@ public class Game extends GameShell {
 					} catch (Exception exception) {
 						stores[0] = null;
 					}
-						if (archiveBuffer != null) {
-							crc32.reset();
-							crc32.update(archiveBuffer);
-							int crc = (int) crc32.getValue();
-							if (crc != archiveCRC) {
-								archiveBuffer = null;
-								errors++;
-								message = "Checksum error: " + crc;
-							}
+					if (archiveBuffer != null) {
+						crc32.reset();
+						crc32.update(archiveBuffer);
+						int crc = (int) crc32.getValue();
+						if (crc != archiveCRC) {
+							archiveBuffer = null;
+							errors++;
+							message = "Checksum error: " + crc;
 						}
+					}
 				} catch (IOException ioexception) {
 					if (message.equals("Unknown error")) {
 						message = "Connection error";
@@ -5962,8 +5963,8 @@ public class Game extends GameShell {
 			}
 			if (i_453_ > 4225 && i_453_ < 90000) {
 				int i_454_ = anInt1210 + anInt1234 & 0x7ff;
-				int i_455_ = Model.anIntArray1682[i_454_];
-				int i_456_ = Model.anIntArray1683[i_454_];
+				int i_455_ = Model.SINE[i_454_];
+				int i_456_ = Model.COSINE[i_454_];
 				i_455_ = i_455_ * 256 / (anInt1195 + 256);
 				i_456_ = i_456_ * 256 / (anInt1195 + 256);
 				int i_457_ = i_451_ * i_455_ + i_452_ * i_456_ >> 16;
@@ -6757,9 +6758,8 @@ public class Game extends GameShell {
 			if (player != Game.localPlayer && menuActionRow < 400 && !bool) {
 				String string;
 				if (player.anInt1743 == 0) {
-					string = player.playerName
-							+ Game.method110(Game.localPlayer.combatLevel, player.combatLevel, true) + " (level-"
-							+ player.combatLevel + ")";
+					string = player.playerName + Game.method110(Game.localPlayer.combatLevel, player.combatLevel, true)
+							+ " (level-" + player.combatLevel + ")";
 				} else {
 					string = player.playerName + " (skill-" + player.anInt1743 + ")";
 				}
@@ -6931,7 +6931,7 @@ public class Game extends GameShell {
 			}
 		}
 		try {
-				connectWebServer();
+			connectWebServer();
 			anArchive1078 = requestArchive(1, "title screen", "title", crcValues[1], 25);
 			fontSmall = new TypeFace(false, "p11_full", anArchive1078);
 			fontNormal = new TypeFace(false, "p12_full", anArchive1078);
@@ -8287,8 +8287,8 @@ public class Game extends GameShell {
 													int i_647_ = widget_635_.itemAmounts[i_636_];
 													fontSmall.drawString(Game.method43(-33245, i_647_), i_639_ + 1
 															+ i_641_, i_640_ + 10 + i_642_, 0);
-													fontSmall.drawString(Game.method43(-33245, i_647_), i_639_
-															+ i_641_, i_640_ + 9 + i_642_, 0xFFFF00);
+													fontSmall.drawString(Game.method43(-33245, i_647_),
+															i_639_ + i_641_, i_640_ + 9 + i_642_, 0xFFFF00);
 												}
 											}
 										}
@@ -9735,10 +9735,10 @@ public class Game extends GameShell {
 				i -= anInt883;
 				i_797_ -= anInt884;
 				i_796_ -= anInt885;
-				int i_798_ = Model.anIntArray1682[anInt886];
-				int i_799_ = Model.anIntArray1683[anInt886];
-				int i_800_ = Model.anIntArray1682[anInt887];
-				int i_801_ = Model.anIntArray1683[anInt887];
+				int i_798_ = Model.SINE[anInt886];
+				int i_799_ = Model.COSINE[anInt886];
+				int i_800_ = Model.SINE[anInt887];
+				int i_801_ = Model.COSINE[anInt887];
 				int i_802_ = i_796_ * i_800_ + i * i_801_ >> 16;
 				i_796_ = i_796_ * i_801_ - i * i_800_ >> 16;
 				i = i_802_;
@@ -10076,12 +10076,12 @@ public class Game extends GameShell {
 						i_860_ += 30;
 					}
 					fontBold.drawShadowedString("Username: " + username
-							+ (anInt1241 == 0 & Game.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 90, i_860_,
-							true, 0xFFFFFF);
+							+ (anInt1241 == 0 & Game.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 90, i_860_, true,
+							0xFFFFFF);
 					i_860_ += 15;
 					fontBold.drawShadowedString("Password: " + TextUtils.censorPassword(password)
-							+ (anInt1241 == 1 & Game.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 88, i_860_,
-							true, 0xFFFFFF);
+							+ (anInt1241 == 1 & Game.currentCycle % 40 < 20 ? "@yel@|" : ""), i / 2 - 88, i_860_, true,
+							0xFFFFFF);
 					i_860_ += 15;
 					if (!hideButtons) {
 						int i_861_ = i / 2 - 80;
@@ -10202,8 +10202,7 @@ public class Game extends GameShell {
 					int i_880_ = buffer.getUnsignedByte();
 					int i_881_ = i_880_ >> 4 & 0xf;
 					int i_882_ = i_880_ & 0x7;
-					if (Game.localPlayer.pathX[0] >= i_877_ - i_881_
-							&& Game.localPlayer.pathX[0] <= i_877_ + i_881_
+					if (Game.localPlayer.pathX[0] >= i_877_ - i_881_ && Game.localPlayer.pathX[0] <= i_877_ + i_881_
 							&& Game.localPlayer.pathY[0] >= i_878_ - i_881_
 							&& Game.localPlayer.pathY[0] <= i_878_ + i_881_ && aBoolean873 && !Game.lowMemory
 							&& trackCount < 50) {
@@ -10394,9 +10393,9 @@ public class Game extends GameShell {
 						if (i_938_ >= 0 && i_939_ >= 0 && i_938_ < 104 && i_939_ < 104) {
 							i_938_ = i_938_ * 128 + 64;
 							i_939_ = i_939_ * 128 + 64;
-							GameAnimableObject animableobject = new GameAnimableObject(currentSceneIndex, Game.currentCycle,
-									i_942_, i_940_, method42(currentSceneIndex, i_939_, true, i_938_) - i_941_, i_939_,
-									i_938_);
+							GameAnimableObject animableobject = new GameAnimableObject(currentSceneIndex,
+									Game.currentCycle, i_942_, i_940_,
+									method42(currentSceneIndex, i_939_, true, i_938_) - i_941_, i_939_, i_938_);
 							aLinkedList1081.insertBack(animableobject);
 						}
 					} else if (opcode == 44) {
@@ -10650,8 +10649,8 @@ public class Game extends GameShell {
 			int i_988_ = anInt1210 + anInt1234 & 0x7ff;
 			int i_989_ = i * i + i_987_ * i_987_;
 			if (i_989_ <= 6400) {
-				int i_990_ = Model.anIntArray1682[i_988_];
-				int i_991_ = Model.anIntArray1683[i_988_];
+				int i_990_ = Model.SINE[i_988_];
+				int i_991_ = Model.COSINE[i_988_];
 				i_990_ = i_990_ * 256 / (anInt1195 + 256);
 				i_991_ = i_991_ * 256 / (anInt1195 + 256);
 				int i_992_ = i_987_ * i_990_ + i * i_991_ >> 16;
@@ -10672,70 +10671,70 @@ public class Game extends GameShell {
 
 	private final void method142(int y, int plane, int i_995_, int i_996_, int x, int type, int i_999_) {
 		do {
-				if (x < 1 || y < 1 || x > 102 || y > 102) {
-					break;
+			if (x < 1 || y < 1 || x > 102 || y > 102) {
+				break;
+			}
+			if (!Game.lowMemory || plane == currentSceneIndex) {
+				int i_1001_ = 0;
+				int i_1002_ = -1;
+				if (type == 0) {
+					i_1001_ = currentScene.method522(plane, x, y);
 				}
-				if (!Game.lowMemory || plane == currentSceneIndex) {
-					int i_1001_ = 0;
-					int i_1002_ = -1;
+				if (type == 1) {
+					i_1001_ = currentScene.getWallDecorationHash(plane, x, y);
+				}
+				if (type == 2) {
+					i_1001_ = currentScene.method524(plane, x, y);
+				}
+				if (type == 3) {
+					i_1001_ = currentScene.getFloorDecorationHash(plane, x, y);
+				}
+				if (i_1001_ != 0) {
+					int config = currentScene.getConfig(plane, x, y, i_1001_);
+					i_1002_ = i_1001_ >> 14 & 0x7fff;
+					int position = config & 0x1f;
+					int orientation = config >> 6;
 					if (type == 0) {
-						i_1001_ = currentScene.method522(plane, x, y);
+						currentScene.method513(x, plane, y, (byte) -119);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+						if (gameobjectdefinition.solid) {
+							currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
+									gameobjectdefinition.walkable);
+						}
 					}
 					if (type == 1) {
-						i_1001_ = currentScene.getWallDecorationHash(plane, x, y);
+						currentScene.method514(0, y, plane, x);
 					}
 					if (type == 2) {
-						i_1001_ = currentScene.method524(plane, x, y);
+						currentScene.method515(plane, -978, x, y);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+						if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
+								|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
+							break;
+						}
+						if (gameobjectdefinition.solid) {
+							currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.sizeX,
+									gameobjectdefinition.sizeY, orientation, gameobjectdefinition.walkable);
+						}
 					}
 					if (type == 3) {
-						i_1001_ = currentScene.getFloorDecorationHash(plane, x, y);
-					}
-					if (i_1001_ != 0) {
-						int config = currentScene.getConfig(plane, x, y, i_1001_);
-						i_1002_ = i_1001_ >> 14 & 0x7fff;
-						int position = config & 0x1f;
-						int orientation = config >> 6;
-						if (type == 0) {
-							currentScene.method513(x, plane, y, (byte) -119);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
-							if (gameobjectdefinition.solid) {
-								currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
-										gameobjectdefinition.walkable);
-							}
-						}
-						if (type == 1) {
-							currentScene.method514(0, y, plane, x);
-						}
-						if (type == 2) {
-							currentScene.method515(plane, -978, x, y);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
-							if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
-									|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
-								break;
-							}
-							if (gameobjectdefinition.solid) {
-								currentCollisionMap[plane].unmarkSolidOccupant(x, y, gameobjectdefinition.sizeX,
-										gameobjectdefinition.sizeY, orientation, gameobjectdefinition.walkable);
-							}
-						}
-						if (type == 3) {
-							currentScene.method516((byte) 9, plane, y, x);
-							GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
-							if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
-								currentCollisionMap[plane].unmarkConcealed(x, y);
-							}
+						currentScene.method516((byte) 9, plane, y, x);
+						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
+						if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
+							currentCollisionMap[plane].unmarkConcealed(x, y);
 						}
 					}
-					if (i_999_ < 0) {
-						break;
-					}
-					int i_1007_ = plane;
-					if (i_1007_ < 3 && (currentSceneTileFlags[1][x][y] & 0x2) == 2) {
-						i_1007_++;
-					}
-					Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[plane],
-							anIntArrayArrayArray1239, x, i_999_, plane, (byte) 93);
 				}
+				if (i_999_ < 0) {
+					break;
+				}
+				int i_1007_ = plane;
+				if (i_1007_ < 3 && (currentSceneTileFlags[1][x][y] & 0x2) == 2) {
+					i_1007_++;
+				}
+				Region.method470(currentScene, i_995_, y, i_996_, i_1007_, currentCollisionMap[plane],
+						anIntArrayArrayArray1239, x, i_999_, plane, (byte) 93);
+			}
 			break;
 		} while (false);
 	}
@@ -10781,15 +10780,15 @@ public class Game extends GameShell {
 				startup();
 			}
 			if (i_1018_ != 0) {
-				int i_1023_ = Model.anIntArray1682[i_1018_];
-				int i_1024_ = Model.anIntArray1683[i_1018_];
+				int i_1023_ = Model.SINE[i_1018_];
+				int i_1024_ = Model.COSINE[i_1018_];
 				int i_1025_ = i_1021_ * i_1024_ - i_1022_ * i_1023_ >> 16;
 				i_1022_ = i_1021_ * i_1023_ + i_1022_ * i_1024_ >> 16;
 				i_1021_ = i_1025_;
 			}
 			if (i_1019_ != 0) {
-				int i_1026_ = Model.anIntArray1682[i_1019_];
-				int i_1027_ = Model.anIntArray1683[i_1019_];
+				int i_1026_ = Model.SINE[i_1019_];
+				int i_1027_ = Model.COSINE[i_1019_];
 				int i_1028_ = i_1022_ * i_1026_ + i_1020_ * i_1027_ >> 16;
 				i_1022_ = i_1022_ * i_1027_ - i_1020_ * i_1026_ >> 16;
 				i_1020_ = i_1028_;
@@ -10906,8 +10905,10 @@ public class Game extends GameShell {
 					}
 					for (SpawnObjectNode spawnObjectNodeListed = (SpawnObjectNode) spawnObjectNodeList.getBack(); spawnObjectNodeListed != null; spawnObjectNodeListed = (SpawnObjectNode) spawnObjectNodeList
 							.getPrevious()) {
-						if (spawnObjectNodeListed.x >= playerPositionX && spawnObjectNodeListed.x < playerPositionX + 8 && spawnObjectNodeListed.y >= playerPositionY
-								&& spawnObjectNodeListed.y < playerPositionY + 8 && spawnObjectNodeListed.plane == currentSceneIndex) {
+						if (spawnObjectNodeListed.x >= playerPositionX && spawnObjectNodeListed.x < playerPositionX + 8
+								&& spawnObjectNodeListed.y >= playerPositionY
+								&& spawnObjectNodeListed.y < playerPositionY + 8
+								&& spawnObjectNodeListed.plane == currentSceneIndex) {
 							spawnObjectNodeListed.anInt1344 = 0;
 						}
 					}
@@ -10924,9 +10925,9 @@ public class Game extends GameShell {
 					Widget.cache[widgetIndex].modelType = 3;
 					if (Game.localPlayer.npcDefinition == null) {
 						Widget.cache[widgetIndex].modelIndex = (Game.localPlayer.appearanceColors[0] << 25)
-								+ (Game.localPlayer.appearanceColors[4] << 20)
-								+ (Game.localPlayer.appearance[0] << 15) + (Game.localPlayer.appearance[8] << 10)
-								+ (Game.localPlayer.appearance[11] << 5) + Game.localPlayer.appearance[1];
+								+ (Game.localPlayer.appearanceColors[4] << 20) + (Game.localPlayer.appearance[0] << 15)
+								+ (Game.localPlayer.appearance[8] << 10) + (Game.localPlayer.appearance[11] << 5)
+								+ Game.localPlayer.appearance[1];
 					} else {
 						Widget.cache[widgetIndex].modelIndex = (int) (0x12345678 + Game.localPlayer.npcDefinition.id);
 					}
@@ -11476,8 +11477,8 @@ public class Game extends GameShell {
 						bool_1122_ = true;
 						for (int i_1123_ = 0; i_1123_ < friendsListCount - 1; i_1123_++) {
 							if (friendsListWorlds[i_1123_] != Game.nodeId
-									&& friendsListWorlds[i_1123_ + 1] == Game.nodeId
-									|| friendsListWorlds[i_1123_] == 0 && friendsListWorlds[i_1123_ + 1] != 0) {
+									&& friendsListWorlds[i_1123_ + 1] == Game.nodeId || friendsListWorlds[i_1123_] == 0
+									&& friendsListWorlds[i_1123_ + 1] != 0) {
 								int i_1124_ = friendsListWorlds[i_1123_];
 								friendsListWorlds[i_1123_] = friendsListWorlds[i_1123_ + 1];
 								friendsListWorlds[i_1123_ + 1] = i_1124_;

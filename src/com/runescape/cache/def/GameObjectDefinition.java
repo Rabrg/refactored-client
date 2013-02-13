@@ -2,9 +2,10 @@ package com.runescape.cache.def;
 
 import com.runescape.Game;
 import com.runescape.cache.Archive;
+import com.runescape.cache.cfg.VarBit;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.Model;
+import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.net.requester.OnDemandRequester;
 

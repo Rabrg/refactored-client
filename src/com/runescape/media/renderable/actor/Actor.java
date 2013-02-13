@@ -1,6 +1,6 @@
 package com.runescape.media.renderable.actor;
 
-import com.runescape.cache.def.AnimationSequence;
+import com.runescape.cache.media.AnimationSequence;
 import com.runescape.media.renderable.Renderable;
 
 public class Actor extends Renderable {

@@ -1,4 +1,4 @@
-package com.runescape.scene;
+package com.runescape.scene.tile;
 
 import com.runescape.media.renderable.Renderable;
 

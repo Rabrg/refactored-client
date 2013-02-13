@@ -1,13 +1,13 @@
-package com.runescape.scene;
+package com.runescape.scene.tile;
 
 public class GenericTile {
-	protected int anInt292;
-	protected int anInt293;
-	protected int anInt294;
-	protected int anInt295;
-	protected int texture;
-	protected boolean flat = true;
-	protected int rgbColor;
+	public int anInt292;
+	public int anInt293;
+	public int anInt294;
+	public int anInt295;
+	public int texture;
+	public boolean flat = true;
+	public int rgbColor;
 
 	public GenericTile(int i, int i_0_, int i_1_, int i_2_, int texture, int rgbColor, boolean flat) {
 		this.anInt292 = i;

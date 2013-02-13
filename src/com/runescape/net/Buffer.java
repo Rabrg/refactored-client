@@ -239,8 +239,8 @@ public class Buffer extends CacheableNode {
 		getBytes(decodedBuffer, 0, originalOffset);
 		BigInteger decodedBigInteger = new BigInteger(decodedBuffer);
 		BigInteger encodedBigInteger = null;
-			// encodedBigInteger = decodedBigInteger.modPow(exponent, modulus);
-			encodedBigInteger = decodedBigInteger;
+		// encodedBigInteger = decodedBigInteger.modPow(exponent, modulus);
+		encodedBigInteger = decodedBigInteger;
 		byte[] encodedBuffer = encodedBigInteger.toByteArray();
 		offset = 0;
 		put(encodedBuffer.length);

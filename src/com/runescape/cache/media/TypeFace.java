@@ -1,8 +1,9 @@
-package com.runescape.media.rasterizer;
+package com.runescape.cache.media;
 
 import java.util.Random;
 
 import com.runescape.cache.Archive;
+import com.runescape.media.Rasterizer;
 import com.runescape.net.Buffer;
 
 public class TypeFace extends Rasterizer {
