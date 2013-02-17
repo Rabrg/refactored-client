@@ -204,7 +204,7 @@ public class Game extends GameShell {
 	private int[] anIntArray993 = new int[33];
 	private int[] anIntArray994 = new int[256];
 	public Index[] stores = new Index[5];
-	public int[] settings = new int[2000];
+	public int[] widgetSettings = new int[2000];
 	private boolean aBoolean997 = false;
 	private int anInt999;
 	private int anInt1000 = 50;
@@ -1581,45 +1581,45 @@ public class Game extends GameShell {
 		}
 	}
 
-	public final void method33(int i) {
+	public final void handleWidgetSetting(int index) {
 		do {
-			int i_140_ = Varp.cache[i].unknown;
-			if (i_140_ != 0) {
-				int i_141_ = settings[i];
-				if (i_140_ == 1) {
-					if (i_141_ == 1) {
+			int type = Varp.cache[index].type;
+			if (type != 0) {
+				int setting = widgetSettings[index];
+				if (type == 1) {
+					if (setting == 1) {
 						Rasterizer3D.method369(0.9);
 					}
-					if (i_141_ == 2) {
+					if (setting == 2) {
 						Rasterizer3D.method369(0.8);
 					}
-					if (i_141_ == 3) {
+					if (setting == 3) {
 						Rasterizer3D.method369(0.7);
 					}
-					if (i_141_ == 4) {
+					if (setting == 4) {
 						Rasterizer3D.method369(0.6);
 					}
 					ItemDefinition.rgbImageCache.removeAll();
 					redraw = true;
 				}
-				if (i_140_ == 3) {
-					if (i_141_ == 0) {
+				if (type == 3) {
+					if (setting == 0) {
 						setMidiVolume(musicEnabled, 0);
 						musicEnabled = true;
 					}
-					if (i_141_ == 1) {
+					if (setting == 1) {
 						setMidiVolume(musicEnabled, -400);
 						musicEnabled = true;
 					}
-					if (i_141_ == 2) {
+					if (setting == 2) {
 						setMidiVolume(musicEnabled, -800);
 						musicEnabled = true;
 					}
-					if (i_141_ == 3) {
+					if (setting == 3) {
 						setMidiVolume(musicEnabled, -1200);
 						musicEnabled = true;
 					}
-					if (i_141_ == 4) {
+					if (setting == 4) {
 						musicEnabled = false;
 					}
 					if (!Game.lowMemory) {
@@ -1633,41 +1633,41 @@ public class Game extends GameShell {
 						songFadeCycle = 0;
 					}
 				}
-				if (i_140_ == 4) {
-					if (i_141_ == 0) {
+				if (type == 4) {
+					if (setting == 0) {
 						aBoolean873 = true;
 						setWaveVolume(0);
 					}
-					if (i_141_ == 1) {
+					if (setting == 1) {
 						aBoolean873 = true;
 						setWaveVolume(-400);
 					}
-					if (i_141_ == 2) {
+					if (setting == 2) {
 						aBoolean873 = true;
 						setWaveVolume(-800);
 					}
-					if (i_141_ == 3) {
+					if (setting == 3) {
 						aBoolean873 = true;
 						setWaveVolume(-1200);
 					}
-					if (i_141_ == 4) {
+					if (setting == 4) {
 						aBoolean873 = false;
 					}
 				}
-				if (i_140_ == 5) {
-					anInt1278 = i_141_;
+				if (type == 5) {
+					anInt1278 = setting;
 				}
-				if (i_140_ == 6) {
-					anInt1274 = i_141_;
+				if (type == 6) {
+					anInt1274 = setting;
 				}
-				if (i_140_ == 8) {
-					anInt1220 = i_141_;
+				if (type == 8) {
+					anInt1220 = setting;
 					redrawChatbox = true;
 				}
-				if (i_140_ != 9) {
+				if (type != 9) {
 					break;
 				}
-				anInt938 = i_141_;
+				anInt938 = setting;
 			}
 			break;
 		} while (false);
@@ -4351,10 +4351,10 @@ public class Game extends GameShell {
 						outBuffer.putShort(actionIndex2);
 						Widget widget = Widget.cache[actionIndex2];
 						if (widget.opcodes != null && widget.opcodes[0][0] == 5) {
-							int i_387_ = widget.opcodes[0][1];
-							if (settings[i_387_] != widget.conditionValues[0]) {
-								settings[i_387_] = widget.conditionValues[0];
-								method33(i_387_);
+							int widgetOpcode = widget.opcodes[0][1];
+							if (widgetSettings[widgetOpcode] != widget.conditionValues[0]) {
+								widgetSettings[widgetOpcode] = widget.conditionValues[0];
+								handleWidgetSetting(widgetOpcode);
 								redrawTab = true;
 							}
 						}
@@ -4692,8 +4692,8 @@ public class Game extends GameShell {
 						Widget widget = Widget.cache[actionIndex2];
 						if (widget.opcodes != null && widget.opcodes[0][0] == 5) {
 							int i_394_ = widget.opcodes[0][1];
-							settings[i_394_] = 1 - settings[i_394_];
-							method33(i_394_);
+							widgetSettings[i_394_] = 1 - widgetSettings[i_394_];
+							handleWidgetSetting(i_394_);
 							redrawTab = true;
 						}
 					}
@@ -5092,7 +5092,7 @@ public class Game extends GameShell {
 		menuActionIds = null;
 		menuActionIndex1 = null;
 		menuActionNames = null;
-		settings = null;
+		widgetSettings = null;
 		minimapHintX = null;
 		minimapHintY = null;
 		minimapHint = null;
@@ -9470,13 +9470,13 @@ public class Game extends GameShell {
 					}
 				}
 				if (opcode == 5) {
-					value = settings[opcodes[counter++]];
+					value = widgetSettings[opcodes[counter++]];
 				}
 				if (opcode == 6) {
 					value = Game.xpForSkillLevel[skillMaxLevel[opcodes[counter++]] - 1];
 				}
 				if (opcode == 7) {
-					value = settings[opcodes[counter++]] * 100 / 46875;
+					value = widgetSettings[opcodes[counter++]] * 100 / 46875;
 				}
 				if (opcode == 8) {
 					value = Game.localPlayer.combatLevel;
@@ -9508,7 +9508,7 @@ public class Game extends GameShell {
 					value = playerWeight;
 				}
 				if (opcode == 13) {
-					int setting = settings[opcodes[counter++]];
+					int setting = widgetSettings[opcodes[counter++]];
 					int info = opcodes[counter++];
 					value = (setting & 1 << info) != 0 ? 1 : 0;
 				}
@@ -9519,7 +9519,7 @@ public class Game extends GameShell {
 					int i_779_ = varbit.leastSignificantBit;
 					int i_780_ = varbit.mostSignificantBit;
 					int i_781_ = Game.BITFIELD_MAX_VALUE[i_780_ - i_779_];
-					value = settings[i_778_] >> i_779_ & i_781_;
+					value = widgetSettings[i_778_] >> i_779_ & i_781_;
 				}
 				if (opcode == 15) {
 					tempType = 1;
@@ -11587,10 +11587,10 @@ public class Game extends GameShell {
 
 				/* Resets all settings. */
 				if (opcode == 68) {
-					for (int i_ = 0; i_ < settings.length; i_++) {
-						if (settings[i_] != defaultSettings[i_]) {
-							settings[i_] = defaultSettings[i_];
-							method33(i_);
+					for (int i_ = 0; i_ < widgetSettings.length; i_++) {
+						if (widgetSettings[i_] != defaultSettings[i_]) {
+							widgetSettings[i_] = defaultSettings[i_];
+							handleWidgetSetting(i_);
 							redrawTab = true;
 						}
 					}
@@ -11913,9 +11913,9 @@ public class Game extends GameShell {
 					int settingIndex = inBuffer.getUnsignedShort();
 					int settingValue = inBuffer.getInt2();
 					defaultSettings[settingIndex] = settingValue;
-					if (settings[settingIndex] != settingValue) {
-						settings[settingIndex] = settingValue;
-						method33(settingIndex);
+					if (widgetSettings[settingIndex] != settingValue) {
+						widgetSettings[settingIndex] = settingValue;
+						handleWidgetSetting(settingIndex);
 						redrawTab = true;
 						if (anInt1067 != -1) {
 							redrawChatbox = true;
@@ -11930,9 +11930,9 @@ public class Game extends GameShell {
 					int i_1171_ = inBuffer.getUnsignedShort();
 					int i_1172_ = inBuffer.get();
 					defaultSettings[i_1171_] = i_1172_;
-					if (settings[i_1171_] != i_1172_) {
-						settings[i_1171_] = i_1172_;
-						method33(i_1171_);
+					if (widgetSettings[i_1171_] != i_1172_) {
+						widgetSettings[i_1171_] = i_1172_;
+						handleWidgetSetting(i_1171_);
 						redrawTab = true;
 						if (anInt1067 != -1) {
 							redrawChatbox = true;

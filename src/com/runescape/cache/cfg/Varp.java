@@ -8,7 +8,7 @@ public class Varp {
 	public static int varpCount;
 	public static Varp[] cache;
 	public static int currentIndex;
-	public int unknown;
+	public int type;
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("varp.dat"));
@@ -40,7 +40,7 @@ public class Varp {
 			} else if (attributeId == 2) {
 				buffer.getUnsignedByte(); // dummy
 			} else if (attributeId == 5) {
-				unknown = buffer.getUnsignedLEShort();
+				type = buffer.getUnsignedLEShort();
 			} else if (attributeId == 7) {
 				buffer.getInt(); // dummy
 			} else if (attributeId == 10) {

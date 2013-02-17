@@ -105,9 +105,9 @@ public class ActorDefinition {
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
 			int bit = Game.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-			childId = ActorDefinition.client.settings[configId] >> leastSignificantBit & bit;
+			childId = ActorDefinition.client.widgetSettings[configId] >> leastSignificantBit & bit;
 		} else if (settingId != -1) {
-			childId = ActorDefinition.client.settings[settingId];
+			childId = ActorDefinition.client.widgetSettings[settingId];
 		}
 		if (childId < 0 || childId >= childrenIndexes.length || childrenIndexes[childId] == -1) {
 			return null;

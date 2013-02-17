@@ -68,9 +68,9 @@ public class GameObject extends Renderable {
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
 			int bit = Game.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-			child = GameObject.client.settings[configId] >> leastSignificantBit & bit;
+			child = GameObject.client.widgetSettings[configId] >> leastSignificantBit & bit;
 		} else if (configId != -1) {
-			child = GameObject.client.settings[configId];
+			child = GameObject.client.widgetSettings[configId];
 		}
 		if (child < 0 || child >= childrenIds.length || childrenIds[child] == -1) {
 			return null;

@@ -209,9 +209,9 @@ public class GameObjectDefinition {
 			int leastSignificantBit = varbit.leastSignificantBit;
 			int mostSignificantBit = varbit.mostSignificantBit;
 			int bit = Game.BITFIELD_MAX_VALUE[mostSignificantBit - leastSignificantBit];
-			child = GameObjectDefinition.client.settings[configId] >> leastSignificantBit & bit;
+			child = GameObjectDefinition.client.widgetSettings[configId] >> leastSignificantBit & bit;
 		} else if (configId != -1) {
-			child = GameObjectDefinition.client.settings[configId];
+			child = GameObjectDefinition.client.widgetSettings[configId];
 		}
 		if (child < 0 || child >= childrenIds.length || childrenIds[child] == -1) {
 			return null;
