@@ -10,7 +10,6 @@ public class VarBit {
 	public int configId;
 	public int leastSignificantBit;
 	public int mostSignificantBit;
-	public boolean aBoolean740 = false;
 
 	public static void load(Archive archive) {
 		Buffer buffer = new Buffer(archive.getFile("varbit.dat"));
@@ -23,9 +22,6 @@ public class VarBit {
 				VarBit.cache[index] = new VarBit();
 			}
 			VarBit.cache[index].loadDefinition(buffer);
-			if (VarBit.cache[index].aBoolean740) {
-				Varp.cache[VarBit.cache[index].configId].aBoolean758 = true;
-			}
 		}
 		if (buffer.offset == buffer.payload.length) {
 			return;
@@ -43,15 +39,12 @@ public class VarBit {
 				configId = buffer.getUnsignedLEShort();
 				leastSignificantBit = buffer.getUnsignedByte();
 				mostSignificantBit = buffer.getUnsignedByte();
-				// System.out.println(configId + ":" + leastSignificantBit + ":"
-				// + leastSignificantBit);
 			} else if (attributeId == 10) {
-				buffer.getString();
-			} else if (attributeId == 2) {
+				buffer.getString(); // dummy
 			} else if (attributeId == 3) {
-				buffer.getInt();
+				buffer.getInt(); // dummy
 			} else if (attributeId == 4) {
-				buffer.getInt();
+				buffer.getInt(); // dummy
 			} else {
 				System.out.println("Error unrecognised config code: " + attributeId);
 			}

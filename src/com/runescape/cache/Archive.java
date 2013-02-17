@@ -5,7 +5,7 @@ import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 
 /**
- * Manages an archive file in the cache.
+ * Represents an archive in the cache.
  */
 public class Archive {
 

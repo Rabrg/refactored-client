@@ -1,12 +1,11 @@
-package com.runescape.media;
+package com.runescape.cache.media;
 
 import com.runescape.Game;
 import com.runescape.cache.Archive;
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.ItemDefinition;
-import com.runescape.cache.media.ImageRGB;
-import com.runescape.cache.media.TypeFace;
 import com.runescape.collection.Cache;
+import com.runescape.media.Animation;
 import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;

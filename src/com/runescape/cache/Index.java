@@ -27,49 +27,49 @@ public class Index {
 				}
 			}
 			fileSize = ((Index.buffer[0] & 0xff) << 16) + ((Index.buffer[1] & 0xff) << 8) + (Index.buffer[2] & 0xff);
-			int sector = ((Index.buffer[3] & 0xff) << 16) + ((Index.buffer[4] & 0xff) << 8) + (Index.buffer[5] & 0xff);
+			int fileBlock = ((Index.buffer[3] & 0xff) << 16) + ((Index.buffer[4] & 0xff) << 8) + (Index.buffer[5] & 0xff);
 			if (fileSize < 0) {
 				return null;
 			}
-			if (sector <= 0 || sector > dataFile.length() / 520L) {
+			if (fileBlock <= 0 || fileBlock > dataFile.length() / 520L) {
 				return null;
 			}
 			byte[] fileBuffer = new byte[fileSize];
 			int read = 0;
-			int bytesRead3 = 0;
+			int cycles = 0;
 			while (read < fileSize) {
-				if (sector == 0) {
+				if (fileBlock == 0) {
 					return null;
 				}
-				seek(dataFile, sector * 520);
-				int bytesRead = 0;
+				seek(dataFile, fileBlock * 520);
+				int size = 0;
 				int remaining = fileSize - read;
 				if (remaining > 512) {
 					remaining = 512;
 				}
-				int index_;
-				for (; bytesRead < remaining + 8; bytesRead += index_) {
-					index_ = dataFile.read(Index.buffer, bytesRead, remaining + 8 - bytesRead);
-					if (index_ == -1) {
+				int nextFileId;
+				for (; size < remaining + 8; size += nextFileId) {
+					nextFileId = dataFile.read(Index.buffer, size, remaining + 8 - size);
+					if (nextFileId == -1) {
 						return null;
 					}
 				}
-				index_ = ((Index.buffer[0] & 0xff) << 8) + (Index.buffer[1] & 0xff);
-				int bytesRead_ = ((Index.buffer[2] & 0xff) << 8) + (Index.buffer[3] & 0xff);
-				int nextSector = ((Index.buffer[4] & 0xff) << 16) + ((Index.buffer[5] & 0xff) << 8)
+				nextFileId = ((Index.buffer[0] & 0xff) << 8) + (Index.buffer[1] & 0xff);
+				int currentPartId = ((Index.buffer[2] & 0xff) << 8) + (Index.buffer[3] & 0xff);
+				int nextBlockId = ((Index.buffer[4] & 0xff) << 16) + ((Index.buffer[5] & 0xff) << 8)
 						+ (Index.buffer[6] & 0xff);
-				int currentCache = Index.buffer[7] & 0xff;
-				if (index_ != index || bytesRead_ != bytesRead3 || currentCache != storeId) {
+				int nextStoreId = Index.buffer[7] & 0xff;
+				if (nextFileId != index || currentPartId != cycles || nextStoreId != storeId) {
 					return null;
 				}
-				if (nextSector < 0 || nextSector > dataFile.length() / 520L) {
+				if (nextBlockId < 0 || nextBlockId > dataFile.length() / 520L) {
 					return null;
 				}
 				for (int offset = 0; offset < remaining; offset++) {
 					fileBuffer[read++] = Index.buffer[offset + 8];
 				}
-				sector = nextSector;
-				bytesRead3++;
+				fileBlock = nextBlockId;
+				cycles++;
 			}
 			return fileBuffer;
 		} catch (IOException ioexception) {

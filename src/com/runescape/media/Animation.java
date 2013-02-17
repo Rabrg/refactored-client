@@ -3,10 +3,6 @@ package com.runescape.media;
 import com.runescape.net.Buffer;
 import com.runescape.util.SignLink;
 
-/* Animation - Decompiled by JODE
- * Visit http://jode.sourceforge.net/
- */
-
 public class Animation {
 	private static Animation[] cache;
 	public int displayLength;

@@ -365,8 +365,8 @@ public class GameObjectDefinition {
 					if (modelIds == null || GameObjectDefinition.lowMemory) {
 						modelTypes = null;
 						modelIds = new int[modelCount];
-						for (int i_43_ = 0; i_43_ < modelCount; i_43_++) {
-							modelIds[i_43_] = buffer.getUnsignedLEShort();
+						for (int model = 0; model < modelCount; model++) {
+							modelIds[model] = buffer.getUnsignedLEShort();
 						}
 					} else {
 						buffer.offset += modelCount * 2;

@@ -31,12 +31,12 @@ import com.runescape.cache.media.ImageRGB;
 import com.runescape.cache.media.IndexedImage;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.cache.media.TypeFace;
+import com.runescape.cache.media.Widget;
 import com.runescape.collection.LinkedList;
 import com.runescape.media.Animation;
 import com.runescape.media.ProducingGraphicsBuffer;
 import com.runescape.media.Rasterizer;
 import com.runescape.media.Rasterizer3D;
-import com.runescape.media.Widget;
 import com.runescape.media.renderable.GameAnimableObject;
 import com.runescape.media.renderable.GameObject;
 import com.runescape.media.renderable.Item;
@@ -251,7 +251,7 @@ public class Game extends GameShell {
 	private int anInt1040;
 	private int anInt1041;
 	private boolean aBoolean1042 = false;
-	private int walkablewidgetIndex = -1;
+	private int walkableWidgetIndex = -1;
 	private static int[] xpForSkillLevel = new int[99];
 	private int minimapState;
 	protected int anInt1047;
@@ -1583,7 +1583,7 @@ public class Game extends GameShell {
 
 	public final void method33(int i) {
 		do {
-			int i_140_ = Varp.cache[i].anInt754;
+			int i_140_ = Varp.cache[i].unknown;
 			if (i_140_ != 0) {
 				int i_141_ = settings[i];
 				if (i_140_ == 1) {
@@ -6206,7 +6206,7 @@ public class Game extends GameShell {
 				chatboxWidgetIndex = -1;
 				openWidgetId = -1;
 				anInt1214 = -1;
-				walkablewidgetIndex = -1;
+				walkableWidgetIndex = -1;
 				aBoolean1174 = false;
 				currentTabIndex = 3;
 				inputType = 0;
@@ -8929,9 +8929,9 @@ public class Game extends GameShell {
 			cursorCross[4 + anInt941 / 100].drawImage(lastClickX - 8 - 4, lastClickY - 8 - 4);
 		}
 
-		if (walkablewidgetIndex != -1) {
-			method119(anInt970, walkablewidgetIndex);
-			method105(0, 0, Widget.cache[walkablewidgetIndex], 0);
+		if (walkableWidgetIndex != -1) {
+			method119(anInt970, walkableWidgetIndex);
+			method105(0, 0, Widget.cache[walkableWidgetIndex], 0);
 		}
 
 		if (openWidgetId != -1) {
@@ -10945,13 +10945,13 @@ public class Game extends GameShell {
 					return true;
 				}
 
-				/* Clear Interface Inventory. */
+				/* Clear items off a widget. */
 				if (opcode == 72) {
 					int widgetIndex = inBuffer.getUnsignedShort();
 					Widget widget = Widget.cache[widgetIndex];
-					for (int i_ = 0; i_ < widget.items.length; i_++) {
-						widget.items[i_] = -1;
-						widget.items[i_] = 0;
+					for (int itemSlot = 0; itemSlot < widget.items.length; itemSlot++) {
+						widget.items[itemSlot] = -1;
+						widget.items[itemSlot] = 0;
 					}
 					opcode = -1;
 					return true;
@@ -11280,7 +11280,7 @@ public class Game extends GameShell {
 					if (widgetIndex >= 0) {
 						method60(widgetIndex);
 					}
-					walkablewidgetIndex = widgetIndex;
+					walkableWidgetIndex = widgetIndex;
 					opcode = -1;
 					return true;
 				}

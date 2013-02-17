@@ -7,6 +7,7 @@ import com.runescape.media.Animation;
 import com.runescape.media.renderable.Model;
 
 public class Npc extends Actor {
+	
 	public ActorDefinition npcDefinition;
 
 	private final Model getChildModel() {
