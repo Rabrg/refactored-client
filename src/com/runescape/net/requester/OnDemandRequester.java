@@ -324,7 +324,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 		}
 	}
 
-	public final int modelIndex(int model) {
+	public final int modelId(int model) {
 		return modelIndex[model] & 0xff;
 	}
 
@@ -462,7 +462,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 		return onDemandNode;
 	}
 
-	public final int regIndex(int indexType, int regY, int regX) {
+	public final int regId(int indexType, int regY, int regX) {
 		int localRegHash = (regX << 8) + regY;
 		for (int reg = 0; reg < regHash.length; reg++) {
 			if (regHash[reg] == localRegHash) {
@@ -625,7 +625,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 		}
 	}
 
-	public final boolean midiIndexEqualsOne(int index) {
+	public final boolean midiIdEqualsOne(int index) {
 		return midiIndex[index] == 1;
 	}
 }

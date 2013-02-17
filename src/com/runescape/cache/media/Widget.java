@@ -37,9 +37,9 @@ public class Widget {
 	public int itemSpritePadsX;
 	public int disabledColor;
 	public int modelType;
-	public int modelIndex;
+	public int modelId;
 	public boolean itemDeletesDraged;
-	public int parentIndex;
+	public int parentId;
 	public int spellUsableOn;
 	private static Cache spriteCache;
 	public int enabledHoveredColor;
@@ -53,7 +53,7 @@ public class Widget {
 	public int[] imageY;
 	public String disabledText;
 	public boolean isInventory;
-	public int index;
+	public int id;
 	public boolean unknownTwo;
 	public int[] itemAmounts;
 	public int[] items;
@@ -99,8 +99,8 @@ public class Widget {
 				widgetIndex = buffer.getUnsignedLEShort();
 			}
 			Widget widget = Widget.cache[widgetIndex] = new Widget();
-			widget.index = widgetIndex;
-			widget.parentIndex = parentId;
+			widget.id = widgetIndex;
+			widget.parentId = parentId;
 			widget.type = buffer.getUnsignedByte();
 			widget.actionType = buffer.getUnsignedByte();
 			widget.contentType = buffer.getUnsignedLEShort();
@@ -225,7 +225,7 @@ public class Widget {
 				widgetIndex = buffer.getUnsignedByte();
 				if (widgetIndex != 0) {
 					widget.modelType = 1;
-					widget.modelIndex = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
+					widget.modelId = (widgetIndex - 1 << 8) + buffer.getUnsignedByte();
 				}
 				widgetIndex = buffer.getUnsignedByte();
 				if (widgetIndex != 0) {
@@ -349,7 +349,7 @@ public class Widget {
 		if (modelEnabled) {
 			model = getModel(enabledModelType, enabledModelId);
 		} else {
-			model = getModel(modelType, modelIndex);
+			model = getModel(modelType, modelId);
 		}
 		if (model == null) {
 			return null;

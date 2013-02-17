@@ -37,7 +37,7 @@ public class ActorDefinition {
 	private int brightness;
 	private int sizeY = 128;
 	public boolean minimapVisible = true;
-	public int[] childrenIndexes;
+	public int[] childrenIds;
 	public byte[] description;
 	private int sizeXZ = 128;
 	private int contrast;
@@ -60,7 +60,7 @@ public class ActorDefinition {
 	}
 
 	public final Model getHeadModel() {
-		if (childrenIndexes != null) {
+		if (childrenIds != null) {
 			ActorDefinition definition = getChildDefinition();
 			if (definition == null) {
 				return null;
@@ -109,10 +109,10 @@ public class ActorDefinition {
 		} else if (settingId != -1) {
 			childId = ActorDefinition.client.widgetSettings[settingId];
 		}
-		if (childId < 0 || childId >= childrenIndexes.length || childrenIndexes[childId] == -1) {
+		if (childId < 0 || childId >= childrenIds.length || childrenIds[childId] == -1) {
 			return null;
 		}
-		return ActorDefinition.getDefinition(childrenIndexes[childId]);
+		return ActorDefinition.getDefinition(childrenIds[childId]);
 	}
 
 	public static final void load(Archive archive) {
@@ -139,7 +139,7 @@ public class ActorDefinition {
 	}
 
 	public final Model getChildModel(int frameId2, int frameId, int[] framesFrom2) {
-		if (childrenIndexes != null) {
+		if (childrenIds != null) {
 			ActorDefinition childDefinition = getChildDefinition();
 			if (childDefinition == null) {
 				return null;
@@ -277,11 +277,11 @@ public class ActorDefinition {
 					settingId = -1;
 				}
 				int childrenCount = buffer.getUnsignedByte();
-				childrenIndexes = new int[childrenCount + 1];
+				childrenIds = new int[childrenCount + 1];
 				for (int child = 0; child <= childrenCount; child++) {
-					childrenIndexes[child] = buffer.getUnsignedLEShort();
-					if (childrenIndexes[child] == 65535) {
-						childrenIndexes[child] = -1;
+					childrenIds[child] = buffer.getUnsignedLEShort();
+					if (childrenIds[child] == 65535) {
+						childrenIds[child] = -1;
 					}
 				}
 			} else if (attributeId == 107) {

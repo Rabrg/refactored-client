@@ -13,7 +13,7 @@ public class ItemDefinition {
 	private byte femaleEquipOffset;
 	public int value;
 	private int[] originalModelColors;
-	public int index = -1;
+	public int id = -1;
 	public static Cache rgbImageCache = new Cache(100);
 	public static Cache modelCache = new Cache(50);
 	private int[] modifiedModelColors;
@@ -223,14 +223,14 @@ public class ItemDefinition {
 
 	public static final ItemDefinition getDefinition(int itemId) {
 		for (int i = 0; i < 10; i++) {
-			if (ItemDefinition.cache[i].index == itemId) {
+			if (ItemDefinition.cache[i].id == itemId) {
 				return ItemDefinition.cache[i];
 			}
 		}
 		ItemDefinition.cacheIndex = (ItemDefinition.cacheIndex + 1) % 10;
 		ItemDefinition itemDefinition = ItemDefinition.cache[ItemDefinition.cacheIndex];
 		ItemDefinition.buffer.offset = ItemDefinition.bufferOffsets[itemId];
-		itemDefinition.index = itemId;
+		itemDefinition.id = itemId;
 		itemDefinition.setDefaultValues();
 		itemDefinition.loadDefinition(ItemDefinition.buffer);
 		if (itemDefinition.noteTemplateIndex != -1) {
@@ -416,7 +416,7 @@ public class ItemDefinition {
 				return ItemDefinition.getDefinition(stackedItemId).getAmountModel(1);
 			}
 		}
-		Model stackedModel = (Model) ItemDefinition.modelCache.get(index);
+		Model stackedModel = (Model) ItemDefinition.modelCache.get(id);
 		if (stackedModel != null) {
 			return stackedModel;
 		}
@@ -434,7 +434,7 @@ public class ItemDefinition {
 		}
 		stackedModel.applyLighting(64 + lightModifier, 768 + shadowModifier, -50, -10, -50, true);
 		stackedModel.oneSquareModel = true;
-		ItemDefinition.modelCache.put(stackedModel, index);
+		ItemDefinition.modelCache.put(stackedModel, id);
 		return stackedModel;
 	}
 

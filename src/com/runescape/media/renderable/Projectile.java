@@ -22,7 +22,7 @@ public class Projectile extends Renderable {
 	public double currentHeight;
 	public int startSlope;
 	public int startDistanceFromTarget;
-	public int targetedEntityIndex;
+	public int targetedEntityId;
 	private SpotAnimation animation;
 	private int animationFrame;
 	private int duration;
@@ -87,7 +87,7 @@ public class Projectile extends Renderable {
 		this.endCycle = speed;
 		this.startSlope = startSlope;
 		this.startDistanceFromTarget = startDistanceFromTarget;
-		this.targetedEntityIndex = targetedEntityIndex;
+		this.targetedEntityId = targetedEntityIndex;
 		this.endHeight = endHeight;
 		this.moving = false;
 	}
