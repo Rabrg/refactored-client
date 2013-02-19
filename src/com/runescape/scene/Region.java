@@ -553,7 +553,7 @@ public class Region {
 						sizeY = gameObjectDefinition.sizeY;
 					}
 					if (scene.method506(hash, objectConfig, vertexMix, sizeY, renderable, sizeX, plane, i_127_,
-							(byte) 110, y, x) && gameObjectDefinition.unknown2) {
+							(byte) 110, y, x) && gameObjectDefinition.castsShadow) {
 						Model model;
 						if (renderable instanceof Model) {
 							model = (Model) renderable;
@@ -609,7 +609,7 @@ public class Region {
 				scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
 				if (face == 0) {
-					if (gameObjectDefinition.unknown2) {
+					if (gameObjectDefinition.castsShadow) {
 						tileShadowIntensity[plane][x][y] = (byte) 50;
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					}
@@ -617,7 +617,7 @@ public class Region {
 						tileCullingBitsets[plane][x][y] |= 0x249;
 					}
 				} else if (face == 1) {
-					if (gameObjectDefinition.unknown2) {
+					if (gameObjectDefinition.castsShadow) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 					}
@@ -625,7 +625,7 @@ public class Region {
 						tileCullingBitsets[plane][x][y + 1] |= 0x492;
 					}
 				} else if (face == 2) {
-					if (gameObjectDefinition.unknown2) {
+					if (gameObjectDefinition.castsShadow) {
 						tileShadowIntensity[plane][x + 1][y] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y + 1] = (byte) 50;
 					}
@@ -633,7 +633,7 @@ public class Region {
 						tileCullingBitsets[plane][x + 1][y] |= 0x249;
 					}
 				} else if (face == 3) {
-					if (gameObjectDefinition.unknown2) {
+					if (gameObjectDefinition.castsShadow) {
 						tileShadowIntensity[plane][x][y] = (byte) 50;
 						tileShadowIntensity[plane][x + 1][y] = (byte) 50;
 					}
@@ -658,7 +658,7 @@ public class Region {
 				}
 				scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
-				if (gameObjectDefinition.unknown2) {
+				if (gameObjectDefinition.castsShadow) {
 					if (face == 0) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					} else if (face == 1) {
@@ -721,7 +721,7 @@ public class Region {
 				}
 				scene.method504(Region.anIntArray494[face], renderable, true, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
-				if (gameObjectDefinition.unknown2) {
+				if (gameObjectDefinition.castsShadow) {
 					if (face == 0) {
 						tileShadowIntensity[plane][x][y + 1] = (byte) 50;
 					} else if (face == 1) {

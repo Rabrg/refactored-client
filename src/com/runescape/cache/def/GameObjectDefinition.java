@@ -24,7 +24,7 @@ public class GameObjectDefinition {
 	private int[] originalModelColors;
 	private int modelSizeX;
 	public int configId;
-	private boolean unknown3;
+	private boolean rotated;
 	public static boolean lowMemory;
 	private static Buffer buffer;
 	public int id = -1;
@@ -50,7 +50,7 @@ public class GameObjectDefinition {
 	private int[] modelTypes;
 	public byte[] description;
 	public boolean actionsBoolean;
-	public boolean unknown2;
+	public boolean castsShadow;
 	public static Cache animatedModelCache = new Cache(30);
 	public int animationId;
 	private static GameObjectDefinition[] cache;
@@ -96,8 +96,8 @@ public class GameObjectDefinition {
 		actions = null;
 		icon = -1;
 		mapScene = -1;
-		unknown3 = false;
-		unknown2 = true;
+		rotated = false;
+		castsShadow = true;
 		modelSizeX = 128;
 		modelSizeY = 128;
 		modelSizeZ = 128;
@@ -234,7 +234,7 @@ public class GameObjectDefinition {
 			if (modelIds == null) {
 				return null;
 			}
-			boolean mirror = unknown3 ^ face > 3;
+			boolean mirror = rotated ^ face > 3;
 			int modelCount = modelIds.length;
 			for (int modelId = 0; modelId < modelCount; modelId++) {
 				int subModelId = modelIds[modelId];
@@ -276,7 +276,7 @@ public class GameObjectDefinition {
 				return model;
 			}
 			int modelId = modelIds[modelType];
-			boolean mirror = unknown3 ^ face > 3;
+			boolean mirror = rotated ^ face > 3;
 			if (mirror) {
 				modelId += 65536;
 			}
@@ -421,9 +421,9 @@ public class GameObjectDefinition {
 			} else if (attributeId == 60) {
 				icon = buffer.getUnsignedLEShort();
 			} else if (attributeId == 62) {
-				unknown3 = true;
+				rotated = true;
 			} else if (attributeId == 64) {
-				unknown2 = false;
+				castsShadow = false;
 			} else if (attributeId == 65) {
 				modelSizeX = buffer.getUnsignedLEShort();
 			} else if (attributeId == 66) {
