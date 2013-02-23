@@ -4,6 +4,7 @@ import com.runescape.Game;
 import com.runescape.cache.cfg.VarBit;
 import com.runescape.cache.def.GameObjectDefinition;
 import com.runescape.cache.media.AnimationSequence;
+import com.runescape.cache.media.Model;
 
 public class GameObject extends Renderable {
 
@@ -11,16 +12,16 @@ public class GameObject extends Renderable {
 	protected int[] childrenIds;
 	protected int varbitId;
 	protected int configId;
-	private int vertexHeight;
-	private int vertexHeightRight;
-	private int vertexHeightTopRight;
-	private int vertexHeightTop;
+	private final int vertexHeight;
+	private final int vertexHeightRight;
+	private final int vertexHeightTopRight;
+	private final int vertexHeightTop;
 	private AnimationSequence animationSequence;
 	private int animationCycleDelay;
 	public static Game client;
-	private int id;
-	private int clickType;
-	private int face;
+	private final int id;
+	private final int clickType;
+	private final int face;
 
 	@Override
 	public final Model getRotatedModel() {
@@ -55,7 +56,7 @@ public class GameObject extends Renderable {
 		if (gameObjectDefinition == null) {
 			return null;
 		}
-		Model model = gameObjectDefinition.getGameObjectModel(clickType, face, vertexHeight, vertexHeightRight,
+		Model model = gameObjectDefinition.getModelAt(clickType, face, vertexHeight, vertexHeightRight,
 				vertexHeightTopRight, vertexHeightTop, animation);
 		return model;
 	}

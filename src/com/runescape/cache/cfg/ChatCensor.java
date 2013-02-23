@@ -140,10 +140,10 @@ public class ChatCensor {
 		ChatCensor.method188(censoredString, true);
 		ChatCensor.method189((byte) 0, censoredString);
 		ChatCensor.method202(censoredString, -511);
-		for (int i_20_ = 0; i_20_ < ChatCensor.aStringArray175.length; i_20_++) {
+		for (String element : ChatCensor.aStringArray175) {
 			int i_21_ = -1;
-			while ((i_21_ = censoredStringLowercased.indexOf(ChatCensor.aStringArray175[i_20_], i_21_ + 1)) != -1) {
-				char[] cs_22_ = ChatCensor.aStringArray175[i_20_].toCharArray();
+			while ((i_21_ = censoredStringLowercased.indexOf(element, i_21_ + 1)) != -1) {
+				char[] cs_22_ = element.toCharArray();
 				for (int i_23_ = 0; i_23_ < cs_22_.length; i_23_++) {
 					censoredString[i_23_ + i_21_] = cs_22_[i_23_];
 				}

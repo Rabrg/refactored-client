@@ -1,5 +1,6 @@
 package com.runescape.media.renderable;
 
+import com.runescape.cache.media.Model;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.media.Animation;
 
@@ -11,7 +12,7 @@ public class GameAnimableObject extends Renderable {
 	public int z;
 	public int loopCycle;
 	public boolean transformCompleted = false;
-	private SpotAnimation animation;
+	private final SpotAnimation animation;
 	private int eclapsedFrames;
 	private int duration;
 
@@ -40,7 +41,7 @@ public class GameAnimableObject extends Renderable {
 			animatedModel.vectorSkin = null;
 		}
 		if (animation.resizeXY != 128 || animation.resizeZ != 128) {
-			animatedModel.scaleT(animation.resizeXY, animation.resizeXY, animation.resizeZ);
+			animatedModel.scaleT(animation.resizeXY, animation.resizeZ, animation.resizeXY);
 		}
 		if (animation.rotation != 0) {
 			if (animation.rotation == 90) {

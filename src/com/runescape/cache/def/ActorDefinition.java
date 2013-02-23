@@ -3,9 +3,9 @@ package com.runescape.cache.def;
 import com.runescape.Game;
 import com.runescape.cache.Archive;
 import com.runescape.cache.cfg.VarBit;
+import com.runescape.cache.media.Model;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 
 public class ActorDefinition {
@@ -149,8 +149,8 @@ public class ActorDefinition {
 		Model childIdModel = (Model) ActorDefinition.modelCache.get(id);
 		if (childIdModel == null) {
 			boolean cached = false;
-			for (int model = 0; model < modelIds.length; model++) {
-				if (Model.isCached(modelIds[model])) {
+			for (int modelId : modelIds) {
+				if (Model.isCached(modelId)) {
 					cached = true;
 				}
 			}
@@ -183,7 +183,7 @@ public class ActorDefinition {
 			childModel.applyTransform(frameId);
 		}
 		if (sizeXZ != 128 || sizeY != 128) {
-			childModel.scaleT(sizeXZ, sizeXZ, sizeY);
+			childModel.scaleT(sizeXZ, sizeY, sizeXZ);
 		}
 		childModel.calculateDiagonals();
 		childModel.triangleSkin = null;

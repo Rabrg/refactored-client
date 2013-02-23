@@ -2,11 +2,11 @@ package com.runescape.collection;
 
 public class Cache {
 
-	private CacheableNode emptyCachableNode = new CacheableNode();
-	private int size;
+	private final CacheableNode emptyCachableNode = new CacheableNode();
+	private final int size;
 	private int remaining;
-	private HashTable hashTable;
-	private Queue queue = new Queue();
+	private final HashTable hashTable;
+	private final Queue queue = new Queue();
 
 	public Cache(int size) {
 		this.size = size;

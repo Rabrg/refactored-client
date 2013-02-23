@@ -30,12 +30,12 @@ public final class ISAACCipher {
 	/**
 	 * The results given to the user.
 	 */
-	private int[] rsl;
+	private final int[] rsl;
 
 	/**
 	 * The internal state.
 	 */
-	private int[] mem;
+	private final int[] mem;
 
 	/**
 	 * The accumulator.

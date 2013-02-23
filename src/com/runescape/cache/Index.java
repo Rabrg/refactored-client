@@ -27,7 +27,8 @@ public class Index {
 				}
 			}
 			fileSize = ((Index.buffer[0] & 0xff) << 16) + ((Index.buffer[1] & 0xff) << 8) + (Index.buffer[2] & 0xff);
-			int fileBlock = ((Index.buffer[3] & 0xff) << 16) + ((Index.buffer[4] & 0xff) << 8) + (Index.buffer[5] & 0xff);
+			int fileBlock = ((Index.buffer[3] & 0xff) << 16) + ((Index.buffer[4] & 0xff) << 8)
+					+ (Index.buffer[5] & 0xff);
 			if (fileSize < 0) {
 				return null;
 			}

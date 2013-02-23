@@ -2,8 +2,8 @@ package com.runescape.collection;
 
 public class HashTable {
 
-	private int size;
-	private Node[] cache;
+	private final int size;
+	private final Node[] cache;
 
 	public HashTable(int size) {
 		this.size = size;

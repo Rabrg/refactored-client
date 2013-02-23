@@ -2,12 +2,12 @@ package com.runescape.media.renderable.actor;
 
 import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.media.AnimationSequence;
+import com.runescape.cache.media.Model;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.media.Animation;
-import com.runescape.media.renderable.Model;
 
 public class Npc extends Actor {
-	
+
 	public ActorDefinition npcDefinition;
 
 	private final Model getChildModel() {
@@ -48,7 +48,7 @@ public class Npc extends Actor {
 				animationModel.triangleSkin = null;
 				animationModel.vectorSkin = null;
 				if (spotanimation.resizeXY != 128 || spotanimation.resizeZ != 128) {
-					animationModel.scaleT(spotanimation.resizeXY, spotanimation.resizeXY, spotanimation.resizeZ);
+					animationModel.scaleT(spotanimation.resizeXY, spotanimation.resizeZ, spotanimation.resizeXY);
 				}
 				animationModel.applyLighting(64 + spotanimation.modelLightFalloff,
 						850 + spotanimation.modelLightAmbient, -30, -50, -30, true);

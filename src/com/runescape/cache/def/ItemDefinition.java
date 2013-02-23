@@ -2,10 +2,10 @@ package com.runescape.cache.def;
 
 import com.runescape.cache.Archive;
 import com.runescape.cache.media.ImageRGB;
+import com.runescape.cache.media.Model;
 import com.runescape.collection.Cache;
 import com.runescape.media.Rasterizer;
 import com.runescape.media.Rasterizer3D;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 
 public class ItemDefinition {
@@ -425,7 +425,7 @@ public class ItemDefinition {
 			return null;
 		}
 		if (modelSizeX != 128 || modelSizeY != 128 || modelSizeZ != 128) {
-			stackedModel.scaleT(modelSizeX, modelSizeZ, modelSizeY);
+			stackedModel.scaleT(modelSizeX, modelSizeY, modelSizeZ);
 		}
 		if (originalModelColors != null) {
 			for (int modelColor = 0; modelColor < originalModelColors.length; modelColor++) {

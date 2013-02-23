@@ -3,21 +3,21 @@ package com.runescape.cache.def;
 import com.runescape.Game;
 import com.runescape.cache.Archive;
 import com.runescape.cache.cfg.VarBit;
+import com.runescape.cache.media.Model;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.net.requester.OnDemandRequester;
 
 public class GameObjectDefinition {
 
 	public boolean unknown;
-	private byte modelLightFalloff;
+	private byte lightAmbient;
 	private int translateX;
 	public String name;
 	private int modelSizeZ;
 	private static Model[] models = new Model[4];
-	private byte modelLightAmbient;
+	private byte lightDiffuse;
 	public int sizeX;
 	private int translateY;
 	public int icon;
@@ -41,7 +41,7 @@ public class GameObjectDefinition {
 	public boolean unwalkableSolid;
 	public boolean solid;
 	public int face;
-	private boolean nonFlatShading;
+	private boolean delayShading;
 	private static int cacheIndex;
 	private int modelSizeY;
 	private int[] modelIds;
@@ -87,12 +87,12 @@ public class GameObjectDefinition {
 		walkable = true;
 		actionsBoolean = false;
 		adjustToTerrain = false;
-		nonFlatShading = false;
+		delayShading = false;
 		aBoolean269 = false;
 		animationId = -1;
 		unknown4 = 16;
-		modelLightFalloff = (byte) 0;
-		modelLightAmbient = (byte) 0;
+		lightAmbient = (byte) 0;
+		lightDiffuse = (byte) 0;
 		actions = null;
 		icon = -1;
 		mapScene = -1;
@@ -115,8 +115,8 @@ public class GameObjectDefinition {
 
 	public final void passiveRequestModels(OnDemandRequester onDemandRequester) {
 		if (modelIds != null) {
-			for (int model = 0; model < modelIds.length; model++) {
-				onDemandRequester.passiveRequest(modelIds[model] & 0xffff, 0);
+			for (int modelId : modelIds) {
+				onDemandRequester.passiveRequest(modelId & 0xffff, 0);
 			}
 		}
 	}
@@ -154,8 +154,8 @@ public class GameObjectDefinition {
 				return true;
 			}
 			boolean cached = true;
-			for (int model = 0; model < modelIds.length; model++) {
-				cached &= Model.isCached(modelIds[model] & 0xffff);
+			for (int modelId : modelIds) {
+				cached &= Model.isCached(modelId & 0xffff);
 			}
 			return cached;
 		}
@@ -167,13 +167,13 @@ public class GameObjectDefinition {
 		return true;
 	}
 
-	public final Model getGameObjectModel(int type, int face, int i_8_, int i_9_, int i_10_, int i_11_, int animationId) {
+	public final Model getModelAt(int type, int face, int i_8_, int i_9_, int i_10_, int i_11_, int animationId) {
 		Model model = getGameObjectAnimatedModel(type, animationId, face);
 		if (model == null) {
 			return null;
 		}
-		if (adjustToTerrain || nonFlatShading) {
-			model = new Model(adjustToTerrain, -819, nonFlatShading, model);
+		if (adjustToTerrain || delayShading) {
+			model = new Model(adjustToTerrain, -819, delayShading, model);
 		}
 		if (adjustToTerrain) {
 			int i_13_ = (i_8_ + i_9_ + i_10_ + i_11_) / 4;
@@ -195,8 +195,8 @@ public class GameObjectDefinition {
 			return true;
 		}
 		boolean cached = true;
-		for (int model = 0; model < modelIds.length; model++) {
-			cached &= Model.isCached(modelIds[model] & 0xffff);
+		for (int modelId : modelIds) {
+			cached &= Model.isCached(modelId & 0xffff);
 		}
 		return cached;
 	}
@@ -321,12 +321,12 @@ public class GameObjectDefinition {
 			}
 		}
 		if (scale) {
-			animtedModel.scaleT(modelSizeX, modelSizeZ, modelSizeY);
+			animtedModel.scaleT(modelSizeX, modelSizeY, modelSizeZ);
 		}
 		if (needsTranslation) {
 			animtedModel.translate(translateX, translateY, translateZ);
 		}
-		animtedModel.applyLighting(64 + modelLightFalloff, 768 + modelLightAmbient * 5, -50, -10, -50, !nonFlatShading);
+		animtedModel.applyLighting(64 + lightAmbient, 768 + lightDiffuse * 5, -50, -10, -50, !delayShading);
 		if (solidInt == 1) {
 			animtedModel.anInt1647 = animtedModel.modelHeight;
 		}
@@ -388,7 +388,7 @@ public class GameObjectDefinition {
 			} else if (attributeId == 21) {
 				adjustToTerrain = true;
 			} else if (attributeId == 22) {
-				nonFlatShading = true;
+				delayShading = true;
 			} else if (attributeId == 23) {
 				aBoolean269 = true;
 			} else if (attributeId == 24) {
@@ -399,9 +399,9 @@ public class GameObjectDefinition {
 			} else if (attributeId == 28) {
 				unknown4 = buffer.getUnsignedByte();
 			} else if (attributeId == 29) {
-				modelLightFalloff = buffer.get();
+				lightAmbient = buffer.get();
 			} else if (attributeId == 39) {
-				modelLightAmbient = buffer.get();
+				lightDiffuse = buffer.get();
 			} else if (attributeId >= 30 && attributeId < 39) {
 				if (actions == null) {
 					actions = new String[5];

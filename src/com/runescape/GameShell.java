@@ -26,7 +26,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	private int gameState;
 	private int deltime = 20;
 	public int mindel = 1;
-	private long[] optims = new long[10];
+	private final long[] optims = new long[10];
 	public int fps;
 	public boolean dumpRequested = false;
 	public int width;
@@ -50,7 +50,7 @@ public class GameShell extends Applet implements Runnable, MouseListener, MouseM
 	public int clickY;
 	public long clickTime;
 	public int[] keyStatus = new int[128];
-	private int[] inputBuffer = new int[128];
+	private final int[] inputBuffer = new int[128];
 	private int readIndex;
 	private int writeIndex;
 

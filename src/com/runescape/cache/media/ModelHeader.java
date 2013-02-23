@@ -1,4 +1,4 @@
-package com.runescape.media.renderable;
+package com.runescape.cache.media;
 
 public class ModelHeader {
 

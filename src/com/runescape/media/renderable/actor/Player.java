@@ -5,10 +5,10 @@ import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.ItemDefinition;
 import com.runescape.cache.media.AnimationSequence;
 import com.runescape.cache.media.IdentityKit;
+import com.runescape.cache.media.Model;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 
@@ -45,14 +45,14 @@ public class Player extends Actor {
 		if (!visibile) {
 			return null;
 		}
-		Model model = getAnimatedModel();
-		if (model == null) {
+		Model animatedModel = getAnimatedModel();
+		if (animatedModel == null) {
 			return null;
 		}
-		modelHeight = model.modelHeight;
-		model.oneSquareModel = true;
+		modelHeight = animatedModel.modelHeight;
+		animatedModel.oneSquareModel = true;
 		if (aBoolean1719) {
-			return model;
+			return animatedModel;
 		}
 		if (spotAnimationId != -1 && currentAnimationFrame != -1) {
 			SpotAnimation spotAnimation = SpotAnimation.cache[spotAnimationId];
@@ -66,12 +66,12 @@ public class Player extends Actor {
 				spotAnimationModel2.triangleSkin = null;
 				spotAnimationModel2.vectorSkin = null;
 				if (spotAnimation.resizeXY != 128 || spotAnimation.resizeZ != 128) {
-					spotAnimationModel2.scaleT(spotAnimation.resizeXY, spotAnimation.resizeXY, spotAnimation.resizeZ);
+					spotAnimationModel2.scaleT(spotAnimation.resizeXY, spotAnimation.resizeZ, spotAnimation.resizeXY);
 				}
 				spotAnimationModel2.applyLighting(64 + spotAnimation.modelLightFalloff,
 						850 + spotAnimation.modelLightAmbient, -30, -50, -30, true);
-				Model[] models = { model, spotAnimationModel2 };
-				model = new Model(2, -819, true, models);
+				Model[] models = { animatedModel, spotAnimationModel2 };
+				animatedModel = new Model(2, -819, true, models);
 			}
 		}
 		if (playerModel != null) {
@@ -79,35 +79,35 @@ public class Player extends Actor {
 				playerModel = null;
 			}
 			if (Game.currentCycle >= anInt1727 && Game.currentCycle < anInt1728) {
-				Model model_2_ = playerModel;
-				model_2_.translate(anInt1731 - xWithBoundary, anInt1732 - anInt1729, anInt1733 - yWithBoundary);
+				Model playerModel = this.playerModel;
+				playerModel.translate(anInt1731 - xWithBoundary, anInt1732 - anInt1729, anInt1733 - yWithBoundary);
 				if (anInt1530 == 512) {
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				} else if (anInt1530 == 1024) {
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				} else if (anInt1530 == 1536) {
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				}
-				Model[] models = { model, model_2_ };
-				model = new Model(2, -819, true, models);
+				Model[] models = { animatedModel, playerModel };
+				animatedModel = new Model(2, -819, true, models);
 				if (anInt1530 == 512) {
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				} else if (anInt1530 == 1024) {
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				} else if (anInt1530 == 1536) {
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
-					model_2_.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
+					playerModel.rotate90Degrees(360);
 				}
-				model_2_.translate(xWithBoundary - anInt1731, anInt1729 - anInt1732, yWithBoundary - anInt1733);
+				playerModel.translate(xWithBoundary - anInt1731, anInt1729 - anInt1732, yWithBoundary - anInt1733);
 			}
 		}
-		model.oneSquareModel = true;
-		return model;
+		animatedModel.oneSquareModel = true;
+		return animatedModel;
 	}
 
 	public final void updatePlayer(Buffer buffer) {
@@ -257,29 +257,29 @@ public class Player extends Actor {
 		}
 		if (model == null) {
 			Model[] models = new Model[12];
-			int i_19_ = 0;
-			for (int i_20_ = 0; i_20_ < 12; i_20_++) {
-				int i_21_ = appearance[i_20_];
-				if (i_15_ >= 0 && i_20_ == 3) {
-					i_21_ = i_15_;
+			int modelIndex = 0;
+			for (int appearanceIndex = 0; appearanceIndex < 12; appearanceIndex++) {
+				int appearanceValue = appearance[appearanceIndex];
+				if (i_15_ >= 0 && appearanceIndex == 3) {
+					appearanceValue = i_15_;
 				}
-				if (i_14_ >= 0 && i_20_ == 5) {
-					i_21_ = i_14_;
+				if (i_14_ >= 0 && appearanceIndex == 5) {
+					appearanceValue = i_14_;
 				}
-				if (i_21_ >= 256 && i_21_ < 512) {
-					Model model_22_ = IdentityKit.cache[i_21_ - 256].getBodyModel();
+				if (appearanceValue >= 256 && appearanceValue < 512) {
+					Model model_22_ = IdentityKit.cache[appearanceValue - 256].getBodyModel();
 					if (model_22_ != null) {
-						models[i_19_++] = model_22_;
+						models[modelIndex++] = model_22_;
 					}
 				}
-				if (i_21_ >= 512) {
-					Model model_23_ = ItemDefinition.getDefinition(i_21_ - 512).getEquipModel(gender);
+				if (appearanceValue >= 512) {
+					Model model_23_ = ItemDefinition.getDefinition(appearanceValue - 512).getEquipModel(gender);
 					if (model_23_ != null) {
-						models[i_19_++] = model_23_;
+						models[modelIndex++] = model_23_;
 					}
 				}
 			}
-			model = new Model(i_19_, models);
+			model = new Model(modelIndex, models);
 			for (int i_24_ = 0; i_24_ < 5; i_24_++) {
 				if (appearanceColors[i_24_] != 0) {
 					model.recolor(Game.anIntArrayArray1028[i_24_][0],

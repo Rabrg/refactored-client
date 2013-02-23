@@ -8,7 +8,7 @@ public class SoundTrack {
 	public static int[] trackDelays = new int[5000];
 	private static byte[] _buffer;
 	private static Buffer buffer;
-	private SoundTrackInstrument[] instruments = new SoundTrackInstrument[10];
+	private final SoundTrackInstrument[] instruments = new SoundTrackInstrument[10];
 	private int loopBegin;
 	private int loopEnd;
 

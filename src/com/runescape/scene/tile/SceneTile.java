@@ -6,10 +6,10 @@ import com.runescape.scene.SceneSpawnRequest;
 
 public class SceneTile extends Node {
 
-	public int anInt1318;
-	public int anInt1319;
-	public int anInt1320;
-	public int anInt1321;
+	public int plane2;
+	public int x;
+	public int y;
+	public int plane;
 	public GenericTile genericTile;
 	public ComplexTile complexTile;
 	public Wall wall;
@@ -18,8 +18,8 @@ public class SceneTile extends Node {
 	public CameraAngle cameraAngle;
 	public int sceneSpawnRequestCount;
 	public SceneSpawnRequest[] sceneSpawnRequests = new SceneSpawnRequest[5];
-	public int[] anIntArray1330 = new int[5];
-	public int anInt1331;
+	public int[] sceneSpawnRequestsSize = new int[5];
+	public int sceneSpawnRequestSizeOR;
 	public int anInt1332;
 	public boolean aBoolean1333;
 	public boolean aBoolean1334;
@@ -30,9 +30,9 @@ public class SceneTile extends Node {
 	public int anInt1339;
 	public SceneTile sceneTile;
 
-	public SceneTile(int i, int i_0_, int i_1_) {
-		anInt1321 = anInt1318 = i;
-		anInt1319 = i_0_;
-		anInt1320 = i_1_;
+	public SceneTile(int plane, int x, int y) {
+		this.plane = plane2 = plane;
+		this.x = x;
+		this.y = y;
 	}
 }

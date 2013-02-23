@@ -1,5 +1,6 @@
 package com.runescape.media.renderable;
 
+import com.runescape.cache.media.Model;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.media.Animation;
 
@@ -23,7 +24,7 @@ public class Projectile extends Renderable {
 	public int startSlope;
 	public int startDistanceFromTarget;
 	public int targetedEntityId;
-	private SpotAnimation animation;
+	private final SpotAnimation animation;
 	private int animationFrame;
 	private int duration;
 	public int modelRotationY;
@@ -68,7 +69,7 @@ public class Projectile extends Renderable {
 			projectileModel.vectorSkin = null;
 		}
 		if (animation.resizeXY != 128 || animation.resizeZ != 128) {
-			projectileModel.scaleT(animation.resizeXY, animation.resizeXY, animation.resizeZ);
+			projectileModel.scaleT(animation.resizeXY, animation.resizeZ, animation.resizeXY);
 		}
 		projectileModel.rotateX(modelRotationX, 1);
 		projectileModel.applyLighting(64 + animation.modelLightFalloff, 850 + animation.modelLightAmbient, -30, -50,

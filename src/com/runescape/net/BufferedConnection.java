@@ -9,9 +9,9 @@ import com.runescape.GameShell;
 
 public class BufferedConnection implements Runnable {
 
-	private InputStream inputStream;
-	private OutputStream outputStream;
-	private Socket socket;
+	private final InputStream inputStream;
+	private final OutputStream outputStream;
+	private final Socket socket;
 	private boolean closed = false;
 	protected GameShell gameStub;
 	private byte[] buffer;

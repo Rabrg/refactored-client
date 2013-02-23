@@ -6,7 +6,6 @@ import com.runescape.cache.def.ActorDefinition;
 import com.runescape.cache.def.ItemDefinition;
 import com.runescape.collection.Cache;
 import com.runescape.media.Animation;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 import com.runescape.util.TextUtils;
 

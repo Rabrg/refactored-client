@@ -12,9 +12,9 @@ public class SoundTrackInstrument {
 	private SoundTrackEnvelope volumeModAmpEnvelope;
 	private SoundTrackEnvelope gatingReleaseEnvelope;
 	private SoundTrackEnvelope gatingAttackEnvelope;
-	private int[] oscillVolume = new int[5];
-	private int[] oscillPitchDelta = new int[5];
-	private int[] oscillDelay = new int[5];
+	private final int[] oscillVolume = new int[5];
+	private final int[] oscillPitchDelta = new int[5];
+	private final int[] oscillDelay = new int[5];
 	private int delayTime;
 	private int delayFeedback = 100;
 	private SoundFilter filter;

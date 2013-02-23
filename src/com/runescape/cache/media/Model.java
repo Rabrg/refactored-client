@@ -1,10 +1,11 @@
-package com.runescape.media.renderable;
+package com.runescape.cache.media;
 
 import com.runescape.media.Animation;
 import com.runescape.media.Rasterizer;
 import com.runescape.media.Rasterizer3D;
 import com.runescape.media.Skins;
 import com.runescape.media.VertexNormal;
+import com.runescape.media.renderable.Renderable;
 import com.runescape.net.Buffer;
 import com.runescape.net.requester.Requester;
 import com.runescape.util.SignLink;
@@ -1038,8 +1039,7 @@ public class Model extends Renderable {
 				int i_129_ = is[i_128_];
 				if (i_129_ < vectorSkin.length) {
 					int[] is_130_ = vectorSkin[i_129_];
-					for (int i_131_ = 0; i_131_ < is_130_.length; i_131_++) {
-						int i_132_ = is_130_[i_131_];
+					for (int i_132_ : is_130_) {
 						Model.vertexXModifier += verticesX[i_132_];
 						Model.vertexYModifier += verticesY[i_132_];
 						Model.vertexZModifier += verticesZ[i_132_];
@@ -1061,8 +1061,8 @@ public class Model extends Renderable {
 				int i_134_ = is[i_133_];
 				if (i_134_ < vectorSkin.length) {
 					int[] is_135_ = vectorSkin[i_134_];
-					for (int i_136_ = 0; i_136_ < is_135_.length; i_136_++) {
-						int i_137_ = is_135_[i_136_];
+					for (int element : is_135_) {
+						int i_137_ = element;
 						verticesX[i_137_] += i_123_;
 						verticesY[i_137_] += i_124_;
 						verticesZ[i_137_] += i_125_;
@@ -1074,8 +1074,8 @@ public class Model extends Renderable {
 				int i_139_ = is[i_138_];
 				if (i_139_ < vectorSkin.length) {
 					int[] is_140_ = vectorSkin[i_139_];
-					for (int i_141_ = 0; i_141_ < is_140_.length; i_141_++) {
-						int i_142_ = is_140_[i_141_];
+					for (int element : is_140_) {
+						int i_142_ = element;
 						verticesX[i_142_] -= Model.vertexXModifier;
 						verticesY[i_142_] -= Model.vertexYModifier;
 						verticesZ[i_142_] -= Model.vertexZModifier;
@@ -1114,8 +1114,8 @@ public class Model extends Renderable {
 				int i_156_ = is[i_155_];
 				if (i_156_ < vectorSkin.length) {
 					int[] is_157_ = vectorSkin[i_156_];
-					for (int i_158_ = 0; i_158_ < is_157_.length; i_158_++) {
-						int i_159_ = is_157_[i_158_];
+					for (int element : is_157_) {
+						int i_159_ = element;
 						verticesX[i_159_] -= Model.vertexXModifier;
 						verticesY[i_159_] -= Model.vertexYModifier;
 						verticesZ[i_159_] -= Model.vertexZModifier;
@@ -1133,8 +1133,8 @@ public class Model extends Renderable {
 				int i_161_ = is[i_160_];
 				if (i_161_ < triangleSkin.length) {
 					int[] is_162_ = triangleSkin[i_161_];
-					for (int i_163_ = 0; i_163_ < is_162_.length; i_163_++) {
-						int i_164_ = is_162_[i_163_];
+					for (int element : is_162_) {
+						int i_164_ = element;
 						triangleAlphaValues[i_164_] += i_123_ * 8;
 						if (triangleAlphaValues[i_164_] < 0) {
 							triangleAlphaValues[i_164_] = 0;
@@ -1232,17 +1232,18 @@ public class Model extends Renderable {
 		} while (false);
 	}
 
-	public void scaleT(int i, int i_181_, int i_183_) {
-		for (int i_184_ = 0; i_184_ < vertexCount; i_184_++) {
-			verticesX[i_184_] = verticesX[i_184_] * i / 128;
-			verticesY[i_184_] = verticesY[i_184_] * i_183_ / 128;
-			verticesZ[i_184_] = verticesZ[i_184_] * i_181_ / 128;
+	public void scaleT(int scaledX, int scaledY, int scaledZ) {
+		for (int vertex = 0; vertex < vertexCount; vertex++) {
+			verticesX[vertex] = verticesX[vertex] * scaledX / 128;
+			verticesY[vertex] = verticesY[vertex] * scaledY / 128;
+			verticesZ[vertex] = verticesZ[vertex] * scaledZ / 128;
 		}
 	}
 
-	public final void applyLighting(int i, int i_185_, int i_186_, int i_187_, int i_188_, boolean bool) {
+	public final void applyLighting(int lightAmbient, int lightDiffuse, int i_186_, int i_187_, int i_188_,
+			boolean delayShading) {
 		int i_189_ = (int) Math.sqrt(i_186_ * i_186_ + i_187_ * i_187_ + i_188_ * i_188_);
-		int i_190_ = i_185_ * i_189_ >> 8;
+		int i_190_ = lightDiffuse * i_189_ >> 8;
 		if (anIntArray1627 == null) {
 			anIntArray1627 = new int[triangleCount];
 			anIntArray1628 = new int[triangleCount];
@@ -1254,54 +1255,56 @@ public class Model extends Renderable {
 				verticesNormal[i_191_] = new VertexNormal();
 			}
 		}
-		for (int i_192_ = 0; i_192_ < triangleCount; i_192_++) {
-			int i_193_ = trianglePointsX[i_192_];
-			int i_194_ = trianglePointsY[i_192_];
-			int i_195_ = trianglePointsZ[i_192_];
+		for (int triangle = 0; triangle < triangleCount; triangle++) {
+			int i_193_ = trianglePointsX[triangle];
+			int i_194_ = trianglePointsY[triangle];
+			int i_195_ = trianglePointsZ[triangle];
 			int i_196_ = verticesX[i_194_] - verticesX[i_193_];
 			int i_197_ = verticesY[i_194_] - verticesY[i_193_];
 			int i_198_ = verticesZ[i_194_] - verticesZ[i_193_];
 			int i_199_ = verticesX[i_195_] - verticesX[i_193_];
 			int i_200_ = verticesY[i_195_] - verticesY[i_193_];
 			int i_201_ = verticesZ[i_195_] - verticesZ[i_193_];
-			int i_202_ = i_197_ * i_201_ - i_200_ * i_198_;
-			int i_203_ = i_198_ * i_199_ - i_201_ * i_196_;
-			int i_204_;
-			for (i_204_ = i_196_ * i_200_ - i_199_ * i_197_; i_202_ > 8192 || i_203_ > 8192 || i_204_ > 8192
-					|| i_202_ < -8192 || i_203_ < -8192 || i_204_ < -8192; i_204_ >>= 1) {
-				i_202_ >>= 1;
-				i_203_ >>= 1;
+			int xOffset = i_197_ * i_201_ - i_200_ * i_198_;
+			int yOffset = i_198_ * i_199_ - i_201_ * i_196_;
+			int zOffset;
+			for (zOffset = i_196_ * i_200_ - i_199_ * i_197_; xOffset > 8192 || yOffset > 8192 || zOffset > 8192
+					|| xOffset < -8192 || yOffset < -8192 || zOffset < -8192; zOffset >>= 1) {
+				xOffset >>= 1;
+				yOffset >>= 1;
 			}
-			int i_205_ = (int) Math.sqrt(i_202_ * i_202_ + i_203_ * i_203_ + i_204_ * i_204_);
+			int i_205_ = (int) Math.sqrt(xOffset * xOffset + yOffset * yOffset + zOffset * zOffset);
 			if (i_205_ <= 0) {
 				i_205_ = 1;
 			}
-			i_202_ = i_202_ * 256 / i_205_;
-			i_203_ = i_203_ * 256 / i_205_;
-			i_204_ = i_204_ * 256 / i_205_;
-			if (texturePoints == null || (texturePoints[i_192_] & 0x1) == 0) {
+			xOffset = xOffset * 256 / i_205_;
+			yOffset = yOffset * 256 / i_205_;
+			zOffset = zOffset * 256 / i_205_;
+			if (texturePoints == null || (texturePoints[triangle] & 0x1) == 0) {
 				VertexNormal vertexnormal = verticesNormal[i_193_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
 				vertexnormal = verticesNormal[i_194_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
 				vertexnormal = verticesNormal[i_195_];
-				vertexnormal.x += i_202_;
-				vertexnormal.y += i_203_;
-				vertexnormal.z += i_204_;
+				vertexnormal.x += xOffset;
+				vertexnormal.y += yOffset;
+				vertexnormal.z += zOffset;
 				vertexnormal.magnitude++;
 			} else {
-				int i_206_ = i + (i_186_ * i_202_ + i_187_ * i_203_ + i_188_ * i_204_) / (i_190_ + i_190_ / 2);
-				anIntArray1627[i_192_] = Model.method429(triangleColorValues[i_192_], i_206_, texturePoints[i_192_]);
+				int i_206_ = lightAmbient + (i_186_ * xOffset + i_187_ * yOffset + i_188_ * zOffset)
+						/ (i_190_ + i_190_ / 2);
+				anIntArray1627[triangle] = Model.method429(triangleColorValues[triangle], i_206_,
+						texturePoints[triangle]);
 			}
 		}
-		if (bool) {
-			method428(i, i_190_, i_186_, i_187_, i_188_);
+		if (delayShading) {
+			delayShade(lightAmbient, i_190_, i_186_, i_187_, i_188_);
 		} else {
 			aVertexNormalArray1653 = new VertexNormal[vertexCount];
 			for (int i_207_ = 0; i_207_ < vertexCount; i_207_++) {
@@ -1313,47 +1316,49 @@ public class Model extends Renderable {
 				vertexnormal_208_.magnitude = vertexnormal.magnitude;
 			}
 		}
-		if (bool) {
+		if (delayShading) {
 			calculateDiagonals();
 		} else {
 			method416(21073);
 		}
 	}
 
-	public final void method428(int i, int i_209_, int i_210_, int i_211_, int i_212_) {
-		for (int i_213_ = 0; i_213_ < triangleCount; i_213_++) {
-			int i_214_ = trianglePointsX[i_213_];
-			int i_215_ = trianglePointsY[i_213_];
-			int i_216_ = trianglePointsZ[i_213_];
+	public final void delayShade(int lightAmbient, int lightDiffuse, int i_210_, int i_211_, int i_212_) {
+		for (int triangle = 0; triangle < triangleCount; triangle++) {
+			int trianglePointX = trianglePointsX[triangle];
+			int trianglePointY = trianglePointsY[triangle];
+			int trianglePointZ = trianglePointsZ[triangle];
 			if (texturePoints == null) {
-				int i_217_ = triangleColorValues[i_213_];
-				VertexNormal vertexnormal = verticesNormal[i_214_];
-				int i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1627[i_213_] = Model.method429(i_217_, i_218_, 0);
-				vertexnormal = verticesNormal[i_215_];
-				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1628[i_213_] = Model.method429(i_217_, i_218_, 0);
-				vertexnormal = verticesNormal[i_216_];
-				i_218_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1629[i_213_] = Model.method429(i_217_, i_218_, 0);
-			} else if ((texturePoints[i_213_] & 0x1) == 0) {
-				int i_219_ = triangleColorValues[i_213_];
-				int i_220_ = texturePoints[i_213_];
-				VertexNormal vertexnormal = verticesNormal[i_214_];
-				int i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1627[i_213_] = Model.method429(i_219_, i_221_, i_220_);
-				vertexnormal = verticesNormal[i_215_];
-				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1628[i_213_] = Model.method429(i_219_, i_221_, i_220_);
-				vertexnormal = verticesNormal[i_216_];
-				i_221_ = i + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
-						/ (i_209_ * vertexnormal.magnitude);
-				anIntArray1629[i_213_] = Model.method429(i_219_, i_221_, i_220_);
+				int triangleColor = triangleColorValues[triangle];
+				VertexNormal vertexNormal = verticesNormal[trianglePointX];
+				int i_218_ = lightAmbient
+						+ (i_210_ * vertexNormal.x + i_211_ * vertexNormal.y + i_212_ * vertexNormal.z)
+						/ (lightDiffuse * vertexNormal.magnitude);
+				anIntArray1627[triangle] = Model.method429(triangleColor, i_218_, 0);
+				vertexNormal = verticesNormal[trianglePointY];
+				i_218_ = lightAmbient + (i_210_ * vertexNormal.x + i_211_ * vertexNormal.y + i_212_ * vertexNormal.z)
+						/ (lightDiffuse * vertexNormal.magnitude);
+				anIntArray1628[triangle] = Model.method429(triangleColor, i_218_, 0);
+				vertexNormal = verticesNormal[trianglePointZ];
+				i_218_ = lightAmbient + (i_210_ * vertexNormal.x + i_211_ * vertexNormal.y + i_212_ * vertexNormal.z)
+						/ (lightDiffuse * vertexNormal.magnitude);
+				anIntArray1629[triangle] = Model.method429(triangleColor, i_218_, 0);
+			} else if ((texturePoints[triangle] & 0x1) == 0) {
+				int i_219_ = triangleColorValues[triangle];
+				int i_220_ = texturePoints[triangle];
+				VertexNormal vertexnormal = verticesNormal[trianglePointX];
+				int i_221_ = lightAmbient
+						+ (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
+						/ (lightDiffuse * vertexnormal.magnitude);
+				anIntArray1627[triangle] = Model.method429(i_219_, i_221_, i_220_);
+				vertexnormal = verticesNormal[trianglePointY];
+				i_221_ = lightAmbient + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
+						/ (lightDiffuse * vertexnormal.magnitude);
+				anIntArray1628[triangle] = Model.method429(i_219_, i_221_, i_220_);
+				vertexnormal = verticesNormal[trianglePointZ];
+				i_221_ = lightAmbient + (i_210_ * vertexnormal.x + i_211_ * vertexnormal.y + i_212_ * vertexnormal.z)
+						/ (lightDiffuse * vertexnormal.magnitude);
+				anIntArray1629[triangle] = Model.method429(i_219_, i_221_, i_220_);
 			}
 		}
 		verticesNormal = null;
@@ -1361,8 +1366,8 @@ public class Model extends Renderable {
 		vertexSkins = null;
 		triangleSkinValues = null;
 		if (texturePoints != null) {
-			for (int i_222_ = 0; i_222_ < triangleCount; i_222_++) {
-				if ((texturePoints[i_222_] & 0x2) == 2) {
+			for (int triangle = 0; triangle < triangleCount; triangle++) {
+				if ((texturePoints[triangle] & 0x2) == 2) {
 					return;
 				}
 			}

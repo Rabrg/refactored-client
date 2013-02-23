@@ -1,7 +1,6 @@
 package com.runescape.cache.media;
 
 import com.runescape.cache.Archive;
-import com.runescape.media.renderable.Model;
 import com.runescape.net.Buffer;
 
 public class IdentityKit {

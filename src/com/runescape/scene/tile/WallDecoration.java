@@ -4,11 +4,11 @@ import com.runescape.media.renderable.Renderable;
 
 public class WallDecoration {
 
-	public int plane;
+	public int z;
 	public int y;
 	public int x;
-	public int faceUnknown;
-	public int face;
+	public int hostOrientation;
+	public int orientation;
 	public Renderable renderable;
 	public int hash;
 	public byte config;

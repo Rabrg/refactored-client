@@ -29,6 +29,7 @@ import com.runescape.cache.media.AnimationSequence;
 import com.runescape.cache.media.IdentityKit;
 import com.runescape.cache.media.ImageRGB;
 import com.runescape.cache.media.IndexedImage;
+import com.runescape.cache.media.Model;
 import com.runescape.cache.media.SpotAnimation;
 import com.runescape.cache.media.TypeFace;
 import com.runescape.cache.media.Widget;
@@ -40,7 +41,6 @@ import com.runescape.media.Rasterizer3D;
 import com.runescape.media.renderable.GameAnimableObject;
 import com.runescape.media.renderable.GameObject;
 import com.runescape.media.renderable.Item;
-import com.runescape.media.renderable.Model;
 import com.runescape.media.renderable.Projectile;
 import com.runescape.media.renderable.actor.Actor;
 import com.runescape.media.renderable.actor.Npc;
@@ -108,7 +108,7 @@ public class Game extends GameShell {
 	private int anInt886;
 	private int anInt887;
 	private int playerRights;
-	private int[] skillExperience = new int[SkillConstants.SKILL_COUNT];
+	private final int[] skillExperience = new int[SkillConstants.SKILL_COUNT];
 	private IndexedImage anIndexedImage890;
 	private IndexedImage anIndexedImage891;
 	private IndexedImage anIndexedImage892;
@@ -117,10 +117,10 @@ public class Game extends GameShell {
 	private ImageRGB mapFlagMarker;
 	private ImageRGB anImageRGB896;
 	private boolean aBoolean897 = false;
-	private int[] anIntArray898 = new int[5];
+	private final int[] anIntArray898 = new int[5];
 	private int anInt899 = -1;
-	private int anInt900 = -680;
-	private boolean[] aBooleanArray901 = new boolean[5];
+	private final int anInt900 = -680;
+	private final boolean[] aBooleanArray901 = new boolean[5];
 	private int playerWeight;
 	protected MouseCapturer mouseCapturer;
 	private volatile boolean aBoolean905 = false;
@@ -130,7 +130,7 @@ public class Game extends GameShell {
 	private int anInt911;
 	private String chatboxInput = "";
 	private final int MAX_PLAYERS = 2048;
-	private int localPlayerId = 2047;
+	private final int localPlayerId = 2047;
 	private Player[] players = new Player[MAX_PLAYERS];
 	private int playerCount;
 	protected int[] anIntArray917 = new int[MAX_PLAYERS];
@@ -142,7 +142,7 @@ public class Game extends GameShell {
 	private int friendsListCount;
 	private int friendListStatus;
 	private int[][] wayPoints = new int[104][104];
-	private int anInt927 = 7759444;
+	private final int anInt927 = 7759444;
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer928;
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer929;
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer930;
@@ -160,14 +160,14 @@ public class Game extends GameShell {
 	private int lastClickType;
 	private int currentSceneId;
 	private static boolean aBoolean944 = true;
-	private int[] skillLevel = new int[SkillConstants.SKILL_COUNT];
+	private final int[] skillLevel = new int[SkillConstants.SKILL_COUNT];
 	private static int anInt949;
-	private long[] ignoreList = new long[100];
+	private final long[] ignoreList = new long[100];
 	private boolean aBoolean951 = false;
-	private int anInt952 = 3353893;
-	private int[] anIntArray953 = new int[5];
+	private final int anInt952 = 3353893;
+	private final int[] anIntArray953 = new int[5];
 	private int[][] anIntArrayArray954 = new int[104][104];
-	private CRC32 crc32 = new CRC32();
+	private final CRC32 crc32 = new CRC32();
 	private ImageRGB anImageRGB956;
 	private ImageRGB anImageRGB957;
 	private int hintIconId;
@@ -176,9 +176,9 @@ public class Game extends GameShell {
 	private int hintIconOffset;
 	private int anInt962;
 	private int anInt963;
-	private int[] chatboxMessageTypes = new int[100];
-	private String[] chatboxMessageNames = new String[100];
-	private String[] chatboxMessages = new String[100];
+	private final int[] chatboxMessageTypes = new int[100];
+	private final String[] chatboxMessageNames = new String[100];
+	private final String[] chatboxMessages = new String[100];
 	private int anInt970;
 	private Scene currentScene;
 	private IndexedImage[] tabIcon = new IndexedImage[13];
@@ -198,31 +198,31 @@ public class Game extends GameShell {
 	private volatile boolean aBoolean987 = false;
 	private int anInt988 = -1;
 	private int anInt989 = -1;
-	private int[] anIntArray990 = { 0xFFFF00, 0xFF0000, 0x00FF00, 0xFFFF, 16711935, 0xFFFFFF };
+	private final int[] anIntArray990 = { 0xFFFF00, 0xFF0000, 0x00FF00, 0xFFFF, 16711935, 0xFFFFFF };
 	private IndexedImage titleboxImage;
 	private IndexedImage titleboxButtonImage;
-	private int[] anIntArray993 = new int[33];
-	private int[] anIntArray994 = new int[256];
+	private final int[] anIntArray993 = new int[33];
+	private final int[] anIntArray994 = new int[256];
 	public Index[] stores = new Index[5];
 	public int[] widgetSettings = new int[2000];
 	private boolean aBoolean997 = false;
 	private int anInt999;
-	private int anInt1000 = 50;
-	private int[] anIntArray1001 = new int[anInt1000];
-	private int[] anIntArray1002 = new int[anInt1000];
-	private int[] anIntArray1003 = new int[anInt1000];
-	private int[] anIntArray1004 = new int[anInt1000];
-	private int[] anIntArray1005 = new int[anInt1000];
-	private int[] anIntArray1006 = new int[anInt1000];
-	private int[] anIntArray1007 = new int[anInt1000];
-	private String[] aStringArray1008 = new String[anInt1000];
+	private final int anInt1000 = 50;
+	private final int[] anIntArray1001 = new int[anInt1000];
+	private final int[] anIntArray1002 = new int[anInt1000];
+	private final int[] anIntArray1003 = new int[anInt1000];
+	private final int[] anIntArray1004 = new int[anInt1000];
+	private final int[] anIntArray1005 = new int[anInt1000];
+	private final int[] anIntArray1006 = new int[anInt1000];
+	private final int[] anIntArray1007 = new int[anInt1000];
+	private final String[] aStringArray1008 = new String[anInt1000];
 	private int anInt1009;
 	private int lastSceneId = -1;
 	private static int anInt1011;
 	private ImageRGB[] anImageRGBArray1012 = new ImageRGB[20];
 	private int anInt1013;
 	private int anInt1014;
-	private int[] characterEditColors = new int[5];
+	private final int[] characterEditColors = new int[5];
 	private int anInt1017;
 	private int anInt1020;
 	private int anInt1021;
@@ -231,7 +231,7 @@ public class Game extends GameShell {
 	private int anInt1024;
 	private ISAACCipher isaacCipher;
 	private ImageRGB minimapEdge;
-	private int anInt1027 = 2301979;
+	private final int anInt1027 = 2301979;
 	public static final int[][] anIntArrayArray1028 = {
 			{ 6798, 107, 10283, 16, 4797, 7744, 5799, 4634, 33697, 22433, 2983, 54193 },
 			{ 8741, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003, 25239 },
@@ -245,7 +245,7 @@ public class Game extends GameShell {
 	private int anInt1034;
 	private int anInt1035;
 	private int anInt1036;
-	private byte aByte1037 = 24;
+	private final byte aByte1037 = 24;
 	private LinkedList projectileList = new LinkedList();
 	private int anInt1039;
 	private int anInt1040;
@@ -262,7 +262,7 @@ public class Game extends GameShell {
 	private IndexedImage anIndexedImage1052;
 	private IndexedImage anIndexedImage1053;
 	private IndexedImage anIndexedImage1054;
-	private int[] anIntArray1055 = new int[5];
+	private final int[] anIntArray1055 = new int[5];
 	private boolean aBoolean1056 = false;
 	private static BigInteger RSA_EXPONENT;
 	private ImageRGB[] worldMapHintIcons = new ImageRGB[100];
@@ -275,26 +275,26 @@ public class Game extends GameShell {
 	private int anInt1065;
 	private int anInt1066;
 	private int anInt1067 = -1;
-	private int[] skillMaxLevel = new int[SkillConstants.SKILL_COUNT];
-	private int[] defaultSettings = new int[2000];
+	private final int[] skillMaxLevel = new int[SkillConstants.SKILL_COUNT];
+	private final int[] defaultSettings = new int[2000];
 	private int anInt1071;
 	private boolean characterEditChangeGenger = true;
 	private int anInt1073;
 	private String aString1074;
 	private static int anInt1076;
-	private int[] anIntArray1077 = new int[151];
+	private final int[] anIntArray1077 = new int[151];
 	private Archive anArchive1078;
 	private int flashingSidebar = -1;
 	private int anInt1080;
 	private LinkedList aLinkedList1081 = new LinkedList();
-	private int[] anIntArray1082 = new int[33];
-	private Widget aWidget1084 = new Widget();
+	private final int[] anIntArray1082 = new int[33];
+	private final Widget aWidget1084 = new Widget();
 	private IndexedImage[] anIndexedImageArray1085 = new IndexedImage[100];
 	static int anInt1086;
 	private int trackCount;
-	private int anInt1088 = 5063219;
+	private final int anInt1088 = 5063219;
 	private int friendsListAction;
-	private int[] characterEditIdentityKits = new int[7];
+	private final int[] characterEditIdentityKits = new int[7];
 	private int anInt1091;
 	private int anInt1092;
 	private OnDemandRequester onDemandRequester;
@@ -310,7 +310,7 @@ public class Game extends GameShell {
 	private ImageRGB mapdotTeammate;
 	private int anInt1104;
 	private boolean aBoolean1105 = false;
-	private int anInt1106 = -733;
+	private final int anInt1106 = -733;
 	private String[] friendsListNames = new String[200];
 	private Buffer inBuffer = Buffer.newPooledBuffer(1);
 	private int anInt1109;
@@ -319,7 +319,7 @@ public class Game extends GameShell {
 	private int anInt1112;
 	private int anInt1113;
 	private int anInt1114;
-	private int[] crcValues = new int[9];
+	private final int[] crcValues = new int[9];
 	private int[] menuActionIds2 = new int[500];
 	private int[] menuActionIds3 = new int[500];
 	private int[] menuActionIds = new int[500];
@@ -351,10 +351,10 @@ public class Game extends GameShell {
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer1149;
 	private ProducingGraphicsBuffer aProducingGraphicsBuffer1150;
 	public static Player localPlayer;
-	private String[] playerActions = new String[5];
-	private boolean[] aBooleanArray1153 = new boolean[5];
-	private int[][][] constructMapTiles = new int[4][13][13];
-	private int[] tabWidgetIds = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+	private final String[] playerActions = new String[5];
+	private final boolean[] aBooleanArray1153 = new boolean[5];
+	private final int[][][] constructMapTiles = new int[4][13][13];
+	private final int[] tabWidgetIds = { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
 	private int anInt1156;
 	private int anInt1157 = 2;
 	private int menuActionRow;
@@ -399,7 +399,7 @@ public class Game extends GameShell {
 	private String username = "";
 	private String password = "";
 	private static int anInt1200;
-	private boolean aBoolean1201 = false;
+	private final boolean aBoolean1201 = false;
 	private final int[] anIntArray1202 = { 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
 	private int anInt1203 = -1;
 	private LinkedList spawnObjectNodeList = new LinkedList();
@@ -424,10 +424,10 @@ public class Game extends GameShell {
 	private String[] menuActionNames = new String[500];
 	private ImageRGB anImageRGB1226;
 	private ImageRGB anImageRGB1227;
-	private int[] anIntArray1228 = new int[5];
+	private final int[] anIntArray1228 = new int[5];
 	public static final int[] anIntArray1229;
 	public static boolean flagged;
-	private int[] trackIds = new int[50];
+	private final int[] trackIds = new int[50];
 	private int anInt1233;
 	private int anInt1234;
 	private int anInt1235 = 2;
@@ -437,7 +437,7 @@ public class Game extends GameShell {
 	private int[][][] anIntArrayArrayArray1239;
 	private long aLong1240;
 	private int anInt1241;
-	private IndexedImage[] moderatorIcon = new IndexedImage[2];
+	private final IndexedImage[] moderatorIcon = new IndexedImage[2];
 	protected long aLong1245;
 	private int currentTabId = 3;
 	private int hintIconActorId;
@@ -446,7 +446,7 @@ public class Game extends GameShell {
 	private static int anInt1251;
 	private int onDemandRequesterId;
 	private boolean midiFade = true;
-	private int[] anIntArray1254 = new int[151];
+	private final int[] anIntArray1254 = new int[151];
 	private CollisionMap[] currentCollisionMap = new CollisionMap[4];
 	private static boolean aBoolean1256;
 	public static int[] BITFIELD_MAX_VALUE;
@@ -456,8 +456,8 @@ public class Game extends GameShell {
 	private int[] anIntArray1261;
 	protected int anInt1262;
 	protected int anInt1263;
-	private int[] anIntArray1265 = new int[100];
-	private int[] trackLoop = new int[50];
+	private final int[] anIntArray1265 = new int[100];
+	private final int[] trackLoop = new int[50];
 	private boolean aBoolean1267 = false;
 	private int anInt1268;
 	private int anInt1269;
@@ -466,9 +466,9 @@ public class Game extends GameShell {
 	private byte[][] aByteArrayArray1272;
 	private int tradeSetting;
 	private int anInt1274;
-	private int[] trackDelay = new int[50];
+	private final int[] trackDelay = new int[50];
 	private int inTutorial;
-	private boolean aBoolean1277 = false;
+	private final boolean aBoolean1277 = false;
 	private int anInt1278;
 	private int anInt1279;
 	private boolean redraw = false;
@@ -1209,8 +1209,7 @@ public class Game extends GameShell {
 			}
 			int position = x + (y << 7) + 1610612736;
 			currentScene.method503((byte) 7, x, position, groundItemOne,
-					method42(currentSceneId, y * 128 + 64, true, x * 128 + 64), groundItemTwo, item,
-					currentSceneId, y);
+					method42(currentSceneId, y * 128 + 64, true, x * 128 + 64), groundItemTwo, item, currentSceneId, y);
 		}
 	}
 
@@ -1565,9 +1564,9 @@ public class Game extends GameShell {
 					closeWidgets();
 					reportedName = "";
 					reportMutePlayer = false;
-					for (int i = 0; i < Widget.cache.length; i++) {
-						if (Widget.cache[i] != null && Widget.cache[i].contentType == 600) {
-							anInt1203 = openWidgetId = Widget.cache[i].parentId;
+					for (Widget element : Widget.cache) {
+						if (element != null && element.contentType == 600) {
+							anInt1203 = openWidgetId = element.parentId;
 							break;
 						}
 					}
@@ -2444,9 +2443,9 @@ public class Game extends GameShell {
 							player.aBoolean1719 = false;
 							player.anInt1729 = method42(currentSceneId, player.yWithBoundary, true,
 									player.xWithBoundary);
-							currentScene.method508(60, currentSceneId, player.yWithBoundary, player,
-									player.anInt1572, player.anInt1742, player.xWithBoundary, player.anInt1729,
-									player.anInt1739, player.anInt1741, i_219_, player.anInt1740, (byte) 35);
+							currentScene.method508(60, currentSceneId, player.yWithBoundary, player, player.anInt1572,
+									player.anInt1742, player.xWithBoundary, player.anInt1729, player.anInt1739,
+									player.anInt1741, i_219_, player.anInt1740, (byte) 35);
 						} else {
 							if ((player.xWithBoundary & 0x7f) == 64 && (player.yWithBoundary & 0x7f) == 64) {
 								if (anIntArrayArray954[i_220_][i_221_] == anInt1290) {
@@ -2871,8 +2870,8 @@ public class Game extends GameShell {
 				int i_276_ = method54();
 				if (i_276_ != 0 && System.currentTimeMillis() - aLong849 > 360000L) {
 					SignLink.reportError(username + " glcfb " + aLong1240 + "," + i_276_ + "," + Game.lowMemory + ","
-							+ stores[0] + "," + onDemandRequester.immediateRequestCount() + "," + currentSceneId
-							+ "," + anInt1094 + "," + anInt1095);
+							+ stores[0] + "," + onDemandRequester.immediateRequestCount() + "," + currentSceneId + ","
+							+ anInt1094 + "," + anInt1095);
 					aLong849 = System.currentTimeMillis();
 				}
 			}
@@ -3165,11 +3164,11 @@ public class Game extends GameShell {
 	public final void method60(int widgetId) {
 		try {
 			Widget widget = Widget.cache[widgetId];
-			for (int i = 0; i < widget.children.length; i++) {
-				if (widget.children[i] == -1) {
+			for (int element : widget.children) {
+				if (element == -1) {
 					break;
 				}
-				Widget child = Widget.cache[widget.children[i]];
+				Widget child = Widget.cache[element];
 				if (child.type == 1) {
 					method60(child.id);
 				}
@@ -4564,9 +4563,9 @@ public class Game extends GameShell {
 								closeWidgets();
 								reportedName = string.substring(i_389_ + 5).trim();
 								reportMutePlayer = false;
-								for (int i_390_ = 0; i_390_ < Widget.cache.length; i_390_++) {
-									if (Widget.cache[i_390_] != null && Widget.cache[i_390_].contentType == 600) {
-										anInt1203 = openWidgetId = Widget.cache[i_390_].parentId;
+								for (Widget element : Widget.cache) {
+									if (element != null && element.contentType == 600) {
+										anInt1203 = openWidgetId = element.parentId;
 										break;
 									}
 								}
@@ -4718,8 +4717,8 @@ public class Game extends GameShell {
 							sendMessage(description, 0, "");
 						}
 						if (menuActionId == 244) {
-							boolean bool_396_ = calculatePath(2, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0,
-									actionId2, Game.localPlayer.pathX[0], false, actionId1);
+							boolean bool_396_ = calculatePath(2, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0, actionId2,
+									Game.localPlayer.pathX[0], false, actionId1);
 							if (!bool_396_) {
 								bool_396_ = calculatePath(2, 0, 1, 0, Game.localPlayer.pathY[0], 1, 0, actionId2,
 										Game.localPlayer.pathX[0], false, actionId1);
@@ -6379,8 +6378,8 @@ public class Game extends GameShell {
 			}
 			if (objectSizeX != 0
 					&& objectSizeY != 0
-					&& currentCollisionMap[currentSceneId].reachedFacingObject(currentX, currentY, toLocalX,
-							toLocalY, objectSizeX, objectSizeY, objectFace)) {
+					&& currentCollisionMap[currentSceneId].reachedFacingObject(currentX, currentY, toLocalX, toLocalY,
+							objectSizeX, objectSizeY, objectFace)) {
 				foundDesination = true;
 				break;
 			}
@@ -9237,11 +9236,11 @@ public class Game extends GameShell {
 		try {
 			boolean bool_742_ = false;
 			Widget widget = Widget.cache[widgetId];
-			for (int i_743_ = 0; i_743_ < widget.children.length; i_743_++) {
-				if (widget.children[i_743_] == -1) {
+			for (int element : widget.children) {
+				if (element == -1) {
 					break;
 				}
-				Widget widget_744_ = Widget.cache[widget.children[i_743_]];
+				Widget widget_744_ = Widget.cache[element];
 				if (widget_744_.type == 1) {
 					bool_742_ |= method119(i, widget_744_.id);
 				}
@@ -9493,8 +9492,8 @@ public class Game extends GameShell {
 					int itemId = opcodes[counter++] + 1;
 					if (itemId >= 0 && itemId < ItemDefinition.itemCount
 							&& (!ItemDefinition.getDefinition(itemId).membersOnly || Game.membersWorld)) {
-						for (int item = 0; item < itemWidget.items.length; item++) {
-							if (itemWidget.items[item] == itemId) {
+						for (int item2 : itemWidget.items) {
+							if (item2 == itemId) {
 								value = 999999999;
 								break;
 							}
@@ -10294,14 +10293,14 @@ public class Game extends GameShell {
 								i_897_ = 10;
 							}
 							if (scenespawnrequest != null) {
-								scenespawnrequest.aRenderable601 = new GameObject(
+								scenespawnrequest.renderable = new GameObject(
 										scenespawnrequest.anInt609 >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
 										i_901_, i_904_, i_900_, false);
 							}
 						}
 						if (i_899_ == 3) {
-							FloorDecoration floordecoration = currentScene.getFloorDecoration(currentSceneId,
-									i_894_, i_895_);
+							FloorDecoration floordecoration = currentScene.getFloorDecoration(currentSceneId, i_894_,
+									i_895_);
 							if (floordecoration != null) {
 								floordecoration.renderable = new GameObject(floordecoration.hash >> 14 & 0x7fff,
 										i_898_, 22, i_902_, i_903_, i_901_, i_904_, i_900_, false);
@@ -10337,8 +10336,8 @@ public class Game extends GameShell {
 							int i_922_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_];
 							int i_923_ = anIntArrayArrayArray1239[currentSceneId][i_907_ + 1][i_908_ + 1];
 							int i_924_ = anIntArrayArrayArray1239[currentSceneId][i_907_][i_908_ + 1];
-							Model model = gameobjectdefinition.getGameObjectModel(i_915_, i_916_, i_921_, i_922_,
-									i_923_, i_924_, -1);
+							Model model = gameobjectdefinition.getModelAt(i_915_, i_916_, i_921_, i_922_, i_923_,
+									i_924_, -1);
 							if (model != null) {
 								addSpawnObjectNode(i_913_ + 1, -1, 0, i_917_, i_908_, 0, currentSceneId, i_907_,
 										i_911_ + 1);
@@ -10394,8 +10393,8 @@ public class Game extends GameShell {
 							i_938_ = i_938_ * 128 + 64;
 							i_939_ = i_939_ * 128 + 64;
 							GameAnimableObject animableobject = new GameAnimableObject(currentSceneId,
-									Game.currentCycle, i_942_, i_940_,
-									method42(currentSceneId, i_939_, true, i_938_) - i_941_, i_939_, i_938_);
+									Game.currentCycle, i_942_, i_940_, method42(currentSceneId, i_939_, true, i_938_)
+											- i_941_, i_939_, i_938_);
 							aLinkedList1081.insertBack(animableobject);
 						}
 					} else if (opcode == 44) {
@@ -10880,9 +10879,9 @@ public class Game extends GameShell {
 						}
 						reportedName = "";
 						reportMutePlayer = false;
-						for (int idx = 0; idx < Widget.cache.length; idx++) {
-							if (Widget.cache[idx] != null && Widget.cache[idx].contentType == contentType) {
-								openWidgetId = Widget.cache[idx].parentId;
+						for (Widget element : Widget.cache) {
+							if (element != null && element.contentType == contentType) {
+								openWidgetId = element.parentId;
 								break;
 							}
 						}
@@ -11140,13 +11139,13 @@ public class Game extends GameShell {
 									anIntArray1261[i_1056_] = -1;
 									i_1056_++;
 								} else {
-									int i_1061_ = anIntArray1260[i_1056_] = onDemandRequester.regId(0, i_1060_,
-											i_1059_);
+									int i_1061_ = anIntArray1260[i_1056_] = onDemandRequester
+											.regId(0, i_1060_, i_1059_);
 									if (i_1061_ != -1) {
 										onDemandRequester.request(3, i_1061_);
 									}
-									int i_1062_ = anIntArray1261[i_1056_] = onDemandRequester.regId(1, i_1060_,
-											i_1059_);
+									int i_1062_ = anIntArray1261[i_1056_] = onDemandRequester
+											.regId(1, i_1060_, i_1059_);
 									if (i_1062_ != -1) {
 										onDemandRequester.request(3, i_1062_);
 									}
@@ -12076,8 +12075,8 @@ public class Game extends GameShell {
 						600 + i * 3,
 						i,
 						anInt1039,
-						method42(currentSceneId, Game.localPlayer.yWithBoundary, true,
-								Game.localPlayer.xWithBoundary) - 50, i_1180_, anInt1040);
+						method42(currentSceneId, Game.localPlayer.yWithBoundary, true, Game.localPlayer.xWithBoundary) - 50,
+						i_1180_, anInt1040);
 			}
 			int i;
 			if (!aBoolean1185) {
@@ -12124,7 +12123,7 @@ public class Game extends GameShell {
 			Model.anInt1679 = mouseEventY - 4;
 			Rasterizer.resetPixels();
 			currentScene.method535(anInt883, anInt885, anInt887, anInt884, i, anInt886, false);
-			currentScene.method510((byte) 104);
+			currentScene.method510();
 			method34();
 			method61();
 			method37(854, i_1188_);

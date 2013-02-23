@@ -4,7 +4,7 @@ import com.runescape.cache.Archive;
 import com.runescape.net.Buffer;
 
 public class Varp {
-	
+
 	public static int varpCount;
 	public static Varp[] cache;
 	public static int currentIndex;
