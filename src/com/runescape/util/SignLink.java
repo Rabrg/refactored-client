@@ -18,6 +18,7 @@ public class SignLink implements Runnable {
 	public static int storeId = 32;
 	public static RandomAccessFile cacheDat = null;
 	public static RandomAccessFile[] cacheIdx = new RandomAccessFile[5];
+	public static boolean sunjava;
 	public static Applet applet = null;
 	private static boolean active;
 	private static InetAddress inetAddress;
