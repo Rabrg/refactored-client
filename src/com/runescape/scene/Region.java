@@ -190,7 +190,7 @@ public class Region {
 						if (y >= 1
 								&& y < regionSizeY - 1
 								&& (!Region.lowMemory || (renderRuleFlags[0][x][y] & 0x2) != 0 || (renderRuleFlags[plane][x][y] & 0x10) == 0
-										&& getVisibilityPlaneFor(y, plane, x, 0) == Region.onBuildTimePlane)) {
+										&& getVisibilityPlaneFor(y, plane, x) == Region.onBuildTimePlane)) {
 							if (plane < Region.lowestPlane) {
 								Region.lowestPlane = plane;
 							}
@@ -263,7 +263,7 @@ public class Region {
 										textureid = -1;
 									} else {
 										rgbBitset = getHSLBitset(floor.hue2, floor.saturation, floor.lightness);
-										hslBitset = Rasterizer3D.getRgbLookupTableId[method467(floor.hslColor2, 96)];
+										hslBitset = Rasterizer3D.getRgbLookupTableId[mixHSLLightness(floor.hslColor2, 96)];
 									}
 									scene.method501(plane, x, y, clippingPath, clippingPathRotation, textureid,
 											vertexSouthWest, vertexSouthEast, vertexNorthEast, vertexNorthWest,
@@ -271,8 +271,8 @@ public class Region {
 											Region.trimHSLLightness(hslBitsetUnmodified, lightSouthEast),
 											Region.trimHSLLightness(hslBitsetUnmodified, lightNorthEast),
 											Region.trimHSLLightness(hslBitsetUnmodified, lightNorthWest),
-											method467(rgbBitset, lightSouthWest), method467(rgbBitset, lightSouthEast),
-											method467(rgbBitset, lightNorthEast), method467(rgbBitset, lightNorthWest),
+											mixHSLLightness(rgbBitset, lightSouthWest), mixHSLLightness(rgbBitset, lightSouthEast),
+											mixHSLLightness(rgbBitset, lightNorthEast), mixHSLLightness(rgbBitset, lightNorthWest),
 											rgbBitsetRandomized, hslBitset);
 								}
 							}
@@ -282,7 +282,7 @@ public class Region {
 			}
 			for (int y = 1; y < regionSizeY - 1; y++) {
 				for (int x = 1; x < regionSizeX - 1; x++) {
-					scene.method500(plane, x, y, getVisibilityPlaneFor(y, plane, x, 0));
+					scene.method500(plane, x, y, getVisibilityPlaneFor(y, plane, x));
 				}
 			}
 		}
@@ -441,16 +441,18 @@ public class Region {
 		}
 	}
 
-	private static final int calculateVertexHeight(int i, int i_106_) {
-		int mapHeight = Region.method458(i + 45365, i_106_ + 91923, 4) - 128
-				+ (Region.method458(i + 10294, i_106_ + 37821, 2) - 128 >> 1)
-				+ (Region.method458(i, i_106_, 1) - 128 >> 2);
-		mapHeight = (int) (mapHeight * 0.3) + 35;
+	private static final int calculateVertexHeight(int x, int y) {
+		// 3 octaves, 0.3 amplitude
+		int mapHeight = interpolatedSmoothNoise(x + 45365, y + 91923, 4) - 128
+							+ (interpolatedSmoothNoise(x + 10294, y + 37821, 2) - 128 >> 1)
+							+ (interpolatedSmoothNoise(x, y, 1) - 128 >> 2);
+		mapHeight = (int)(mapHeight * 0.3) + 35; // original = 0.29999999999999999D instead of 0.3
 		if (mapHeight < 10) {
 			mapHeight = 10;
 		} else if (mapHeight > 60) {
 			mapHeight = 60;
 		}
+		// could be shorted to: return k < 10 ? 10 : (k > 60 ? 60 : k);
 		return mapHeight;
 	}
 
@@ -496,10 +498,9 @@ public class Region {
 		}
 	}
 
-	private final void renderObject(int y, Scene scene, CollisionMap collisionMap, int type, int plane, int x,
-			int objectId, boolean bool, int face) {
+	private final void renderObject(int y, Scene scene, CollisionMap collisionMap, int type, int plane, int x, int objectId, boolean bool, int face) {
 		if (!Region.lowMemory || (renderRuleFlags[0][x][y] & 0x2) != 0 || (renderRuleFlags[plane][x][y] & 0x10) == 0
-				&& getVisibilityPlaneFor(y, plane, x, 0) == Region.onBuildTimePlane) {
+				&& getVisibilityPlaneFor(y, plane, x) == Region.onBuildTimePlane) {
 			if (plane < Region.lowestPlane) {
 				Region.lowestPlane = plane;
 			}
@@ -836,35 +837,34 @@ public class Region {
 		}
 	}
 
-	private static final int method458(int i, int i_140_, int i_141_) {
-		int i_142_ = i / i_141_;
-		int i_143_ = i & i_141_ - 1;
-		int i_144_ = i_140_ / i_141_;
-		int i_145_ = i_140_ & i_141_ - 1;
-		int i_146_ = Region.method468(i_142_, i_144_);
-		int i_147_ = Region.method468(i_142_ + 1, i_144_);
-		int i_148_ = Region.method468(i_142_, i_144_ + 1);
-		int i_149_ = Region.method468(i_142_ + 1, i_144_ + 1);
-		int i_150_ = Region.method466(i_146_, i_147_, i_143_, i_141_);
-		int i_151_ = Region.method466(i_148_, i_149_, i_143_, i_141_);
-		return Region.method466(i_150_, i_151_, i_145_, i_141_);
+	private static final int interpolatedSmoothNoise(int x, int y, int divisor) {
+		int iX = x / divisor; // integer x
+		int fX = x & divisor - 1; // fractional x
+		int iY = y / divisor; // integer y
+		int fY = y & divisor - 1; // fractional y
+		int center = smoothNoise(iX, iY);
+		int right = smoothNoise(iX + 1, iY);
+		int top = smoothNoise(iX, iY + 1);
+		int topRight = smoothNoise(iX + 1, iY + 1);
+		int interpolatedMiddle = interpolateCosine(center, right, fX, divisor);
+		int interpolatedTop = interpolateCosine(top, topRight, fX, divisor);
+		return interpolateCosine(interpolatedMiddle, interpolatedTop, fY, divisor);
 	}
 
-	private final int getHSLBitset(int i, int i_152_, int i_153_) {
-		if (i_153_ > 179) {
-			i_152_ /= 2;
+	private final int getHSLBitset(int h, int s, int l) {
+		if (l > 179) {
+			s /= 2;
 		}
-		if (i_153_ > 192) {
-			i_152_ /= 2;
+		if (l > 192) {
+			s /= 2;
 		}
-		if (i_153_ > 217) {
-			i_152_ /= 2;
+		if (l > 217) {
+			s /= 2;
 		}
-		if (i_153_ > 243) {
-			i_152_ /= 2;
+		if (l > 243) {
+			s /= 2;
 		}
-		int i_154_ = (i / 4 << 10) + (i_152_ / 32 << 7) + i_153_ / 2;
-		return i_154_;
+		return (h / 4 << 10) + (s / 32 << 7) + l / 2;
 	}
 
 	public static final boolean method460(int i, int i_155_, int i_156_) {
@@ -888,9 +888,7 @@ public class Region {
 		}
 	}
 
-	public final void method461(int i, int i_158_, CollisionMap[] collisionMaps, int i_159_, int i_160_, int i_161_,
-			byte[] bs, int i_162_, int plane, int i_164_) {
-		try {
+	public final void method461(int i, int i_158_, CollisionMap[] collisionMaps, int i_159_, int i_160_, int i_161_, byte[] bs, int i_162_, int plane, int i_164_) {
 			for (int i_165_ = 0; i_165_ < 8; i_165_++) {
 				for (int i_166_ = 0; i_166_ < 8; i_166_++) {
 					if (i_160_ + i_165_ > 0 && i_160_ + i_165_ < 103 && i_164_ + i_166_ > 0 && i_164_ + i_166_ < 103) {
@@ -898,37 +896,25 @@ public class Region {
 					}
 				}
 			}
-			if (i_159_ < 9 || i_159_ > 9) {
-				for (int i_167_ = 1; i_167_ > 0; i_167_++) {
-					/* empty */
-				}
-			}
 			Buffer buffer = new Buffer(bs);
 			for (int i_168_ = 0; i_168_ < 4; i_168_++) {
 				for (int i_169_ = 0; i_169_ < 64; i_169_++) {
 					for (int i_170_ = 0; i_170_ < 64; i_170_++) {
-						if (i_168_ == i && i_169_ >= i_161_ && i_169_ < i_161_ + 8 && i_170_ >= i_162_
-								&& i_170_ < i_162_ + 8) {
-							method463(i_164_ + TiledUtils.getRotatedMapChunkY(i_169_ & 0x7, i_170_ & 0x7, i_158_), 0,
+						if (i_168_ == i && i_169_ >= i_161_ && i_169_ < i_161_ + 8 && i_170_ >= i_162_ && i_170_ < i_162_ + 8) {
+							readTile(i_164_ + TiledUtils.getRotatedMapChunkY(i_169_ & 0x7, i_170_ & 0x7, i_158_), 0,
 									buffer,
 									i_160_ + TiledUtils.getRotatedMapChunkX(i_169_ & 0x7, i_170_ & 0x7, i_158_), plane,
-									i_158_, 942, 0);
-						} else {
-							method463(-1, 0, buffer, -1, 0, 0, 942, 0);
+									i_158_, 0);
+						}
+						else {
+							readTile(-1, 0, buffer, -1, 0, 0, 0);
 						}
 					}
 				}
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("28153, " + i + ", " + i_158_ + ", " + collisionMaps + ", " + i_159_ + ", " + i_160_
-					+ ", " + i_161_ + ", " + bs + ", " + i_162_ + ", " + plane + ", " + i_164_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
-		}
 	}
 
-	public final void method462(byte[] bs, int i, int i_171_, int i_172_, int i_173_, byte b,
-			CollisionMap[] collisionmaps) {
+	public final void method462(byte[] bs, int i, int i_171_, int i_172_, int i_173_, byte b, CollisionMap[] collisionmaps) {
 		do {
 			try {
 				for (int i_174_ = 0; i_174_ < 4; i_174_++) {
@@ -944,7 +930,7 @@ public class Region {
 				for (int i_177_ = 0; i_177_ < 4; i_177_++) {
 					for (int i_178_ = 0; i_178_ < 64; i_178_++) {
 						for (int i_179_ = 0; i_179_ < 64; i_179_++) {
-							method463(i_179_ + i, i_173_, buffer, i_178_ + i_171_, i_177_, 0, 942, i_172_);
+							readTile(i_179_ + i, i_173_, buffer, i_178_ + i_171_, i_177_, 0, i_172_);
 						}
 					}
 				}
@@ -961,86 +947,81 @@ public class Region {
 		} while (false);
 	}
 
-	private final void method463(int i, int i_180_, Buffer buffer, int i_181_, int i_182_, int i_183_, int i_184_,
-			int i_185_) {
+	private final void readTile(int y, int yOffset, Buffer buffer, int x, int plane, int shapeOffset, int xOffset) {
 		try {
-			i_184_ = 36 / i_184_;
-			if (i_181_ >= 0 && i_181_ < 104 && i >= 0 && i < 104) {
-				renderRuleFlags[i_182_][i_181_][i] = (byte) 0;
+			if (x >= 0 && x < 104 && y >= 0 && y < 104) {
+				renderRuleFlags[plane][x][y] = (byte)0;
 				for (;;) {
-					int i_186_ = buffer.getUnsignedByte();
-					if (i_186_ == 0) {
-						if (i_182_ == 0) {
-							vertexHeights[0][i_181_][i] = -Region.calculateVertexHeight(932731 + i_181_ + i_185_,
-									556238 + i + i_180_) * 8;
-						} else {
-							vertexHeights[i_182_][i_181_][i] = vertexHeights[i_182_ - 1][i_181_][i] - 240;
+					int setting = buffer.getUnsignedByte();
+					if (setting == 0) {
+						if (plane == 0) {
+							vertexHeights[0][x][y] = -Region.calculateVertexHeight(932731 + x + xOffset, 556238 + y + yOffset) * 8;
+						}
+						else {
+							vertexHeights[plane][x][y] = vertexHeights[plane - 1][x][y] - 240;
 							break;
 						}
 						break;
 					}
-					if (i_186_ == 1) {
-						int i_187_ = buffer.getUnsignedByte();
-						if (i_187_ == 1) {
-							i_187_ = 0;
+					if (setting == 1) {
+						int height = buffer.getUnsignedByte();
+						if (height == 1) {
+							height = 0;
 						}
-						if (i_182_ == 0) {
-							vertexHeights[0][i_181_][i] = -i_187_ * 8;
-						} else {
-							vertexHeights[i_182_][i_181_][i] = vertexHeights[i_182_ - 1][i_181_][i] - i_187_ * 8;
+						if (plane == 0) {
+							vertexHeights[0][x][y] = -height * 8;
+						}
+						else {
+							vertexHeights[plane][x][y] = vertexHeights[plane - 1][x][y] - height * 8;
 							break;
 						}
 						break;
 					}
-					if (i_186_ <= 49) {
-						overlayFloorIds[i_182_][i_181_][i] = buffer.get();
-						overlayClippingPaths[i_182_][i_181_][i] = (byte) ((i_186_ - 2) / 4);
-						overlayRotations[i_182_][i_181_][i] = (byte) (i_186_ - 2 + i_183_ & 0x3);
-					} else if (i_186_ <= 81) {
-						renderRuleFlags[i_182_][i_181_][i] = (byte) (i_186_ - 49);
-					} else {
-						underlayFloorIds[i_182_][i_181_][i] = (byte) (i_186_ - 81);
+					if (setting <= 49) {
+						overlayFloorIds[plane][x][y] = buffer.get();
+						overlayClippingPaths[plane][x][y] = (byte) ((setting - 2) / 4);
+						overlayRotations[plane][x][y] = (byte) (setting - 2 + shapeOffset & 0x3);
+					}
+					else if (setting <= 81) {
+						renderRuleFlags[plane][x][y] = (byte) (setting - 49);
+					}
+					else {
+						underlayFloorIds[plane][x][y] = (byte) (setting - 81);
 					}
 				}
-			} else {
+			}
+			else {
 				for (;;) {
-					int i_188_ = buffer.getUnsignedByte();
-					if (i_188_ == 0) {
+					// excess tiles, outside of 104, 104
+					int setting = buffer.getUnsignedByte();
+					if (setting == 0) {
 						break;
 					}
-					if (i_188_ == 1) {
+					if (setting == 1) {
 						buffer.getUnsignedByte();
 						break;
 					}
-					if (i_188_ <= 49) {
+					if (setting <= 49) {
 						buffer.getUnsignedByte();
 					}
 				}
 			}
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("30203, " + i + ", " + i_180_ + ", " + buffer + ", " + i_181_ + ", " + i_182_ + ", "
-					+ i_183_ + ", " + i_184_ + ", " + i_185_ + ", " + runtimeexception.toString());
+		}
+		catch (RuntimeException runtimeexception) {
+			SignLink.reportError("30203, " + y + ", " + yOffset + ", " + buffer + ", " + x + ", " + plane + ", "
+					+ shapeOffset + ", " + xOffset + ", " + runtimeexception.toString());
 			throw new RuntimeException();
 		}
 	}
 
-	public int getVisibilityPlaneFor(int i, int i_189_, int i_190_, int i_191_) {
-		try {
-			if (i_191_ != 0) {
-				return 2;
-			}
-			if ((renderRuleFlags[i_189_][i_190_][i] & 0x8) != 0) {
-				return 0;
-			}
-			if (i_189_ > 0 && (renderRuleFlags[1][i_190_][i] & 0x2) != 0) {
-				return i_189_ - 1;
-			}
-			return i_189_;
-		} catch (RuntimeException runtimeexception) {
-			SignLink.reportError("5828, " + i + ", " + i_189_ + ", " + i_190_ + ", " + i_191_ + ", "
-					+ runtimeexception.toString());
-			throw new RuntimeException();
+	public int getVisibilityPlaneFor(int y, int plane, int x) {
+		if ((renderRuleFlags[plane][x][y] & 0x8) != 0) {
+			return 0;
 		}
+		if (plane > 0 && (renderRuleFlags[1][x][y] & 0x2) != 0) {
+			return plane - 1;
+		}
+		return plane;
 	}
 
 	public final void method465(CollisionMap[] collisionmaps, Scene scene, int i, int i_192_, int i_193_, boolean bool,
@@ -1102,40 +1083,38 @@ public class Region {
 		}
 	}
 
-	private static final int method466(int i, int i_211_, int i_212_, int i_213_) {
-		int i_214_ = 65536 - Rasterizer3D.COSINE[i_212_ * 1024 / i_213_] >> 1;
-		return (i * (65536 - i_214_) >> 16) + (i_211_ * i_214_ >> 16);
+	private static final int interpolateCosine(int a, int b, int fraction, int divisor) {
+		int res = 65536 - Rasterizer3D.COSINE[fraction * 1024 / divisor] >> 1;
+		return (a * (65536 - res) >> 16) + (b * res >> 16);
 	}
 
-	private final int method467(int i, int i_215_) {
-		if (i == -2) {
+	private final int mixHSLLightness(int hsl, int light) {
+		if (hsl == -2) {
 			return 12345678;
 		}
-		if (i == -1) {
-			if (i_215_ < 0) {
-				i_215_ = 0;
-			} else if (i_215_ > 127) {
-				i_215_ = 127;
+		if (hsl == -1) {
+			if (light < 0) {
+				light = 0;
+			} else if (light > 127) {
+				light = 127;
 			}
-			i_215_ = 127 - i_215_;
-			return i_215_;
+			light = 127 - light;
+			return light;
 		}
-		i_215_ = i_215_ * (i & 0x7f) / 128;
-		if (i_215_ < 2) {
-			i_215_ = 2;
-		} else if (i_215_ > 126) {
-			i_215_ = 126;
+		light = light * (hsl & 0x7f) / 128;
+		if (light < 2) {
+			light = 2;
+		} else if (light > 126) {
+			light = 126;
 		}
-		return (i & 0xff80) + i_215_;
+		return (hsl & 0xff80) + light;
 	}
 
-	private static final int method468(int i, int i_216_) {
-		int i_217_ = Region.calculateNoise(i - 1, i_216_ - 1) + Region.calculateNoise(i + 1, i_216_ - 1)
-				+ Region.calculateNoise(i - 1, i_216_ + 1) + Region.calculateNoise(i + 1, i_216_ + 1);
-		int i_218_ = Region.calculateNoise(i - 1, i_216_) + Region.calculateNoise(i + 1, i_216_)
-				+ Region.calculateNoise(i, i_216_ - 1) + Region.calculateNoise(i, i_216_ + 1);
-		int i_219_ = Region.calculateNoise(i, i_216_);
-		return i_217_ / 16 + i_218_ / 8 + i_219_ / 4;
+	private static final int smoothNoise(int x, int y) {
+		int corners = calculateNoise(x - 1, y - 1) + calculateNoise(x + 1, y - 1) + calculateNoise(x - 1, y + 1) + calculateNoise(x + 1, y + 1);
+		int sides   = calculateNoise(x - 1, y)     + calculateNoise(x + 1, y)     + calculateNoise(x,     y - 1) + calculateNoise(x,     y + 1);
+		int center  = calculateNoise(x,     y);
+		return (corners / 16) + (sides / 8) + (center / 4); // parenthesis added for visualization purposes.
 	}
 
 	private static final int trimHSLLightness(int i, int i_220_) {
