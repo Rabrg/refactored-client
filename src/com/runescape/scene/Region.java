@@ -441,16 +441,18 @@ public class Region {
 		}
 	}
 
-	private static final int calculateVertexHeight(int i, int i_106_) {
-		int mapHeight = Region.method458(i + 45365, i_106_ + 91923, 4) - 128
-				+ (Region.method458(i + 10294, i_106_ + 37821, 2) - 128 >> 1)
-				+ (Region.method458(i, i_106_, 1) - 128 >> 2);
-		mapHeight = (int) (mapHeight * 0.3) + 35;
+	private static final int calculateVertexHeight(int x, int y) {
+		// 3 octaves, 0.3 amplitude
+		int mapHeight = interpolatedSmoothNoise(x + 45365, y + 91923, 4) - 128
+							+ (interpolatedSmoothNoise(x + 10294, y + 37821, 2) - 128 >> 1)
+							+ (interpolatedSmoothNoise(x, y, 1) - 128 >> 2);
+		mapHeight = (int)(mapHeight * 0.3) + 35; // original = 0.29999999999999999D instead of 0.3
 		if (mapHeight < 10) {
 			mapHeight = 10;
 		} else if (mapHeight > 60) {
 			mapHeight = 60;
 		}
+		// could be shorted to: return k < 10 ? 10 : (k > 60 ? 60 : k);
 		return mapHeight;
 	}
 
@@ -836,18 +838,18 @@ public class Region {
 		}
 	}
 
-	private static final int method458(int i, int i_140_, int i_141_) {
-		int i_142_ = i / i_141_;
-		int i_143_ = i & i_141_ - 1;
-		int i_144_ = i_140_ / i_141_;
-		int i_145_ = i_140_ & i_141_ - 1;
-		int i_146_ = Region.method468(i_142_, i_144_);
-		int i_147_ = Region.method468(i_142_ + 1, i_144_);
-		int i_148_ = Region.method468(i_142_, i_144_ + 1);
-		int i_149_ = Region.method468(i_142_ + 1, i_144_ + 1);
-		int i_150_ = Region.method466(i_146_, i_147_, i_143_, i_141_);
-		int i_151_ = Region.method466(i_148_, i_149_, i_143_, i_141_);
-		return Region.method466(i_150_, i_151_, i_145_, i_141_);
+	private static final int interpolatedSmoothNoise(int x, int y, int divisor) {
+		int iX = x / divisor; // integer x
+		int fX = x & divisor - 1; // fractional x
+		int iY = y / divisor; // integer y
+		int fY = y & divisor - 1; // fractional y
+		int center = smoothNoise(iX, iY);
+		int right = smoothNoise(iX + 1, iY);
+		int top = smoothNoise(iX, iY + 1);
+		int topRight = smoothNoise(iX + 1, iY + 1);
+		int interpolatedMiddle = interpolateCosine(center, right, fX, divisor);
+		int interpolatedTop = interpolateCosine(top, topRight, fX, divisor);
+		return interpolateCosine(interpolatedMiddle, interpolatedTop, fY, divisor);
 	}
 
 	private final int getHSLBitset(int i, int i_152_, int i_153_) {
@@ -1102,9 +1104,9 @@ public class Region {
 		}
 	}
 
-	private static final int method466(int i, int i_211_, int i_212_, int i_213_) {
-		int i_214_ = 65536 - Rasterizer3D.COSINE[i_212_ * 1024 / i_213_] >> 1;
-		return (i * (65536 - i_214_) >> 16) + (i_211_ * i_214_ >> 16);
+	private static final int interpolateCosine(int a, int b, int fraction, int divisor) {
+		int res = 65536 - Rasterizer3D.COSINE[fraction * 1024 / divisor] >> 1;
+		return (a * (65536 - res) >> 16) + (b * res >> 16);
 	}
 
 	private final int method467(int i, int i_215_) {
@@ -1129,13 +1131,11 @@ public class Region {
 		return (i & 0xff80) + i_215_;
 	}
 
-	private static final int method468(int i, int i_216_) {
-		int i_217_ = Region.calculateNoise(i - 1, i_216_ - 1) + Region.calculateNoise(i + 1, i_216_ - 1)
-				+ Region.calculateNoise(i - 1, i_216_ + 1) + Region.calculateNoise(i + 1, i_216_ + 1);
-		int i_218_ = Region.calculateNoise(i - 1, i_216_) + Region.calculateNoise(i + 1, i_216_)
-				+ Region.calculateNoise(i, i_216_ - 1) + Region.calculateNoise(i, i_216_ + 1);
-		int i_219_ = Region.calculateNoise(i, i_216_);
-		return i_217_ / 16 + i_218_ / 8 + i_219_ / 4;
+	private static final int smoothNoise(int x, int y) {
+		int corners = calculateNoise(x - 1, y - 1) + calculateNoise(x + 1, y - 1) + calculateNoise(x - 1, y + 1) + calculateNoise(x + 1, y + 1);
+		int sides   = calculateNoise(x - 1, y)     + calculateNoise(x + 1, y)     + calculateNoise(x,     y - 1) + calculateNoise(x,     y + 1);
+		int center  = calculateNoise(x,     y);
+		return (corners / 16) + (sides / 8) + (center / 4); // parenthesis added for visualization purposes.
 	}
 
 	private static final int trimHSLLightness(int i, int i_220_) {
