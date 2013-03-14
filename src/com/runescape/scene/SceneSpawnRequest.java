@@ -15,6 +15,6 @@ public class SceneSpawnRequest {
 	protected int sizeY;
 	protected int anInt607;
 	protected int anInt608;
-	public int anInt609;
+	public int hash;
 	protected byte config;
 }

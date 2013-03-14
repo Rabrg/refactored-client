@@ -826,9 +826,9 @@ public class Model extends Renderable {
 			if (vertexY > maxY) {
 				maxY = vertexY;
 			}
-			int i_94_ = vertexX * vertexX + vertexZ * vertexZ;
-			if (i_94_ > shadowIntensity) {
-				shadowIntensity = i_94_;
+			int calculatedVertexIntensity = vertexX * vertexX + vertexZ * vertexZ;
+			if (calculatedVertexIntensity > shadowIntensity) {
+				shadowIntensity = calculatedVertexIntensity; // the taller the vertex is, the higher the shadow intensity?
 			}
 		}
 		shadowIntensity = (int) (Math.sqrt(shadowIntensity) + 0.99);
