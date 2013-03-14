@@ -1207,7 +1207,7 @@ public class Game extends GameShell {
 				}
 			}
 			int position = x + (y << 7) + 1610612736;
-			currentScene.method503((byte) 7, x, position, groundItemOne,
+			currentScene.method503(x, position, groundItemOne,
 					method42(currentSceneId, y * 128 + 64, true, x * 128 + 64), groundItemTwo, item, currentSceneId, y);
 		}
 	}
@@ -1231,7 +1231,7 @@ public class Game extends GameShell {
 						if (!npc.npcDefinition.clickable) {
 							i_108_ += -2147483648;
 						}
-						currentScene.method507(currentSceneId, npc.anInt1572, (byte) 6,
+						currentScene.method507(currentSceneId, npc.anInt1572,
 								method42(currentSceneId, npc.yWithBoundary, true, npc.xWithBoundary), i_108_,
 								npc.yWithBoundary, (npc.boundaryDimension - 1) * 64 + 60, npc.xWithBoundary, npc,
 								npc.aBoolean1561);
@@ -2434,7 +2434,7 @@ public class Game extends GameShell {
 									player.xWithBoundary);
 							currentScene.method508(60, currentSceneId, player.yWithBoundary, player, player.anInt1572,
 									player.anInt1742, player.xWithBoundary, player.anInt1729, player.anInt1739,
-									player.anInt1741, i_219_, player.anInt1740, (byte) 35);
+									player.anInt1741, i_219_, player.anInt1740);
 						} else {
 							if ((player.xWithBoundary & 0x7f) == 64 && (player.yWithBoundary & 0x7f) == 64) {
 								if (anIntArrayArray954[i_220_][i_221_] == anInt1290) {
@@ -2445,7 +2445,7 @@ public class Game extends GameShell {
 							player.anInt1729 = method42(currentSceneId, player.yWithBoundary, true,
 									player.xWithBoundary);
 							currentScene
-									.method507(currentSceneId, player.anInt1572, (byte) 6, player.anInt1729, i_219_,
+									.method507(currentSceneId, player.anInt1572, player.anInt1729, i_219_,
 											player.yWithBoundary, 60, player.xWithBoundary, player, player.aBoolean1561);
 						}
 					}
@@ -2577,7 +2577,7 @@ public class Game extends GameShell {
 	public final void renderCurrentScene(int i, int i_234_, int i_235_, int i_236_, int i_237_, int i_238_) {
 		do {
 			try {
-				int i_239_ = currentScene.method522(i_238_, i_236_, i);
+				int i_239_ = currentScene.getWallHash(i_238_, i_236_, i);
 				if (i_234_ < 0) {
 					if (i_239_ != 0) {
 						int i_240_ = currentScene.getConfig(i_238_, i_236_, i, i_239_);
@@ -2945,7 +2945,7 @@ public class Game extends GameShell {
 						}
 					}
 					projectile.move(anInt970);
-					currentScene.method507(currentSceneId, projectile.modelRotationY, (byte) 6,
+					currentScene.method507(currentSceneId, projectile.modelRotationY,
 							(int) projectile.currentHeight, -1, (int) projectile.currentY, 60,
 							(int) projectile.currentX, projectile, false);
 				}
@@ -6823,7 +6823,7 @@ public class Game extends GameShell {
 		int type = 0;
 		int face = 0;
 		if (spawnOjectNode.type == 0) {
-			uid = currentScene.method522(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
+			uid = currentScene.getWallHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (spawnOjectNode.type == 1) {
 			uid = currentScene.getWallDecorationHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
@@ -8162,7 +8162,7 @@ public class Game extends GameShell {
 					if (animableobject.transformCompleted) {
 						animableobject.remove();
 					} else {
-						currentScene.method507(animableobject.plane, 0, (byte) 6, animableobject.z, -1,
+						currentScene.method507(animableobject.plane, 0, animableobject.z, -1,
 								animableobject.y, 60, animableobject.x, animableobject, false);
 					}
 				}
@@ -10311,7 +10311,7 @@ public class Game extends GameShell {
 							}
 							if (scenespawnrequest != null) {
 								scenespawnrequest.renderable = new GameObject(
-										scenespawnrequest.anInt609 >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
+										scenespawnrequest.hash >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
 										i_901_, i_904_, i_900_, false);
 							}
 						}
@@ -10694,7 +10694,7 @@ public class Game extends GameShell {
 				int i_1001_ = 0;
 				int i_1002_ = -1;
 				if (type == 0) {
-					i_1001_ = currentScene.method522(plane, x, y);
+					i_1001_ = currentScene.getWallHash(plane, x, y);
 				}
 				if (type == 1) {
 					i_1001_ = currentScene.getWallDecorationHash(plane, x, y);
@@ -10711,7 +10711,7 @@ public class Game extends GameShell {
 					int position = config & 0x1f;
 					int orientation = config >> 6;
 					if (type == 0) {
-						currentScene.method513(x, plane, y);
+						currentScene.removeWall(x, plane, y);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (gameobjectdefinition.solid) {
 							currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
@@ -10719,10 +10719,10 @@ public class Game extends GameShell {
 						}
 					}
 					if (type == 1) {
-						currentScene.method514(0, y, plane, x);
+						currentScene.removeWallDecoration(y, plane, x);
 					}
 					if (type == 2) {
-						currentScene.method515(plane, -978, x, y);
+						currentScene.method515(plane, x, y);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
 								|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
@@ -10734,7 +10734,7 @@ public class Game extends GameShell {
 						}
 					}
 					if (type == 3) {
-						currentScene.method516((byte) 9, plane, y, x);
+						currentScene.removeFloorDecoration(plane, y, x);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
 							currentCollisionMap[plane].unmarkConcealed(x, y);

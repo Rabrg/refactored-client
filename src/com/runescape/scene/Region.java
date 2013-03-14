@@ -644,7 +644,7 @@ public class Region {
 					collisionMap.markWall(x, y, type, face, gameObjectDefinition.walkable);
 				}
 				if (gameObjectDefinition.unknown4 != 16) {
-					scene.method512(y, 441, gameObjectDefinition.unknown4, x, plane);
+					scene.method512(y, gameObjectDefinition.unknown4, x, plane);
 				}
 			} else if (type == 1) {
 				Renderable renderable;
@@ -707,7 +707,7 @@ public class Region {
 					collisionMap.markWall(x, y, type, face, gameObjectDefinition.walkable);
 				}
 				if (gameObjectDefinition.unknown4 != 16) {
-					scene.method512(y, 441, gameObjectDefinition.unknown4, x, plane);
+					scene.method512(y, gameObjectDefinition.unknown4, x, plane);
 				}
 			} else if (type == 3) {
 				Renderable renderable;
@@ -784,7 +784,7 @@ public class Region {
 							objectConfig, hash, renderable);
 				} else if (type == 5) {
 					int offset = 16;
-					int i_139_ = scene.method522(plane, x, y);
+					int i_139_ = scene.getWallHash(plane, x, y);
 					if (i_139_ > 0) {
 						offset = GameObjectDefinition.getDefinition(i_139_ >> 14 & 0x7fff).unknown4;
 					}
@@ -1304,7 +1304,7 @@ public class Region {
 							b_233_, i_232_, renderable);
 				} else if (i_222_ == 5) {
 					int i_242_ = 16;
-					int i_243_ = scene.method522(i_226_, i_224_, i_221_);
+					int i_243_ = scene.getWallHash(i_226_, i_224_, i_221_);
 					if (i_243_ > 0) {
 						i_242_ = GameObjectDefinition.getDefinition(i_243_ >> 14 & 0x7fff).unknown4;
 					}
