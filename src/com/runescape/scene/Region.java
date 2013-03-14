@@ -41,7 +41,6 @@ public class Region {
 	private final int regionSizeY;
 	private final byte[][][] overlayRotations;
 	private final byte[][][] renderRuleFlags;
-	private final int anInt504 = -53;
 	public static boolean lowMemory = true;
 	private static final int[] anIntArray506 = { 1, 2, 4, 8 };
 
@@ -282,15 +281,15 @@ public class Region {
 			}
 			for (int y = 1; y < regionSizeY - 1; y++) {
 				for (int x = 1; x < regionSizeX - 1; x++) {
-					scene.method500(plane, x, y, getVisibilityPlaneFor(y, plane, x));
+					scene.setTileLogicalHeight(plane, x, y, getVisibilityPlaneFor(y, plane, x));
 				}
 			}
 		}
-		scene.method527(-10, (byte) 3, 64, -50, 768, -50);
+		scene.method527(-10, 64, -50, 768, -50);
 		for (int y = 0; y < regionSizeX; y++) {
 			for (int x = 0; x < regionSizeY; x++) {
 				if ((renderRuleFlags[1][y][x] & 0x2) == 2) {
-					scene.setBridgeMode(x, y, -438);
+					scene.setBridgeMode(x, y);
 				}
 			}
 		}
@@ -343,8 +342,7 @@ public class Region {
 										- highestOcclussionVertexHeightOffset;
 								int lowestOcclussionVertexHeight = vertexHeights[lowestOcclussionPlane][x][lowestOcclussionY];
 								Scene.createCullingOcclussionBox(currentPlane, x * 128, lowestOcclussionVertexHeight,
-										x * 128, higestOcclussionY * 128 + 128, highestOcclussionVertexHeight,
-										anInt504, lowestOcclussionY * 128, 1);
+										x * 128, higestOcclussionY * 128 + 128, highestOcclussionVertexHeight, lowestOcclussionY * 128, 1);
 								for (int occludedPlane = lowestOcclussionPlane; occludedPlane <= higestOcclussionPlane; occludedPlane++) {
 									for (int occludedY = lowestOcclussionY; occludedY <= higestOcclussionY; occludedY++) {
 										tileCullingBitsets[occludedPlane][x][occludedY] &= renderRule1 ^ 0xffffffff;
@@ -387,7 +385,7 @@ public class Region {
 								int i_93_ = vertexHeights[i_88_][i_85_][y] - i_92_;
 								int i_94_ = vertexHeights[i_87_][i_85_][y];
 								Scene.createCullingOcclussionBox(currentPlane, i_85_ * 128, i_94_, i_86_ * 128 + 128,
-										y * 128, i_93_, anInt504, y * 128, 2);
+										y * 128, i_93_, y * 128, 2);
 								for (int i_95_ = i_87_; i_95_ <= i_88_; i_95_++) {
 									for (int i_96_ = i_85_; i_96_ <= i_86_; i_96_++) {
 										tileCullingBitsets[i_95_][i_96_][y] &= renderRule2 ^ 0xffffffff;
@@ -427,7 +425,7 @@ public class Region {
 							if ((i_98_ - i_97_ + 1) * (i_100_ - i_99_ + 1) >= 4) {
 								int i_103_ = vertexHeights[plane][i_97_][i_99_];
 								Scene.createCullingOcclussionBox(currentPlane, i_97_ * 128, i_103_, i_98_ * 128 + 128,
-										i_100_ * 128 + 128, i_103_, anInt504, i_99_ * 128, 4);
+										i_100_ * 128 + 128, i_103_, i_99_ * 128, 4);
 								for (int i_104_ = i_97_; i_104_ <= i_98_; i_104_++) {
 									for (int i_105_ = i_99_; i_105_ <= i_100_; i_105_++) {
 										tileCullingBitsets[plane][i_104_][i_105_] &= renderRule3 ^ 0xffffffff;
@@ -452,7 +450,7 @@ public class Region {
 		} else if (mapHeight > 60) {
 			mapHeight = 60;
 		}
-		// could be shorted to: return k < 10 ? 10 : (k > 60 ? 60 : k);
+		// could be shortened to: return k < 10 ? 10 : (k > 60 ? 60 : k);
 		return mapHeight;
 	}
 
@@ -607,7 +605,7 @@ public class Region {
 					renderable = new GameObject(objectId, face, 0, vertexHeightRight, vertexHeightTopRight,
 							vertexHeight, vertexHeightTop, gameObjectDefinition.animationId, true);
 				}
-				scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x, null,
+				scene.method504(Region.anIntArray506[face], renderable, hash, y, objectConfig, x, null,
 						vertexMix, 0, plane);
 				if (face == 0) {
 					if (gameObjectDefinition.castsShadow) {
@@ -657,7 +655,7 @@ public class Region {
 					renderable = new GameObject(objectId, face, 1, vertexHeightRight, vertexHeightTopRight,
 							vertexHeight, vertexHeightTop, gameObjectDefinition.animationId, true);
 				}
-				scene.method504(Region.wallCornerOrientationMap[face], renderable, true, hash, y, objectConfig, x,
+				scene.method504(Region.wallCornerOrientationMap[face], renderable, hash, y, objectConfig, x,
 						null, vertexMix, 0, plane);
 				if (gameObjectDefinition.castsShadow) {
 					if (face == 0) {
@@ -688,7 +686,7 @@ public class Region {
 					renderable_134_ = new GameObject(objectId, i_133_, 2, vertexHeightRight, vertexHeightTopRight,
 							vertexHeight, vertexHeightTop, gameObjectDefinition.animationId, true);
 				}
-				scene.method504(Region.anIntArray506[face], renderable, true, hash, y, objectConfig, x,
+				scene.method504(Region.anIntArray506[face], renderable, hash, y, objectConfig, x,
 						renderable_134_, vertexMix, Region.anIntArray506[i_133_], plane);
 				if (gameObjectDefinition.aBoolean269) {
 					if (face == 0) {
@@ -720,7 +718,7 @@ public class Region {
 					renderable = new GameObject(objectId, face, 3, vertexHeightRight, vertexHeightTopRight,
 							vertexHeight, vertexHeightTop, gameObjectDefinition.animationId, true);
 				}
-				scene.method504(Region.wallCornerOrientationMap[face], renderable, true, hash, y, objectConfig, x,
+				scene.method504(Region.wallCornerOrientationMap[face], renderable, hash, y, objectConfig, x,
 						null, vertexMix, 0, plane);
 				if (gameObjectDefinition.castsShadow) {
 					if (face == 0) {
@@ -838,6 +836,7 @@ public class Region {
 	}
 
 	private static final int interpolatedSmoothNoise(int x, int y, int divisor) {
+		// since x and y aren't fractional, divisor creates the fraction? 4, 2, 1 = grid sizes? 
 		int iX = x / divisor; // integer x
 		int fX = x & divisor - 1; // fractional x
 		int iY = y / divisor; // integer y
@@ -1208,7 +1207,7 @@ public class Region {
 					renderable = new GameObject(i_225_, i, 0, i_228_, i_229_, i_227_, i_230_,
 							gameobjectdefinition.animationId, true);
 				}
-				scene.method504(Region.anIntArray506[i], renderable, true, i_232_, i_221_, b_233_, i_224_, null,
+				scene.method504(Region.anIntArray506[i], renderable, i_232_, i_221_, b_233_, i_224_, null,
 						i_231_, 0, i_226_);
 				if (gameobjectdefinition.solid) {
 					collisionmap.markWall(i_224_, i_221_, i_222_, i, gameobjectdefinition.walkable);
@@ -1221,7 +1220,7 @@ public class Region {
 					renderable = new GameObject(i_225_, i, 1, i_228_, i_229_, i_227_, i_230_,
 							gameobjectdefinition.animationId, true);
 				}
-				scene.method504(Region.wallCornerOrientationMap[i], renderable, true, i_232_, i_221_, b_233_, i_224_,
+				scene.method504(Region.wallCornerOrientationMap[i], renderable, i_232_, i_221_, b_233_, i_224_,
 						null, i_231_, 0, i_226_);
 				if (gameobjectdefinition.solid) {
 					collisionmap.markWall(i_224_, i_221_, i_222_, i, gameobjectdefinition.walkable);
@@ -1239,7 +1238,7 @@ public class Region {
 					renderable_238_ = new GameObject(i_225_, i_237_, 2, i_228_, i_229_, i_227_, i_230_,
 							gameobjectdefinition.animationId, true);
 				}
-				scene.method504(Region.anIntArray506[i], renderable, true, i_232_, i_221_, b_233_, i_224_,
+				scene.method504(Region.anIntArray506[i], renderable, i_232_, i_221_, b_233_, i_224_,
 						renderable_238_, i_231_, Region.anIntArray506[i_237_], i_226_);
 				if (gameobjectdefinition.solid) {
 					collisionmap.markWall(i_224_, i_221_, i_222_, i, gameobjectdefinition.walkable);
@@ -1252,7 +1251,7 @@ public class Region {
 					renderable = new GameObject(i_225_, i, 3, i_228_, i_229_, i_227_, i_230_,
 							gameobjectdefinition.animationId, true);
 				}
-				scene.method504(Region.wallCornerOrientationMap[i], renderable, true, i_232_, i_221_, b_233_, i_224_,
+				scene.method504(Region.wallCornerOrientationMap[i], renderable, i_232_, i_221_, b_233_, i_224_,
 						null, i_231_, 0, i_226_);
 				if (gameobjectdefinition.solid) {
 					collisionmap.markWall(i_224_, i_221_, i_222_, i, gameobjectdefinition.walkable);
