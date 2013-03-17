@@ -11,7 +11,7 @@ public class Actor extends Renderable {
 	public int anInt1523;
 	public int anInt1524 = 32;
 	public int runAnimationId = -1;
-	public String textSpoken;
+	public String forcedChat;
 	public int modelHeight = 200;
 	public int anInt1530;
 	public int standAnimationId = -1;
@@ -38,8 +38,8 @@ public class Actor extends Renderable {
 	public int endCycle = -1000;
 	public int maxHealth;
 	public int currentHealth;
-	public int textCycle = 100;
-	public int updateCycle;
+	public int anInt1555 = 100;
+	public int anInt1557;
 	public int faceTowardX;
 	public int faceTowardY;
 	public int boundaryDimension = 1;

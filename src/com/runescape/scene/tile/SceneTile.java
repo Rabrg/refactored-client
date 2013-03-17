@@ -20,7 +20,7 @@ public class SceneTile extends Node {
 	public SceneSpawnRequest[] sceneSpawnRequests = new SceneSpawnRequest[5];
 	public int[] sceneSpawnRequestsSize = new int[5];
 	public int sceneSpawnRequestSizeOR;
-	public int logicalHeight;
+	public int anInt1332;
 	public boolean aBoolean1333;
 	public boolean aBoolean1334;
 	public boolean aBoolean1335;

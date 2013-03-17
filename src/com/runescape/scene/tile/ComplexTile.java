@@ -14,8 +14,8 @@ public class ComplexTile {
 	public int[] anIntArray203;
 	public int[] anIntArray204;
 	public boolean aBoolean205 = true;
-	public int shape;
-	public int rotation;
+	public int anInt206;
+	public int anInt207;
 	public int anInt208;
 	public int anInt209;
 	public static int[] anIntArray210 = new int[6];
@@ -44,8 +44,8 @@ public class ComplexTile {
 			if (i_11_ != i_10_ || i_11_ != i_2_ || i_11_ != i_9_) {
 				aBoolean205 = false;
 			}
-			shape = i_12_;
-			rotation = i_5_;
+			anInt206 = i_12_;
+			anInt207 = i_5_;
 			anInt208 = i_7_;
 			anInt209 = i_18_;
 			int i_19_ = 128;
