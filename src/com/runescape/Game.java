@@ -115,7 +115,7 @@ public class Game extends GameShell {
 	private IndexedImage anIndexedImage894;
 	private ImageRGB mapFlagMarker;
 	private ImageRGB anImageRGB896;
-	private boolean aBoolean897 = false;
+	private boolean aBoolean897 = true;
 	private final int[] anIntArray898 = new int[5];
 	private int anInt899 = -1;
 	private final int anInt900 = -680;
@@ -447,7 +447,6 @@ public class Game extends GameShell {
 	private boolean midiFade = true;
 	private final int[] anIntArray1254 = new int[151];
 	private CollisionMap[] currentCollisionMap = new CollisionMap[4];
-	private static boolean aBoolean1256;
 	public static int[] BITFIELD_MAX_VALUE;
 	private boolean redrawChatSettings = false;
 	private int[] anIntArray1259;
@@ -551,6 +550,7 @@ public class Game extends GameShell {
 				problem = "EOF problem";
 				crcValues[8] = 0;
 			} catch (IOException ioexception) {
+				ioexception.printStackTrace();
 				problem = "connection problem";
 				crcValues[8] = 0;
 			} catch (Exception exception) {
@@ -904,7 +904,7 @@ public class Game extends GameShell {
 				projectileList.clear();
 				Rasterizer3D.method363(Game.anInt871);
 				resetModelCaches();
-				currentScene.method496(619);
+				currentScene.initialize();
 				System.gc();
 				for (int i = 0; i < 4; i++) {
 					currentCollisionMap[i].reset();
@@ -1020,9 +1020,9 @@ public class Game extends GameShell {
 					i_67_ = currentSceneId - 1;
 				}
 				if (Game.lowMemory) {
-					currentScene.method497(Region.lowestPlane, -34686);
+					currentScene.setPlane(Region.lowestPlane);
 				} else {
-					currentScene.method497(0, -34686);
+					currentScene.setPlane(0);
 				}
 				for (int i_68_ = 0; i_68_ < 104; i_68_++) {
 					for (int i_69_ = 0; i_69_ < 104; i_69_++) {
@@ -1207,7 +1207,7 @@ public class Game extends GameShell {
 				}
 			}
 			int position = x + (y << 7) + 1610612736;
-			currentScene.method503((byte) 7, x, position, groundItemOne,
+			currentScene.method503(x, position, groundItemOne,
 					method42(currentSceneId, y * 128 + 64, true, x * 128 + 64), groundItemTwo, item, currentSceneId, y);
 		}
 	}
@@ -1231,7 +1231,7 @@ public class Game extends GameShell {
 						if (!npc.npcDefinition.clickable) {
 							i_108_ += -2147483648;
 						}
-						currentScene.method507(currentSceneId, npc.anInt1572, (byte) 6,
+						currentScene.method507(currentSceneId, npc.anInt1572,
 								method42(currentSceneId, npc.yWithBoundary, true, npc.xWithBoundary), i_108_,
 								npc.yWithBoundary, (npc.boundaryDimension - 1) * 64 + 60, npc.xWithBoundary, npc,
 								npc.aBoolean1561);
@@ -1956,81 +1956,71 @@ public class Game extends GameShell {
 		}
 	}
 
-	public final void method37(int i, int i_163_) {
-		do {
-			try {
-				if (i <= 0) {
-					opcode = -1;
-				}
-				if (Game.lowMemory) {
-					break;
-				}
-				if (Rasterizer3D.anIntArray1500[17] >= i_163_) {
-					IndexedImage indexedimage = Rasterizer3D.indexedImages[17];
-					int i_164_ = indexedimage.width * indexedimage.height - 1;
-					int i_165_ = indexedimage.width * anInt970 * 2;
-					byte[] bs = indexedimage.pixels;
-					byte[] bs_166_ = aByteArray937;
-					for (int i_167_ = 0; i_167_ <= i_164_; i_167_++) {
-						bs_166_[i_167_] = bs[i_167_ - i_165_ & i_164_];
-					}
-					indexedimage.pixels = bs_166_;
-					aByteArray937 = bs;
-					Rasterizer3D.method367(17, -477);
-					Game.anInt879++;
-					if (Game.anInt879 > 1235) {
-						Game.anInt879 = 0;
-						outBuffer.putOpcode(226);
-						outBuffer.put(0);
-						int i_168_ = outBuffer.offset;
-						outBuffer.putShort(58722);
-						outBuffer.put(240);
-						outBuffer.putShort((int) (Math.random() * 65536.0));
-						outBuffer.put((int) (Math.random() * 256.0));
-						if ((int) (Math.random() * 2.0) == 0) {
-							outBuffer.putShort(51825);
-						}
-						outBuffer.put((int) (Math.random() * 256.0));
-						outBuffer.putShort((int) (Math.random() * 65536.0));
-						outBuffer.putShort(7130);
-						outBuffer.putShort((int) (Math.random() * 65536.0));
-						outBuffer.putShort(61657);
-						outBuffer.putSizeByte(outBuffer.offset - i_168_);
-					}
-				}
-				if (Rasterizer3D.anIntArray1500[24] >= i_163_) {
-					IndexedImage indexedimage = Rasterizer3D.indexedImages[24];
-					int i_169_ = indexedimage.width * indexedimage.height - 1;
-					int i_170_ = indexedimage.width * anInt970 * 2;
-					byte[] bs = indexedimage.pixels;
-					byte[] bs_171_ = aByteArray937;
-					for (int i_172_ = 0; i_172_ <= i_169_; i_172_++) {
-						bs_171_[i_172_] = bs[i_172_ - i_170_ & i_169_];
-					}
-					indexedimage.pixels = bs_171_;
-					aByteArray937 = bs;
-					Rasterizer3D.method367(24, -477);
-				}
-				if (Rasterizer3D.anIntArray1500[34] < i_163_) {
-					break;
-				}
-				IndexedImage indexedimage = Rasterizer3D.indexedImages[34];
-				int i_173_ = indexedimage.width * indexedimage.height - 1;
-				int i_174_ = indexedimage.width * anInt970 * 2;
-				byte[] bs = indexedimage.pixels;
-				byte[] bs_175_ = aByteArray937;
-				for (int i_176_ = 0; i_176_ <= i_173_; i_176_++) {
-					bs_175_[i_176_] = bs[i_176_ - i_174_ & i_173_];
-				}
-				indexedimage.pixels = bs_175_;
-				aByteArray937 = bs;
-				Rasterizer3D.method367(34, -477);
-			} catch (RuntimeException runtimeexception) {
-				SignLink.reportError("86342, " + i + ", " + i_163_ + ", " + runtimeexception.toString());
-				throw new RuntimeException();
+	public final void method37(int j) {
+		if (Game.lowMemory) {
+			return;
+		}
+		if (Rasterizer3D.anIntArray1500[17] >= j) {
+			IndexedImage indexedimage = Rasterizer3D.indexedImages[17];
+			int i_164_ = indexedimage.width * indexedimage.height - 1;
+			int i_165_ = indexedimage.width * anInt970 * 2;
+			byte[] bs = indexedimage.pixels;
+			byte[] bs_166_ = aByteArray937;
+			for (int i_167_ = 0; i_167_ <= i_164_; i_167_++) {
+				bs_166_[i_167_] = bs[i_167_ - i_165_ & i_164_];
 			}
-			break;
-		} while (false);
+			indexedimage.pixels = bs_166_;
+			aByteArray937 = bs;
+			Rasterizer3D.method367(17, -477);
+			Game.anInt879++;
+			if (Game.anInt879 > 1235) {
+				// anti-bot stuff
+				Game.anInt879 = 0;
+				outBuffer.putOpcode(226);
+				outBuffer.put(0);
+				int i_168_ = outBuffer.offset;
+				outBuffer.putShort(58722);
+				outBuffer.put(240);
+				outBuffer.putShort((int) (Math.random() * 65536.0));
+				outBuffer.put((int) (Math.random() * 256.0));
+				if ((int) (Math.random() * 2.0) == 0) {
+					outBuffer.putShort(51825);
+				}
+				outBuffer.put((int) (Math.random() * 256.0));
+				outBuffer.putShort((int) (Math.random() * 65536.0));
+				outBuffer.putShort(7130);
+				outBuffer.putShort((int) (Math.random() * 65536.0));
+				outBuffer.putShort(61657);
+				outBuffer.putSizeByte(outBuffer.offset - i_168_);
+			}
+		}
+		if (Rasterizer3D.anIntArray1500[24] >= j) {
+			IndexedImage indexedimage = Rasterizer3D.indexedImages[24];
+			int i_169_ = indexedimage.width * indexedimage.height - 1;
+			int i_170_ = indexedimage.width * anInt970 * 2;
+			byte[] bs = indexedimage.pixels;
+			byte[] bs_171_ = aByteArray937;
+			for (int i_172_ = 0; i_172_ <= i_169_; i_172_++) {
+				bs_171_[i_172_] = bs[i_172_ - i_170_ & i_169_];
+			}
+			indexedimage.pixels = bs_171_;
+			aByteArray937 = bs;
+			Rasterizer3D.method367(24, -477);
+		}
+		if (Rasterizer3D.anIntArray1500[34] < j) {
+			return;
+		}
+		IndexedImage indexedimage = Rasterizer3D.indexedImages[34];
+		int i_173_ = indexedimage.width * indexedimage.height - 1;
+		int i_174_ = indexedimage.width * anInt970 * 2;
+		byte[] bs = indexedimage.pixels;
+		byte[] bs_175_ = aByteArray937;
+		for (int i_176_ = 0; i_176_ <= i_173_; i_176_++) {
+			bs_175_[i_176_] = bs[i_176_ - i_174_ & i_173_];
+		}
+		indexedimage.pixels = bs_175_;
+		aByteArray937 = bs;
+		Rasterizer3D.method367(34, -477);
 	}
 
 	public final void resetSpokenText() {
@@ -2312,7 +2302,7 @@ public class Game extends GameShell {
 		username = "";
 		password = "";
 		resetModelCaches();
-		currentScene.method496(619);
+		currentScene.initialize();
 		for (int plane = 0; plane < 4; plane++) {
 			currentCollisionMap[plane].reset();
 		}
@@ -2444,7 +2434,7 @@ public class Game extends GameShell {
 									player.xWithBoundary);
 							currentScene.method508(60, currentSceneId, player.yWithBoundary, player, player.anInt1572,
 									player.anInt1742, player.xWithBoundary, player.anInt1729, player.anInt1739,
-									player.anInt1741, i_219_, player.anInt1740, (byte) 35);
+									player.anInt1741, i_219_, player.anInt1740);
 						} else {
 							if ((player.xWithBoundary & 0x7f) == 64 && (player.yWithBoundary & 0x7f) == 64) {
 								if (anIntArrayArray954[i_220_][i_221_] == anInt1290) {
@@ -2455,7 +2445,7 @@ public class Game extends GameShell {
 							player.anInt1729 = method42(currentSceneId, player.yWithBoundary, true,
 									player.xWithBoundary);
 							currentScene
-									.method507(currentSceneId, player.anInt1572, (byte) 6, player.anInt1729, i_219_,
+									.method507(currentSceneId, player.anInt1572, player.anInt1729, i_219_,
 											player.yWithBoundary, 60, player.xWithBoundary, player, player.aBoolean1561);
 						}
 					}
@@ -2587,7 +2577,7 @@ public class Game extends GameShell {
 	public final void renderCurrentScene(int i, int i_234_, int i_235_, int i_236_, int i_237_, int i_238_) {
 		do {
 			try {
-				int i_239_ = currentScene.method522(i_238_, i_236_, i);
+				int i_239_ = currentScene.getWallHash(i_238_, i_236_, i);
 				if (i_234_ < 0) {
 					if (i_239_ != 0) {
 						int i_240_ = currentScene.getConfig(i_238_, i_236_, i, i_239_);
@@ -2955,7 +2945,7 @@ public class Game extends GameShell {
 						}
 					}
 					projectile.move(anInt970);
-					currentScene.method507(currentSceneId, projectile.modelRotationY, (byte) 6,
+					currentScene.method507(currentSceneId, projectile.modelRotationY,
 							(int) projectile.currentHeight, -1, (int) projectile.currentY, 60,
 							(int) projectile.currentX, projectile, false);
 				}
@@ -3420,12 +3410,12 @@ public class Game extends GameShell {
 							clickType = 0;
 						}
 					}
-					if (Scene.anInt550 != -1) {
-						int i_324_ = Scene.anInt550;
-						int i_325_ = Scene.anInt551;
+					if (Scene.tileClickX != -1) {
+						int i_324_ = Scene.tileClickX;
+						int i_325_ = Scene.tileClickY;
 						boolean bool = calculatePath(0, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0, i_325_,
 								Game.localPlayer.pathX[0], true, i_324_);
-						Scene.anInt550 = -1;
+						Scene.tileClickX = -1;
 						if (bool) {
 							lastClickX = clickX;
 							lastClickY = clickY;
@@ -4041,9 +4031,9 @@ public class Game extends GameShell {
 				}
 				if (menuActionId == 516) {
 					if (!actionMenuOpen) {
-						currentScene.method534(false, clickY - 4, clickX - 4);
+						currentScene.method534(clickY - 4, clickX - 4);
 					} else {
-						currentScene.method534(false, actionId2 - 4, actionId1 - 4);
+						currentScene.method534(actionId2 - 4, actionId1 - 4);
 					}
 				}
 				if (menuActionId == 1062) {
@@ -5116,7 +5106,7 @@ public class Game extends GameShell {
 		producingGraphicsBuffer = null;
 		Player.modelCache = null;
 		Rasterizer3D.reset();
-		Scene.method495(-501);
+		Scene.releaseReferences();
 		Model.reset();
 		Animation.reset();
 		System.gc();
@@ -6833,7 +6823,7 @@ public class Game extends GameShell {
 		int type = 0;
 		int face = 0;
 		if (spawnOjectNode.type == 0) {
-			uid = currentScene.method522(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
+			uid = currentScene.getWallHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
 		}
 		if (spawnOjectNode.type == 1) {
 			uid = currentScene.getWallDecorationHash(spawnOjectNode.plane, spawnOjectNode.x, spawnOjectNode.y);
@@ -6940,7 +6930,7 @@ public class Game extends GameShell {
 			Archive archiveAudio = requestArchive(8, "sound effects", "sounds", crcValues[8], 55);
 			currentSceneTileFlags = new byte[4][104][104];
 			anIntArrayArrayArray1239 = new int[4][105][105];
-			currentScene = new Scene(104, (byte) 43, 104, anIntArrayArrayArray1239, 4);
+			currentScene = new Scene(104, 104, anIntArrayArrayArray1239, 4);
 			for (int i = 0; i < 4; i++) {
 				currentCollisionMap[i] = new CollisionMap(104, 104, true);
 			}
@@ -7069,8 +7059,8 @@ public class Game extends GameShell {
 					onDemandRequester.setPriority(priority, 0, id);
 				}
 			}
-			onDemandRequester.preloadRegions(Game.membersWorld);
-			if (!Game.lowMemory) {
+			onDemandRequester.preloadRegions(membersWorld);
+			if (!lowMemory) {
 				fileRequestCount = onDemandRequester.fileCount(2);
 				for (int id = 1; id < fileRequestCount; id++) {
 					if (onDemandRequester.midiIdEqualsOne(id)) {
@@ -7086,8 +7076,8 @@ public class Game extends GameShell {
 			anIndexedImage1053 = new IndexedImage(archiveMedia, "backbase2", 0);
 			anIndexedImage1054 = new IndexedImage(archiveMedia, "backhmid1", 0);
 
-			for (int i_555_ = 0; i_555_ < 13; i_555_++) {
-				tabIcon[i_555_] = new IndexedImage(archiveMedia, "sideicons", i_555_);
+			for (int i = 0; i < 13; i++) {
+				tabIcon[i] = new IndexedImage(archiveMedia, "sideicons", i);
 			}
 
 			minimapCompass = new ImageRGB(archiveMedia, "compass", 0);
@@ -7120,8 +7110,8 @@ public class Game extends GameShell {
 			}
 			mapFlagMarker = new ImageRGB(archiveMedia, "mapmarker", 0);
 			anImageRGB896 = new ImageRGB(archiveMedia, "mapmarker", 1);
-			for (int i_560_ = 0; i_560_ < 8; i_560_++) {
-				cursorCross[i_560_] = new ImageRGB(archiveMedia, "cross", i_560_);
+			for (int i = 0; i < 8; i++) {
+				cursorCross[i] = new ImageRGB(archiveMedia, "cross", i);
 			}
 			mapdotItem = new ImageRGB(archiveMedia, "mapdots", 0);
 			mapdotActor = new ImageRGB(archiveMedia, "mapdots", 1);
@@ -7249,11 +7239,11 @@ public class Game extends GameShell {
 				anIntArray1077[i_571_ - 5] = i_572_ - 25;
 				anIntArray1254[i_571_ - 5] = i_573_ - i_572_;
 			}
-			Rasterizer3D.method362(-950, 479, 96);
+			Rasterizer3D.setBoundaries(479, 96);
 			chatboxLineOffsets = Rasterizer3D.lineOffsets;
-			Rasterizer3D.method362(-950, 190, 261);
+			Rasterizer3D.setBoundaries(190, 261);
 			anIntArray1206 = Rasterizer3D.lineOffsets;
-			Rasterizer3D.method362(-950, 512, 334);
+			Rasterizer3D.setBoundaries(512, 334);
 			anIntArray1207 = Rasterizer3D.lineOffsets;
 			int[] is = new int[9];
 			for (int i_575_ = 0; i_575_ < 9; i_575_++) {
@@ -7262,7 +7252,7 @@ public class Game extends GameShell {
 				int i_578_ = Rasterizer3D.SINE[i_576_];
 				is[i_575_] = i_577_ * i_578_ >> 16;
 			}
-			Scene.method532(500, 800, 512, 334, is, Game.aBoolean1256);
+			Scene.loadViewport(500, 800, 512, 334, is);
 			ChatCensor.load(archiveCensor);
 			mouseCapturer = new MouseCapturer(this);
 			startRunnable(mouseCapturer, 10);
@@ -8172,7 +8162,7 @@ public class Game extends GameShell {
 					if (animableobject.transformCompleted) {
 						animableobject.remove();
 					} else {
-						currentScene.method507(animableobject.plane, 0, (byte) 6, animableobject.z, -1,
+						currentScene.method507(animableobject.plane, 0, animableobject.z, -1,
 								animableobject.y, 60, animableobject.x, animableobject, false);
 					}
 				}
@@ -10321,7 +10311,7 @@ public class Game extends GameShell {
 							}
 							if (scenespawnrequest != null) {
 								scenespawnrequest.renderable = new GameObject(
-										scenespawnrequest.anInt609 >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
+										scenespawnrequest.hash >> 14 & 0x7fff, i_898_, i_897_, i_902_, i_903_,
 										i_901_, i_904_, i_900_, false);
 							}
 						}
@@ -10704,7 +10694,7 @@ public class Game extends GameShell {
 				int i_1001_ = 0;
 				int i_1002_ = -1;
 				if (type == 0) {
-					i_1001_ = currentScene.method522(plane, x, y);
+					i_1001_ = currentScene.getWallHash(plane, x, y);
 				}
 				if (type == 1) {
 					i_1001_ = currentScene.getWallDecorationHash(plane, x, y);
@@ -10721,7 +10711,7 @@ public class Game extends GameShell {
 					int position = config & 0x1f;
 					int orientation = config >> 6;
 					if (type == 0) {
-						currentScene.method513(x, plane, y, (byte) -119);
+						currentScene.removeWall(x, plane, y);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (gameobjectdefinition.solid) {
 							currentCollisionMap[plane].unmarkWall(orientation, x, y, position,
@@ -10729,10 +10719,10 @@ public class Game extends GameShell {
 						}
 					}
 					if (type == 1) {
-						currentScene.method514(0, y, plane, x);
+						currentScene.removeWallDecoration(y, plane, x);
 					}
 					if (type == 2) {
-						currentScene.method515(plane, -978, x, y);
+						currentScene.method515(plane, x, y);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (x + gameobjectdefinition.sizeX > 103 || y + gameobjectdefinition.sizeX > 103
 								|| x + gameobjectdefinition.sizeY > 103 || y + gameobjectdefinition.sizeY > 103) {
@@ -10744,7 +10734,7 @@ public class Game extends GameShell {
 						}
 					}
 					if (type == 3) {
-						currentScene.method516((byte) 9, plane, y, x);
+						currentScene.removeFloorDecoration(plane, y, x);
 						GameObjectDefinition gameobjectdefinition = GameObjectDefinition.getDefinition(i_1002_);
 						if (gameobjectdefinition.solid && gameobjectdefinition.actionsBoolean) {
 							currentCollisionMap[plane].unmarkConcealed(x, y);
@@ -12101,13 +12091,7 @@ public class Game extends GameShell {
 					i = anIntArray1228[4] + 128;
 				}
 				int i_1180_ = cameraX + anInt921 & 0x7ff;
-				method144(
-						0,
-						600 + i * 3,
-						i,
-						anInt1039,
-						method42(currentSceneId, Game.localPlayer.yWithBoundary, true, Game.localPlayer.xWithBoundary) - 50,
-						i_1180_, anInt1040);
+				method144(0, 600 + i * 3, i, anInt1039, method42(currentSceneId, localPlayer.yWithBoundary, true, localPlayer.xWithBoundary) - 50, i_1180_, anInt1040);
 			}
 			int i;
 			if (!aBoolean1185) {
@@ -12115,15 +12099,14 @@ public class Game extends GameShell {
 			} else {
 				i = method121(anInt1106);
 			}
-			int i_1181_ = anInt883;
-			int i_1182_ = anInt884;
-			int i_1183_ = anInt885;
-			int i_1184_ = anInt886;
-			int i_1185_ = anInt887;
+			int camX = anInt883;
+			int camY = anInt884;
+			int camZ = anInt885;
+			int camYCurve = anInt886;
+			int camXCurve = anInt887;
 			for (int i_1186_ = 0; i_1186_ < 5; i_1186_++) {
 				if (aBooleanArray901[i_1186_]) {
-					int i_1187_ = (int) (Math.random() * (anIntArray898[i_1186_] * 2 + 1) - anIntArray898[i_1186_] + Math
-							.sin(anIntArray1055[i_1186_] * (anIntArray953[i_1186_] / 100.0)) * anIntArray1228[i_1186_]);
+					int i_1187_ = (int) (Math.random() * (anIntArray898[i_1186_] * 2 + 1) - anIntArray898[i_1186_] + Math.sin(anIntArray1055[i_1186_] * (anIntArray953[i_1186_] / 100.0)) * anIntArray1228[i_1186_]);
 					if (i_1186_ == 0) {
 						anInt883 += i_1187_;
 					}
@@ -12147,24 +12130,24 @@ public class Game extends GameShell {
 					}
 				}
 			}
-			int i_1188_ = Rasterizer3D.anInt1501;
+			int k2 = Rasterizer3D.anInt1501;
 			Model.aBoolean1677 = true;
 			Model.anInt1680 = 0;
 			Model.anInt1678 = mouseEventX - 4;
 			Model.anInt1679 = mouseEventY - 4;
 			Rasterizer.resetPixels();
-			currentScene.method535(anInt883, anInt885, anInt887, anInt884, i, anInt886, false);
-			currentScene.method510();
-			method34();
-			method61();
-			method37(854, i_1188_);
-			method112();
-			currentSceneBuffer.drawGraphics(4, 4, gameGraphics);
-			anInt883 = i_1181_;
-			anInt884 = i_1182_;
-			anInt885 = i_1183_;
-			anInt886 = i_1184_;
-			anInt887 = i_1185_;
+			currentScene.render(anInt883, anInt885, anInt887, anInt884, i, anInt886);
+			currentScene.clearSceneSpawnRequests();
+			method34(); // updateentities
+			method61(); // drawheadicons
+			method37(k2);
+			method112(); // draw3dscreen
+			currentSceneBuffer.drawGraphics(4, 4, gameGraphics); // copy drawn scene to main window's graphics
+			anInt883 = camX;
+			anInt884 = camY;
+			anInt885 = camZ;
+			anInt886 = camYCurve;
+			anInt887 = camXCurve;
 		} catch (RuntimeException runtimeexception) {
 			SignLink.reportError("97263, " + runtimeexception.toString());
 			throw new RuntimeException();
