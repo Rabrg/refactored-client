@@ -124,7 +124,7 @@ public class Player extends Actor {
 				int i_5_ = buffer.getUnsignedByte();
 				appearance[index] = (i_4_ << 8) + i_5_;
 				if (index == 0 && appearance[0] == 65535) {
-					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedLEShort());
+					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedShort());
 					break;
 				}
 				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
@@ -142,37 +142,37 @@ public class Player extends Actor {
 			}
 			appearanceColors[i_7_] = i_8_;
 		}
-		standAnimationId = buffer.getUnsignedLEShort();
+		standAnimationId = buffer.getUnsignedShort();
 		if (standAnimationId == 65535) {
 			standAnimationId = -1;
 		}
-		standTurnAnimationId = buffer.getUnsignedLEShort();
+		standTurnAnimationId = buffer.getUnsignedShort();
 		if (standTurnAnimationId == 65535) {
 			standTurnAnimationId = -1;
 		}
-		walkAnimationId = buffer.getUnsignedLEShort();
+		walkAnimationId = buffer.getUnsignedShort();
 		if (walkAnimationId == 65535) {
 			walkAnimationId = -1;
 		}
-		turnAroundAnimationId = buffer.getUnsignedLEShort();
+		turnAroundAnimationId = buffer.getUnsignedShort();
 		if (turnAroundAnimationId == 65535) {
 			turnAroundAnimationId = -1;
 		}
-		turnRightAnimationId = buffer.getUnsignedLEShort();
+		turnRightAnimationId = buffer.getUnsignedShort();
 		if (turnRightAnimationId == 65535) {
 			turnRightAnimationId = -1;
 		}
-		turnLeftAnimationId = buffer.getUnsignedLEShort();
+		turnLeftAnimationId = buffer.getUnsignedShort();
 		if (turnLeftAnimationId == 65535) {
 			turnLeftAnimationId = -1;
 		}
-		runAnimationId = buffer.getUnsignedLEShort();
+		runAnimationId = buffer.getUnsignedShort();
 		if (runAnimationId == 65535) {
 			runAnimationId = -1;
 		}
 		playerName = TextUtils.formatName(TextUtils.longToName(buffer.getLong()));
 		combatLevel = buffer.getUnsignedByte();
-		anInt1743 = buffer.getUnsignedLEShort();
+		anInt1743 = buffer.getUnsignedShort();
 		visibile = true;
 		appearanceOffset = 0L;
 		for (int index = 0; index < 12; index++) {
