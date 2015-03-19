@@ -38,7 +38,7 @@ public class Player extends Actor {
 	public int anInt1740;
 	public int anInt1741;
 	public int anInt1742;
-	public int anInt1743;
+	public int totalLevel;
 
 	@Override
 	public final Model getRotatedModel() {
@@ -116,31 +116,31 @@ public class Player extends Actor {
 		headIcon = buffer.getUnsignedByte();
 		npcDefinition = null;
 		teamId = 0;
-		for (int index = 0; index < 12; index++) {
-			int i_4_ = buffer.getUnsignedByte();
-			if (i_4_ == 0) {
-				appearance[index] = 0;
+		for (int x = 0; x < 12; x++) { // Equipment
+			int first = buffer.getUnsignedByte();
+			if (first == 0) {
+				appearance[x] = 0;
 			} else {
-				int i_5_ = buffer.getUnsignedByte();
-				appearance[index] = (i_4_ << 8) + i_5_;
-				if (index == 0 && appearance[0] == 65535) {
+				int second = buffer.getUnsignedByte();
+				appearance[x] = (first << 8) + second;
+				if (x == 0 && appearance[0] == 65535) {
 					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedShort());
 					break;
 				}
-				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
-					int teamId = ItemDefinition.getDefinition(appearance[index] - 512).teamId;
+				if (appearance[x] >= 512 && appearance[x] - 512 < ItemDefinition.itemCount) {
+					int teamId = ItemDefinition.getDefinition(appearance[x] - 512).teamId;
 					if (teamId != 0) {
 						this.teamId = teamId;
 					}
 				}
 			}
 		}
-		for (int i_7_ = 0; i_7_ < 5; i_7_++) {
-			int i_8_ = buffer.getUnsignedByte();
-			if (i_8_ < 0 || i_8_ >= Game.anIntArrayArray1028[i_7_].length) {
-				i_8_ = 0;
+		for (int x = 0; x < 5; x++) { // Player Colors
+			int color = buffer.getUnsignedByte();
+			if (color < 0 || color >= Game.anIntArrayArray1028[x].length) {
+				color = 0;
 			}
-			appearanceColors[i_7_] = i_8_;
+			appearanceColors[x] = color;
 		}
 		standAnimationId = buffer.getUnsignedShort();
 		if (standAnimationId == 65535) {
@@ -172,7 +172,7 @@ public class Player extends Actor {
 		}
 		playerName = TextUtils.formatName(TextUtils.longToName(buffer.getLong()));
 		combatLevel = buffer.getUnsignedByte();
-		anInt1743 = buffer.getUnsignedShort();
+		totalLevel = buffer.getUnsignedShort();
 		visibile = true;
 		appearanceOffset = 0L;
 		for (int index = 0; index < 12; index++) {

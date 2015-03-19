@@ -61,12 +61,12 @@ public class Game extends GameShell {
 	private volatile boolean aBoolean856 = false;
 	private Socket jaggrabSocket;
 	private int loginScreenState;
-	private Buffer aBuffer859 = new Buffer(new byte[5000]);
+	private Buffer chatMessageBuffer = new Buffer(new byte[5000]);
 	private Npc[] localNpcs = new Npc[16384];
 	private int actorCount;
 	protected int[] anIntArray862 = new int[16384];
-	private int anInt864;
-	protected int[] anIntArray865 = new int[1000];
+	private int otherPlayerPlacementIdx;
+	protected int[] otherPlayerPlacements = new int[1000];
 	private int anInt866;
 	private int anInt867;
 	private int anInt868;
@@ -115,9 +115,9 @@ public class Game extends GameShell {
 	private final int localPlayerId = 2047;
 	private Player[] players = new Player[MAX_PLAYERS];
 	private int playerCount;
-	protected int[] anIntArray917 = new int[MAX_PLAYERS];
-	private int anInt918;
-	private int[] anIntArray919 = new int[MAX_PLAYERS];
+	protected int[] localPlayerIds = new int[MAX_PLAYERS];
+	private int entitiesAwaitingUpdateIndex;
+	private int[] entitiesAwaitingUpdate = new int[MAX_PLAYERS];
 	private Buffer[] playerBuffer = new Buffer[MAX_PLAYERS];
 	private int anInt921;
 	private int anInt922 = 1;
@@ -1484,14 +1484,14 @@ public class Game extends GameShell {
 	}
 
 	private final void updateActors(Buffer buffer, int actorIndex) {
-		anInt864 = 0;
-		anInt918 = 0;
+		otherPlayerPlacementIdx = 0;
+		entitiesAwaitingUpdateIndex = 0;
 		method139(buffer, -45, actorIndex);
 		method46(actorIndex, buffer, (byte) 2);
 		method86(actorIndex, buffer, true);
-		for (int i_137_ = 0; i_137_ < anInt864; i_137_++) {
-			int i_138_ = anIntArray865[i_137_];
-			if (localNpcs[i_138_].anInt1557 != Game.currentCycle) {
+		for (int i_137_ = 0; i_137_ < otherPlayerPlacementIdx; i_137_++) {
+			int i_138_ = otherPlayerPlacements[i_137_];
+			if (localNpcs[i_138_].lastUpdateTime != Game.currentCycle) {
 				localNpcs[i_138_].npcDefinition = null;
 				localNpcs[i_138_] = null;
 			}
@@ -1662,7 +1662,7 @@ public class Game extends GameShell {
 				if (i_143_ == -1) {
 					actor = Game.localPlayer;
 				} else if (i_143_ < playerCount) {
-					actor = players[anIntArray917[i_143_]];
+					actor = players[localPlayerIds[i_143_]];
 				} else {
 					actor = localNpcs[anIntArray862[i_143_ - playerCount]];
 				}
@@ -1690,7 +1690,7 @@ public class Game extends GameShell {
 								}
 							}
 						}
-						if (i_143_ >= 0 && hintIconType == 10 && hintIconId == anIntArray917[i_143_]) {
+						if (i_143_ >= 0 && hintIconType == 10 && hintIconId == localPlayerIds[i_143_]) {
 							method127(true, actor, actor.modelHeight + 15);
 							if (anInt988 > -1) {
 								anImageRGBArray1120[7].drawImage(anInt988 - 12, anInt989 - i_144_);
@@ -1712,19 +1712,19 @@ public class Game extends GameShell {
 							}
 						}
 					}
-					if (actor.forcedChat != null
+					if (actor.overheadChatMessage != null
 							&& (i_143_ >= playerCount || publicChatSetting == 0 || publicChatSetting == 3 || publicChatSetting == 1
 									&& method109(false, ((Player) actor).playerName))) {
 						method127(true, actor, actor.modelHeight);
 						if (anInt988 > -1 && anInt999 < anInt1000) {
-							anIntArray1004[anInt999] = fontBold.getStringWidth(actor.forcedChat) / 2;
+							anIntArray1004[anInt999] = fontBold.getStringWidth(actor.overheadChatMessage) / 2;
 							anIntArray1003[anInt999] = fontBold.characterDefaultHeight;
 							anIntArray1001[anInt999] = anInt988;
 							anIntArray1002[anInt999] = anInt989;
 							anIntArray1005[anInt999] = actor.chatColor;
 							anIntArray1006[anInt999] = actor.chatEffect;
 							anIntArray1007[anInt999] = actor.anInt1555;
-							aStringArray1008[anInt999++] = actor.forcedChat;
+							aStringArray1008[anInt999++] = actor.overheadChatMessage;
 							if (anInt1274 == 0 && actor.chatEffect >= 1 && actor.chatEffect <= 3) {
 								anIntArray1003[anInt999] += 10;
 								anIntArray1002[anInt999] += 5;
@@ -2023,13 +2023,13 @@ public class Game extends GameShell {
 				if (i == -1) {
 					i_177_ = localPlayerId;
 				} else {
-					i_177_ = anIntArray917[i];
+					i_177_ = localPlayerIds[i];
 				}
 				Player player = players[i_177_];
 				if (player != null && player.anInt1555 > 0) {
 					player.anInt1555--;
 					if (player.anInt1555 == 0) {
-						player.forcedChat = null;
+						player.overheadChatMessage = null;
 					}
 				}
 			}
@@ -2039,7 +2039,7 @@ public class Game extends GameShell {
 				if (npc != null && npc.anInt1555 > 0) {
 					npc.anInt1555--;
 					if (npc.anInt1555 == 0) {
-						npc.forcedChat = null;
+						npc.overheadChatMessage = null;
 					}
 				}
 			}
@@ -2345,7 +2345,7 @@ public class Game extends GameShell {
 				}
 				Npc npc = localNpcs[i_211_];
 				anIntArray862[actorCount++] = i_211_;
-				npc.anInt1557 = Game.currentCycle;
+				npc.lastUpdateTime = Game.currentCycle;
 				int i_212_ = buffer.getBits(5);
 				if (i_212_ > 15) {
 					i_212_ -= 32;
@@ -2358,7 +2358,7 @@ public class Game extends GameShell {
 				npc.npcDefinition = ActorDefinition.getDefinition(buffer.getBits(12));
 				int i_215_ = buffer.getBits(1);
 				if (i_215_ == 1) {
-					anIntArray919[anInt918++] = i_211_;
+					entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = i_211_;
 				}
 				npc.boundaryDimension = npc.npcDefinition.boundaryDimension;
 				npc.anInt1524 = npc.npcDefinition.degreesToTurn;
@@ -2408,8 +2408,8 @@ public class Game extends GameShell {
 					player = Game.localPlayer;
 					i_219_ = localPlayerId << 14;
 				} else {
-					player = players[anIntArray917[i_218_]];
-					i_219_ = anIntArray917[i_218_] << 14;
+					player = players[localPlayerIds[i_218_]];
+					i_219_ = localPlayerIds[i_218_] << 14;
 				}
 				if (player != null && player.isVisibile()) {
 					player.aBoolean1719 = false;
@@ -2555,13 +2555,13 @@ public class Game extends GameShell {
 		return false;
 	}
 
-	private final void method49(Buffer buffer) {
+	private final void updatePlayerStates(Buffer buffer) {
 		try {
-			for (int i = 0; i < anInt918; i++) {
-				int playerIndex = anIntArray919[i];
+			for (int x = 0; x < entitiesAwaitingUpdateIndex; x++) {
+				int playerIndex = entitiesAwaitingUpdate[x];
 				Player player = players[playerIndex];
 				int updateMask = buffer.getUnsignedByte();
-				if ((updateMask & 0x40) != 0) {
+				if ((updateMask & 0x40) != 0) { // 0x40 (0b01000000 = continuation flag
 					updateMask += buffer.getUnsignedByte() << 8;
 				}
 				updatePlayerMask(updateMask, playerIndex, buffer, player);
@@ -4127,14 +4127,14 @@ public class Game extends GameShell {
 						String string_380_ = TextUtils.formatName(TextUtils.longToName(TextUtils.nameToLong(string)));
 						boolean bool_381_ = false;
 						for (int i_382_ = 0; i_382_ < playerCount; i_382_++) {
-							Player player = players[anIntArray917[i_382_]];
+							Player player = players[localPlayerIds[i_382_]];
 							if (player != null && player.playerName != null
 									&& player.playerName.equalsIgnoreCase(string_380_)) {
 								calculatePath(2, 0, 1, 0, Game.localPlayer.pathY[0], 1, 0, player.pathY[0],
 										Game.localPlayer.pathX[0], false, player.pathX[0]);
 								if (menuActionId == 484) {
 									outBuffer.putOpcode(139);
-									outBuffer.putLEShort(anIntArray917[i_382_]);
+									outBuffer.putLEShort(localPlayerIds[i_382_]);
 								}
 								if (menuActionId == 6) {
 									Game.anInt1213 += itemId;
@@ -4143,7 +4143,7 @@ public class Game extends GameShell {
 										Game.anInt1213 = 0;
 									}
 									outBuffer.putOpcode(128);
-									outBuffer.putShort(anIntArray917[i_382_]);
+									outBuffer.putShort(localPlayerIds[i_382_]);
 								}
 								bool_381_ = true;
 								break;
@@ -4867,10 +4867,10 @@ public class Game extends GameShell {
 									}
 								}
 								for (int i_409_ = 0; i_409_ < playerCount; i_409_++) {
-									Player player = players[anIntArray917[i_409_]];
+									Player player = players[localPlayerIds[i_409_]];
 									if (player != null && player.xWithBoundary == npc.xWithBoundary
 											&& player.yWithBoundary == npc.yWithBoundary) {
-										method88(i_402_, anIntArray917[i_409_], player, false, i_403_);
+										method88(i_402_, localPlayerIds[i_409_], player, false, i_403_);
 									}
 								}
 							}
@@ -4888,11 +4888,11 @@ public class Game extends GameShell {
 									}
 								}
 								for (int i_411_ = 0; i_411_ < playerCount; i_411_++) {
-									Player player_412_ = players[anIntArray917[i_411_]];
+									Player player_412_ = players[localPlayerIds[i_411_]];
 									if (player_412_ != null && player_412_ != player
 											&& player_412_.xWithBoundary == player.xWithBoundary
 											&& player_412_.yWithBoundary == player.yWithBoundary) {
-										method88(i_402_, anIntArray917[i_411_], player_412_, false, i_403_);
+										method88(i_402_, localPlayerIds[i_411_], player_412_, false, i_403_);
 									}
 								}
 							}
@@ -4994,7 +4994,7 @@ public class Game extends GameShell {
 		mouseCapturer = null;
 		onDemandRequester.stop();
 		onDemandRequester = null;
-		aBuffer859 = null;
+		chatMessageBuffer = null;
 		outBuffer = null;
 		aBuffer872 = null;
 		inBuffer = null;
@@ -5058,10 +5058,10 @@ public class Game extends GameShell {
 		worldMapHintIcons = null;
 		anIntArrayArray954 = null;
 		players = null;
-		anIntArray917 = null;
-		anIntArray919 = null;
+		localPlayerIds = null;
+		entitiesAwaitingUpdate = null;
 		playerBuffer = null;
-		anIntArray865 = null;
+		otherPlayerPlacements = null;
 		localNpcs = null;
 		anIntArray862 = null;
 		groundItemNodes = null;
@@ -5344,22 +5344,22 @@ public class Game extends GameShell {
 							int i_423_ = outBuffer.offset;
 							outBuffer.putByteS(i_422_);
 							outBuffer.putByteS(i_421_);
-							aBuffer859.offset = 0;
-							ChatEncoder.put(chatboxInput, aBuffer859);
-							outBuffer.putBytesA(aBuffer859.payload, aBuffer859.offset, 0);
+							chatMessageBuffer.offset = 0;
+							ChatEncoder.put(chatboxInput, chatMessageBuffer);
+							outBuffer.putBytesA(chatMessageBuffer.payload, chatMessageBuffer.offset, 0);
 							outBuffer.putSizeByte(outBuffer.offset - i_423_);
 							chatboxInput = ChatEncoder.formatChatMessage(chatboxInput);
 							chatboxInput = ChatCensor.censorString(chatboxInput);
-							Game.localPlayer.forcedChat = chatboxInput;
+							Game.localPlayer.overheadChatMessage = chatboxInput;
 							Game.localPlayer.chatColor = i_421_;
 							Game.localPlayer.chatEffect = i_422_;
 							Game.localPlayer.anInt1555 = 150;
 							if (playerRights == 2) {
-								sendMessage(Game.localPlayer.forcedChat, 2, "@cr2@" + Game.localPlayer.playerName);
+								sendMessage(Game.localPlayer.overheadChatMessage, 2, "@cr2@" + Game.localPlayer.playerName);
 							} else if (playerRights == 1) {
-								sendMessage(Game.localPlayer.forcedChat, 2, "@cr1@" + Game.localPlayer.playerName);
+								sendMessage(Game.localPlayer.overheadChatMessage, 2, "@cr1@" + Game.localPlayer.playerName);
 							} else {
-								sendMessage(Game.localPlayer.forcedChat, 2, Game.localPlayer.playerName);
+								sendMessage(Game.localPlayer.overheadChatMessage, 2, Game.localPlayer.playerName);
 							}
 							if (publicChatSetting == 2) {
 								publicChatSetting = 3;
@@ -6534,8 +6534,8 @@ public class Game extends GameShell {
 
 	private final void method86(int i, Buffer buffer, boolean bool) {
 		try {
-			for (int i_512_ = 0; i_512_ < anInt918; i_512_++) {
-				int i_513_ = anIntArray919[i_512_];
+			for (int i_512_ = 0; i_512_ < entitiesAwaitingUpdateIndex; i_512_++) {
+				int i_513_ = entitiesAwaitingUpdate[i_512_];
 				Npc npc = localNpcs[i_513_];
 				int i_514_ = buffer.getUnsignedByte();
 				if ((i_514_ & 0x10) != 0) {
@@ -6595,7 +6595,7 @@ public class Game extends GameShell {
 					}
 				}
 				if ((i_514_ & 0x1) != 0) {
-					npc.forcedChat = buffer.getString();
+					npc.overheadChatMessage = buffer.getString();
 					npc.anInt1555 = 100;
 				}
 				if ((i_514_ & 0x40) != 0) {
@@ -6738,11 +6738,11 @@ public class Game extends GameShell {
 		try {
 			if (player != Game.localPlayer && menuActionRow < 400 && !bool) {
 				String string;
-				if (player.anInt1743 == 0) {
+				if (player.totalLevel == 0) {
 					string = player.playerName + Game.method110(Game.localPlayer.combatLevel, player.combatLevel, true)
 							+ " (level-" + player.combatLevel + ")";
 				} else {
-					string = player.playerName + " (skill-" + player.anInt1743 + ")";
+					string = player.playerName + " (skill-" + player.totalLevel + ")";
 				}
 				if (anInt1307 == 1) {
 					menuActionNames[menuActionRow] = "Use " + aString1311 + " with @whi@" + string;
@@ -7263,7 +7263,7 @@ public class Game extends GameShell {
 		}
 	}
 
-	private final void method91(Buffer buffer, int i) {
+	private final void addNewPlayersInViewingArea(Buffer buffer, int i) {
 		try {
 			anInt1144 = -50;
 			while (buffer.bitOffset + 10 < i * 8) {
@@ -7277,23 +7277,23 @@ public class Game extends GameShell {
 						players[playerId].updatePlayer(playerBuffer[playerId]);
 					}
 				}
-				anIntArray917[playerCount++] = playerId;
+				localPlayerIds[playerCount++] = playerId;
 				Player player = players[playerId];
-				player.anInt1557 = Game.currentCycle;
-				int i_580_ = buffer.getBits(1);
-				if (i_580_ == 1) {
-					anIntArray919[anInt918++] = playerId;
+				player.lastUpdateTime = Game.currentCycle;
+				int updateRequired = buffer.getBits(1); // Is an update required?
+				if (updateRequired == 1) {
+					entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = playerId;
 				}
-				buffer.getBits(1);
-				int i_582_ = buffer.getBits(5);
-				if (i_582_ > 15) {
-					i_582_ -= 32;
+				buffer.getBits(1); // I'm not sure, it's obviously unused.
+				int relativeY = buffer.getBits(5);
+				if (relativeY > 15) {
+					relativeY -= 32;
 				}
-				int i_583_ = buffer.getBits(5);
-				if (i_583_ > 15) {
-					i_583_ -= 32;
+				int relativeX = buffer.getBits(5);
+				if (relativeX > 15) {
+					relativeX -= 32;
 				}
-				player.setPosition(Game.localPlayer.pathX[0] + i_583_, Game.localPlayer.pathY[0] + i_582_);
+				player.setPosition(Game.localPlayer.pathX[0] + relativeX, Game.localPlayer.pathY[0] + relativeY);
 			}
 			buffer.finishBitAccess();
 		} catch (RuntimeException runtimeexception) {
@@ -7309,25 +7309,25 @@ public class Game extends GameShell {
 					if (clickType != 1) {
 						break;
 					}
-					int i = clickX - 25 - 550;
-					int i_584_ = clickY - 5 - 4;
-					if (i >= 0 && i_584_ >= 0 && i < 146 && i_584_ < 151) {
-						i -= 73;
-						i_584_ -= 75;
+					int minimapX = clickX - 25 - 550;
+					int minimapY = clickY - 5 - 4;
+					if (minimapX >= 0 && minimapY >= 0 && minimapX < 146 && minimapY < 151) {
+						minimapX -= 73;
+						minimapY -= 75;
 						int i_585_ = anInt1210 + anInt1234 & 0x7ff;
 						int i_586_ = Rasterizer3D.SINE[i_585_];
 						int i_587_ = Rasterizer3D.COSINE[i_585_];
 						i_586_ = i_586_ * (anInt1195 + 256) >> 8;
 						i_587_ = i_587_ * (anInt1195 + 256) >> 8;
-						int i_588_ = i_584_ * i_586_ + i * i_587_ >> 11;
-						int i_589_ = i_584_ * i_587_ - i * i_586_ >> 11;
+						int i_588_ = minimapY * i_586_ + minimapX * i_587_ >> 11;
+						int i_589_ = minimapY * i_587_ - minimapX * i_586_ >> 11;
 						int i_590_ = Game.localPlayer.xWithBoundary + i_588_ >> 7;
 						int i_591_ = Game.localPlayer.yWithBoundary - i_589_ >> 7;
 						boolean bool_592_ = calculatePath(1, 0, 0, 0, Game.localPlayer.pathY[0], 0, 0, i_591_,
 								Game.localPlayer.pathX[0], true, i_590_);
 						if (bool_592_) {
-							outBuffer.put(i);
-							outBuffer.put(i_584_);
+							outBuffer.put(minimapX);
+							outBuffer.put(minimapY);
 							outBuffer.putShort(anInt1210);
 							outBuffer.put(57);
 							outBuffer.put(anInt1234);
@@ -8600,51 +8600,51 @@ public class Game extends GameShell {
 				}
 
 				if ((mask & 0x4) != 0) {
-					player.forcedChat = buffer.getString();
-					if (player.forcedChat.charAt(0) == '~') {
-						player.forcedChat = player.forcedChat.substring(1);
-						sendMessage(player.forcedChat, 2, player.playerName);
+					player.overheadChatMessage = buffer.getString();
+					if (player.overheadChatMessage.charAt(0) == '~') {
+						player.overheadChatMessage = player.overheadChatMessage.substring(1);
+						sendMessage(player.overheadChatMessage, 2, player.playerName);
 					} else if (player == Game.localPlayer) {
-						sendMessage(player.forcedChat, 2, player.playerName);
+						sendMessage(player.overheadChatMessage, 2, player.playerName);
 					}
 					player.chatColor = 0;
 					player.chatEffect = 0;
 					player.anInt1555 = 150;
 				}
 
-				if ((mask & 0x80) != 0) {
+				if ((mask & 0x80) != 0) { // Overhead Text Update
 					int chatEffects = buffer.getUnsignedLEShort();
 					int playerRights = buffer.getUnsignedByte();
 					int chatTextLength = buffer.getUnsignedByteC();
 					int originalOffset = buffer.offset;
 					if (player.playerName != null && player.visibile) {
 						long l = TextUtils.nameToLong(player.playerName);
-						boolean bool = false;
+						boolean ignored = false;
 						if (playerRights <= 1) {
-							for (int i_691_ = 0; i_691_ < ignoreListCount; i_691_++) {
-								if (ignoreList[i_691_] == l) {
-									bool = true;
+							for (int x = 0; x < ignoreListCount; x++) {
+								if (ignoreList[x] == l) {
+									ignored = true;
 									break;
 								}
 							}
 						}
-						if (!bool && inTutorial == 0) {
+						if (!ignored && inTutorial == 0) {
 							try {
-								aBuffer859.offset = 0;
-								buffer.getBytesReversed(aBuffer859.payload, 0, chatTextLength);
-								aBuffer859.offset = 0;
-								String forcedChat = ChatEncoder.get(chatTextLength, aBuffer859);
-								forcedChat = ChatCensor.censorString(forcedChat);
-								player.forcedChat = forcedChat;
+								chatMessageBuffer.offset = 0;
+								buffer.getBytesReversed(chatMessageBuffer.payload, 0, chatTextLength);
+								chatMessageBuffer.offset = 0;
+								String overheadChatMessage = ChatEncoder.get(chatTextLength, chatMessageBuffer);
+								overheadChatMessage = ChatCensor.censorString(overheadChatMessage);
+								player.overheadChatMessage = overheadChatMessage;
 								player.chatColor = chatEffects >> 8;
 								player.chatEffect = chatEffects & 0xff;
 								player.anInt1555 = 150;
 								if (playerRights == 2 || playerRights == 3) {
-									sendMessage(forcedChat, 1, "@cr2@" + player.playerName);
+									sendMessage(overheadChatMessage, 1, "@cr2@" + player.playerName);
 								} else if (playerRights == 1) {
-									sendMessage(forcedChat, 1, "@cr1@" + player.playerName);
+									sendMessage(overheadChatMessage, 1, "@cr1@" + player.playerName);
 								} else {
-									sendMessage(forcedChat, 2, player.playerName);
+									sendMessage(overheadChatMessage, 2, player.playerName);
 								}
 							} catch (Exception exception) {
 								SignLink.reportError("cde2");
@@ -8661,7 +8661,7 @@ public class Game extends GameShell {
 					}
 				}
 
-				if ((mask & 0x10) != 0) {
+				if ((mask & 0x10) != 0) { // Appearance update
 					int appearanceBufferSize = buffer.getUnsignedByteC();
 					byte[] _appearanceBuffer = new byte[appearanceBufferSize];
 					Buffer appearanceBuffer = new Buffer(_appearanceBuffer);
@@ -8675,7 +8675,7 @@ public class Game extends GameShell {
 					player.faceTowardY = buffer.getUnsignedLEShort();
 				}
 
-				if ((mask & 0x20) != 0) {
+				if ((mask & 0x20) != 0) { // Hit Update
 					int hitDamage = buffer.getUnsignedByte();
 					int hitType = buffer.getUnsignedByteA();
 					player.updateHits(hitType, hitDamage, Game.currentCycle);
@@ -8684,7 +8684,7 @@ public class Game extends GameShell {
 					player.currentHealth = buffer.getUnsignedByte();
 				}
 
-				if ((mask & 0x200) != 0) {
+				if ((mask & 0x200) != 0) { // Secondary Hit?
 					int hitDamage = buffer.getUnsignedByte();
 					int hitType = buffer.getUnsignedByteS();
 					player.updateHits(hitType, hitDamage, Game.currentCycle);
@@ -9003,7 +9003,7 @@ public class Game extends GameShell {
 				if (i == -1) {
 					playerId = localPlayerId;
 				} else {
-					playerId = anIntArray917[i];
+					playerId = localPlayerIds[i];
 				}
 				Player player = players[playerId];
 				if (player != null) {
@@ -9141,41 +9141,41 @@ public class Game extends GameShell {
 		} while (false);
 	}
 
-	private final void method117(Buffer buffer) {
+	private final void updateLocalPlayerMovement(Buffer buffer) {
 		try {
 			buffer.initBitAccess();
 			opcode = buffer.getUnsignedByte();
-			int i_730_ = buffer.getBits(1);
-			if (i_730_ != 0) {
-				int i_731_ = buffer.getBits(2);
-				if (i_731_ == 0) {
-					anIntArray919[anInt918++] = localPlayerId;
-				} else if (i_731_ == 1) {
-					int i_732_ = buffer.getBits(3);
-					Game.localPlayer.move(i_732_, false);
-					int i_733_ = buffer.getBits(1);
-					if (i_733_ == 1) {
-						anIntArray919[anInt918++] = localPlayerId;
+			int needsPlacement = buffer.getBits(1);
+			if (needsPlacement != 0) {
+				int updateType = buffer.getBits(2);
+				if (updateType == 0) { // No movement
+					entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
+				} else if (updateType == 1) { // Walking
+					int direction = buffer.getBits(3);
+					Game.localPlayer.move(direction, false);
+					int attributesUpdate = buffer.getBits(1);
+					if (attributesUpdate == 1) {
+						entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
 					}
-				} else if (i_731_ == 2) {
-					int i_734_ = buffer.getBits(3);
-					Game.localPlayer.move(i_734_, true);
-					int i_735_ = buffer.getBits(3);
-					Game.localPlayer.move(i_735_, true);
-					int i_736_ = buffer.getBits(1);
-					if (i_736_ == 1) {
-						anIntArray919[anInt918++] = localPlayerId;
+				} else if (updateType == 2) { // Running
+					int direction1 = buffer.getBits(3);
+					Game.localPlayer.move(direction1, true);
+					int direction2 = buffer.getBits(3);
+					Game.localPlayer.move(direction2, true);
+					int attributesUpdate = buffer.getBits(1);
+					if (attributesUpdate == 1) {
+						entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
 					}
-				} else if (i_731_ == 3) {
+				} else if (updateType == 3) { // Placement
 					currentSceneId = buffer.getBits(2);
 					buffer.getBits(1);
-					int i_738_ = buffer.getBits(1);
-					if (i_738_ == 1) {
-						anIntArray919[anInt918++] = localPlayerId;
+					int attributesUpdate = buffer.getBits(1);
+					if (attributesUpdate == 1) {
+						entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
 					}
-					int i_739_ = buffer.getBits(7);
-					int i_740_ = buffer.getBits(7);
-					Game.localPlayer.setPosition(i_740_, i_739_);
+					int localY = buffer.getBits(7);
+					int localX = buffer.getBits(7);
+					Game.localPlayer.setPosition(localX, localY);
 				}
 			}
 		} catch (RuntimeException runtimeexception) {
@@ -9626,7 +9626,7 @@ public class Game extends GameShell {
 
 				/* Players */
 				for (int playerId = 0; playerId < playerCount; playerId++) {
-					Player player = players[anIntArray917[playerId]];
+					Player player = players[localPlayerIds[playerId]];
 					if (player != null && player.isVisibile()) {
 						mapX = player.xWithBoundary / 32 - Game.localPlayer.xWithBoundary / 32;
 						mapY = player.yWithBoundary / 32 - Game.localPlayer.yWithBoundary / 32;
@@ -9969,54 +9969,55 @@ public class Game extends GameShell {
 		} while (false);
 	}
 
-	private final void method134(Buffer buffer) {
+	private final void updateOtherPlayersMovements(Buffer buffer) {
 		do {
-			int i_844_ = buffer.getBits(8);
-			if (i_844_ < playerCount) {
-				for (int i_845_ = i_844_; i_845_ < playerCount; i_845_++) {
-					anIntArray865[anInt864++] = anIntArray917[i_845_];
+			int localPlayerCount = buffer.getBits(8);
+			if (localPlayerCount < playerCount) {
+				for (int x = localPlayerCount; x < playerCount; x++) {
+					otherPlayerPlacements[otherPlayerPlacementIdx++] = localPlayerIds[x];
 				}
 			}
-			if (i_844_ > playerCount) {
+			if (localPlayerCount > playerCount) {
 				SignLink.reportError(username + " Too many players");
 				throw new RuntimeException("eek");
 			}
 			playerCount = 0;
-			for (int i_846_ = 0; i_846_ < i_844_; i_846_++) {
-				int i_847_ = anIntArray917[i_846_];
-				Player player = players[i_847_];
-				int i_848_ = buffer.getBits(1);
-				if (i_848_ == 0) {
-					anIntArray917[playerCount++] = i_847_;
-					player.anInt1557 = Game.currentCycle;
+			for (int x = 0; x < localPlayerCount; x++) {
+				int localPlayerId = localPlayerIds[x];
+				Player player = players[localPlayerId];
+				int needsUpdate = buffer.getBits(1);
+				if (needsUpdate == 0) {
+					localPlayerIds[playerCount++] = localPlayerId;
+					player.lastUpdateTime = Game.currentCycle;
 				} else {
-					int i_849_ = buffer.getBits(2);
-					if (i_849_ == 0) {
-						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
-						anIntArray919[anInt918++] = i_847_;
-					} else if (i_849_ == 1) {
-						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
-						int i_850_ = buffer.getBits(3);
-						player.move(i_850_, false);
-						int i_851_ = buffer.getBits(1);
-						if (i_851_ == 1) {
-							anIntArray919[anInt918++] = i_847_;
+					int updateType = buffer.getBits(2);
+					if (updateType == 0) { // Stand
+						localPlayerIds[playerCount++] = localPlayerId;
+						player.lastUpdateTime = Game.currentCycle;
+						entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
+					} else if (updateType == 1) { // Walk
+						localPlayerIds[playerCount++] = localPlayerId;
+						player.lastUpdateTime = Game.currentCycle;
+						int direction = buffer.getBits(3);
+						player.move(direction, false);
+						int attributesUpdate = buffer.getBits(1);
+						if (attributesUpdate == 1) {
+							entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
 						}
-					} else if (i_849_ == 2) {
-						anIntArray917[playerCount++] = i_847_;
-						player.anInt1557 = Game.currentCycle;
-						int i_852_ = buffer.getBits(3);
-						player.move(i_852_, true);
-						int i_853_ = buffer.getBits(3);
-						player.move(i_853_, true);
-						int i_854_ = buffer.getBits(1);
-						if (i_854_ == 1) {
-							anIntArray919[anInt918++] = i_847_;
+					} else if (updateType == 2) { // Run
+						localPlayerIds[playerCount++] = localPlayerId;
+						player.lastUpdateTime = Game.currentCycle;
+						int primaryDirection = buffer.getBits(3);
+						player.move(primaryDirection, true);
+						int secondaryDirection = buffer.getBits(3);
+						player.move(secondaryDirection, true);
+						int attributesUpdate = buffer.getBits(1);
+						if (attributesUpdate == 1) {
+							entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = localPlayerId;
 						}
-					} else if (i_849_ == 3) {
-						anIntArray865[anInt864++] = i_847_;
+					} else if (updateType == 3) { // If a local player isn't viewable from
+						                          // us than this is sent.
+						otherPlayerPlacements[otherPlayerPlacementIdx++] = localPlayerId;
 					}
 				}
 			}
@@ -10462,7 +10463,7 @@ public class Game extends GameShell {
 			int i_969_ = buffer.getBits(8);
 			if (i_969_ < actorCount) {
 				for (int i_970_ = i_969_; i_970_ < actorCount; i_970_++) {
-					anIntArray865[anInt864++] = anIntArray862[i_970_];
+					otherPlayerPlacements[otherPlayerPlacementIdx++] = anIntArray862[i_970_];
 				}
 			}
 			if (i_969_ > actorCount) {
@@ -10476,35 +10477,35 @@ public class Game extends GameShell {
 				int i_973_ = buffer.getBits(1);
 				if (i_973_ == 0) {
 					anIntArray862[actorCount++] = i_972_;
-					npc.anInt1557 = Game.currentCycle;
+					npc.lastUpdateTime = Game.currentCycle;
 				} else {
 					int i_974_ = buffer.getBits(2);
 					if (i_974_ == 0) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
-						anIntArray919[anInt918++] = i_972_;
+						npc.lastUpdateTime = Game.currentCycle;
+						entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = i_972_;
 					} else if (i_974_ == 1) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
+						npc.lastUpdateTime = Game.currentCycle;
 						int i_975_ = buffer.getBits(3);
 						npc.move(i_975_, false);
 						int i_976_ = buffer.getBits(1);
 						if (i_976_ == 1) {
-							anIntArray919[anInt918++] = i_972_;
+							entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = i_972_;
 						}
 					} else if (i_974_ == 2) {
 						anIntArray862[actorCount++] = i_972_;
-						npc.anInt1557 = Game.currentCycle;
+						npc.lastUpdateTime = Game.currentCycle;
 						int i_977_ = buffer.getBits(3);
 						npc.move(i_977_, true);
 						int i_978_ = buffer.getBits(3);
 						npc.move(i_978_, true);
 						int i_979_ = buffer.getBits(1);
 						if (i_979_ == 1) {
-							anIntArray919[anInt918++] = i_972_;
+							entitiesAwaitingUpdate[entitiesAwaitingUpdateIndex++] = i_972_;
 						}
 					} else if (i_974_ == 3) {
-						anIntArray865[anInt864++] = i_972_;
+						otherPlayerPlacements[otherPlayerPlacementIdx++] = i_972_;
 					}
 				}
 			}
@@ -10722,15 +10723,15 @@ public class Game extends GameShell {
 
 	private final void updatePlayers(int i, Buffer buffer) {
 		try {
-			anInt864 = 0;
-			anInt918 = 0;
-			method117(buffer);
-			method134(buffer);
-			method91(buffer, i);
-			method49(buffer);
-			for (int i_ = 0; i_ < anInt864; i_++) {
-				int playerId = anIntArray865[i_];
-				if (players[playerId].anInt1557 != Game.currentCycle) {
+			otherPlayerPlacementIdx = 0;
+			entitiesAwaitingUpdateIndex = 0;
+			updateLocalPlayerMovement(buffer);
+			updateOtherPlayersMovements(buffer);
+			addNewPlayersInViewingArea(buffer, i);
+			updatePlayerStates(buffer);
+			for (int i_ = 0; i_ < otherPlayerPlacementIdx; i_++) {
+				int playerId = otherPlayerPlacements[i_];
+				if (players[playerId].lastUpdateTime != Game.currentCycle) {
 					players[playerId] = null;
 				}
 			}
@@ -10739,7 +10740,7 @@ public class Game extends GameShell {
 				throw new RuntimeException("eek");
 			}
 			for (int i_ = 0; i_ < playerCount; i_++) {
-				if (players[anIntArray917[i_]] == null) {
+				if (players[localPlayerIds[i_]] == null) {
 					SignLink.reportError(username + " null entry in pl list - pos:" + i_ + " size:" + playerCount);
 					throw new RuntimeException("eek");
 				}
