@@ -1,7 +1,6 @@
 package com.jagex.runescape.collection;
 
 public class HashTable {
-
 	private final int size;
 	private final Node[] cache;
 
@@ -10,14 +9,14 @@ public class HashTable {
 		cache = new Node[size];
 		for (int nodeId = 0; nodeId < size; nodeId++) {
 			Node node = cache[nodeId] = new Node();
-			node.previousNode = node;
-			node.nextNode = node;
+			node.prev = node;
+			node.next = node;
 		}
 	}
 
 	public Node get(long nodeId) {
 		Node node = cache[(int) (nodeId & size - 1)];
-		for (Node nodePrevious_ = node.previousNode; nodePrevious_ != node; nodePrevious_ = nodePrevious_.previousNode) {
+		for (Node nodePrevious_ = node.prev; nodePrevious_ != node; nodePrevious_ = nodePrevious_.prev) {
 			if (nodePrevious_.nodeId == nodeId) {
 				return nodePrevious_;
 			}
@@ -26,14 +25,14 @@ public class HashTable {
 	}
 
 	public void remove(Node node, long nodeId) {
-		if (node.nextNode != null) {
+		if (node.next != null) {
 			node.remove();
 		}
 		Node cachedNode = cache[(int) (nodeId & size - 1)];
-		node.nextNode = cachedNode.nextNode;
-		node.previousNode = cachedNode;
-		node.nextNode.previousNode = node;
-		node.previousNode.nextNode = node;
+		node.next = cachedNode.next;
+		node.prev = cachedNode;
+		node.next.prev = node;
+		node.prev.next = node;
 		node.nodeId = nodeId;
 	}
 }

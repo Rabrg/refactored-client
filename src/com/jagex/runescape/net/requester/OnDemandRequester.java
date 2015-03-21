@@ -177,7 +177,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 			fileVersions[version] = new int[versionCount];
 			filePriorities[version] = new byte[versionCount];
 			for (int file = 0; file < versionCount; file++) {
-				fileVersions[version][file] = buffer.getUnsignedLEShort();
+				fileVersions[version][file] = buffer.getUnsignedShort();
 			}
 		}
 		String[] crcFiles = { "model_crc", "anim_crc", "midi_crc", "map_crc" };
@@ -208,9 +208,9 @@ public class OnDemandRequester extends Requester implements Runnable {
 		regLandIndex = new int[count];
 		regShouldPreload = new int[count];
 		for (int reg = 0; reg < count; reg++) {
-			regHash[reg] = buffer.getUnsignedLEShort();
-			regMapIndex[reg] = buffer.getUnsignedLEShort();
-			regLandIndex[reg] = buffer.getUnsignedLEShort();
+			regHash[reg] = buffer.getUnsignedShort();
+			regMapIndex[reg] = buffer.getUnsignedShort();
+			regLandIndex[reg] = buffer.getUnsignedShort();
 			regShouldPreload[reg] = buffer.getUnsignedByte();
 		}
 		data = archive.getFile("anim_index");
@@ -218,7 +218,7 @@ public class OnDemandRequester extends Requester implements Runnable {
 		count = data.length / 2;
 		animIndex = new int[count];
 		for (int i = 0; i < count; i++) {
-			animIndex[i] = buffer.getUnsignedLEShort();
+			animIndex[i] = buffer.getUnsignedShort();
 		}
 		data = archive.getFile("midi_index");
 		buffer = new Buffer(data);
