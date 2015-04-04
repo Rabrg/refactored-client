@@ -1,6 +1,6 @@
 *.class
 
-cache/
+/cache/
 
 # Package Files #
 *.jar
