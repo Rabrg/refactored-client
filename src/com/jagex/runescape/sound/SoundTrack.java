@@ -17,7 +17,7 @@ public class SoundTrack {
 		SoundTrack.buffer = new Buffer(SoundTrack._buffer);
 		SoundTrackInstrument.initialize();
 		while (true) {
-			int trackId = buffer.getUnsignedShort();
+			int trackId = buffer.getUnsignedLEShort();
 			if (trackId == 65535) {
 				break;
 			}
@@ -44,8 +44,8 @@ public class SoundTrack {
 				instruments[instrument].decode(buffer);
 			}
 		}
-		loopBegin = buffer.getUnsignedShort();
-		loopEnd = buffer.getUnsignedShort();
+		loopBegin = buffer.getUnsignedLEShort();
+		loopEnd = buffer.getUnsignedLEShort();
 	}
 
 	private final int delay() {

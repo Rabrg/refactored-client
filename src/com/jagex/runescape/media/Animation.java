@@ -26,10 +26,10 @@ public class Animation {
 		try {
 			Buffer buffer = new Buffer(bs);
 			buffer.offset = bs.length - 8;
-			int i = buffer.getUnsignedShort();
-			int i_1_ = buffer.getUnsignedShort();
-			int i_2_ = buffer.getUnsignedShort();
-			int i_3_ = buffer.getUnsignedShort();
+			int i = buffer.getUnsignedLEShort();
+			int i_1_ = buffer.getUnsignedLEShort();
+			int i_2_ = buffer.getUnsignedLEShort();
+			int i_3_ = buffer.getUnsignedLEShort();
 			int i_4_ = 0;
 			Buffer buffer_5_ = new Buffer(bs);
 			buffer_5_.offset = i_4_;
@@ -51,13 +51,13 @@ public class Animation {
 				}
 			}
 			Skins skins = new Skins(buffer_9_);
-			int animationAmount = buffer_5_.getUnsignedShort();
+			int animationAmount = buffer_5_.getUnsignedLEShort();
 			int[] is = new int[500];
 			int[] is_12_ = new int[500];
 			int[] is_13_ = new int[500];
 			int[] is_14_ = new int[500];
 			for (int animationCounter = 0; animationCounter < animationAmount; animationCounter++) {
-				int animationId = buffer_5_.getUnsignedShort();
+				int animationId = buffer_5_.getUnsignedLEShort();
 				Animation animation = Animation.cache[animationId] = new Animation();
 				animation.displayLength = buffer_8_.getUnsignedByte();
 				animation.animationSkins = skins;

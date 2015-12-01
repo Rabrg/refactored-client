@@ -282,8 +282,8 @@ public class SoundTrackInstrument {
 		}
 		delayTime = buffer.getSmartB();
 		delayFeedback = buffer.getSmartB();
-		duration = buffer.getUnsignedShort();
-		begin = buffer.getUnsignedShort();
+		duration = buffer.getUnsignedLEShort();
+		begin = buffer.getUnsignedLEShort();
 		filter = new SoundFilter();
 		filterEnvelope = new SoundTrackEnvelope();
 		filter.decode(buffer, false, filterEnvelope);

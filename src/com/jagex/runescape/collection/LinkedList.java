@@ -1,59 +1,37 @@
 package com.jagex.runescape.collection;
 
-/**
- * {@code LinkedList} is a non-generic container used for {@code Node} traversal.
- *
- * This is more of a DoublyLinkedList.
- *
- * @author Jagex
- */
 public class LinkedList {
-	/**
-	 * The beginning of this {@code LinkedList}.
-	 */
-	public Node head = new Node();
 
-	/**
-	 * The current {@code Node} being traversed.
-	 */
+	public Node head = new Node();
 	private Node current;
 
-	/**
-	 * Construct an empty {@code LinkedList}.
-	 */
 	public LinkedList() {
-		head.prev = head;
-		head.next = head;
+		head.previousNode = head;
+		head.nextNode = head;
 	}
 
-	/**
-	 * Append a {@code Node} to the end of the {@code LinkedList}.
-	 *
-	 * @param node the {@code Node} to append to the {@code LinkedList}.
-	 */
 	public void insertBack(Node node) {
-		if (node.next != null) {
+		if (node.nextNode != null) {
 			node.remove();
 		}
-
-		node.next = head.next;
-		node.prev = head;
-		node.next.prev = node;
-		node.prev.next = node;
+		node.nextNode = head.nextNode;
+		node.previousNode = head;
+		node.nextNode.previousNode = node;
+		node.previousNode.nextNode = node;
 	}
 
 	public void insertFront(Node node) {
-		if (node.next != null) {
+		if (node.nextNode != null) {
 			node.remove();
 		}
-		node.next = head;
-		node.prev = head.prev;
-		node.next.prev = node;
-		node.prev.next = node;
+		node.nextNode = head;
+		node.previousNode = head.previousNode;
+		node.nextNode.previousNode = node;
+		node.previousNode.nextNode = node;
 	}
 
 	public Node popTail() {
-		Node node = head.prev;
+		Node node = head.previousNode;
 		if (node == head) {
 			return null;
 		}
@@ -62,22 +40,22 @@ public class LinkedList {
 	}
 
 	public Node getBack() {
-		Node node = head.prev;
+		Node node = head.previousNode;
 		if (node == head) {
 			current = null;
 			return null;
 		}
-		current = node.prev;
+		current = node.previousNode;
 		return node;
 	}
 
 	public Node getFront() {
-		Node node = head.next;
+		Node node = head.nextNode;
 		if (node == head) {
 			current = null;
 			return null;
 		}
-		current = node.next;
+		current = node.nextNode;
 		return node;
 	}
 
@@ -87,7 +65,7 @@ public class LinkedList {
 			current = null;
 			return null;
 		}
-		current = node.prev;
+		current = node.previousNode;
 		return node;
 	}
 
@@ -97,14 +75,14 @@ public class LinkedList {
 			current = null;
 			return null;
 		}
-		current = node.next;
+		current = node.nextNode;
 		return node;
 	}
 
 	public void clear() {
-		if (head.prev != head) {
+		if (head.previousNode != head) {
 			for (;;) {
-				Node node = head.prev;
+				Node node = head.previousNode;
 				if (node == head) {
 					break;
 				}

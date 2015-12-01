@@ -272,9 +272,9 @@ public final class ISAACCipher {
 	}
 
 	/**
-	 * Gets the prev random value.
+	 * Gets the next random value.
 	 * 
-	 * @return The prev random value.
+	 * @return The next random value.
 	 */
 	public int nextInt() {
 		if (0 == count--) {

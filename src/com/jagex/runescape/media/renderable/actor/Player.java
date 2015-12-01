@@ -38,7 +38,7 @@ public class Player extends Actor {
 	public int anInt1740;
 	public int anInt1741;
 	public int anInt1742;
-	public int totalLevel;
+	public int anInt1743;
 
 	@Override
 	public final Model getRotatedModel() {
@@ -116,63 +116,63 @@ public class Player extends Actor {
 		headIcon = buffer.getUnsignedByte();
 		npcDefinition = null;
 		teamId = 0;
-		for (int x = 0; x < 12; x++) { // Equipment
-			int first = buffer.getUnsignedByte();
-			if (first == 0) {
-				appearance[x] = 0;
+		for (int index = 0; index < 12; index++) {
+			int i_4_ = buffer.getUnsignedByte();
+			if (i_4_ == 0) {
+				appearance[index] = 0;
 			} else {
-				int second = buffer.getUnsignedByte();
-				appearance[x] = (first << 8) + second;
-				if (x == 0 && appearance[0] == 65535) {
-					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedShort());
+				int i_5_ = buffer.getUnsignedByte();
+				appearance[index] = (i_4_ << 8) + i_5_;
+				if (index == 0 && appearance[0] == 65535) {
+					npcDefinition = ActorDefinition.getDefinition(buffer.getUnsignedLEShort());
 					break;
 				}
-				if (appearance[x] >= 512 && appearance[x] - 512 < ItemDefinition.itemCount) {
-					int teamId = ItemDefinition.getDefinition(appearance[x] - 512).teamId;
+				if (appearance[index] >= 512 && appearance[index] - 512 < ItemDefinition.itemCount) {
+					int teamId = ItemDefinition.getDefinition(appearance[index] - 512).teamId;
 					if (teamId != 0) {
 						this.teamId = teamId;
 					}
 				}
 			}
 		}
-		for (int x = 0; x < 5; x++) { // Player Colors
-			int color = buffer.getUnsignedByte();
-			if (color < 0 || color >= Game.anIntArrayArray1028[x].length) {
-				color = 0;
+		for (int i_7_ = 0; i_7_ < 5; i_7_++) {
+			int i_8_ = buffer.getUnsignedByte();
+			if (i_8_ < 0 || i_8_ >= Game.anIntArrayArray1028[i_7_].length) {
+				i_8_ = 0;
 			}
-			appearanceColors[x] = color;
+			appearanceColors[i_7_] = i_8_;
 		}
-		standAnimationId = buffer.getUnsignedShort();
+		standAnimationId = buffer.getUnsignedLEShort();
 		if (standAnimationId == 65535) {
 			standAnimationId = -1;
 		}
-		standTurnAnimationId = buffer.getUnsignedShort();
+		standTurnAnimationId = buffer.getUnsignedLEShort();
 		if (standTurnAnimationId == 65535) {
 			standTurnAnimationId = -1;
 		}
-		walkAnimationId = buffer.getUnsignedShort();
+		walkAnimationId = buffer.getUnsignedLEShort();
 		if (walkAnimationId == 65535) {
 			walkAnimationId = -1;
 		}
-		turnAroundAnimationId = buffer.getUnsignedShort();
+		turnAroundAnimationId = buffer.getUnsignedLEShort();
 		if (turnAroundAnimationId == 65535) {
 			turnAroundAnimationId = -1;
 		}
-		turnRightAnimationId = buffer.getUnsignedShort();
+		turnRightAnimationId = buffer.getUnsignedLEShort();
 		if (turnRightAnimationId == 65535) {
 			turnRightAnimationId = -1;
 		}
-		turnLeftAnimationId = buffer.getUnsignedShort();
+		turnLeftAnimationId = buffer.getUnsignedLEShort();
 		if (turnLeftAnimationId == 65535) {
 			turnLeftAnimationId = -1;
 		}
-		runAnimationId = buffer.getUnsignedShort();
+		runAnimationId = buffer.getUnsignedLEShort();
 		if (runAnimationId == 65535) {
 			runAnimationId = -1;
 		}
 		playerName = TextUtils.formatName(TextUtils.longToName(buffer.getLong()));
 		combatLevel = buffer.getUnsignedByte();
-		totalLevel = buffer.getUnsignedShort();
+		anInt1743 = buffer.getUnsignedLEShort();
 		visibile = true;
 		appearanceOffset = 0L;
 		for (int index = 0; index < 12; index++) {
