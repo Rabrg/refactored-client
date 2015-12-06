@@ -1,6 +1,6 @@
 *.class
 
-cache/
+/cache/
 
 # Package Files #
 *.jar
@@ -53,3 +53,16 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+/nbproject/private/
+
+# Ignore Netbeans project files.
+build/
+nbproject/
+build.xml
+manifest.mf
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+.nb-gradle/
